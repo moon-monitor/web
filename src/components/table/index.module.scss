@@ -1,0 +1,19 @@
+.a_table {
+  :global {
+    .ant-table-wrapper,
+    .custom-table-wrapper {
+      margin-bottom: 20px;
+    }
+    .ant-pagination {
+      text-align: right;
+    }
+  }
+
+  .pagination {
+    text-align: right;
+    // margin-top: 20px;
+    padding: 0;
+    display: inline-block;
+    width: 100%;
+  }
+}
