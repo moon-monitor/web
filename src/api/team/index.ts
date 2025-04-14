@@ -55,12 +55,12 @@ export function updateTeamStatus(params: UpdateTeamStatusRequest): Promise<null>
 
 /**
  * 我的团队
- * @method: get /v1/my/team
+ * @method: get /api/user/self/team-list
  * @param {MyTeamRequest} params
  * @returns {MyTeamReply}
  */
 export function myTeam(): Promise<MyTeamReply> {
-  return request.GET<MyTeamReply>('/v1/my/team')
+  return request.GET<MyTeamReply>('/api/user/self/team-list')
 }
 
 /**

@@ -626,6 +626,22 @@ export const mockTreeMenuReply: TreeMenuReply = {
           updatedAt: ''
         }
       ]
+    },
+    {
+      id: 39,
+      label: '测试页面',
+      menuType: MenuType.MenuTypeMenu,
+      permission: 'template',
+      icon: '',
+      component: 'NotificationTemplate',
+      level: 2,
+      sort: 4,
+      key: '/test',
+      enName: 'Notification Template',
+      parentId: 34,
+      status: Status.StatusEnable,
+      createdAt: '',
+      updatedAt: ''
     }
   ]
 }

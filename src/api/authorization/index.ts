@@ -16,25 +16,25 @@ export function login(params: LoginRequest): Promise<LoginReply> {
  * @returns {Promise<LogoutReply>}
  */
 export function logout(): Promise<LogoutReply> {
-  return request.POST<LogoutReply>('/v1/authorization/logout', {})
+  return request.POST<LogoutReply>('/api/auth/logout', {})
 }
 
 /**
  * 刷新 token
  * @param {RefreshTokenRequest} params
- * @returns {Promise<RefreshTokenReply>}
+ * @returns {Promise<LoginReply>}
  */
-export function refreshToken(params: RefreshTokenRequest): Promise<RefreshTokenReply> {
-  return request.POST<RefreshTokenReply>('/v1/authorization/refresh', params)
+export function refreshToken(params: RefreshTokenRequest): Promise<LoginReply> {
+  return request.POST<LoginReply>('/v1/authorization/refresh', params)
 }
 
 /**
  * 获取验证码
  * @param {CaptchaReq} params
- * @returns {Promise<CaptchaReply>}
+ * @returns {Promise<GetCaptchaReply>}
  */
-export function getCaptcha(): Promise<CaptchaReply> {
-  return request.GET<CaptchaReply>('/api/auth/captcha')
+export function getCaptcha(): Promise<GetCaptchaReply> {
+  return request.GET<GetCaptchaReply>('/api/auth/captcha')
 }
 
 /**
@@ -68,10 +68,10 @@ export function verifyEmail(params: VerifyEmailRepquest): Promise<void> {
 /**
  * 设置账号邮箱
  * post /v1/authorization/set_email
- * @param {SetEmailRequest} params
+ * @param {OAuthLoginByEmailRequest} params
  * @returns {Promise<SetEmailReply>}
  */
-export function setEmailWithLogin(params: SetEmailRequest): Promise<RefreshTokenReply> {
+export function setEmailWithLogin(params: OAuthLoginByEmailRequest): Promise<LoginReply> {
   return request.POST('/api/auth/oauth2/login/email', params)
 }
 
@@ -168,7 +168,7 @@ export interface RefreshTokenRequest {
 /**
  * 刷新 token 响应
  */
-export interface RefreshTokenReply {
+export interface LoginReply {
   /**
    * token
    */
@@ -190,7 +190,7 @@ export interface RefreshTokenReply {
 /**
  * 验证码响应
  */
-export interface CaptchaReply {
+export interface GetCaptchaReply {
   captchaId: string
   captchaImg: string
   expired_seconds: number
@@ -270,7 +270,7 @@ export interface VerifyEmailRepquest {
 /**
  * 设置邮箱请求
  */
-export interface SetEmailRequest {
+export interface OAuthLoginByEmailRequest {
   /**
    * 邮箱
    */

@@ -1,4 +1,4 @@
-import { CaptchaReply, getCaptcha, setEmailWithLogin, verifyEmail } from '@/api/authorization'
+import { GetCaptchaReply, getCaptcha, setEmailWithLogin, verifyEmail } from '@/api/authorization'
 import { ErrorResponse, setToken } from '@/api/request'
 import { DataFrom } from '@/components/data/form'
 import { githubURL } from '@/components/layout/header-op'
@@ -23,7 +23,7 @@ export default function EmailVerification() {
   const { theme, setTheme } = useContext(GlobalContext)
   const { token } = useToken()
 
-  const [captcha, setCaptcha] = useState<CaptchaReply>()
+  const [captcha, setCaptcha] = useState<GetCaptchaReply>()
   const [step, setStep] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState('')
@@ -34,6 +34,7 @@ export default function EmailVerification() {
   const search = window.location.search
   const searchOAuthID = new URLSearchParams(search).get('oauth_id')
   const searchOAuthToken = new URLSearchParams(search).get('token')
+  const app = new URLSearchParams(search).get('app')
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const generateCaptcha = useCallback(
@@ -74,7 +75,8 @@ export default function EmailVerification() {
       email: email,
       code: value.emailCode?.toUpperCase(),
       oauthID: oauthID,
-      token: searchOAuthToken || ''
+      token: searchOAuthToken || '',
+      app: app ? parseInt(app) : 0
     })
       .then((res) => {
         setSuccess('邮箱验证成功！')

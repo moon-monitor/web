@@ -1,5 +1,5 @@
 import {
-  type CaptchaReply,
+  type GetCaptchaReply,
   type LoginRequest,
   type OAuthItem,
   getCaptcha,
@@ -48,7 +48,7 @@ const LoginForm: FC = () => {
   const { token } = useToken()
   const [form] = Form.useForm<formData>()
   const { setUserInfo, setMenuItems, setRouters } = useContext(GlobalContext)
-  const [captcha, setCaptcha] = useState<CaptchaReply>()
+  const [captcha, setCaptcha] = useState<GetCaptchaReply>()
   const [remeber, setRemeber] = useState<boolean>(!!cookie.load('remeber'))
   const [err, setErr] = useState<ErrorResponse>()
   const [oauthList, setOAuthList] = useState<OAuthItem[]>([])

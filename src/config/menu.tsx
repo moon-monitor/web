@@ -369,5 +369,9 @@ export const breadcrumbNameMap: Record<string, BreadcrumbNameType> = {
   '/system/template': {
     name: '通知模板',
     path: () => import('@/pages/system/template')
+  },
+  '/test': {
+    name: '通知模板',
+    path: () => import('@/pages/test')
   }
 }

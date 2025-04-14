@@ -45,12 +45,12 @@ export function getUser(params: GetUserRequest): Promise<GetUserReply> {
 
 /**
  * 获取用户
- * @method: get /v1/user/{id}
+ * @method: get /api/user/self
  * @param {GetUserRequest} params
  * @returns {GetUserReply}
  */
 export function getUserBasic(): Promise<GetUserReply> {
-  return request.GET<GetUserReply>('/v1/user/self/basic')
+  return request.GET<GetUserReply>('/api/user/self')
 }
 
 /**
