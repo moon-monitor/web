@@ -229,22 +229,23 @@ export const defaultRouters: RouteObject[] = [
   },
 
   {
-    path: '/',
+    path: '/home',
     Component: lazy(() => import('@/components/layout')),
+    loader: () => ({ title: '首页', path: '/home' }),
     children: []
   },
   {
     path: '/register',
     Component: lazy(() => import('@/pages/login/register/register'))
-  },
+  }
   // {
-  //   path: '/',
+  //   path: '*',
   //   // 重定向/home
   //   element: <Navigate to='/login' replace={true} />
-  // },
-  {
-    // 403
-    path: '*',
-    element: <Error403 />
-  }
+  // }
+  // {
+  //   // 403
+  //   path: '*',
+  //   element: <Error403 />
+  // }
 ]

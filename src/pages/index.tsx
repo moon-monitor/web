@@ -75,17 +75,22 @@ function App() {
 
     if (menuItems?.length && isLogin()) {
       const routersTree = defaultRouters.map((item) => {
-        if (item.path === '/') {
+        if (item.path === '/home') {
           item.children = [
             ...transformRoutersTree(menuItems),
             {
-              path: '/',
-              element: <Navigate to='/realtime/alarm' replace={true} />
+              path: '',
+              element: <Navigate to='/home/realtime/alarm' replace={true} />
             }
+            // {
+            //   path: '/*',
+            //   element: <Error404 />
+            // }
           ] as RouteObject[]
         }
         return item
       })
+      console.log('routersTree====', routersTree)
       setRouters(createHashRouter(routersTree))
     } else {
       setRouters(createHashRouter(defaultRouters))
@@ -94,13 +99,17 @@ function App() {
   const handleRouter = () => {
     if (menuItems?.length && isLogin()) {
       const routersTree = defaultRouters.map((item) => {
-        if (item.path === '/') {
+        if (item.path === '/home') {
           item.children = [
             ...transformRoutersTree(menuItems),
             {
-              path: '/',
-              element: <Navigate to='/realtime/alarm' replace={true} />
+              path: '',
+              element: <Navigate to='/home/realtime/alarm' replace={true} />
             }
+            // {
+            //   path: '/*',
+            //   element: <Error404 />
+            // }
           ] as RouteObject[]
         }
         return item

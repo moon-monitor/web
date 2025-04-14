@@ -1,6 +1,5 @@
 import { MenuTree } from '@/api/menu'
 import { ErrorResponse } from '@/api/request'
-import { breadcrumbNameMap } from '@/config/menu'
 import { FormInstance } from 'antd'
 import { lazy } from 'react'
 import { RouteObject } from 'react-router-dom'
@@ -24,10 +23,12 @@ export const handleFormError = <T extends Record<string, any>>(
 export const transformRoutersTree = (menuTree: MenuTree[]): RouteObject[] => {
   return menuTree.map((item) => {
     const routersItem: RouteObject = {
-      path: item.key,
+      path: `/home${item.key}`,
       ...(!item.children && {
-        Component: lazy(breadcrumbNameMap[item.key]?.path || (() => import('@/components/error/Error404')))
+        // Component: lazy(breadcrumbNameMap[item.key]?.path || (() => import('@/components/error/Error404')))
+        Component: lazy(() => import(`../pages${item.key}`))
       }),
+      loader: () => ({ title: item.label }),
       children: item.children ? transformRoutersTree(item.children) : undefined
     }
     return routersItem

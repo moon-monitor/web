@@ -6,7 +6,7 @@ import {
   getOAuthList,
   login
 } from '@/api/authorization'
-import { type ErrorResponse, isLogin, setToken } from '@/api/request'
+import { type ErrorResponse, setToken } from '@/api/request'
 import { Gitee, Github } from '@/components/icon'
 import { defaultRouters } from '@/config/router'
 import { getTreeMenu } from '@/mocks'
@@ -41,9 +41,9 @@ const { useToken } = theme
 const LoginForm: FC = () => {
   const navigate = useNavigate()
   const { localURL } = useContext(GlobalContext)
-  if (isLogin()) {
-    navigate(localURL || '/')
-  }
+  // if (isLogin()) {
+  //   navigate(localURL || '/')
+  // }
 
   const { token } = useToken()
   const [form] = Form.useForm<formData>()
@@ -60,13 +60,13 @@ const LoginForm: FC = () => {
     getTreeMenu({}).then((res) => {
       console.log('res', res)
       const routersTree = defaultRouters.map((item) => {
-        if (item.path === '/') {
+        if (item.path === '/home') {
           item.children = [
             ...transformRoutersTree(res.menuTree),
             {
-              path: '/',
+              path: '',
               // 重定向/home
-              element: <Navigate to='/realtime/alarm' replace={true} />
+              element: <Navigate to='/home/realtime/alarm' replace={true} />
             }
           ] as RouteObject[]
         }
