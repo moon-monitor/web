@@ -1,9 +1,9 @@
 import type { MenuTree, TeamItem, UserItem } from '@/api/model-types'
-import { isLogin } from '@/api/request'
+import { getToken, isLogin, removeToken, setToken } from '@/api/request'
 import '@/assets/styles/index.scss'
-import { breadcrumbNameMap } from '@/config/menu'
-import { defaultRouters } from '@/config/router'
+import { defaultRouters, unAuthRouters } from '@/config/router'
 import useStorage from '@/hooks/storage'
+import { getTreeMenu } from '@/mocks'
 import { transformRoutersTree } from '@/utils'
 import {
   GlobalContext,
@@ -18,7 +18,7 @@ import { ConfigProvider, theme } from 'antd'
 import type { SpaceSize } from 'antd/es/space'
 import zhCN from 'antd/locale/zh_CN'
 import { Suspense, useEffect, useState } from 'react'
-import { Navigate, RouteObject, RouterProvider, createHashRouter } from 'react-router-dom'
+import { RouterProvider, createHashRouter } from 'react-router-dom'
 
 const { useToken } = theme
 
@@ -64,61 +64,44 @@ function App() {
     'menuItems',
     JSON.parse(localStorage.getItem('menuItems') || '[]')
   )
+  const [authToken, setAuthToken] = useState<string>(getToken())
   const [authData, setAuthData] = useState<{ permissions: PermissionType[]; isAuthenticated: boolean }>({
     permissions: ['add'],
     isAuthenticated: false
   })
   const [routers, setRouters] = useState<Router>(createHashRouter(defaultRouters))
 
-  useEffect(() => {
-    console.log('routers====', defaultRouters)
-
-    if (menuItems?.length && isLogin()) {
-      const routersTree = defaultRouters.map((item) => {
-        if (item.path === '/home') {
-          item.children = [
-            ...transformRoutersTree(menuItems),
-            {
-              path: '',
-              element: <Navigate to='/home/realtime/alarm' replace={true} />
-            }
-            // {
-            //   path: '/*',
-            //   element: <Error404 />
-            // }
-          ] as RouteObject[]
-        }
-        return item
+  const storageMenus = () => {
+    getTreeMenu({})
+      .then((res) => {
+        setMenuItems?.(res.menuTree)
       })
-      console.log('routersTree====', routersTree)
-      setRouters(createHashRouter(routersTree))
-    } else {
-      setRouters(createHashRouter(defaultRouters))
-    }
-  }, [])
-  const handleRouter = () => {
-    if (menuItems?.length && isLogin()) {
-      const routersTree = defaultRouters.map((item) => {
-        if (item.path === '/home') {
-          item.children = [
-            ...transformRoutersTree(menuItems),
-            {
-              path: '',
-              element: <Navigate to='/home/realtime/alarm' replace={true} />
-            }
-            // {
-            //   path: '/*',
-            //   element: <Error404 />
-            // }
-          ] as RouteObject[]
+      .finally(() => {
+        if (isLogin()) {
+          window.location.href = '/#/home'
         }
-        return item
       })
-      return createHashRouter(routersTree)
-    } else {
-      return createHashRouter(defaultRouters)
-    }
   }
+
+  useEffect(() => {
+    console.log('authToken', authToken)
+    storageMenus()
+  }, [authToken])
+
+  const handleRouter = () => {
+    if (!(menuItems?.length && isLogin())) {
+      return createHashRouter(unAuthRouters)
+    }
+    const routersTree = defaultRouters.map((item) => {
+      if (item.path === '/home') {
+        item.children = [...transformRoutersTree(menuItems), ...(item.children || [])]
+      }
+      return item
+    })
+
+    return createHashRouter(routersTree)
+  }
+
   const contextValue: GlobalContextType = {
     theme: theme,
     setTheme: setTheme,
@@ -131,7 +114,6 @@ function App() {
     setMenuItems: setMenuItems,
     collapsed: collapsed,
     setCollapsed: setCollapsed,
-    breadcrumbNameMap: breadcrumbNameMap,
     userInfo: userInfo,
     setUserInfo: setUserInfo,
     teamInfo: teamInfo,
@@ -153,7 +135,13 @@ function App() {
     authData: authData,
     setAuthData: setAuthData,
     routers: routers,
-    setRouters: setRouters
+    setRouters: setRouters,
+    authToken: authToken,
+    setAuthToken: (auth: string) => {
+      setAuthToken(auth)
+      setToken(auth)
+    },
+    removeAuthToken: removeToken
   }
 
   return (

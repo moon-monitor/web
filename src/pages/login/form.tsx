@@ -6,18 +6,15 @@ import {
   getOAuthList,
   login
 } from '@/api/authorization'
-import { type ErrorResponse, setToken } from '@/api/request'
+import { type ErrorResponse } from '@/api/request'
 import { Gitee, Github } from '@/components/icon'
-import { defaultRouters } from '@/config/router'
-import { getTreeMenu } from '@/mocks'
-import { transformRoutersTree } from '@/utils'
 import { GlobalContext } from '@/utils/context'
 import { hashMd5 } from '@/utils/hash'
 import { LockOutlined, UserOutlined } from '@ant-design/icons'
 import { Button, Checkbox, Divider, Flex, Form, Input, theme } from 'antd'
 import { type FC, useContext, useEffect, useState } from 'react'
 import cookie from 'react-cookies'
-import { createHashRouter, Navigate, RouteObject, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 export type LoginParams = {
   username: string
@@ -40,49 +37,23 @@ const { useToken } = theme
 
 const LoginForm: FC = () => {
   const navigate = useNavigate()
-  const { localURL } = useContext(GlobalContext)
-  // if (isLogin()) {
-  //   navigate(localURL || '/')
-  // }
-
+  const { localURL, setAuthToken } = useContext(GlobalContext)
   const { token } = useToken()
   const [form] = Form.useForm<formData>()
-  const { setUserInfo, setMenuItems, setRouters } = useContext(GlobalContext)
+  const { setUserInfo } = useContext(GlobalContext)
   const [captcha, setCaptcha] = useState<GetCaptchaReply>()
   const [remeber, setRemeber] = useState<boolean>(!!cookie.load('remeber'))
   const [err, setErr] = useState<ErrorResponse>()
   const [oauthList, setOAuthList] = useState<OAuthItem[]>([])
 
   const handleLogin = (loginParams: LoginRequest) => {
-    setToken(
+    setAuthToken?.(
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoyLCJpc3MiOiJtb29uLXBhbGFjZSIsImV4cCI6MTc0MzY5NDM0NX0.LGVJpMGxolSfBqp7jXZiKSO1ax_Lvz9Ma0or20oFnNg'
     )
-    getTreeMenu({}).then((res) => {
-      console.log('res', res)
-      const routersTree = defaultRouters.map((item) => {
-        if (item.path === '/home') {
-          item.children = [
-            ...transformRoutersTree(res.menuTree),
-            {
-              path: '',
-              // 重定向/home
-              element: <Navigate to='/home/realtime/alarm' replace={true} />
-            }
-          ] as RouteObject[]
-        }
-        return item
-      })
-      const newRouters = createHashRouter(routersTree)
-      setRouters?.(newRouters)
-      // const menuTree = transformMenuTree(res.menuTree) as ItemType[]
-      setMenuItems?.(res.menuTree)
-      navigate(localURL || '/')
-    })
     login(loginParams)
       .then((res) => {
-        setToken(res.token)
+        setAuthToken?.(res.token)
         setUserInfo?.(res.user)
-        navigate(localURL || '/')
       })
       .catch((e: ErrorResponse) => {
         setErr(e)
@@ -102,7 +73,7 @@ const LoginForm: FC = () => {
     handleLogin({
       username: values.username,
       password: hashMd5(values.password),
-      captcha: { answer: values.code, captchaId: captcha?.captchaId },
+      captcha: { answer: values.code, captchaId: captcha?.captchaId || '' },
       redirect: localURL || '/'
     })
   }

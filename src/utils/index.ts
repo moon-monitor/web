@@ -1,6 +1,8 @@
 import { MenuTree } from '@/api/menu'
 import { ErrorResponse } from '@/api/request'
+import { renderIcon } from '@/components/icon'
 import { FormInstance } from 'antd'
+import { ItemType } from 'antd/es/menu/interface'
 import { lazy } from 'react'
 import { RouteObject } from 'react-router-dom'
 
@@ -23,14 +25,36 @@ export const handleFormError = <T extends Record<string, any>>(
 export const transformRoutersTree = (menuTree: MenuTree[]): RouteObject[] => {
   return menuTree.map((item) => {
     const routersItem: RouteObject = {
-      path: `/home${item.key}`,
+      path: routeJoin('/home', item.key),
       ...(!item.children && {
-        // Component: lazy(breadcrumbNameMap[item.key]?.path || (() => import('@/components/error/Error404')))
-        Component: lazy(() => import(`../pages${item.key}`))
+        Component: lazy(() => import(routeJoin('../pages', item.key)))
       }),
       loader: () => ({ title: item.label }),
-      children: item.children ? transformRoutersTree(item.children) : undefined
+      children: transformRoutersTree(item.children || [])
     }
     return routersItem
   })
+}
+
+// 转换菜单树
+export const transformMenuTree = (menuTree: MenuTree[] | undefined): ItemType[] => {
+  if (!menuTree) {
+    return []
+  }
+  return menuTree.map((item) => {
+    const menuItem: ItemType = {
+      key: `/home${item.key}`,
+      label: item.label,
+      title: item.label,
+      icon: renderIcon(item.icon),
+      children: item.children ? transformMenuTree(item.children) : undefined
+    }
+
+    return menuItem
+  })
+}
+
+// 路由拼接
+function routeJoin(...paths: string[]) {
+  return paths.join('/').replace(/\/+/g, '/')
 }

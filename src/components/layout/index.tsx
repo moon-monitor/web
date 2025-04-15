@@ -1,15 +1,13 @@
-import { MenuTree } from '@/api/menu'
-import { isLogin, setToken } from '@/api/request'
+import { isLogin } from '@/api/request'
 import { useContainerHeight } from '@/hooks/useContainerHeightTop'
+import { transformMenuTree } from '@/utils'
 import { GlobalContext } from '@/utils/context'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Layout, Menu, Space, Spin, theme } from 'antd'
 import { BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb'
-import { ItemType } from 'antd/lib/menu/interface'
 import type React from 'react'
 import { Suspense, useContext, useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation, useMatches, useNavigate } from 'react-router-dom'
-import { renderIcon } from '../icon'
 import { CreateTeamModalProvider } from './create-team-provider'
 import LayoutFooter from './footer'
 import { HeaderOp } from './header-op'
@@ -20,6 +18,8 @@ const { useToken } = theme
 
 let timer: NodeJS.Timeout | null = null
 const MoonLayout: React.FC = () => {
+  const { token } = useToken()
+  const { menuItems, collapsed, setContentHeight, setCollapsed, setAuthToken } = useContext(GlobalContext)
   const location = useLocation()
   const navigate = useNavigate()
   const search = window.location.search
@@ -27,7 +27,7 @@ const MoonLayout: React.FC = () => {
 
   useEffect(() => {
     if (authToken) {
-      setToken(authToken)
+      setAuthToken?.(authToken)
       // 清除search
       window.location.search = ''
     }
@@ -44,9 +44,6 @@ const MoonLayout: React.FC = () => {
       }, 1000)
     }, 1000)
   }
-
-  const { token } = useToken()
-  const { menuItems, collapsed, setContentHeight, setCollapsed } = useContext(GlobalContext)
 
   const [openKeys, setOpenKeys] = useState<string[]>([])
   const [selectedKeys, setSelectedKeys] = useState<string[]>([])
@@ -93,32 +90,13 @@ const MoonLayout: React.FC = () => {
     openKey.pop()
     setOpenKeys([...keys, `/${openKey.join('/')}`])
     setLocationPath(location.pathname)
-    console.log('openKey', openKey)
   }, [location.pathname])
-
-  // 转换菜单树
-  const transformMenuTree = (menuTree: MenuTree[] | undefined): ItemType[] => {
-    if (!menuTree) {
-      return []
-    }
-    return menuTree.map((item) => {
-      const menuItem: ItemType = {
-        key: `/home${item.key}`,
-        label: item.label,
-        title: item.label,
-        icon: renderIcon(item.icon),
-        children: item.children ? transformMenuTree(item.children) : undefined
-      }
-
-      return menuItem
-    })
-  }
 
   useEffect(() => {
     if (!meta) return
     setBreadcrumbItems(() => {
-      return meta.map((item) => {
-        return item.data
+      return meta?.map((item) => {
+        return item?.data || []
       }) as BreadcrumbItemType[]
     })
   }, [location])
@@ -136,8 +114,8 @@ const MoonLayout: React.FC = () => {
               items={transformMenuTree(menuItems)}
               style={{ borderInlineEnd: 'none' }}
               className='h-full overflow-auto'
-              openKeys={collapsed ? openKeys : []}
-              defaultOpenKeys={collapsed ? openKeys : []}
+              openKeys={openKeys}
+              defaultOpenKeys={openKeys}
               onSelect={({ key }) => handleOnSelect(key)}
               selectedKeys={selectedKeys}
               defaultSelectedKeys={selectedKeys}

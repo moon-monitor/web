@@ -1,5 +1,5 @@
 import { GetCaptchaReply, getCaptcha, setEmailWithLogin, verifyEmail } from '@/api/authorization'
-import { ErrorResponse, setToken } from '@/api/request'
+import { ErrorResponse } from '@/api/request'
 import { DataFrom } from '@/components/data/form'
 import { githubURL } from '@/components/layout/header-op'
 import { GlobalContext } from '@/utils/context'
@@ -20,7 +20,7 @@ type SetEmailFormData = {
 const { useToken } = theme
 
 export default function EmailVerification() {
-  const { theme, setTheme } = useContext(GlobalContext)
+  const { theme, setTheme, setAuthToken } = useContext(GlobalContext)
   const { token } = useToken()
 
   const [captcha, setCaptcha] = useState<GetCaptchaReply>()
@@ -80,7 +80,7 @@ export default function EmailVerification() {
     })
       .then((res) => {
         setSuccess('邮箱验证成功！')
-        setToken(res.token)
+        setAuthToken?.(res.token)
         return res.token
       })
       .then((token) => {

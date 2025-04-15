@@ -1,6 +1,5 @@
 import { refreshToken } from '@/api/authorization'
 import type { TeamItem } from '@/api/model-types'
-import { setToken } from '@/api/request'
 import { myTeam } from '@/api/team'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
@@ -19,13 +18,14 @@ function getTeamInfo() {
 
 export const TeamMenu: React.FC = () => {
   const createTeamContext = useCreateTeamModal()
-  const { teamInfo, setTeamInfo, setUserInfo, refreshMyTeamList, setTeamMemberID } = useContext(GlobalContext)
+  const { teamInfo, setTeamInfo, setUserInfo, refreshMyTeamList, setTeamMemberID, setAuthToken } =
+    useContext(GlobalContext)
   const [teamList, setTeamList] = React.useState<TeamItem[]>([])
 
   const { run: initRefreshToken } = useRequest(refreshToken, {
     manual: true,
     onSuccess: ({ token, user, teamMemberID }) => {
-      setToken(token)
+      setAuthToken?.(token)
       setUserInfo?.(user)
       setTeamMemberID?.(teamMemberID)
     }
