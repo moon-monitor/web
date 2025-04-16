@@ -912,7 +912,7 @@ export interface AsymmetricEncryptionConfigItem {
  */
 export interface TeamConfigItem {
   /** 邮箱配置 */
-  emailConfig: EmailConfigItem
+  emailConfig: EmailConfigItem[]
   /** 对称加密配置 */
   symmetricEncryptionConfig: SymmetricEncryptionConfigItem
   /** 非对称加密配置 */

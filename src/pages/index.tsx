@@ -77,14 +77,14 @@ function App() {
         setMenuItems?.(res.menuTree)
       })
       .finally(() => {
-        if (isLogin()) {
+        if (isLogin() && !window.location.href.includes('home')) {
           window.location.href = '/#/home'
         }
       })
   }
 
   useEffect(() => {
-    console.log('authToken', authToken)
+    console.log('authToken====', authToken)
     storageMenus()
   }, [authToken])
 

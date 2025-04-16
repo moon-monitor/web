@@ -1,9 +1,14 @@
-import type { AsymmetricEncryptionConfigItem, SymmetricEncryptionConfigItem, TeamConfigItem } from '@/api/model-types'
+import type {
+  AsymmetricEncryptionConfigItem,
+  EmailConfigItem,
+  SymmetricEncryptionConfigItem,
+  TeamConfigItem
+} from '@/api/model-types'
 import { getTeamConfig, updateTeamConfig } from '@/api/team'
 import { GlobalContext } from '@/utils/context'
 import { SaveOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
-import { Button, Card, Col, Form, Row, message } from 'antd'
+import { Button, Card, Col, Form, Row, Space, message } from 'antd'
 import { FileLock2, FolderKey, Mail, Settings } from 'lucide-react'
 import { useContext, useEffect, useState } from 'react'
 import { AsymmetricEncryptionSection } from './config-asymmetric'
@@ -12,16 +17,7 @@ import { SymmetricEncryptionSection } from './config-symmetric'
 
 export type TeamConfigFormData = {
   /** 邮箱配置 */
-  emailConfig: {
-    /** 邮箱用户名 */
-    user: string
-    /** 邮箱密码 */
-    pass: string
-    /** 邮箱服务器 */
-    host: string[]
-    /** 邮箱端口 */
-    port: string[]
-  }
+  emailConfig: EmailConfigItem[]
   /** 对称加密配置 */
   symmetricEncryptionConfig: SymmetricEncryptionConfigItem
   /** 非对称加密配置 */
@@ -33,6 +29,14 @@ export default function TeamConfig() {
   const { contentHeight } = useContext(GlobalContext)
 
   const [teamConfig, setTeamConfig] = useState<TeamConfigItem>()
+  const [emailConfigs, setEmailConfigs] = useState<EmailConfigItem[]>([
+    {
+      host: '',
+      port: '',
+      user: '',
+      pass: ''
+    }
+  ])
 
   const { run: initTeamConfig, loading: isLoading } = useRequest(getTeamConfig, {
     manual: true,
@@ -49,15 +53,11 @@ export default function TeamConfig() {
   })
 
   const handleSubmit = () => {
+    console.log(form.getFieldsValue())
     try {
       const values = form.getFieldsValue()
       editTeamConfig({
-        ...values,
-        emailConfig: {
-          ...values.emailConfig,
-          host: values.emailConfig.host?.at(0) ?? '',
-          port: values.emailConfig.port?.at(0) ?? ''
-        }
+        ...values
       })
     } catch (error) {
       console.error(error)
@@ -72,15 +72,14 @@ export default function TeamConfig() {
   useEffect(() => {
     if (teamConfig) {
       form.setFieldsValue({
-        ...teamConfig,
-        emailConfig: {
-          ...teamConfig.emailConfig,
-          host: teamConfig.emailConfig.host ? [teamConfig.emailConfig.host] : [],
-          port: teamConfig.emailConfig.port ? [teamConfig.emailConfig.port] : []
-        }
+        ...teamConfig
       })
     }
   }, [teamConfig, form])
+
+  const addEmailConfig = () => {
+    setEmailConfigs([...emailConfigs, { user: '', pass: '', host: '', port: '' }])
+  }
 
   return (
     <Form className='p-3 gap-3 flex flex-col' form={form} layout='vertical' onFinish={handleSubmit}>
@@ -108,13 +107,18 @@ export default function TeamConfig() {
             <Card
               type='inner'
               title={
-                <div className='flex items-center gap-2'>
-                  <Mail /> 邮箱配置
+                <div className='flex items-center gap-2 justify-between'>
+                  <Space>
+                    <Mail /> 邮箱配置
+                  </Space>
+                  <Button type='primary' onClick={addEmailConfig}>
+                    添加配置
+                  </Button>
                 </div>
               }
               className='mb-4'
             >
-              <EmailConfigSection />
+              <EmailConfigSection emailConfigs={emailConfigs} setEmailConfigs={setEmailConfigs} form={form} />
             </Card>
           </Col>
           <Col span={24}>

@@ -1,10 +1,10 @@
 import {
   type GetCaptchaReply,
-  type LoginRequest,
+  type LoginByPasswordRequest,
   type OAuthItem,
   getCaptcha,
   getOAuthList,
-  login
+  LoginByPassword
 } from '@/api/authorization'
 import { type ErrorResponse } from '@/api/request'
 import { Gitee, Github } from '@/components/icon'
@@ -37,7 +37,7 @@ const { useToken } = theme
 
 const LoginForm: FC = () => {
   const navigate = useNavigate()
-  const { localURL, setAuthToken } = useContext(GlobalContext)
+  const { setAuthToken } = useContext(GlobalContext)
   const { token } = useToken()
   const [form] = Form.useForm<formData>()
   const { setUserInfo } = useContext(GlobalContext)
@@ -46,11 +46,11 @@ const LoginForm: FC = () => {
   const [err, setErr] = useState<ErrorResponse>()
   const [oauthList, setOAuthList] = useState<OAuthItem[]>([])
 
-  const handleLogin = (loginParams: LoginRequest) => {
+  const handleLogin = (loginParams: LoginByPasswordRequest) => {
     setAuthToken?.(
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoyLCJpc3MiOiJtb29uLXBhbGFjZSIsImV4cCI6MTc0MzY5NDM0NX0.LGVJpMGxolSfBqp7jXZiKSO1ax_Lvz9Ma0or20oFnNg'
     )
-    login(loginParams)
+    LoginByPassword(loginParams)
       .then((res) => {
         setAuthToken?.(res.token)
         setUserInfo?.(res.user)
@@ -73,8 +73,7 @@ const LoginForm: FC = () => {
     handleLogin({
       username: values.username,
       password: hashMd5(values.password),
-      captcha: { answer: values.code, captchaId: captcha?.captchaId || '' },
-      redirect: localURL || '/'
+      captcha: { answer: values.code, captchaId: captcha?.captchaId || '' }
     })
   }
 
@@ -101,7 +100,7 @@ const LoginForm: FC = () => {
 
   useEffect(() => {
     if (cookie.load('account')) {
-      const account: LoginRequest = cookie.load('account')
+      const account: LoginByPasswordRequest = cookie.load('account')
       form.setFieldsValue({ username: account.username, password: account.password })
     }
     // 获取验证码

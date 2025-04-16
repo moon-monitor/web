@@ -3,11 +3,11 @@ import request from '../request'
 
 /**
  * 登录
- * @param {LoginRequest} params
+ * @param {LoginByPasswordRequest} params
  * @returns {Promise<LoginReply>}
  */
-export function login(params: LoginRequest): Promise<LoginReply> {
-  return request.POST<LoginReply>('/v1/authorization/login', params)
+export function LoginByPassword(params: LoginByPasswordRequest): Promise<LoginReply> {
+  return request.POST<LoginReply>('/api/auth/login', params)
 }
 
 /**
@@ -30,7 +30,6 @@ export function refreshToken(params: RefreshTokenRequest): Promise<LoginReply> {
 
 /**
  * 获取验证码
- * @param {CaptchaReq} params
  * @returns {Promise<GetCaptchaReply>}
  */
 export function getCaptcha(): Promise<GetCaptchaReply> {
@@ -99,7 +98,7 @@ export function registerWithEmail(params: RegisterWithEmailRequest): Promise<Reg
 /**
  * 登录请求
  */
-export interface LoginRequest {
+export interface LoginByPasswordRequest {
   /**
    * 用户名
    */
@@ -112,14 +111,6 @@ export interface LoginRequest {
    * 验证码
    */
   captcha: AuthCaptcha
-  /**
-   * 重定向地址
-   */
-  redirect?: string
-  /**
-   * 团队ID
-   */
-  teamID?: number
 }
 
 /**
@@ -135,9 +126,9 @@ export interface LoginReply {
    */
   token: string
   /**
-   * 重定向地址
+   * Token expiration time in seconds
    */
-  redirect?: string
+  expiredSeconds?: number
 }
 
 /**
