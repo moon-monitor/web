@@ -55,7 +55,7 @@ export function loginByEmail(params: LoginByEmailRequest): Promise<LoginReply> {
  * @param {LogoutRequest} params
  * @returns {Promise<LogoutReply>}
  */
-export function logout(params: LogoutRequest): Promise<LogoutReply> {
+export function logout(params?: LogoutRequest): Promise<LogoutReply> {
   return request.POST<LogoutReply>('/api/auth/logout', params)
 }
 

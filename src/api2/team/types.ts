@@ -19,14 +19,13 @@ import {
 } from '../common.types'
 
 /**
- * api.palace.SelfTeamListReply, SelfTeamListReply contains the response data for retrieving
- * the list of teams the current user is a member of
+ * api.palace.GetTeamReply，GetTeamReply contains the response data for retrieving a team
  */
-export interface SelfTeamListReply {
+export interface GetTeamReply {
   /**
-   * List of team items
+   * Detailed information about the team
    */
-  items?: TeamItem[]
+  detail?: TeamItem
 }
 
 /**
