@@ -89,7 +89,7 @@ export function oAuthLoginByEmail(params: OAuthLoginByEmailRequest): Promise<Log
  * @returns {Promise<LoginReply>}
  */
 export function refreshToken(): Promise<LoginReply> {
-  return request.POST<LoginReply>('/api/auth/refresh')
+  return request.POST<LoginReply>('/api/auth/refresh', {})
 }
 
 /**

@@ -1,5 +1,5 @@
-import type { UserItem } from '@/api/model-types'
 import { type UpdateUserBaseInfoRequest, updateUserBaseInfo } from '@/api/user'
+import { UserItem } from '@/api2/common.types'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Button, Form, Space, message } from 'antd'

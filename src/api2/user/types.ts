@@ -8,7 +8,7 @@ export interface SelfInfoReply {
   /**
    * Detailed information about the user
    */
-  user?: UserItem
+  user: UserItem
 }
 
 /**
@@ -112,11 +112,11 @@ export interface SelfSubscribeTeamStrategiesReply {
   /**
    * List of team strategy items
    */
-  items?: TeamStrategyItem[]
+  items: TeamStrategyItem[]
   /**
    * Pagination response details
    */
-  pagination?: PaginationReply
+  pagination: PaginationReply
 }
 
 /**
@@ -127,5 +127,5 @@ export interface SelfTeamListReply {
   /**
    * List of team items
    */
-  items?: TeamItem[]
+  items: TeamItem[]
 }

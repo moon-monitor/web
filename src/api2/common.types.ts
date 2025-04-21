@@ -32,16 +32,37 @@ export interface UserItem {
   /**
    * User's avatar URL
    */
-  avatar?: string
-  /**
+  avatar?: string /**
+   * User's creation time
+   */
+  createdAt?: string /**
+   * User's email address (encrypted)
+   */
+  email?: string /**
    * User's gender
    */
-  gender?: number
-  /**
+  gender?: number /**
    * User's nickname
    */
-  nickname?: string
-  /**
+  nickname?: string /**
+   * User's phone number (encrypted)
+   */
+  phone?: string /**
+   * User's position/role in the system
+   */
+  position?: number /**
+   * Remarks about the user
+   */
+  remark?: string /**
+   * User's status
+   */
+  status?: number /**
+   * User's last update time
+   */
+  updatedAt?: string /**
+   * User's unique identifier
+   */
+  userID?: number /**
    * User's login name
    */
   username?: string
@@ -50,7 +71,7 @@ export interface UserItem {
 /**
  * api.palace.common.EmptyReply, EmptyReply represents an empty response, typically used for
  * operations that only need to return a status message.
- * message: A string message, usually used to indicate the execution status.
+ * message?: A string message, usually used to indicate the execution status.
  */
 export interface EmptyReply {
   message?: string
@@ -123,8 +144,8 @@ export interface ResourceItem {
 /**
  * api.palace.common.PaginationRequest, PaginationRequest is used for pagination queries,
  * specifying the page number and the number of items per page.
- * page: The current page number, must be greater than 0.
- * limit: The number of items per page, must be greater than 0 and less than or equal to
+ * page?: The current page number, must be greater than 0.
+ * limit?: The number of items per page, must be greater than 0 and less than or equal to
  * 10000.
  */
 export interface PaginationRequest {
@@ -136,9 +157,9 @@ export interface PaginationRequest {
  * api.palace.common.PaginationReply, PaginationReply is the response for pagination queries,
  * containing the total number of items, the current page number, and the number of items
  * per page.
- * total: The total number of items.
- * page: The current page number.
- * limit: The number of items per page.
+ * total?: The total number of items.
+ * page?: The current page number.
+ * limit?: The number of items per page.
  */
 export interface PaginationReply {
   limit?: number
@@ -364,7 +385,7 @@ export interface TeamItem {
   /**
    * Unique identifier for the team.
    */
-  id?: number
+  id: number
   /**
    * Information about the leader of the team.
    */
@@ -406,9 +427,9 @@ export interface TeamItem {
 /**
  * api.palace.common.SelectItem, SelectItem represents an option in a selection, including
  * its value, display label, and whether it is disabled.
- * value: The actual value of the option.
- * label: The label displayed for the option.
- * disabled: Indicates whether the option is disabled, true for disabled, false for enabled.
+ * value?: The actual value of the option.
+ * label?: The label displayed for the option.
+ * disabled?: Indicates whether the option is disabled, true for disabled, false for enabled.
  */
 export interface SelectItem {
   disabled?: boolean

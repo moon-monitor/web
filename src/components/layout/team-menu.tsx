@@ -1,12 +1,11 @@
-import { refreshToken } from '@/api/authorization'
-import type { TeamItem } from '@/api/model-types'
-import { myTeam } from '@/api/team'
+import { TeamItem } from '@/api2/common.types'
+import { selfTeamList } from '@/api2/user'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
 import { DownOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Avatar, Col, Dropdown, Row, Space, message } from 'antd'
-import React, { useCallback, useContext, useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 
 function getTeamInfo() {
   const teamInfo = localStorage.getItem('teamInfo')
@@ -18,30 +17,12 @@ function getTeamInfo() {
 
 export const TeamMenu: React.FC = () => {
   const createTeamContext = useCreateTeamModal()
-  const { teamInfo, setTeamInfo, setUserInfo, refreshMyTeamList, setTeamMemberID, setAuthToken } =
-    useContext(GlobalContext)
+  const { teamInfo, setTeamInfo, refreshMyTeamList } = useContext(GlobalContext)
   const [teamList, setTeamList] = React.useState<TeamItem[]>([])
 
-  const { run: initRefreshToken } = useRequest(refreshToken, {
+  const { run: initTeamList } = useRequest(selfTeamList, {
     manual: true,
-    onSuccess: ({ token, user, teamMemberID }) => {
-      setAuthToken?.(token)
-      setUserInfo?.(user)
-      setTeamMemberID?.(teamMemberID)
-    }
-  })
-
-  const handleRefreshToken = useCallback(
-    (team?: TeamItem) => {
-      if (!team?.id) return
-      initRefreshToken({ teamID: team.id })
-    },
-    [initRefreshToken]
-  )
-
-  const { run: initTeamList } = useRequest(myTeam, {
-    manual: true,
-    onSuccess: ({ list }) => {
+    onSuccess: ({ items: list }) => {
       setTeamList(list || [])
       if (!list?.length) {
         message.warning('当前没有团队信息, 部分功能无法使用，你需要创建团队或者加入团队')
@@ -59,17 +40,6 @@ export const TeamMenu: React.FC = () => {
       }
     }
   })
-
-  useEffect(() => {
-    handleRefreshToken(teamInfo)
-    const interval = setInterval(
-      () => {
-        handleRefreshToken(teamInfo)
-      },
-      1000 * 60 * 10
-    )
-    return () => clearInterval(interval)
-  }, [handleRefreshToken, teamInfo])
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {

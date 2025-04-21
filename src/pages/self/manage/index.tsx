@@ -1,15 +1,14 @@
-import type { UserItem } from '@/api/model-types'
 import {
   type ResetUserPasswordBySelfRequest,
   type UpdateUserAvatarRequest,
   type UpdateUserBaseInfoRequest,
   type UpdateUserRequest,
-  getUserBasic,
-  resetUserPasswordBySelf,
   updateUserAvatar,
   updateUserEmail,
   updateUserPhone
 } from '@/api/user'
+import { UserItem } from '@/api2/common.types'
+import { selfInfo, updateSelfPassword } from '@/api2/user'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { GlobalContext } from '@/utils/context'
 import { hashMd5 } from '@/utils/hash'
@@ -80,7 +79,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
     {
       key: 'username',
       label: '用户',
-      children: <b>{userDetail.name}</b>
+      children: <b>{userDetail.username}</b>
     },
     {
       key: 'phone',
@@ -122,8 +121,8 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
     if (!userInfo) {
       return
     }
-    getUserBasic().then((res) => {
-      const { detail } = res
+    selfInfo().then((res) => {
+      const { user: detail } = res
       localStorage.setItem('user', JSON.stringify(detail))
       setUserDetail(detail)
       setUserInfo?.(detail)
@@ -135,7 +134,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
       oldPassword: hashMd5(val.oldPassword),
       newPassword: hashMd5(val.newPassword)
     }
-    resetUserPasswordBySelf(params).then(() => {
+    updateSelfPassword(params).then(() => {
       message.success('修改密码成功')
       form.resetFields()
     })

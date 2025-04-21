@@ -1,5 +1,6 @@
-import type { MenuTree, TeamItem, UserItem } from '@/api/model-types'
+import type { MenuTree } from '@/api/model-types'
 import { getToken, isLogin, removeToken, setToken } from '@/api/request'
+import { TeamItem, UserItem } from '@/api2/common.types'
 import '@/assets/styles/index.scss'
 import { defaultRouters, unAuthRouters } from '@/config/router'
 import useStorage from '@/hooks/storage'

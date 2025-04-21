@@ -1,5 +1,5 @@
-import type { TeamItem } from '@/api/model-types'
-import { myTeam } from '@/api/team'
+import { TeamItem } from '@/api2/common.types'
+import { selfTeamList } from '@/api2/user'
 import { useRequest } from 'ahooks'
 import { Avatar, Card, Skeleton, Space } from 'antd'
 import Meta from 'antd/es/card/Meta'
@@ -14,9 +14,9 @@ export const MyTeam: React.FC<MyTeamProps> = (props) => {
 
   const [teamItems, setTeamItems] = React.useState<TeamItem[]>([])
 
-  const { run: initMyTeams, loading: initMyTeamsLoading } = useRequest(myTeam, {
+  const { run: initMyTeams, loading: initMyTeamsLoading } = useRequest(selfTeamList, {
     manual: true,
-    onSuccess: ({ list }) => {
+    onSuccess: ({ items: list }) => {
       setTeamItems(list || [])
     }
   })
@@ -32,7 +32,7 @@ export const MyTeam: React.FC<MyTeamProps> = (props) => {
           <Card key={`${id}`}>
             <Skeleton loading={initMyTeamsLoading} avatar active>
               <Meta
-                avatar={<Avatar src={logo.trim()}>{name?.at(0)?.toUpperCase()}</Avatar>}
+                avatar={<Avatar src={logo && logo.trim()}>{name?.at(0)?.toUpperCase()}</Avatar>}
                 title={name}
                 description={remark || '-'}
               />
