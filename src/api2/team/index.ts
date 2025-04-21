@@ -58,7 +58,7 @@ export function inviteMember(params: InviteMemberRequest): Promise<EmptyReply> {
  * @returns {Promise<GetTeamMembersReply>}
  */
 export function getTeamMembers(): Promise<GetTeamMembersReply> {
-  return request.POST<GetTeamMembersReply>('/api/team/members')
+  return request.POST<GetTeamMembersReply>('/api/team/members', {})
 }
 
 /**

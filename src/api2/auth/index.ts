@@ -30,7 +30,7 @@ export function getCaptcha(): Promise<GetCaptchaReply> {
  * @returns {Promise<GetFilingInformationReply>}
  */
 export function getFilingInformation(): Promise<GetFilingInformationReply> {
-  return request.POST<GetFilingInformationReply>('/api/auth/filing/information')
+  return request.POST<GetFilingInformationReply>('/api/auth/filing/information', {})
 }
 
 /**
@@ -73,7 +73,7 @@ export function replaceMemberRole(params: ReplaceMemberRoleRequest): Promise<Emp
  * @returns {Promise<OAuth2ListReply>}
  */
 export function oAuth2List(): Promise<OAuth2ListReply> {
-  return request.POST<OAuth2ListReply>('/api/auth/oauth2/list')
+  return request.POST<OAuth2ListReply>('/api/auth/oauth2/list', {})
 }
 
 /**

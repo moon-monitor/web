@@ -1,5 +1,6 @@
-import { GetCaptchaReply, getCaptcha, setEmailWithLogin, verifyEmail } from '@/api/authorization'
-import { ErrorResponse } from '@/api/request'
+import { getCaptcha, oAuthLoginByEmail, verifyEmail } from '@/api2/auth'
+import { GetCaptchaReply } from '@/api2/auth/types'
+import { ErrorResponse } from '@/api2/request'
 import { DataFrom } from '@/components/data/form'
 import { githubURL } from '@/components/layout/header-op'
 import { GlobalContext } from '@/utils/context'
@@ -71,7 +72,7 @@ export default function EmailVerification() {
     setIsLoading(true)
     setError('')
 
-    setEmailWithLogin({
+    oAuthLoginByEmail({
       email: email,
       code: value.emailCode?.toUpperCase(),
       oauthID: oauthID,

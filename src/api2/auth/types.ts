@@ -8,15 +8,15 @@ export interface GetCaptchaReply {
   /**
    * Unique identifier for the captcha
    */
-  captchaId?: string
+  captchaId: string
   /**
    * Base64 encoded captcha image data
    */
-  captchaImg?: string
+  captchaImg: string
   /**
    * Captcha expiration time in seconds
    */
-  expiredSeconds?: number
+  expiredSeconds: number
 }
 
 /**
@@ -27,11 +27,11 @@ export interface GetFilingInformationReply {
   /**
    * Filing information
    */
-  filingInformation?: string
+  filingInformation: string
   /**
    * URL of the filing information
    */
-  url?: string
+  url: string
 }
 
 /**
@@ -42,15 +42,15 @@ export interface LoginByPasswordRequest {
   /**
    * Captcha validation information
    */
-  captcha?: Captcha
+  captcha: Captcha
   /**
    * User email
    */
-  email?: string
+  email: string
   /**
    * User password
    */
-  password?: string
+  password: string
 }
 
 /**
@@ -62,11 +62,11 @@ export interface Captcha {
   /**
    * User's captcha answer
    */
-  answer?: string
+  answer: string
   /**
    * Captcha ID, used to identify the captcha image
    */
-  captchaId?: string
+  captchaId: string
 }
 
 /**
@@ -76,15 +76,15 @@ export interface LoginReply {
   /**
    * Token expiration time in seconds
    */
-  expiredSeconds?: number
+  expiredSeconds: number
   /**
    * Login token
    */
-  token?: string
+  token: string
   /**
    * User basic information
    */
-  user?: UserBaseItem
+  user: UserBaseItem
 }
 
 /**
@@ -95,27 +95,27 @@ export interface LoginByEmailRequest {
   /**
    * Email verification code
    */
-  code?: string
+  code: string
   /**
    * User email
    */
-  email?: string
+  email: string
   /**
    * User gender, optional
    */
-  gender?: number
+  gender: number
   /**
    * User nickname, optional
    */
-  nickname?: string
+  nickname: string
   /**
    * Remark, for additional information
    */
-  remark?: string
+  remark: string
   /**
    * Username, not email
    */
-  username?: string
+  username: string
 }
 
 /**
@@ -125,7 +125,7 @@ export interface LogoutRequest {
   /**
    * Redirect URL after logout, optional
    */
-  redirect?: string
+  redirect: string
 }
 
 /**
@@ -135,7 +135,7 @@ export interface LogoutReply {
   /**
    * Redirect URL after logout, if any
    */
-  redirect?: string
+  redirect: string
 }
 
 /**
@@ -143,8 +143,8 @@ export interface LogoutReply {
  * for replacing a member's role
  */
 export interface ReplaceMemberRoleRequest {
-  memberID?: number
-  roleIds?: number[]
+  memberID: number
+  roleIds: number[]
 }
 
 /**
@@ -155,25 +155,25 @@ export interface OAuth2ListReply {
   /**
    * List of OAuth2.0 providers
    */
-  items?: ApiPalaceOAuth2ListReplyOAuthItem[]
+  items: OAuthItem[]
 }
 
 /**
  * api.palace.OAuth2ListReply_OAuthItem, OAuth2.0 provider information item
  */
-export interface ApiPalaceOAuth2ListReplyOAuthItem {
+export interface OAuthItem {
   /**
    * Provider icon URL
    */
-  icon?: string
+  icon: string
   /**
    * Provider label or name
    */
-  label?: string
+  label: string
   /**
    * Provider redirect URL
    */
-  redirect?: string
+  redirect: string
 }
 
 /**
@@ -184,23 +184,23 @@ export interface OAuthLoginByEmailRequest {
   /**
    * Application ID, to identify the application
    */
-  app?: number
+  app: number
   /**
    * OAuth2.0 authorization code
    */
-  code?: string
+  code: string
   /**
    * User email
    */
-  email?: string
+  email: string
   /**
    * OAuth2.0 provider ID
    */
-  oauthID?: number
+  oauthID: number
   /**
    * OAuth2.0 token
    */
-  token?: string
+  token: string
 }
 
 /**
@@ -211,7 +211,7 @@ export interface GetSelfMenuTreeReply {
   /**
    * Menu tree data
    */
-  items?: MenuTreeItem[]
+  items: MenuTreeItem[]
 }
 
 /**
@@ -219,8 +219,8 @@ export interface GetSelfMenuTreeReply {
  * replacing a user's role
  */
 export interface ReplaceUserRoleRequest {
-  roleIds?: number[]
-  userID?: number
+  roleIds: number[]
+  userID: number
 }
 
 /**
@@ -231,11 +231,11 @@ export interface VerifyEmailRequest {
   /**
    * Captcha validation information
    */
-  captcha?: Captcha
+  captcha: Captcha
   /**
    * Email to verify
    */
-  email?: string
+  email: string
 }
 
 /**
@@ -246,5 +246,5 @@ export interface VerifyEmailReply {
   /**
    * Email verification code expiration time in seconds
    */
-  expiredSeconds?: number
+  expiredSeconds: number
 }

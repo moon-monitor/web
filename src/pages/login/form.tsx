@@ -1,12 +1,7 @@
-import {
-  type GetCaptchaReply,
-  type LoginByPasswordRequest,
-  type OAuthItem,
-  getCaptcha,
-  getOAuthList,
-  LoginByPassword
-} from '@/api/authorization'
+import { type GetCaptchaReply, type LoginByPasswordRequest, getCaptcha, LoginByPassword } from '@/api/authorization'
 import { type ErrorResponse } from '@/api/request'
+import { oAuth2List } from '@/api2/auth'
+import { OAuthItem } from '@/api2/auth/types'
 import { Gitee, Github } from '@/components/icon'
 import { GlobalContext } from '@/utils/context'
 import { hashMd5 } from '@/utils/hash'
@@ -93,7 +88,7 @@ const LoginForm: FC = () => {
   }
 
   const handleOAuthList = () => {
-    getOAuthList().then((res) => {
+    oAuth2List().then((res) => {
       setOAuthList(res.items || [])
     })
   }

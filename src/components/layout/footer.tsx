@@ -1,4 +1,8 @@
+import { getFilingInformation } from '@/api2/auth'
+import { GetFilingInformationReply } from '@/api2/auth/types'
 import { CopyrightOutlined } from '@ant-design/icons'
+import { useRequest } from 'ahooks'
+import { useEffect, useState } from 'react'
 
 const actionList = [
   {
@@ -20,13 +24,26 @@ const actionList = [
 ]
 
 export default function LayoutFooter() {
+  const [information, setInformation] = useState<GetFilingInformationReply>({
+    url: '',
+    filingInformation: ''
+  })
+  const { run: getInformation } = useRequest(getFilingInformation, {
+    manual: true,
+    onSuccess: (res) => {
+      setInformation(res)
+    }
+  })
+  useEffect(() => {
+    getInformation()
+  }, [getInformation])
   return (
     <div className='ml-2 flex flex-col items-center gap-2'>
       <div className='flex items-center gap-2 text-sm '>
         <CopyrightOutlined />
         {window.location.host}
-        <a href='https://beian.miit.gov.cn/' target='_blank' rel='noreferrer' className='text-blue-600'>
-          黔ICP备2023006024号
+        <a href={information.url} target='_blank' rel='noreferrer' className='text-blue-600'>
+          {information.filingInformation}
         </a>
       </div>
       <div className='flex items-center gap-2'>
