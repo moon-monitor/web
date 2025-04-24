@@ -1,3 +1,5 @@
+import { Gender, UserPosition, UserStatus } from './enum'
+
 /**
  * User basic information
  * api.palace.common.UserBaseItem
@@ -32,37 +34,48 @@ export interface UserItem {
   /**
    * User's avatar URL
    */
-  avatar?: string /**
+  avatar?: string
+  /**
    * User's creation time
    */
-  createdAt?: string /**
+  createdAt?: string
+  /**
    * User's email address (encrypted)
    */
-  email?: string /**
+  email?: string
+  /**
    * User's gender
    */
-  gender?: number /**
+  gender?: keyof typeof Gender
+  /**
    * User's nickname
    */
-  nickname?: string /**
+  nickname?: string
+  /**
    * User's phone number (encrypted)
    */
-  phone?: string /**
+  phone?: string
+  /**
    * User's position/role in the system
    */
-  position?: number /**
+  position: keyof typeof UserPosition
+  /**
    * Remarks about the user
    */
-  remark?: string /**
+  remark?: string
+  /**
    * User's status
    */
-  status?: number /**
+  status: keyof typeof UserStatus
+  /**
    * User's last update time
    */
-  updatedAt?: string /**
+  updatedAt?: string
+  /**
    * User's unique identifier
    */
-  userID?: number /**
+  userId: number
+  /**
    * User's login name
    */
   username?: string
@@ -104,7 +117,7 @@ export interface MenuTreeItem {
   /**
    * Status of the menu tree item
    */
-  status?: number
+  status: number
 }
 
 /**
@@ -134,7 +147,7 @@ export interface ResourceItem {
   /**
    * Status of the API resource
    */
-  status?: number
+  status: number
   /**
    * Last update time of the API resource
    */
@@ -145,12 +158,12 @@ export interface ResourceItem {
  * api.palace.common.PaginationRequest, PaginationRequest is used for pagination queries,
  * specifying the page number and the number of items per page.
  * page?: The current page number, must be greater than 0.
- * limit?: The number of items per page, must be greater than 0 and less than or equal to
+ * pageSize?: The number of items per page, must be greater than 0 and less than or equal to
  * 10000.
  */
 export interface PaginationRequest {
-  limit?: number
-  page?: number
+  pageSize: number
+  page: number
 }
 
 /**
@@ -159,10 +172,10 @@ export interface PaginationRequest {
  * per page.
  * total?: The total number of items.
  * page?: The current page number.
- * limit?: The number of items per page.
+ * pageSize?: The number of items per page.
  */
 export interface PaginationReply {
-  limit?: number
+  pageSize?: number
   page?: number
   total?: number
 }
@@ -194,7 +207,7 @@ export interface MenuTreeItem {
   /**
    * Status of the menu tree item
    */
-  status?: number
+  status: number
 }
 
 /**
@@ -226,7 +239,7 @@ export interface Detail {
   /**
    * Status of the API resource
    */
-  status?: number
+  status: number
   /**
    * Last update time of the API resource
    */
@@ -305,7 +318,7 @@ export interface SystemRoleItem {
   /**
    * Status of the system role
    */
-  status?: number
+  status: number
 }
 
 /**
@@ -327,7 +340,7 @@ export interface TeamAuditItem {
   /**
    * Status of the team audit
    */
-  status?: number
+  status: number
   /**
    * Team information being audited
    */
@@ -369,7 +382,7 @@ export interface TeamItem {
   /**
    * List of administrators in the team.
    */
-  admins?: UserItem[]
+  admins?: UserBaseItem[]
   /**
    * Timestamp indicating when the team was created.
    */
@@ -377,7 +390,7 @@ export interface TeamItem {
   /**
    * Information about the creator of the team.
    */
-  creator?: UserItem
+  creator?: UserBaseItem
   /**
    * Total number of data sources associated with the team.
    */
@@ -389,7 +402,7 @@ export interface TeamItem {
   /**
    * Information about the leader of the team.
    */
-  leader?: UserItem
+  leader?: UserBaseItem
   /**
    * URL or path to the team's logo.
    */
@@ -401,7 +414,7 @@ export interface TeamItem {
   /**
    * Name of the team.
    */
-  name?: string
+  name: string
   /**
    * Remarks or additional information about the team.
    */
@@ -409,7 +422,7 @@ export interface TeamItem {
   /**
    * Status of the team.
    */
-  status?: number
+  status: number
   /**
    * Total number of strategies associated with the team.
    */
@@ -466,7 +479,7 @@ export interface TeamStrategyItem {
   /**
    * Status of the strategy.
    */
-  status?: number
+  status: number
   /**
    * Unique identifier for the strategy.
    */
@@ -491,7 +504,7 @@ export interface NoticeGroupItem {
   name?: string
   noticeGroupID?: number
   remark?: string
-  status?: number
+  status: number
   updatedAt?: string
 }
 
@@ -506,7 +519,7 @@ export interface NoticeHookItem {
   noticeHookID?: number
   remark?: string
   secret?: string
-  status?: number
+  status: number
   updatedAt?: string
   url?: string
 }
@@ -542,7 +555,7 @@ export interface TeamRoleItem {
   /**
    * Status of the role.
    */
-  status?: number
+  status: number
   /**
    * Timestamp indicating when the role was last updated.
    */
@@ -576,7 +589,7 @@ export interface TeamMemberItem {
   /**
    * Status of the member.
    */
-  status?: number
+  status: number
   /**
    * Timestamp indicating when the member's information was last updated.
    */
@@ -614,7 +627,7 @@ export interface TeamMemberItem {
   /**
    * Status of the member.
    */
-  status?: number
+  status: number
   /**
    * Timestamp indicating when the member's information was last updated.
    */
@@ -634,7 +647,7 @@ export interface TeamDashboardChartItem {
   height?: string
   id?: number
   remark?: string
-  status?: number
+  status: number
   title?: string
   updatedAt?: string
   url?: string
@@ -650,7 +663,7 @@ export interface TeamDashboardItem {
   id?: number
   name?: string
   remark?: string
-  status?: number
+  status: number
   updatedAt?: string
 }
 
@@ -705,7 +718,7 @@ export interface TeamStrategyMetricItemRuleItem {
   notices?: NoticeGroupItem[]
   ruleID?: number
   sampleMode?: number
-  status?: number
+  status: number
   strategyMetricID?: number
   values?: number[]
 }
@@ -785,7 +798,7 @@ export interface ApiPalaceCommonTeamStrategyGroupItem {
   /**
    * Status of the strategy group.
    */
-  status?: number
+  status: number
   /**
    * Total number of strategies in the group.
    */
@@ -828,7 +841,7 @@ export interface TeamStrategyGroupItem {
   /**
    * Status of the strategy group.
    */
-  status?: number
+  status: number
   /**
    * Total number of strategies in the group.
    */

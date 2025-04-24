@@ -1,7 +1,8 @@
 import { StatusData } from '@/api/global'
-import type { TeamItem } from '@/api/model-types'
 import { ErrorResponse } from '@/api/request'
-import { type CreateTeamReply, type CreateTeamRequest, createTeam, getTeam, updateTeam } from '@/api/team'
+import { type CreateTeamReply, type CreateTeamRequest, createTeam, updateTeam } from '@/api/team'
+import { TeamItem } from '@/api2/common.types'
+import { getTeam } from '@/api2/team'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
@@ -102,7 +103,7 @@ export const EditSpaceModal: React.FC<EditSpaceModalProps> = (props) => {
 
   useEffect(() => {
     if (spaceId) {
-      initTeamDetail({ id: spaceId })
+      initTeamDetail()
     }
   }, [initTeamDetail, spaceId])
 

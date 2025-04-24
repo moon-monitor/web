@@ -1,5 +1,5 @@
-import { type UpdateUserBaseInfoRequest, updateUserBaseInfo } from '@/api/user'
 import { UserItem } from '@/api2/common.types'
+import { updateSelfInfo } from '@/api2/user'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Button, Form, Space, message } from 'antd'
@@ -16,17 +16,13 @@ export const BaseInfo: React.FC<BaseInfoProps> = (props) => {
   const { userInfo, onOK } = props
   const [form] = Form.useForm()
 
-  const { run: editSelfInfo, loading } = useRequest(updateUserBaseInfo, {
+  const { run: editSelfInfo, loading } = useRequest(updateSelfInfo, {
     manual: true,
     onSuccess: () => {
       message.success('修改成功')
       onOK()
     }
   })
-
-  const updateSelfInfo = (values: UpdateUserBaseInfoRequest) => {
-    editSelfInfo(values)
-  }
 
   const initSelfInfo = useCallback(() => {
     if (userInfo) {
@@ -40,7 +36,7 @@ export const BaseInfo: React.FC<BaseInfoProps> = (props) => {
 
   return (
     <div>
-      <DataFrom items={baseInfoOptions} props={{ layout: 'vertical', form, onFinish: updateSelfInfo }}>
+      <DataFrom items={baseInfoOptions} props={{ layout: 'vertical', form, onFinish: editSelfInfo }}>
         <Space size={8}>
           <Form.Item>
             <Button type='default' onClick={initSelfInfo}>

@@ -1,7 +1,8 @@
 import { Role } from '@/api/enum'
 import { RoleData } from '@/api/global'
-import type { UserItem } from '@/api/model-types'
 import { type UpdateUserRoleRequest, updateUserRole } from '@/api/user'
+import { UserItem } from '@/api2/common.types'
+import { UserPosition } from '@/api2/enum'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
 import { Alert, Form, Modal, type ModalProps, Select } from 'antd'
@@ -11,7 +12,7 @@ interface ModalRoleSetProps extends ModalProps {
 }
 
 export const ModalRoleSet: React.FC<ModalRoleSetProps> = (props) => {
-  const { detail = { role: Role.RoleAll, name: '', id: 0 }, onOk, ...rest } = props
+  const { detail = { position: 'USER_POSITION_UNKNOWN', username: '', userId: 0 }, onOk, ...rest } = props
   const [form] = Form.useForm<UpdateUserRoleRequest>()
 
   const { runAsync: setUserRole, loading: setUserRoleLoading } = useRequest(updateUserRole, {
@@ -20,7 +21,7 @@ export const ModalRoleSet: React.FC<ModalRoleSetProps> = (props) => {
 
   const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     form.validateFields().then((values) => {
-      setUserRole({ id: detail.id, role: +values.role })
+      setUserRole({ id: detail.userId, role: +values.role })
         .then(() => {
           onOk?.(e)
         })
@@ -33,9 +34,9 @@ export const ModalRoleSet: React.FC<ModalRoleSetProps> = (props) => {
   return (
     <Modal {...rest} onOk={onSubmit} confirmLoading={setUserRoleLoading}>
       <div className='flex flex-col gap-3'>
-        <Alert message={`${detail.name} 当前角色为 ${RoleData[detail.role]}`} type='info' showIcon />
-        <Form form={form} layout='vertical' initialValues={{ role: detail.role }}>
-          <Form.Item label='角色' name='role' rules={[{ required: true, message: '请选择角色' }]}>
+        <Alert message={`${detail.username} 当前角色为 ${UserPosition[detail.position]}`} type='info' showIcon />
+        <Form form={form} layout='vertical' initialValues={{ role: detail.position }}>
+          <Form.Item label='角色' name='position' rules={[{ required: true, message: '请选择角色' }]}>
             <Select
               options={Object.entries(RoleData)
                 .filter(([key]) => +key !== Role.RoleAll)

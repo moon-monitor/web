@@ -1,6 +1,7 @@
-import { type Role, Status } from '@/api/enum'
+import { type Role } from '@/api/enum'
 import { ActionKey, RoleData, StatusData } from '@/api/global'
-import type { UserItem } from '@/api/model-types'
+import { UserItem } from '@/api2/common.types'
+import { UserStatus, UserStatusMap } from '@/api2/enum'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
@@ -64,7 +65,7 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
   const tableOperationItems = (record: UserItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
+    record.status === 'USER_STATUS_FORBIDDEN'
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -117,7 +118,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
       align: 'center',
       width: 50,
       render: (avatar: string, record: UserItem) => {
-        return <Avatar src={avatar}>{avatar ? '' : record.name.at(0)?.toUpperCase()}</Avatar>
+        return <Avatar src={avatar}>{avatar ? '' : record.username?.at(0)?.toUpperCase()}</Avatar>
       }
     },
     {
@@ -157,9 +158,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
       key: 'status',
       align: 'center',
       width: 120,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
-        return <Badge color={color} text={text} />
+      render: (status: keyof typeof UserStatus) => {
+        return <Badge color={UserStatusMap[status].color} text={UserStatus[status]} />
       }
     },
 

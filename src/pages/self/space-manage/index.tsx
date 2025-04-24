@@ -1,6 +1,7 @@
 import { Status } from '@/api/enum'
-import type { TeamItem } from '@/api/model-types'
-import { myTeam, updateTeamStatus } from '@/api/team'
+import { updateTeamStatus } from '@/api/team'
+import { TeamItem } from '@/api2/common.types'
+import { selfTeamList } from '@/api2/user'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
 import { EditOutlined, PlusOutlined, UserSwitchOutlined } from '@ant-design/icons'
@@ -36,10 +37,10 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
   const [operatorTeam, setOperatorTeam] = React.useState<TeamItem>()
   const [teamList, setTeamList] = React.useState<TeamItem[]>([])
 
-  const { runAsync: initTeamList, loading: initTeamListLoading } = useRequest(myTeam, {
+  const { runAsync: initTeamList, loading: initTeamListLoading } = useRequest(selfTeamList, {
     manual: true,
-    onSuccess: (res) => {
-      setTeamList(res?.list)
+    onSuccess: ({ items }) => {
+      setTeamList(items)
     }
   })
 
@@ -117,7 +118,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
         ) : (
           <Row gutter={[12, 12]} className='flex-1 overflow-auto'>
             {teamList?.map((item, index) => {
-              const { name, logo, status, id, remark, leader, admins: admin, creator } = item
+              const { name, logo, status, id, remark, leader, admins: admins, creator } = item
               const items: DescriptionsProps['items'] = [
                 {
                   key: 'leader',
@@ -125,7 +126,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                   children: (
                     <Space direction='horizontal'>
                       <Avatar src={leader?.avatar} />
-                      {`${leader?.name}(${leader?.nickname})`}
+                      {`${leader?.username}(${leader?.nickname})`}
                     </Space>
                   ),
                   span: 4
@@ -133,11 +134,13 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                 {
                   key: 'creator',
                   label: '创建者',
-                  children: (
+                  children: creator ? (
                     <Space direction='horizontal'>
                       <Avatar src={creator?.avatar} />
-                      {`${leader?.name}(${leader?.nickname})`}
+                      {`${creator?.username}(${creator?.nickname})`}
                     </Space>
+                  ) : (
+                    '-'
                   ),
                   span: 4
                 },
@@ -146,10 +149,10 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                   label: '管理员',
                   children: (
                     <Avatar.Group size='small'>
-                      {admin
-                        ? admin?.map((item) => (
-                            <Avatar key={item?.user?.id} src={item?.user?.avatar}>
-                              {item?.user?.nickname || item?.user?.name}
+                      {admins?.length
+                        ? admins?.map((item) => (
+                            <Avatar key={item?.userId} src={item?.avatar}>
+                              {item?.nickname || item?.username}
                             </Avatar>
                           ))
                         : '-'}

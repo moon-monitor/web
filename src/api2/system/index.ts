@@ -10,6 +10,7 @@ import {
   GetUserListReply,
   GetUserListRequest,
   GetUserReply,
+  GetUserRequest,
   OperateLogListReply,
   OperateLogListRequest,
   ResetUserPasswordRequest,
@@ -151,9 +152,9 @@ export function updateUserStatus(params: UpdateUserStatusRequest): Promise<Empty
 
 /**
  * GetUser retrieves a user by ID
- * @param {userID} userID
+ * @param GetUserRequest params
  * @returns {Promise<GetUserReply>}
  */
-export function getUser(userID: number): Promise<GetUserReply> {
-  return request.GET<GetUserReply>(`/api/system/user/${userID}`)
+export function getUser(params: GetUserRequest): Promise<GetUserReply> {
+  return request.GET<GetUserReply>('/api/system/user/detail', params)
 }

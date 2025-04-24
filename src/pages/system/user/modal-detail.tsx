@@ -1,50 +1,50 @@
-import { RoleData, StatusData } from '@/api/global'
-import type { UserItem } from '@/api/model-types'
-import { getUser } from '@/api/user'
+import { UserItem } from '@/api2/common.types'
+import { UserPosition, UserStatusMap } from '@/api2/enum'
+import { getUser } from '@/api2/system'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, type DescriptionsProps, Modal } from 'antd'
 import { useEffect, useState } from 'react'
 
 export interface UserDetailModalProps {
-  id: number
+  userId: number
   open?: boolean
   onCancel?: () => void
   onOk?: () => void
 }
 
 export function DetailModal(props: UserDetailModalProps) {
-  const { id, open, onCancel, onOk } = props
+  const { userId, open, onCancel, onOk } = props
 
   const [detail, setDetail] = useState<UserItem>({} as UserItem)
 
   const { run: initUserDetail, loading: initUserDetailLoading } = useRequest(getUser, {
     manual: true,
-    onSuccess: (data) => {
-      setDetail(data.detail)
+    onSuccess: ({ user }) => {
+      setDetail(user)
     }
   })
 
   useEffect(() => {
-    if (id && open) {
-      initUserDetail({ id })
+    if (userId && open) {
+      initUserDetail({ userId })
     }
-  }, [id, open, initUserDetail])
+  }, [userId, open, initUserDetail])
 
   const items: DescriptionsProps['items'] = [
     {
       label: '名称',
       children: (
         <div className='flex items-center gap-2'>
-          <Avatar src={detail?.avatar}>{detail?.nickname || detail?.name}</Avatar>
-          {detail?.nickname || detail?.name}
-          <Badge color={StatusData[detail?.status]?.color} />
+          <Avatar src={detail?.avatar}>{detail?.nickname || detail?.username}</Avatar>
+          {detail?.nickname || detail?.username}
+          <Badge color={UserStatusMap[detail.status]?.color} />
         </div>
       ),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },
     {
       label: '角色',
-      children: RoleData[detail.role],
+      children: UserPosition[detail?.position],
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },
 
@@ -75,10 +75,10 @@ export function DetailModal(props: UserDetailModalProps) {
   ]
 
   useEffect(() => {
-    if (id && open) {
-      initUserDetail({ id })
+    if (userId && open) {
+      initUserDetail({ userId })
     }
-  }, [id, open, initUserDetail])
+  }, [userId, open, initUserDetail])
 
   return (
     <>

@@ -8,6 +8,7 @@ import {
   TeamItem,
   UserItem
 } from '../common.types'
+import { UserStatus } from '../enum'
 
 /**
  * api.palace.OperateLogListRequest，OperateLogListRequest represents the request data for
@@ -27,9 +28,9 @@ export interface OperateLogListRequest {
    */
   type?: number[]
   /**
-   * User ID, optional for filtering logs by user
+   * User Id, optional for filtering logs by user
    */
-  userID?: number
+  userId?: number
 }
 
 /**
@@ -48,9 +49,9 @@ export interface OperateLogListReply {
 }
 export interface GetSystemRoleRequest {
   /**
-   * Role ID
+   * Role Id
    */
-  roleID?: number
+  roleId?: number
 }
 
 /**
@@ -78,13 +79,13 @@ export interface SaveRoleRequest {
    */
   remark?: string
   /**
-   * List of resource IDs associated with the role
+   * List of resource Ids associated with the role
    */
-  resourceIDs?: number[]
+  resourceIds?: number[]
   /**
-   * Role ID, optional for new roles
+   * Role Id, optional for new roles
    */
-  roleID?: number
+  roleId?: number
 }
 
 /**
@@ -93,9 +94,9 @@ export interface SaveRoleRequest {
  */
 export interface UpdateRoleStatusRequest {
   /**
-   * Role ID
+   * Role Id
    */
-  roleID?: number
+  roleId?: number
   /**
    * New status for the role
    */
@@ -108,13 +109,13 @@ export interface UpdateRoleStatusRequest {
  */
 export interface UpdateRoleUsersRequest {
   /**
-   * Role ID
+   * Role Id
    */
-  roleID?: number
+  roleId?: number
   /**
-   * List of user IDs to assign to the role
+   * List of user Ids to assign to the role
    */
-  userIDs?: number[]
+  userIds?: number[]
 }
 
 /**
@@ -135,9 +136,9 @@ export interface GetTeamAuditListRequest {
    */
   status?: number[]
   /**
-   * User ID, optional for filtering audits by user
+   * User Id, optional for filtering audits by user
    */
-  userID?: number
+  userId?: number
 }
 
 /**
@@ -161,9 +162,9 @@ export interface GetTeamAuditListReply {
  */
 export interface UpdateTeamAuditStatusRequest {
   /**
-   * Audit ID
+   * Audit Id
    */
-  auditID?: number
+  auditId?: number
   /**
    * Reason for the status update
    */
@@ -224,9 +225,9 @@ export interface UpdateUserRequest {
    */
   nickname?: string
   /**
-   * User ID
+   * User Id
    */
-  userID?: number
+  userId?: number
 }
 
 /**
@@ -237,7 +238,7 @@ export interface GetUserListRequest {
   /**
    * Pagination request details
    */
-  pagination?: PaginationRequest
+  pagination: PaginationRequest
   /**
    * List of positions to filter users by
    */
@@ -246,6 +247,10 @@ export interface GetUserListRequest {
    * List of statuses to filter users by
    */
   status?: number[]
+  /**
+   * Keyword to search users by
+   */
+  keyword?: string
 }
 
 /**
@@ -259,7 +264,7 @@ export interface GetUserListReply {
   /**
    * List of user items
    */
-  users?: UserItem[]
+  items?: UserItem[]
 }
 
 /**
@@ -268,9 +273,9 @@ export interface GetUserListReply {
  */
 export interface ResetUserPasswordRequest {
   /**
-   * List of user IDs to reset passwords for
+   * List of user Ids to reset passwords for
    */
-  userIDs?: number[]
+  userId?: number
 }
 
 /**
@@ -283,9 +288,9 @@ export interface UpdateUserPositionRequest {
    */
   position?: number
   /**
-   * User ID
+   * User Id
    */
-  userID?: number
+  userId?: number
 }
 
 /**
@@ -294,13 +299,13 @@ export interface UpdateUserPositionRequest {
  */
 export interface UpdateUserRolesRequest {
   /**
-   * List of role IDs to assign to the user
+   * List of role Ids to assign to the user
    */
-  roleIDs?: number[]
+  roleIds?: number[]
   /**
-   * User ID
+   * User Id
    */
-  userID?: number
+  userId?: number
 }
 
 /**
@@ -311,11 +316,11 @@ export interface UpdateUserStatusRequest {
   /**
    * New status for the users
    */
-  status?: number
+  status?: keyof typeof UserStatus
   /**
-   * List of user IDs to update
+   * List of user Ids to update
    */
-  userIDs?: number[]
+  userIds?: number[]
 }
 /**
  * api.palace.GetUserReply，GetUserReply contains the response data for retrieving a user
@@ -324,5 +329,12 @@ export interface GetUserReply {
   /**
    * Detailed information about the user
    */
-  user?: UserItem
+  user: UserItem
+}
+
+export interface GetUserRequest {
+  /**
+   * User Id
+   */
+  userId?: number
 }

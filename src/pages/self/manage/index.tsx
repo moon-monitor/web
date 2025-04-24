@@ -3,12 +3,11 @@ import {
   type UpdateUserAvatarRequest,
   type UpdateUserBaseInfoRequest,
   type UpdateUserRequest,
-  updateUserAvatar,
   updateUserEmail,
   updateUserPhone
 } from '@/api/user'
-import { UserItem } from '@/api2/common.types'
-import { selfInfo, updateSelfPassword } from '@/api2/user'
+import { EmptyReply, UserItem } from '@/api2/common.types'
+import { selfInfo, updateSelfInfo, updateSelfPassword } from '@/api2/user'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { GlobalContext } from '@/utils/context'
 import { hashMd5 } from '@/utils/hash'
@@ -41,7 +40,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
     let options: (DataFromItem | DataFromItem[])[]
     let title: string
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let update: (params: any) => Promise<null>
+    let update: (params: any) => Promise<EmptyReply | null>
 
     switch (type) {
       case 'phone': {
@@ -59,7 +58,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
       case 'avatar': {
         options = avatarOptions
         title = '修改头像？'
-        update = updateUserAvatar
+        update = updateSelfInfo
       }
     }
     confirm({
