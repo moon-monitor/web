@@ -2,7 +2,6 @@ import {
   OperateLogItem,
   PaginationReply,
   PaginationRequest,
-  SelectItem,
   SystemRoleItem,
   TeamAuditItem,
   TeamItem,
@@ -187,11 +186,14 @@ export interface GetTeamListRequest {
   /**
    * Pagination request details
    */
-  pagination?: PaginationRequest
+  pagination: PaginationRequest
   /**
    * List of statuses to filter teams by
    */
-  status?: SelectItem[]
+  status?: keyof (typeof UserStatus)[]
+
+  leaderId?: number
+  creatorId?: number
 }
 /**
  * api.palace.GetTeamListReply，GetTeamListReply contains the response data for listing teams
@@ -200,11 +202,11 @@ export interface GetTeamListReply {
   /**
    * List of team items
    */
-  items?: TeamItem[]
+  items: TeamItem[]
   /**
    * Pagination response details
    */
-  pagination?: PaginationReply
+  pagination: PaginationReply
 }
 
 /**
@@ -286,11 +288,11 @@ export interface UpdateUserPositionRequest {
   /**
    * New position for the user
    */
-  position?: number
+  position: number
   /**
    * User Id
    */
-  userId?: number
+  userId: number
 }
 
 /**
@@ -301,11 +303,11 @@ export interface UpdateUserRolesRequest {
   /**
    * List of role Ids to assign to the user
    */
-  roleIds?: number[]
+  roleIds: number[]
   /**
    * User Id
    */
-  userId?: number
+  userId: number
 }
 
 /**
@@ -325,12 +327,7 @@ export interface UpdateUserStatusRequest {
 /**
  * api.palace.GetUserReply，GetUserReply contains the response data for retrieving a user
  */
-export interface GetUserReply {
-  /**
-   * Detailed information about the user
-   */
-  user: UserItem
-}
+export interface GetUserReply extends UserItem {}
 
 export interface GetUserRequest {
   /**

@@ -1,11 +1,10 @@
-import { Role } from '@/api/enum'
-import { RoleData } from '@/api/global'
-import { type UpdateUserRoleRequest, updateUserRole } from '@/api/user'
 import { UserItem } from '@/api2/common.types'
 import { UserPosition } from '@/api2/enum'
+import { updateUserPosition } from '@/api2/system'
+import { UpdateUserPositionRequest } from '@/api2/system/types'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
-import { Alert, Form, Modal, type ModalProps, Select } from 'antd'
+import { Alert, Form, Modal, Select, type ModalProps } from 'antd'
 
 interface ModalRoleSetProps extends ModalProps {
   detail?: UserItem
@@ -13,15 +12,15 @@ interface ModalRoleSetProps extends ModalProps {
 
 export const ModalRoleSet: React.FC<ModalRoleSetProps> = (props) => {
   const { detail = { position: 'USER_POSITION_UNKNOWN', username: '', userId: 0 }, onOk, ...rest } = props
-  const [form] = Form.useForm<UpdateUserRoleRequest>()
+  const [form] = Form.useForm<UpdateUserPositionRequest>()
 
-  const { runAsync: setUserRole, loading: setUserRoleLoading } = useRequest(updateUserRole, {
+  const { runAsync: setUserRole, loading: setUserRoleLoading } = useRequest(updateUserPosition, {
     manual: true
   })
 
   const onSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     form.validateFields().then((values) => {
-      setUserRole({ id: detail.userId, role: +values.role })
+      setUserRole({ userId: detail.userId, position: values.position })
         .then(() => {
           onOk?.(e)
         })
@@ -38,9 +37,9 @@ export const ModalRoleSet: React.FC<ModalRoleSetProps> = (props) => {
         <Form form={form} layout='vertical' initialValues={{ role: detail.position }}>
           <Form.Item label='角色' name='position' rules={[{ required: true, message: '请选择角色' }]}>
             <Select
-              options={Object.entries(RoleData)
-                .filter(([key]) => +key !== Role.RoleAll)
-                .map(([key, value]) => ({ label: value, value: +key }))}
+              options={Object.entries(UserPosition)
+                .filter(([key]) => key !== 'USER_POSITION_UNKNOWN')
+                .map(([key, value]) => ({ label: value, value: key }))}
               placeholder='请选择角色'
             />
           </Form.Item>

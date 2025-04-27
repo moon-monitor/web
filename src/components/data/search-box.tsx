@@ -48,9 +48,11 @@ export type SearchFormItem = {
 }
 export interface SearchProps {
   formList: SearchFormItem[]
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onSearch: (values: any) => void
   onReset: () => void
   labelCol?: number
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ref: any
 }
 

@@ -19,8 +19,8 @@ export function DetailModal(props: UserDetailModalProps) {
 
   const { run: initUserDetail, loading: initUserDetailLoading } = useRequest(getUser, {
     manual: true,
-    onSuccess: ({ user }) => {
-      setDetail(user)
+    onSuccess: (data) => {
+      setDetail(data)
     }
   })
 
@@ -37,7 +37,7 @@ export function DetailModal(props: UserDetailModalProps) {
         <div className='flex items-center gap-2'>
           <Avatar src={detail?.avatar}>{detail?.nickname || detail?.username}</Avatar>
           {detail?.nickname || detail?.username}
-          <Badge color={UserStatusMap[detail.status]?.color} />
+          <Badge color={UserStatusMap[detail?.status]?.color} />
         </div>
       ),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }

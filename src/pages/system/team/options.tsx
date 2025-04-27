@@ -1,6 +1,8 @@
 import { Status } from '@/api/enum'
 import { ActionKey, StatusData } from '@/api/global'
-import type { TeamItem, TeamMemberItem, UserItem } from '@/api/model-types'
+import { TeamItem, TeamMemberItem, UserItem } from '@/api2/common.types'
+import { UserStatus, UserStatusMap } from '@/api2/enum'
+// import type { TeamItem, TeamMemberItem, UserItem } from '@/api/model-types'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
@@ -114,10 +116,10 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> =>
           <Row gutter={12}>
             <Col>
               <Avatar src={leader?.avatar} shape='square'>
-                {leader?.name?.at(0)?.toUpperCase()}
+                {leader?.username?.at(0)?.toUpperCase()}
               </Avatar>
             </Col>
-            <Col>{leader?.name}</Col>
+            <Col>{leader?.username}</Col>
           </Row>
         )
       }
@@ -131,8 +133,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> =>
         return admins?.length > 0 ? (
           <Avatar.Group size='small'>
             {admins?.map((item) => (
-              <Avatar src={item?.user?.avatar} shape='square' key={item?.user?.id}>
-                {item?.user?.name?.at(0)?.toUpperCase()}
+              <Avatar src={item?.user?.avatar} shape='square' key={item?.user?.userId}>
+                {item?.user?.username?.at(0)?.toUpperCase()}
               </Avatar>
             ))}
           </Avatar.Group>
@@ -147,9 +149,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> =>
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
-        return <Badge color={color} text={text} />
+      render: (status: keyof typeof UserStatus) => {
+        return <Badge color={UserStatusMap[status].color} text={UserStatus[status]} />
       }
     },
 

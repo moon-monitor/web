@@ -1,7 +1,7 @@
 import { type Role } from '@/api/enum'
-import { ActionKey, RoleData, StatusData } from '@/api/global'
+import { ActionKey, RoleData } from '@/api/global'
 import { UserItem } from '@/api2/common.types'
-import { UserStatus, UserStatusMap } from '@/api2/enum'
+import { UserPosition, UserStatus, UserStatusMap } from '@/api2/enum'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
@@ -28,10 +28,11 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(StatusData).map(([key, value]) => {
+        mode: 'multiple',
+        options: Object.entries(UserStatus).map(([key, value]) => {
           return {
-            label: value.text,
-            value: Number(key)
+            label: key === 'USER_STATUS_UNKNOWN' ? '全部' : value,
+            value: key
           }
         })
       }
@@ -45,10 +46,11 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '角色',
         allowClear: true,
-        options: Object.entries(RoleData).map(([key, value]) => {
+        mode: 'multiple',
+        options: Object.entries(UserPosition).map(([key, value]) => {
           return {
-            label: value,
-            value: Number(key)
+            label: key === 'USER_POSITION_UNKNOWN' ? '全部' : value,
+            value: key
           }
         })
       }

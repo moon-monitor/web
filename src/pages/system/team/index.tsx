@@ -1,7 +1,9 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { TeamItem } from '@/api/model-types'
-import { type ListTeamRequest, listTeam, syncTeam, updateTeamStatus } from '@/api/team'
+import { syncTeam, updateTeamStatus } from '@/api/team'
+import { TeamItem } from '@/api2/common.types'
+import { getTeamList } from '@/api2/system'
+import { GetTeamListRequest } from '@/api2/system/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -12,9 +14,9 @@ import { useContext, useEffect, useRef, useState } from 'react'
 import { TeamDetailModal } from './modal-detail'
 import { formList, getColumnList } from './options'
 
-const defaultSearchParams: ListTeamRequest = {
+const defaultSearchParams: GetTeamListRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 50
   }
 }
@@ -24,19 +26,19 @@ const { useToken } = theme
 export default function Team() {
   const { token } = useToken()
   const { isFullscreen } = useContext(GlobalContext)
-  const [searchParams, setSearchParams] = useState<ListTeamRequest>({
+  const [searchParams, setSearchParams] = useState<GetTeamListRequest>({
     ...defaultSearchParams
   })
   const [teamList, setTeamList] = useState<TeamItem[]>([])
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState<number>(0)
   const [openDetailModal, setOpenDetailModal] = useState(false)
   const [teamId, setTeamId] = useState<number>(0)
 
-  const { run: getTeamList, loading } = useRequest(listTeam, {
+  const { run: initTeamList, loading } = useRequest(getTeamList, {
     manual: true,
-    onSuccess: (data) => {
-      setTeamList(data.list)
-      setTotal(data.pagination.total)
+    onSuccess: ({ items, pagination }) => {
+      setTeamList(items || [])
+      setTotal(pagination.total)
     }
   })
 
@@ -51,12 +53,12 @@ export default function Team() {
   const ADivRef = useRef<HTMLDivElement>(null)
   const AutoTableHeight = useContainerHeightTop(ADivRef, teamList, isFullscreen)
 
-  const onSearch = (formData: ListTeamRequest) => {
+  const onSearch = (formData: GetTeamListRequest) => {
     setSearchParams({
       ...searchParams,
       ...formData,
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: searchParams.pagination.pageSize
       }
     })
@@ -67,13 +69,13 @@ export default function Team() {
   }
 
   const onRefresh = () => {
-    getTeamList(searchParams)
+    initTeamList(searchParams)
   }
 
-  const handleTurnPage = (pageNum: number, pageSize: number) => {
+  const handleTurnPage = (page: number, pageSize: number) => {
     setSearchParams({
       ...searchParams,
-      pagination: { pageNum, pageSize }
+      pagination: { page, pageSize }
     })
   }
 
@@ -114,13 +116,13 @@ export default function Team() {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.pageNum,
+    current: searchParams.pagination.page,
     pageSize: searchParams.pagination.pageSize
   })
 
   useEffect(() => {
-    getTeamList(searchParams)
-  }, [searchParams, getTeamList])
+    initTeamList(searchParams)
+  }, [searchParams, initTeamList])
 
   return (
     <div className='p-3 gap-3 flex flex-col'>
@@ -163,7 +165,7 @@ export default function Team() {
             columns={columns}
             handleTurnPage={handleTurnPage}
             pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.pageNum}
+            pageNum={searchParams.pagination.page}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

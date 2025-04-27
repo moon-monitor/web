@@ -175,9 +175,9 @@ export interface PaginationRequest {
  * pageSize?: The number of items per page.
  */
 export interface PaginationReply {
-  pageSize?: number
-  page?: number
-  total?: number
+  pageSize: number
+  page: number
+  total: number
 }
 
 /**
