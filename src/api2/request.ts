@@ -1,6 +1,6 @@
 import { message, notification } from 'antd'
 import axios, { type AxiosError, type AxiosRequestConfig } from 'axios'
-import { TeamItem } from './model-types'
+import { TeamItem } from './common.types'
 
 const host = window.location.origin
 

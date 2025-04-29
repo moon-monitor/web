@@ -1,14 +1,10 @@
 /* eslint-disable prettier/prettier */
 import { Status, StrategyType } from '@/api/enum'
 import { ActionKey, StrategyTypeData } from '@/api/global'
-import type { StrategyItem } from '@/api/model-types'
-import {
-  deleteStrategy,
-  listStrategy,
-  pushStrategy,
-  updateStrategyStatus,
-  type ListStrategyRequest
-} from '@/api/strategy'
+import { deleteStrategy, pushStrategy, updateStrategyStatus } from '@/api/strategy'
+import { TeamStrategyItem } from '@/api2/common.types'
+import { listTeamStrategy } from '@/api2/team/team-strategy'
+import { ListTeamStrategyRequest } from '@/api2/team/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -38,9 +34,9 @@ import { formList, getColumnList } from './options'
 const { confirm } = Modal
 const { useToken } = theme
 
-const defaultSearchParams: ListStrategyRequest = {
+const defaultSearchParams: ListTeamStrategyRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 50
   }
 }
@@ -53,8 +49,8 @@ const StrategyList = (props: StrategyListProps) => {
   const { isFullscreen } = useContext(GlobalContext)
   const { selectedGroups } = props
 
-  const [datasource, setDatasource] = useState<StrategyItem[]>([])
-  const [searchParams, setSearchParams] = useState<ListStrategyRequest>(defaultSearchParams)
+  const [datasource, setDatasource] = useState<TeamStrategyItem[]>([])
+  const [searchParams, setSearchParams] = useState<ListTeamStrategyRequest>(defaultSearchParams)
   const [loading, setLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const [total, setTotal] = useState(0)
@@ -75,7 +71,7 @@ const StrategyList = (props: StrategyListProps) => {
   const [openSubscribeModal, setOpenSubscribeModal] = useState(false)
   const [openSubscriberModal, setOpenSubscriberModal] = useState(false)
 
-  const [detail, setDetail] = useState<StrategyItem>()
+  const [detail, setDetail] = useState<TeamStrategyItem>()
 
   const [openChartModal, setOpenChartModal] = useState(false)
   const [openStrategyTypeModal, setOpenStrategyTypeModal] = useState(false)
@@ -84,42 +80,42 @@ const StrategyList = (props: StrategyListProps) => {
   const ADivRef = useRef<HTMLDivElement>(null)
   const AutoTableHeight = useContainerHeightTop(ADivRef, datasource, isFullscreen)
 
-  const handleOpenMetricEditModal = (item?: StrategyItem) => {
+  const handleOpenMetricEditModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenMetricEditModal(true)
   }
 
-  const handleOpenEventEditModal = (item?: StrategyItem) => {
+  const handleOpenEventEditModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenEventEditModal(true)
   }
 
-  const handleOpenDomainEditModal = (item?: StrategyItem) => {
+  const handleOpenDomainEditModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenDomainEditModal(true)
   }
 
-  const handleOpenPortEditModal = (item?: StrategyItem) => {
+  const handleOpenPortEditModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenPortEditModal(true)
   }
 
-  const handleOpenHttpEditModal = (item?: StrategyItem) => {
+  const handleOpenHttpEditModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenHttpEditModal(true)
   }
 
-  const handleOpenLogEditModal = (item?: StrategyItem) => {
+  const handleOpenLogEditModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenLogEditModal(true)
   }
 
-  const handleOpenSubscribeModal = (item?: StrategyItem) => {
+  const handleOpenSubscribeModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenSubscribeModal(true)
   }
 
-  const handleOpenSubscriberModal = (item?: StrategyItem) => {
+  const handleOpenSubscriberModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenSubscriberModal(true)
   }
@@ -176,7 +172,7 @@ const StrategyList = (props: StrategyListProps) => {
     setDetail(undefined)
   }
 
-  const handleDetailModal = (item: StrategyItem) => {
+  const handleDetailModal = (item: TeamStrategyItem) => {
     setDetail(item)
     switch (item.strategyType) {
       case StrategyType.StrategyTypeMetric:
@@ -247,7 +243,7 @@ const StrategyList = (props: StrategyListProps) => {
     setRefresh(!refresh)
   }
 
-  const handleOpenChartModal = (item: StrategyItem) => {
+  const handleOpenChartModal = (item: TeamStrategyItem) => {
     setOpenChartModal(true)
     setDetail(item)
   }
@@ -262,8 +258,8 @@ const StrategyList = (props: StrategyListProps) => {
     debounce(async (params) => {
       setLoading(true)
       try {
-        const { list, pagination } = await listStrategy(params)
-        setDatasource(list || [])
+        const { items, pagination } = await listTeamStrategy(params)
+        setDatasource(items || [])
         setTotal(pagination?.total || 0)
       } finally {
         setLoading(false)
@@ -277,12 +273,12 @@ const StrategyList = (props: StrategyListProps) => {
     fetchData(searchParams)
   }, [refresh, searchParams, fetchData])
 
-  const onSearch = (formData: ListStrategyRequest) => {
+  const onSearch = (formData: ListTeamStrategyRequest) => {
     setSearchParams({
       ...searchParams,
       ...formData,
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: searchParams?.pagination?.pageSize
       }
     })
@@ -293,7 +289,7 @@ const StrategyList = (props: StrategyListProps) => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum: page,
+        page: page,
         pageSize: pageSize
       }
     })
@@ -304,7 +300,7 @@ const StrategyList = (props: StrategyListProps) => {
     setSearchParams(defaultSearchParams)
   }
 
-  const handleOpenEditModal = (item: StrategyItem) => {
+  const handleOpenEditModal = (item: TeamStrategyItem) => {
     switch (item.strategyType) {
       case StrategyType.StrategyTypeMetric:
         handleOpenMetricEditModal(item)
@@ -330,11 +326,11 @@ const StrategyList = (props: StrategyListProps) => {
     }
   }
 
-  const onHandleMenuOnClick = (item: StrategyItem, key: ActionKey) => {
+  const onHandleMenuOnClick = (item: TeamStrategyItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
         updateStrategyStatus({
-          ids: [item.id],
+          ids: [item.groupId],
           status: Status.StatusEnable
         }).then(() => {
           message.success('更改状态成功')
@@ -343,7 +339,7 @@ const StrategyList = (props: StrategyListProps) => {
         break
       case ActionKey.DISABLE:
         updateStrategyStatus({
-          ids: [item.id],
+          ids: [item.groupId],
           status: Status.StatusDisable
         }).then(() => {
           message.success('更改状态成功')
@@ -362,7 +358,7 @@ const StrategyList = (props: StrategyListProps) => {
         handleOpenChartModal(item)
         break
       case ActionKey.IMMEDIATELY_PUSH:
-        pushStrategy(item.id)
+        pushStrategy(item.groupId)
           .then(() => message.success('推送成功'))
           .catch(() => message.error('推送失败'))
         break
@@ -378,7 +374,7 @@ const StrategyList = (props: StrategyListProps) => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteStrategy({ id: item.id }).then(() => {
+            deleteStrategy({ id: item.groupId }).then(() => {
               message.success('删除成功')
               onRefresh()
             })
@@ -393,7 +389,7 @@ const StrategyList = (props: StrategyListProps) => {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.pageNum,
+    current: searchParams.pagination.page,
     pageSize: searchParams.pagination.pageSize
   })
 
@@ -443,7 +439,7 @@ const StrategyList = (props: StrategyListProps) => {
         width='60%'
         open={openSubscriberModal}
         onClose={handleCloseSubscriberModal}
-        strategyId={detail?.id}
+        strategyId={detail?.groupId}
       />
       <ModalSubscribe
         title={`订阅【${detail?.name}】策略`}
@@ -511,49 +507,49 @@ const StrategyList = (props: StrategyListProps) => {
       <StrategyCharts
         title='策略图表'
         width='60%'
-        strategyID={detail?.id}
+        strategyID={detail?.groupId}
         open={openChartModal}
         onCancel={handleCloseChartModal}
       />
       <MetricDetail
         title='Metric 策略详情'
         width='60%'
-        strategyId={detail?.id}
+        strategyId={detail?.groupId}
         open={openMetricDetailModal}
         onCancel={handleCloseDetailModal}
       />
       <StrategyDetailEvent
         title='事件监控策略详情'
         width='60%'
-        strategyId={detail?.id}
+        strategyId={detail?.groupId}
         open={openEventDetailModal}
         onCancel={handleCloseDetailModal}
       />
       <StrategyDetailDomain
         title='证书监控策略详情'
         width='60%'
-        strategyId={detail?.id}
+        strategyId={detail?.groupId}
         open={openDomainDetailModal}
         onCancel={handleCloseDetailModal}
       />
       <StrategyDetailPort
         title='端口监控策略详情'
         width='60%'
-        strategyId={detail?.id}
+        strategyId={detail?.groupId}
         open={openPortDetailModal}
         onCancel={handleCloseDetailModal}
       />
       <StrategyDetailHttp
         title='HTTP监控策略详情'
         width='60%'
-        strategyId={detail?.id}
+        strategyId={detail?.groupId}
         open={openHttpDetailModal}
         onCancel={handleCloseDetailModal}
       />
       <StrategyDetailLog
         title='Log监控策略详情'
         width='60%'
-        strategyId={detail?.id}
+        strategyId={detail?.groupId}
         open={openLogDetailModal}
         onCancel={handleCloseDetailModal}
       />
@@ -585,14 +581,14 @@ const StrategyList = (props: StrategyListProps) => {
         </div>
         <div className='mt-3' ref={ADivRef}>
           <AutoTable
-            rowKey={(record) => record.id}
+            rowKey={(record) => record.groupId}
             dataSource={datasource}
             total={total}
             loading={loading}
             columns={columns}
             handleTurnPage={handleTurnPage}
             pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.pageNum}
+            pageNum={searchParams.pagination.page}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

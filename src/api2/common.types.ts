@@ -1,4 +1,4 @@
-import { Gender, GlobalStatus, TeamStatus, UserPosition, UserStatus } from './enum'
+import { Gender, GlobalStatus, StrategyType, TeamStatus, UserPosition, UserStatus } from './enum'
 
 /**
  * User basic information
@@ -492,6 +492,8 @@ export interface TeamStrategyItem {
    * Timestamp indicating when the strategy was last updated.
    */
   updatedAt?: string
+  strategyType?: keyof typeof StrategyType
+  group: string
 }
 
 /**
@@ -770,49 +772,6 @@ export interface TeamStrategyMetricItem {
  * api.palace.common.TeamStrategyGroupItem，TeamStrategyGroupItem represents the structure of
  * a team strategy group item.
  */
-export interface ApiPalaceCommonTeamStrategyGroupItem {
-  /**
-   * Timestamp indicating when the group was created.
-   */
-  createdAt?: string
-  /**
-   * Information about the creator of the group.
-   */
-  creator?: UserItem
-  /**
-   * Number of enabled strategies in the group.
-   */
-  enableStrategyCount?: string
-  /**
-   * Unique identifier for the strategy group.
-   */
-  groupId?: number
-  /**
-   * Name of the strategy group.
-   */
-  name?: string
-  /**
-   * Remarks or additional information about the group.
-   */
-  remark?: string
-  /**
-   * Status of the strategy group.
-   */
-  status: number
-  /**
-   * Total number of strategies in the group.
-   */
-  strategyCount?: string
-  /**
-   * Timestamp indicating when the group was last updated.
-   */
-  updatedAt?: string
-}
-
-/**
- * api.palace.common.TeamStrategyGroupItem，TeamStrategyGroupItem represents the structure of
- * a team strategy group item.
- */
 export interface TeamStrategyGroupItem {
   /**
    * Timestamp indicating when the group was created.
@@ -850,4 +809,5 @@ export interface TeamStrategyGroupItem {
    * Timestamp indicating when the group was last updated.
    */
   updatedAt?: string
+  strategyType?: keyof typeof StrategyType
 }

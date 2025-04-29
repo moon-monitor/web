@@ -14,7 +14,6 @@ import {
   TeamRoleItem,
   TeamStrategyGroupItem,
   TeamStrategyItem,
-  TeamStrategyMetricItem,
   TLS
 } from '../common.types'
 import { GlobalStatus } from '../enum'
@@ -401,18 +400,45 @@ export interface GetTeamStrategyRequest {
  * api.palace.GetTeamStrategyReply, GetTeamStrategyReply contains the response data for
  * retrieving a team strategy
  */
-export interface GetTeamStrategyReply {
-  /**
-   * Detailed information about the strategy
-   */
-  detail?: TeamStrategyMetricItem
-}
+export interface GetTeamStrategyReply extends TeamStrategyItem {}
 
+/**
+ * api.palace.SaveTeamStrategyRequest
+ */
+export interface SaveTeamStrategyRequest {
+  /**
+   * Group id
+   */
+  groupId?: number
+  /**
+   * Strategy item name
+   */
+  name?: string
+  /**
+   * Receiver routes
+   */
+  receiverRoutes?: number[]
+  /**
+   * Strategy item remark or description
+   */
+  remark?: string
+  /**
+   * Strategy item Id, optional for new items
+   */
+  strategyId?: number
+  /**
+   * Strategy item type
+   */
+  strategyType?: number
+}
 export interface DeleteTeamStrategyRequest {
   /**
    * Strategy Id
    */
-  strategyId?: number
+  strategyId?: number /**
+   * strategy type
+   */
+  strategyType?: number
 }
 
 /**
@@ -470,15 +496,15 @@ export interface ListTeamStrategyRequest {
   /**
    * Strategy group Id to filter strategies by
    */
-  groupId?: number
+  groupIds?: number[]
   /**
    * Pagination request details
    */
-  pagination?: PaginationRequest
+  pagination: PaginationRequest
   /**
    * List of statuses to filter strategies by
    */
-  status?: number[]
+  status?: keyof (typeof GlobalStatus)[]
 }
 
 /**
@@ -492,7 +518,7 @@ export interface ListTeamStrategyReply {
   items?: TeamStrategyItem[] /**
    * Pagination response details
    */
-  pagination?: PaginationReply
+  pagination: PaginationReply
 }
 
 /**

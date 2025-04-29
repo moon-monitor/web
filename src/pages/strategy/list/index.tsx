@@ -8,7 +8,7 @@ import { useRequest } from 'ahooks'
 import { Badge, Button, Dropdown, Input, MenuProps, Modal, Spin, message, theme } from 'antd'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
-import { GroupEditModal } from '../group/group-edit-modal'
+import { GroupEditModal } from './group-edit-modal'
 import StrategyList from './strategy-list'
 
 const { confirm } = Modal
@@ -262,7 +262,7 @@ const StrategyMetric: React.FC = () => {
           {strategyGroups.map((item: TeamStrategyGroupItem) => (
             <div
               key={item.groupId}
-              className='flex gap-1 text-left p-2 rounded cursor-pointer text-sm items-center '
+              className='flex gap-1 text-left p-2 rounded cursor-pointer text-sm items-center  justify-between'
               style={{
                 backgroundColor: selectedGroups.includes(item.groupId)
                   ? token.colorPrimaryBg
@@ -270,13 +270,13 @@ const StrategyMetric: React.FC = () => {
                 color: selectedGroups.includes(item.groupId) ? token.colorPrimary : token.colorText
               }}
             >
-              <div className='flex gap-2 flex-1' onClick={() => handleGroupClick(item)}>
+              <div className='flex gap-2 w-[90%]' onClick={() => handleGroupClick(item)}>
                 <Badge status={item.status === 'GLOBAL_STATUS_ENABLE' ? 'success' : 'error'} />
                 <div>
                   [<span className='text-green-500'>{item.enableStrategyCount}</span>/
                   <span className='text-red-500'>{item.strategyCount}</span>]
                 </div>
-                <div className='w-[60%] overflow-hidden whitespace-nowrap overflow-ellipsis'>{item.name}</div>
+                <div className=' overflow-hidden whitespace-nowrap overflow-ellipsis '>{item.name}</div>
               </div>
               <Dropdown
                 menu={{
@@ -287,11 +287,7 @@ const StrategyMetric: React.FC = () => {
                 }}
                 trigger={['click']}
               >
-                <div
-                  className='ml-auto text-lg '
-                  onClick={(e) => e.stopPropagation()}
-                  style={{ color: token.colorPrimary }}
-                >
+                <div className=' text-lg  ' onClick={(e) => e.stopPropagation()} style={{ color: token.colorPrimary }}>
                   <MoreOutlined />
                 </div>
               </Dropdown>

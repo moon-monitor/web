@@ -4,9 +4,14 @@ import {
   DeleteTeamStrategyRequest,
   GetTeamStrategyGroupReply,
   GetTeamStrategyGroupRequest,
+  GetTeamStrategyReply,
+  GetTeamStrategyRequest,
   ListTeamStrategyGroupReply,
   ListTeamStrategyGroupRequest,
+  ListTeamStrategyReply,
+  ListTeamStrategyRequest,
   SaveTeamStrategyGroupRequest,
+  SaveTeamStrategyRequest,
   UpdateTeamStrategyGroupStatusRequest
 } from './types'
 
@@ -53,4 +58,40 @@ export function deleteTeamStrategy(params: DeleteTeamStrategyRequest): Promise<E
  */
 export function updateTeamStrategyGroupStatus(params: UpdateTeamStrategyGroupStatusRequest): Promise<EmptyReply> {
   return request.PUT<EmptyReply>('/api/team/strategy/group/status', params)
+}
+
+/**
+ * ListTeamStrategy lists team strategies based on specified filters
+ * @param {ListTeamStrategyRequest} params
+ * @returns {Promise<ListTeamStrategyReply>}
+ */
+export function listTeamStrategy(params: ListTeamStrategyRequest): Promise<ListTeamStrategyReply> {
+  return request.POST<ListTeamStrategyReply>('/api/team/strategy/list', params)
+}
+
+/**
+ * GetTeamStrategy retrieves a team strategy by Id
+ * @param {GetTeamStrategyRequest} params
+ * @returns {Promise<GetTeamStrategyReply>}
+ */
+export function getTeamStrategy(params: GetTeamStrategyRequest): Promise<GetTeamStrategyReply> {
+  return request.GET<GetTeamStrategyReply>(`/api/team/strategy`, params)
+}
+
+/**
+ * SaveTeamStrategy saves a new team strategy or updates an existing one
+ * @param {SaveTeamStrategyRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveTeamStrategy(params: SaveTeamStrategyRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/strategy', params)
+}
+
+/**
+ * DeleteTeamStrategy deletes a team strategy by Id
+ * @param {DeleteTeamStrategyRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export function deleteTeamStrategyById(params: DeleteTeamStrategyRequest): Promise<EmptyReply> {
+  return request.DELETE<EmptyReply>('/api/team/strategy', params)
 }

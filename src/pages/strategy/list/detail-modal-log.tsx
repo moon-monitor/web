@@ -1,7 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { StatusData } from '@/api/global'
-import type { SelectItem, StrategyItem, StrategyLogLevelItem } from '@/api/model-types'
-import { getStrategy } from '@/api/strategy'
+import type { SelectItem, StrategyLogLevelItem } from '@/api/model-types'
+import { TeamStrategyItem } from '@/api2/common.types'
+import { getTeamStrategy } from '@/api2/team/team-strategy'
 import { useRequest } from 'ahooks'
 import { Badge, Descriptions, type DescriptionsProps, Modal, type ModalProps, Space, Table, Tag } from 'antd'
 import type React from 'react'
@@ -49,18 +50,18 @@ export interface StrategyDetailLogProps extends ModalProps {
 
 export const StrategyDetailLog: React.FC<StrategyDetailLogProps> = (props) => {
   const { strategyId, open, ...rest } = props
-  const [detail, setDetail] = useState<StrategyItem>()
+  const [detail, setDetail] = useState<TeamStrategyItem>()
 
-  const { run: initDetail, loading: detailLoading } = useRequest(getStrategy, {
+  const { run: initDetail, loading: detailLoading } = useRequest(getTeamStrategy, {
     manual: true,
     onSuccess: (data) => {
-      setDetail(data?.detail)
+      setDetail(data)
     }
   })
 
   useEffect(() => {
     if (!strategyId || !open) return
-    initDetail({ id: strategyId })
+    initDetail({ strategyId })
   }, [strategyId, open, initDetail])
 
   const items = (): DescriptionsProps['items'] => {

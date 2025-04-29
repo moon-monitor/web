@@ -134,6 +134,64 @@ export enum GlobalStatus {
   GLOBAL_STATUS_DISABLE = '禁用'
 }
 
+export const GlobalStatusMap: Record<keyof typeof GlobalStatus, { color: string }> = {
+  GLOBAL_STATUS_UNKNOWN: {
+    color: 'blue'
+  },
+  GLOBAL_STATUS_ENABLE: {
+    color: 'green'
+  },
+  GLOBAL_STATUS_DISABLE: {
+    color: 'red'
+  }
+}
+
+export enum StrategyType {
+  // STRATEGY_TYPE_UNKNOWN is the default type for a strategy.
+  STRATEGY_TYPE_UNKNOWN = '未知',
+  // STRATEGY_TYPE_METRIC indicates the strategy is based on metrics.
+  STRATEGY_TYPE_METRIC = '指标',
+  // STRATEGY_TYPE_EVENT indicates the strategy is based on events.
+  STRATEGY_TYPE_EVENT = '事件',
+  // STRATEGY_TYPE_LOGS indicates the strategy is based on logs.
+  STRATEGY_TYPE_LOGS = '日志',
+  // STRATEGY_TYPE_PORT indicates the strategy is based on port monitoring.
+  STRATEGY_TYPE_PORT = '端口',
+  // STRATEGY_TYPE_HTTP indicates the strategy is based on HTTP monitoring.
+  STRATEGY_TYPE_HTTP = 'HTTP',
+  // STRATEGY_TYPE_PING indicates the strategy is based on ping monitoring.
+  STRATEGY_TYPE_PING = 'Ping',
+  // STRATEGY_TYPE_CERT indicates the strategy is based on certificate monitoring.
+  STRATEGY_TYPE_CERT = '证书'
+}
+
+export const StrategyTypeMap: Record<keyof typeof StrategyType, { color: string }> = {
+  STRATEGY_TYPE_UNKNOWN: {
+    color: ''
+  },
+  STRATEGY_TYPE_METRIC: {
+    color: 'green'
+  },
+  STRATEGY_TYPE_EVENT: {
+    color: 'blue'
+  },
+  STRATEGY_TYPE_LOGS: {
+    color: 'orange'
+  },
+  STRATEGY_TYPE_PORT: {
+    color: 'red'
+  },
+  STRATEGY_TYPE_HTTP: {
+    color: 'purple'
+  },
+  STRATEGY_TYPE_PING: {
+    color: 'cyan'
+  },
+  STRATEGY_TYPE_CERT: {
+    color: 'magenta'
+  }
+}
+
 // 操作
 export enum ActionKey {
   /** 新增 */
