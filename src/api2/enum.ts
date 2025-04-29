@@ -78,6 +78,62 @@ export enum TeamAuditAction {
   TEAM_AUDIT_ACTION_LEAVE = '离开'
 }
 
+// TeamStatus represents the status of a team.
+export enum TeamStatus {
+  // TEAM_STATUS_UNKNOWN is the default status for a team.
+  TEAM_STATUS_UNKNOWN = '未知',
+  // TEAM_STATUS_NORMAL indicates the team is operating normally.
+  TEAM_STATUS_NORMAL = '正常',
+  // TEAM_STATUS_FORBIDDEN indicates the team has been forbidden.
+  TEAM_STATUS_FORBIDDEN = '禁用',
+  // TEAM_STATUS_DELETED indicates the team has been deleted.
+  TEAM_STATUS_DELETED = '已删除',
+  // TEAM_STATUS_APPROVAL indicates the team is waiting for approval.
+  TEAM_STATUS_APPROVAL = '待审核',
+  // TEAM_STATUS_REJECTED indicates the team has been rejected.
+  TEAM_STATUS_REJECTED = '已拒绝'
+}
+
+// MemberPosition represents the position of a member in a team.
+export enum MemberPosition {
+  // MEMBER_POSITION_UNKNOWN is the default position for a member.
+  MEMBER_POSITION_UNKNOWN = '未知',
+  // MEMBER_POSITION_SUPER_ADMIN indicates the member is the super administrator of the team.
+  MEMBER_POSITION_SUPER_ADMIN = '超级管理员',
+  // MEMBER_POSITION_ADMIN indicates the member is an administrator of the team.
+  MEMBER_POSITION_ADMIN = '管理员',
+  // MEMBER_POSITION_MEMBER indicates the member is a regular member of the team.
+  MEMBER_POSITION_MEMBER = '普通成员',
+  // MEMBER_POSITION_GUEST indicates the member is a guest of the team.
+  MEMBER_POSITION_GUEST = '访客'
+}
+
+// MemberStatus represents the status of a member in a team.
+export enum MemberStatus {
+  // MEMBER_STATUS_UNKNOWN is the default status for a member.
+  MEMBER_STATUS_UNKNOWN = '未知',
+  // MEMBER_STATUS_NORMAL indicates the member is active and normal.
+  MEMBER_STATUS_NORMAL = '正常',
+  // MEMBER_STATUS_FORBIDDEN indicates the member has been forbidden.
+  MEMBER_STATUS_FORBIDDEN = '禁用',
+  // MEMBER_STATUS_DELETED indicates the member has been deleted.
+  MEMBER_STATUS_DELETED = '已删除',
+  // MEMBER_STATUS_PENDING_CONFIRM indicates the member is waiting for confirmation to join the team.
+  MEMBER_STATUS_PENDING_CONFIRM = '待确认',
+  // MEMBER_STATUS_DEPARTED indicates the member has left the team.
+  MEMBER_STATUS_DEPARTED = '已离开'
+}
+
+// GlobalStatus represents the status of a global resource.
+export enum GlobalStatus {
+  // GLOBAL_STATUS_UNKNOWN is the default status for a global resource.
+  GLOBAL_STATUS_UNKNOWN = '未知',
+  // GLOBAL_STATUS_ENABLE indicates the resource is enabled.
+  GLOBAL_STATUS_ENABLE = '启用',
+  // GLOBAL_STATUS_DISABLE indicates the resource is disabled.
+  GLOBAL_STATUS_DISABLE = '禁用'
+}
+
 // 操作
 export enum ActionKey {
   /** 新增 */

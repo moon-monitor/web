@@ -1,12 +1,11 @@
-import { Status } from '@/api/enum'
 import { ActionKey, StatusData } from '@/api/global'
 import { TeamItem, TeamMemberItem, UserItem } from '@/api2/common.types'
-import { UserStatus, UserStatusMap } from '@/api2/enum'
+import { TeamStatus } from '@/api2/enum'
 // import type { TeamItem, TeamMemberItem, UserItem } from '@/api/model-types'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
-import { Avatar, Badge, Button, Col, Row, Space } from 'antd'
+import { Avatar, Button, Col, Row, Space } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 
 export const formList: SearchFormItem[] = [
@@ -49,23 +48,23 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
   const tableOperationItems = (record: TeamItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
-      ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
-      : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+    // record.status === Status.StatusDisable
+    //   ? {
+    //       key: ActionKey.ENABLE,
+    //       label: (
+    //         <Button type='link' size='small'>
+    //           启用
+    //         </Button>
+    //       )
+    //     }
+    //   : {
+    //       key: ActionKey.DISABLE,
+    //       label: (
+    //         <Button type='link' size='small' danger>
+    //           禁用
+    //         </Button>
+    //       )
+    //     },
     {
       key: ActionKey.SYNC,
       label: (
@@ -149,8 +148,9 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> =>
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: keyof typeof UserStatus) => {
-        return <Badge color={UserStatusMap[status].color} text={UserStatus[status]} />
+      render: (status: keyof typeof TeamStatus) => {
+        return <div>{TeamStatus[status]}</div>
+        // return <Badge color={UserStatusMap[status].color} text={UserStatus[status]} />
       }
     },
 

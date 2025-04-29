@@ -1,12 +1,10 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
 import type { StrategyGroupItem } from '@/api/model-types'
-import {
-  type ListStrategyGroupRequest,
-  deleteStrategyGroup,
-  listStrategyGroup,
-  updateStrategyGroupStatus
-} from '@/api/strategy'
+import { deleteStrategyGroup, updateStrategyGroupStatus } from '@/api/strategy'
+import { TeamStrategyGroupItem } from '@/api2/common.types'
+import { listTeamStrategyGroup } from '@/api2/team/team-strategy'
+import { ListTeamStrategyGroupRequest } from '@/api2/team/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -22,21 +20,20 @@ import { formList, getColumnList } from './options'
 const { confirm } = Modal
 const { useToken } = theme
 
-const defaultSearchParams: ListStrategyGroupRequest = {
+const defaultSearchParams: ListTeamStrategyGroupRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 10
   },
-  keyword: '',
-  status: Status.StatusAll
+  keyword: ''
 }
 
 const Group: React.FC = () => {
   const { token } = useToken()
   const { isFullscreen } = useContext(GlobalContext)
 
-  const [datasource, setDatasource] = useState<StrategyGroupItem[]>([])
-  const [searchParams, setSearchParams] = useState<ListStrategyGroupRequest>(defaultSearchParams)
+  const [datasource, setDatasource] = useState<TeamStrategyGroupItem[]>([])
+  const [searchParams, setSearchParams] = useState<ListTeamStrategyGroupRequest>(defaultSearchParams)
   const [total, setTotal] = useState(0)
   const [openGroupEditModal, setOpenGroupEditModal] = useState(false)
   const [editGroupId, setEditGroupId] = useState<number>()
@@ -46,11 +43,11 @@ const Group: React.FC = () => {
   const ADivRef = useRef<HTMLDivElement>(null)
   const AutoTableHeight = useContainerHeightTop(ADivRef, datasource, isFullscreen)
 
-  const { run: initDatasource, loading: initDatasourceLoading } = useRequest(listStrategyGroup, {
+  const { run: initDatasource, loading: initDatasourceLoading } = useRequest(listTeamStrategyGroup, {
     manual: true,
-    onSuccess: (res) => {
-      setDatasource(res.list || [])
-      setTotal(res.pagination?.total || 0)
+    onSuccess: ({ items, pagination }) => {
+      setDatasource(items || [])
+      setTotal(pagination?.total || 0)
     }
   })
 
@@ -75,12 +72,12 @@ const Group: React.FC = () => {
     initDatasource(searchParams)
   }
 
-  const onSearch = (formData: ListStrategyGroupRequest) => {
+  const onSearch = (formData: ListTeamStrategyGroupRequest) => {
     setSearchParams({
       ...searchParams,
       ...formData,
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: searchParams?.pagination?.pageSize || 10
       }
     })
@@ -91,7 +88,7 @@ const Group: React.FC = () => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum: page,
+        page: page,
         pageSize: pageSize
       }
     })
@@ -151,7 +148,7 @@ const Group: React.FC = () => {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.pageNum,
+    current: searchParams.pagination.page,
     pageSize: searchParams.pagination.pageSize
   })
 
@@ -200,7 +197,7 @@ const Group: React.FC = () => {
             columns={columns}
             handleTurnPage={handleTurnPage}
             pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.pageNum}
+            pageNum={searchParams.pagination.page}
             showSizeChanger={true}
             style={{ background: token.colorBgContainer, borderRadius: token.borderRadius }}
             scroll={{ y: `calc(100vh - 174px - ${AutoTableHeight}px)` }}

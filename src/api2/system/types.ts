@@ -335,3 +335,11 @@ export interface GetUserRequest {
    */
   userId?: number
 }
+
+export interface GetTeamRequest {
+  /**
+   * Team Id
+   */
+  teamId?: number
+}
+export interface GetTeamReply extends TeamItem {}

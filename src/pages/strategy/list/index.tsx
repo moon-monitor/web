@@ -1,13 +1,8 @@
-import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import { StrategyGroupItem } from '@/api/model-types'
-import {
-  ListStrategyGroupRequest,
-  deleteStrategyGroup,
-  listStrategyGroup,
-  updateStrategyGroupStatus,
-  type ListStrategyRequest
-} from '@/api/strategy'
+import { deleteStrategyGroup } from '@/api/strategy'
+import { TeamStrategyGroupItem } from '@/api2/common.types'
+import { listTeamStrategyGroup, updateTeamStrategyGroupStatus } from '@/api2/team/team-strategy'
+import { ListTeamStrategyGroupRequest } from '@/api2/team/types'
 import { ExclamationCircleFilled, MoreOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Badge, Button, Dropdown, Input, MenuProps, Modal, Spin, message, theme } from 'antd'
@@ -18,19 +13,19 @@ import StrategyList from './strategy-list'
 
 const { confirm } = Modal
 
-const defaultSearchParams: ListStrategyRequest = {
+const defaultSearchParams: ListTeamStrategyGroupRequest = {
   keyword: '',
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 20
   }
 }
 
 const StrategyMetric: React.FC = () => {
-  const [strategyGroups, setStrategyGroups] = useState<StrategyGroupItem[]>([])
+  const [strategyGroups, setStrategyGroups] = useState<TeamStrategyGroupItem[]>([])
   const [selectedGroups, setSelectedGroups] = useState<number[]>([]) // 存储选中的策略组
   const { token } = theme.useToken() // 获取主题变量
-  const [searchParams, setSearchParams] = useState<ListStrategyGroupRequest>(defaultSearchParams)
+  const [searchParams, setSearchParams] = useState<ListTeamStrategyGroupRequest>(defaultSearchParams)
   const [total, setTotal] = useState(0)
   const listRef = useRef<HTMLDivElement>(null) // 列表容器的引用
   const [openGroupEditModal, setOpenGroupEditModal] = useState(false) // 编辑策略组模态框的显示状态
@@ -38,32 +33,41 @@ const StrategyMetric: React.FC = () => {
   const [disabledEditGroupModal, setDisabledEditGroupModal] = useState(false) // 编辑模态框是否禁用
 
   // 处理策略组点击事件
-  const handleGroupClick = (item: StrategyGroupItem) => {
-    if (selectedGroups.includes(item.id)) {
+  const handleGroupClick = (item: TeamStrategyGroupItem) => {
+    if (selectedGroups.includes(item.groupId)) {
       // 如果已选中，则取消选中
-      setSelectedGroups(selectedGroups.filter((group) => group !== item.id))
+      setSelectedGroups(selectedGroups.filter((group) => group !== item.groupId))
     } else {
       // 如果未选中，则添加到选中列表
-      setSelectedGroups([...selectedGroups, item.id])
+      setSelectedGroups([...selectedGroups, item.groupId])
     }
   }
 
-  const { run: fetchData, loading: loading } = useRequest(listStrategyGroup, {
+  const { run: fetchData, loading: loading } = useRequest(listTeamStrategyGroup, {
     manual: true,
     onSuccess: (res) => {
       // 保留之前选中的策略组
-      const newStrategyGroups = res.list || []
+      const newStrategyGroups = res.items || []
       setStrategyGroups(newStrategyGroups)
 
       // 过滤掉已经不存在的策略组
       const updatedSelectedGroups = selectedGroups.filter((groupId) =>
-        newStrategyGroups.some((group) => group.id === groupId)
+        newStrategyGroups.some((group) => group.groupId === groupId)
       )
       setSelectedGroups(updatedSelectedGroups)
 
       setTotal(res.pagination?.total || 0)
     }
   })
+  const { run: updateStrategyGroupStatus } = useRequest(updateTeamStrategyGroupStatus, {
+    manual: true,
+    onSuccess: () => {
+      message.success('更改状态成功')
+      console.log('状态更新成功，重新获取数据')
+      onRefresh()
+    }
+  })
+
   // 处理搜索事件
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const onPressEnter = (e: any) => {
@@ -104,36 +108,28 @@ const StrategyMetric: React.FC = () => {
   }
 
   // 策略组操作菜单点击事件
-  const onHandleMenuOnClick = (item: StrategyGroupItem, key: ActionKey) => {
+  const onHandleMenuOnClick = (item: TeamStrategyGroupItem, key: ActionKey) => {
     console.log(item, key)
     switch (key) {
       case ActionKey.ENABLE:
         updateStrategyGroupStatus({
-          ids: [item.id],
-          status: Status.StatusEnable
-        }).then(() => {
-          message.success('更改状态成功')
-          console.log('状态更新成功，重新获取数据')
-          onRefresh()
+          groupId: item.groupId,
+          status: 'GLOBAL_STATUS_ENABLE'
         })
         break
       case ActionKey.DISABLE:
         updateStrategyGroupStatus({
-          ids: [item.id],
-          status: Status.StatusDisable
-        }).then(() => {
-          message.success('更改状态成功')
-          console.log('状态更新成功，重新获取数据')
-          onRefresh()
+          groupId: item.groupId,
+          status: 'GLOBAL_STATUS_DISABLE'
         })
         break
       case ActionKey.OPERATION_LOG:
         break
       case ActionKey.DETAIL:
-        handleOpenDetailModal(item.id)
+        handleOpenDetailModal(item.groupId)
         break
       case ActionKey.EDIT:
-        handleEditModal(item.id)
+        handleEditModal(item.groupId)
         break
       case ActionKey.DELETE:
         confirm({
@@ -141,7 +137,7 @@ const StrategyMetric: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteStrategyGroup({ id: item.id }).then(() => {
+            deleteStrategyGroup({ id: item.groupId }).then(() => {
               message.success('删除成功')
               onRefresh()
             })
@@ -154,8 +150,8 @@ const StrategyMetric: React.FC = () => {
     }
   } // 策略组操作菜单
 
-  const tableOperationItems = (record: StrategyGroupItem): MenuProps['items'] => [
-    record.status === Status.StatusDisable
+  const tableOperationItems = (record: TeamStrategyGroupItem): MenuProps['items'] => [
+    record.status === 'GLOBAL_STATUS_DISABLE'
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -209,7 +205,7 @@ const StrategyMetric: React.FC = () => {
           // 加载下一页
           setSearchParams({
             ...searchParams,
-            pagination: { pageNum: searchParams.pagination.pageNum + 1, pageSize: searchParams.pagination.pageSize }
+            pagination: { page: searchParams.pagination.page + 1, pageSize: searchParams.pagination.pageSize }
           })
         }
       }
@@ -263,19 +259,19 @@ const StrategyMetric: React.FC = () => {
           )}
         </div>
         <div className=' space-y-1 h-[90%] overflow-y-auto ' ref={listRef}>
-          {strategyGroups.map((item: StrategyGroupItem) => (
+          {strategyGroups.map((item: TeamStrategyGroupItem) => (
             <div
-              key={item.id}
+              key={item.groupId}
               className='flex gap-1 text-left p-2 rounded cursor-pointer text-sm items-center '
               style={{
-                backgroundColor: selectedGroups.includes(item.id)
+                backgroundColor: selectedGroups.includes(item.groupId)
                   ? token.colorPrimaryBg
                   : token.colorBgContainerDisabled,
-                color: selectedGroups.includes(item.id) ? token.colorPrimary : token.colorText
+                color: selectedGroups.includes(item.groupId) ? token.colorPrimary : token.colorText
               }}
             >
               <div className='flex gap-2 flex-1' onClick={() => handleGroupClick(item)}>
-                <Badge status={item.status === Status.StatusEnable ? 'success' : 'error'} />
+                <Badge status={item.status === 'GLOBAL_STATUS_ENABLE' ? 'success' : 'error'} />
                 <div>
                   [<span className='text-green-500'>{item.enableStrategyCount}</span>/
                   <span className='text-red-500'>{item.strategyCount}</span>]

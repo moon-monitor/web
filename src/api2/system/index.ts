@@ -7,6 +7,8 @@ import {
   GetTeamAuditListRequest,
   GetTeamListReply,
   GetTeamListRequest,
+  GetTeamReply,
+  GetTeamRequest,
   GetUserListReply,
   GetUserListRequest,
   GetUserReply,
@@ -94,6 +96,14 @@ export function updateTeamAuditStatus(params: UpdateTeamAuditStatusRequest): Pro
  */
 export function getTeamList(params: GetTeamListRequest): Promise<GetTeamListReply> {
   return request.POST<GetTeamListReply>('/api/system/team/list', params)
+}
+/**
+ * GetTeam retrieves a team by Id
+ * @param {GetTeamRequest} params
+ * @returns {Promise<GetTeamReply>}
+ */
+export function getTeam(params: GetTeamRequest): Promise<GetTeamReply> {
+  return request.GET<GetTeamReply>('/api/system/team/detail', params)
 }
 
 /**

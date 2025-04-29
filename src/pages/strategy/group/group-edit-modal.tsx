@@ -1,12 +1,9 @@
-import { dictSelectList } from '@/api/dict'
-import { DictType } from '@/api/enum'
-import { defaultPaginationReq } from '@/api/global'
-import type { SelectItem, StrategyGroupItem } from '@/api/model-types'
-import { createStrategyGroup, getStrategyGroup, updateStrategyGroup } from '@/api/strategy'
+import { TeamStrategyGroupItem } from '@/api2/common.types'
+import { getTeamStrategyGroup, saveTeamStrategyGroup } from '@/api2/team/team-strategy'
 import { useRequest } from 'ahooks'
-import { Form, Input, Modal, type ModalProps, Select, Tag } from 'antd'
+import { Form, Input, Modal, type ModalProps } from 'antd'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { GroupEditModalFormData } from './options'
 
 export type GroupEditModalData = {
@@ -30,46 +27,46 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
 
   const [form] = Form.useForm<GroupEditModalFormData>()
 
-  const [grounpDetail, setGroupDetail] = useState<StrategyGroupItem>()
-  const [strategyCategoryList, setStrategyCategoryList] = useState<SelectItem[]>([])
+  const [grounpDetail, setGroupDetail] = useState<TeamStrategyGroupItem>()
+  // const [strategyCategoryList, setStrategyCategoryList] = useState<SelectItem[]>([])
 
-  const { run: initStrategyCategoryList, loading: strategyCategoryListLoading } = useRequest(dictSelectList, {
+  // const { run: initStrategyCategoryList, loading: strategyCategoryListLoading } = useRequest(dictSelectList, {
+  //   manual: true,
+  //   onSuccess: (data) => {
+  //     setStrategyCategoryList(data?.list || [])
+  //   }
+  // })
+
+  const { run: initDetail, loading: detailLoading } = useRequest(getTeamStrategyGroup, {
     manual: true,
     onSuccess: (data) => {
-      setStrategyCategoryList(data?.list || [])
+      setGroupDetail(data)
     }
   })
 
-  const { run: initDetail, loading: detailLoading } = useRequest(getStrategyGroup, {
+  const { runAsync: saveStrategyGroup, loading: saveStrategyGroupLoading } = useRequest(saveTeamStrategyGroup, {
     manual: true,
-    onSuccess: (data) => {
-      setGroupDetail(data.detail)
+    onSuccess: () => {
+      form?.resetFields()
+      setGroupDetail(undefined)
     }
   })
 
-  const { runAsync: editStrategyGroup, loading: editStrategyGroupLoading } = useRequest(updateStrategyGroup, {
-    manual: true
-  })
-
-  const { runAsync: addStrategyGroup, loading: addStrategyGroupLoading } = useRequest(createStrategyGroup, {
-    manual: true
-  })
-
-  const initFormDeps = useCallback(() => {
-    initStrategyCategoryList({
-      pagination: defaultPaginationReq,
-      dictType: DictType.DictTypeStrategyGroupCategory
-    })
-    if (groupId) {
-      initDetail({ id: groupId })
-    }
-  }, [initStrategyCategoryList, initDetail, groupId])
+  // const initFormDeps = useCallback(() => {
+  //   initStrategyCategoryList({
+  //     pagination: defaultPaginationReq,
+  //     dictType: DictType.DictTypeStrategyGroupCategory
+  //   })
+  //   if (groupId) {
+  //     initDetail({ groupId: groupId })
+  //   }
+  // }, [initStrategyCategoryList, initDetail, groupId])
 
   useEffect(() => {
     if (open && grounpDetail) {
       form?.setFieldsValue({
-        ...grounpDetail,
-        categoriesIds: grounpDetail.categories?.map((item) => item.id) || []
+        ...grounpDetail
+        // categoriesIds: grounpDetail.categories?.map((item) => item.id) || []
       })
       return
     }
@@ -77,10 +74,11 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   }, [grounpDetail, open, form])
 
   useEffect(() => {
-    if (open) {
-      initFormDeps()
+    if (open && groupId) {
+      // initFormDeps()
+      initDetail({ groupId: groupId })
     }
-  }, [open, initFormDeps])
+  }, [open, groupId, form])
 
   const handleOnCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
     onCancel?.(e)
@@ -90,14 +88,14 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
 
   const handleOnOk = () => {
     form?.validateFields().then((formValues) => {
-      const { name, remark, categoriesIds } = formValues
+      const { name, remark } = formValues
       const data = {
         id: groupId,
         name,
-        remark,
-        categoriesIds
+        remark
+        // categoriesIds
       }
-      Promise.all([groupId ? editStrategyGroup({ id: groupId, update: data }) : addStrategyGroup(data)]).then(() => {
+      Promise.all([groupId ? saveStrategyGroup({ groupId: groupId, ...data }) : saveStrategyGroup(data)]).then(() => {
         onOk?.()
       })
     })
@@ -112,18 +110,13 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
         open={open}
         onCancel={handleOnCancel}
         onOk={handleOnOk}
-        confirmLoading={editStrategyGroupLoading || addStrategyGroupLoading}
+        confirmLoading={saveStrategyGroupLoading}
       >
-        <Form
-          form={form}
-          layout='vertical'
-          autoComplete='off'
-          disabled={disabled || editStrategyGroupLoading || addStrategyGroupLoading}
-        >
+        <Form form={form} layout='vertical' autoComplete='off' disabled={disabled || saveStrategyGroupLoading}>
           <Form.Item label='规则组名称' name='name' rules={[{ required: true, message: '请输入规则组名称' }]}>
             <Input placeholder='请输入规则组名称' allowClear />
           </Form.Item>
-          <Form.Item label='规则组分类' name='categoriesIds' rules={[{ required: true, message: '请选择规则组分类' }]}>
+          {/* <Form.Item label='规则组分类' name='categoriesIds' rules={[{ required: true, message: '请选择规则组分类' }]}>
             <Select
               placeholder='请选择策略组类型'
               allowClear
@@ -139,7 +132,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
                 disabled: item.disabled
               }))}
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label='规则组描述' name='remark'>
             <Input.TextArea placeholder='请输入200字以内的规则组描述' allowClear maxLength={200} showCount />
           </Form.Item>

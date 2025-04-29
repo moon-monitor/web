@@ -1,6 +1,7 @@
-import { StatusData } from '@/api/global'
-import type { TeamItem } from '@/api/model-types'
-import { getTeam } from '@/api/team'
+import { TeamItem } from '@/api2/common.types'
+import { TeamStatus } from '@/api2/enum'
+import { getTeam } from '@/api2/system'
+
 import { useRequest } from 'ahooks'
 import { Avatar, Descriptions, type DescriptionsProps, Modal, type ModalProps, Tag } from 'antd'
 import { useEffect, useState } from 'react'
@@ -15,8 +16,8 @@ export const TeamDetailModal: React.FC<ModalDetailProps> = (props) => {
 
   const { run: initTeamDetail } = useRequest(getTeam, {
     manual: true,
-    onSuccess: (res) => {
-      setDetail(res.detail)
+    onSuccess: (detail) => {
+      setDetail(detail)
     }
   })
 
@@ -31,15 +32,11 @@ export const TeamDetailModal: React.FC<ModalDetailProps> = (props) => {
     },
     {
       label: '负责人',
-      children: detail?.leader ? `${detail?.leader?.name} (${detail?.leader?.nickname})` : '--'
+      children: detail?.leader ? `${detail?.leader?.username} (${detail?.leader?.nickname})` : '--'
     },
     {
       label: '团队状态',
-      children: detail?.status ? (
-        <Tag color={StatusData[detail.status].color}>{StatusData[detail.status].text}</Tag>
-      ) : (
-        '--'
-      )
+      children: detail?.status ? <Tag>{TeamStatus[detail.status]}</Tag> : '--'
     },
     {
       label: '管理员',
@@ -47,8 +44,8 @@ export const TeamDetailModal: React.FC<ModalDetailProps> = (props) => {
       children: detail?.admins?.length ? (
         <Avatar.Group size='small'>
           {detail?.admins?.map((item) => (
-            <Avatar src={item?.user?.avatar} shape='square' key={item?.user?.id}>
-              {item?.user?.name?.at(0)?.toUpperCase()}
+            <Avatar src={item?.avatar} shape='square' key={item?.userId}>
+              {item?.username?.at(0)?.toUpperCase()}
             </Avatar>
           ))}
         </Avatar.Group>
@@ -73,7 +70,7 @@ export const TeamDetailModal: React.FC<ModalDetailProps> = (props) => {
 
   useEffect(() => {
     if (open) {
-      initTeamDetail({ id: teamId })
+      initTeamDetail({ teamId: teamId })
     }
   }, [open, teamId, initTeamDetail])
 

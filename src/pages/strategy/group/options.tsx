@@ -1,18 +1,19 @@
 import { dictSelectList } from '@/api/dict'
 import { DictType, Status } from '@/api/enum'
 import { ActionKey, StatusData } from '@/api/global'
-import type { DictItem, StrategyGroupItem } from '@/api/model-types'
+import type { StrategyGroupItem } from '@/api/model-types'
+import { GlobalStatus } from '@/api2/enum'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
-import { Badge, Button, Space, Tooltip } from 'antd'
+import { Badge, Button, Space } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 
 export type GroupEditModalFormData = {
   name: string
   remark: string
-  status?: number
-  categoriesIds: number[]
+  status?: keyof typeof GlobalStatus
+  // categoriesIds: number[]
   teamId?: number
 }
 
@@ -140,29 +141,28 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<StrategyGrou
         return text || '-'
       }
     },
-    {
-      title: '类型',
-      dataIndex: 'categories',
-      key: 'categories',
-      width: 160,
-      ellipsis: true,
-      render: (categories: DictItem[]) => {
-        return (
-          <Tooltip placement='top' title={<div>{categories.map((item) => item.name).join(', ')}</div>}>
-            <div>{categories.map((item) => item.name).join(', ')}</div>
-          </Tooltip>
-        )
-      }
-    },
+    // {
+    //   title: '类型',
+    //   dataIndex: 'categories',
+    //   key: 'categories',
+    //   width: 160,
+    //   ellipsis: true,
+    //   render: (categories: DictItem[]) => {
+    //     return (
+    //       <Tooltip placement='top' title={<div>{categories.map((item) => item.name).join(', ')}</div>}>
+    //         <div>{categories.map((item) => item.name).join(', ')}</div>
+    //       </Tooltip>
+    //     )
+    //   }
+    // },
     {
       title: '状态',
       dataIndex: 'status',
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
-        return <Badge color={color} text={text} />
+      render: (status: keyof typeof GlobalStatus) => {
+        return <Badge text={GlobalStatus[status]} />
       }
     },
     {

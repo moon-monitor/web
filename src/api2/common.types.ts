@@ -1,4 +1,4 @@
-import { Gender, UserPosition, UserStatus } from './enum'
+import { Gender, GlobalStatus, TeamStatus, UserPosition, UserStatus } from './enum'
 
 /**
  * User basic information
@@ -260,9 +260,9 @@ export interface OperateLogItem {
    */
   before?: string
   /**
-   * DataID of the operation
+   * DataId of the operation
    */
-  dataID?: number
+  dataId?: number
   /**
    * DataName of the operation
    */
@@ -422,7 +422,7 @@ export interface TeamItem {
   /**
    * Status of the team.
    */
-  status: number
+  status: keyof typeof TeamStatus
   /**
    * Total number of strategies associated with the team.
    */
@@ -464,9 +464,9 @@ export interface TeamStrategyItem {
    */
   UserItem?: UserItem
   /**
-   * ID of the group to which the strategy belongs.
+   * Id of the group to which the strategy belongs.
    */
-  groupID?: number
+  groupId?: number
   /**
    * Name of the strategy.
    */
@@ -483,7 +483,7 @@ export interface TeamStrategyItem {
   /**
    * Unique identifier for the strategy.
    */
-  strategyID?: number
+  strategyId?: number
   /**
    * Information about the team associated with the strategy.
    */
@@ -502,7 +502,7 @@ export interface NoticeGroupItem {
   hooks?: NoticeHookItem[]
   members?: TeamMemberItem[]
   name?: string
-  noticeGroupID?: number
+  noticeGroupId?: number
   remark?: string
   status: number
   updatedAt?: string
@@ -516,7 +516,7 @@ export interface NoticeHookItem {
   headers?: { [key: string]: string }
   method?: number
   name?: string
-  noticeHookID?: number
+  noticeHookId?: number
   remark?: string
   secret?: string
   status: number
@@ -643,7 +643,7 @@ export interface TeamMemberItem {
  */
 export interface TeamDashboardChartItem {
   createdAt?: string
-  dashboardID?: number
+  dashboardId?: number
   height?: string
   id?: number
   remark?: string
@@ -674,7 +674,7 @@ export interface TeamMetricDatasourceItem {
   basicAuth?: BasicAuth
   ca?: string
   createdAt?: string
-  datasourceID?: number
+  datasourceId?: number
   driver?: number
   endpoint?: string
   extra?: { [key: string]: string }
@@ -683,7 +683,7 @@ export interface TeamMetricDatasourceItem {
   queryMethod?: number
   remark?: string
   scrapeInterval?: string
-  teamID?: number
+  teamId?: number
   tls?: TLS
   updatedAt?: string
 }
@@ -716,10 +716,10 @@ export interface TeamStrategyMetricItemRuleItem {
   labelNotices?: StrategyMetricRuleLabelNotice[]
   level?: TeamDictItem
   notices?: NoticeGroupItem[]
-  ruleID?: number
+  ruleId?: number
   sampleMode?: number
   status: number
-  strategyMetricID?: number
+  strategyMetricId?: number
   values?: number[]
 }
 
@@ -729,11 +729,11 @@ export interface TeamStrategyMetricItemRuleItem {
 export interface TeamDictItem {
   color?: string
   createdAt?: string
-  dictID?: number
+  dictId?: number
   dictType?: number
   key?: string
   lang?: string
-  teamID?: number
+  teamId?: number
   updatedAt?: string
   value?: string
 }
@@ -744,10 +744,10 @@ export interface TeamDictItem {
 export interface StrategyMetricRuleLabelNotice {
   createdAt?: string
   labelKey?: string
-  labelNoticeID?: number
+  labelNoticeId?: number
   labelValue?: string
   notices?: NoticeGroupItem[]
-  strategyMetricRuleID?: number
+  strategyMetricRuleId?: number
   updatedAt?: string
 }
 
@@ -762,7 +762,7 @@ export interface TeamStrategyMetricItem {
   datasource?: TeamMetricDatasourceItem[]
   expr?: string
   labels?: { [key: string]: string }
-  StrategyMetricID?: number
+  StrategyMetricId?: number
   strategyMetricRules?: TeamStrategyMetricItemRuleItem[]
 }
 
@@ -786,7 +786,7 @@ export interface ApiPalaceCommonTeamStrategyGroupItem {
   /**
    * Unique identifier for the strategy group.
    */
-  groupID?: number
+  groupId?: number
   /**
    * Name of the strategy group.
    */
@@ -829,7 +829,7 @@ export interface TeamStrategyGroupItem {
   /**
    * Unique identifier for the strategy group.
    */
-  groupID?: number
+  groupId: number
   /**
    * Name of the strategy group.
    */
@@ -841,7 +841,7 @@ export interface TeamStrategyGroupItem {
   /**
    * Status of the strategy group.
    */
-  status: number
+  status: keyof typeof GlobalStatus
   /**
    * Total number of strategies in the group.
    */

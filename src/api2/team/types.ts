@@ -17,6 +17,7 @@ import {
   TeamStrategyMetricItem,
   TLS
 } from '../common.types'
+import { GlobalStatus } from '../enum'
 
 /**
  * api.palace.GetTeamReply，GetTeamReply contains the response data for retrieving a team
@@ -25,7 +26,7 @@ export interface GetTeamReply {
   /**
    * Detailed information about the team
    */
-  detail?: TeamItem
+  detail: TeamItem
 }
 
 /**
@@ -126,7 +127,7 @@ export interface InviteMemberRequest {
    */
   position?: number
   /**
-   * List of role IDs to assign to the new member
+   * List of role Ids to assign to the new member
    */
   roleIds?: number[]
   /**
@@ -193,9 +194,9 @@ export interface SaveTeamRequest {
  */
 export interface TransferTeamRequest {
   /**
-   * New leader's user ID
+   * New leader's user Id
    */
-  newLeaderID?: number
+  newLeaderId?: number
 }
 
 /**
@@ -204,9 +205,9 @@ export interface TransferTeamRequest {
  */
 export interface UpdateMemberPositionRequest {
   /**
-   * Member ID
+   * Member Id
    */
-  memberID?: number
+  memberId?: number
   /**
    * New position for the member
    */
@@ -219,13 +220,13 @@ export interface UpdateMemberPositionRequest {
  */
 export interface UpdateMemberRolesRequest {
   /**
-   * List of member IDs to update
+   * List of member Ids to update
    */
-  memberIDs?: number[]
+  memberIds?: number[]
   /**
-   * List of role IDs to assign to the members
+   * List of role Ids to assign to the members
    */
-  roleIDs?: number[]
+  roleIds?: number[]
 }
 
 /**
@@ -234,9 +235,9 @@ export interface UpdateMemberRolesRequest {
  */
 export interface UpdateMemberStatusRequest {
   /**
-   * List of member IDs to update
+   * List of member Ids to update
    */
-  memberIDs?: number[]
+  memberIds?: number[]
   /**
    * New status for the members
    */
@@ -257,13 +258,13 @@ export interface SaveTeamRoleRequest {
    */
   remark?: string
   /**
-   * List of resource IDs associated with the role
+   * List of resource Ids associated with the role
    */
-  resourceIDs?: number[]
+  resourceIds?: number[]
   /**
-   * Role ID, optional for new roles
+   * Role Id, optional for new roles
    */
-  roleID?: number
+  roleId?: number
 }
 
 /**
@@ -279,16 +280,16 @@ export interface GetTeamRolesReply {
 
 export interface DeleteTeamRoleRequest {
   /**
-   * Role ID to delete
+   * Role Id to delete
    */
-  roleID?: number
+  roleId?: number
 }
 
 /**
  * api.palace.ListTeamDashboardChartRequest
  */
 export interface ListTeamDashboardChartRequest {
-  dashboardID?: number
+  dashboardId?: number
   pagination?: PaginationRequest
 }
 
@@ -305,7 +306,7 @@ export interface ListTeamDashboardChartReply {
  */
 export interface UpdateTeamDashboardChartStatusRequest {
   chartIds?: number[]
-  dashboardID?: number
+  dashboardId?: number
   status?: number
 }
 
@@ -333,7 +334,7 @@ export interface UpdateTeamDashboardStatusRequest {
 }
 
 export interface GetTeamDashboardRequest {
-  dashboardID?: number
+  dashboardId?: number
 }
 
 /**
@@ -348,19 +349,19 @@ export interface GetTeamDashboardReply {
  */
 export interface SaveTeamDashboardRequest {
   colorHex?: string
-  dashboardID?: number
+  dashboardId?: number
   remark?: string
   status?: number
   title?: string
 }
 
 export interface DeleteTeamDashboardRequest {
-  dashboardID?: number
+  dashboardId?: number
 }
 
 export interface GetTeamDashboardChartRequest {
-  chartID?: number
-  dashboardID?: number
+  chartId?: number
+  dashboardId?: number
 }
 
 /**
@@ -374,8 +375,8 @@ export interface GetTeamDashboardChartReply {
  * api.palace.SaveTeamDashboardChartRequest
  */
 export interface SaveTeamDashboardChartRequest {
-  chartID?: number
-  dashboardID?: number
+  chartId?: number
+  dashboardId?: number
   height?: string
   remark?: string
   status?: number
@@ -385,15 +386,15 @@ export interface SaveTeamDashboardChartRequest {
 }
 
 export interface DeleteTeamDashboardChartRequest {
-  chartID?: number
-  dashboardID?: number
+  chartId?: number
+  dashboardId?: number
 }
 
 export interface GetTeamStrategyRequest {
   /**
-   * Strategy ID
+   * Strategy Id
    */
-  strategyID?: number
+  strategyId?: number
 }
 
 /**
@@ -409,9 +410,9 @@ export interface GetTeamStrategyReply {
 
 export interface DeleteTeamStrategyRequest {
   /**
-   * Strategy ID
+   * Strategy Id
    */
-  strategyID?: number
+  strategyId?: number
 }
 
 /**
@@ -426,7 +427,7 @@ export interface ListTeamStrategyGroupRequest {
   /**
    * Pagination request details
    */
-  pagination?: PaginationRequest
+  pagination: PaginationRequest
   /**
    * List of statuses to filter strategy groups by
    */
@@ -453,13 +454,13 @@ export interface ListTeamStrategyGroupReply {
  */
 export interface UpdateTeamStrategyGroupStatusRequest {
   /**
-   * Strategy group ID
+   * Strategy group Id
    */
-  groupID?: number
+  groupId?: number
   /**
    * New status for the strategy group
    */
-  status?: number
+  status?: keyof typeof GlobalStatus
 }
 /**
  * api.palace.ListTeamStrategyRequest，ListTeamStrategyRequest represents the request data
@@ -467,9 +468,9 @@ export interface UpdateTeamStrategyGroupStatusRequest {
  */
 export interface ListTeamStrategyRequest {
   /**
-   * Strategy group ID to filter strategies by
+   * Strategy group Id to filter strategies by
    */
-  groupID?: number
+  groupId?: number
   /**
    * Pagination request details
    */
@@ -504,9 +505,9 @@ export interface UpdateTeamStrategiesStatusRequest {
    */
   status?: number
   /**
-   * List of strategy IDs to update
+   * List of strategy Ids to update
    */
-  strategyIDs?: number[]
+  strategyIds?: number[]
 }
 
 /**
@@ -519,9 +520,9 @@ export interface SubscribeTeamStrategyRequest {
    */
   isSubscribe?: boolean
   /**
-   * Strategy ID
+   * Strategy Id
    */
-  strategyID?: number
+  strategyId?: number
 }
 
 /**
@@ -544,16 +545,17 @@ export interface SubscribeTeamStrategiesReply {
   pagination?: PaginationReply
 }
 
+export interface GetTeamStrategyGroupRequest {
+  /**
+   * Strategy group Id
+   */
+  groupId?: number
+}
 /**
  * api.palace.GetTeamStrategyGroupReply，GetTeamStrategyGroupReply contains the response data
  * for retrieving a team strategy group
  */
-export interface GetTeamStrategyGroupReply {
-  /**
-   * Detailed information about the strategy group
-   */
-  detail?: TeamStrategyGroupItem
-}
+export interface GetTeamStrategyGroupReply extends TeamStrategyGroupItem {}
 
 /**
  * api.palace.SaveTeamStrategyGroupRequest，SaveTeamStrategyGroupRequest represents the
@@ -561,9 +563,9 @@ export interface GetTeamStrategyGroupReply {
  */
 export interface SaveTeamStrategyGroupRequest {
   /**
-   * Strategy group ID, optional for new groups
+   * Strategy group Id, optional for new groups
    */
-  groupID?: number
+  groupId?: number
   /**
    * Strategy group name
    */
@@ -576,9 +578,9 @@ export interface SaveTeamStrategyGroupRequest {
 
 export interface DeleteTeamStrategyGroupRequest {
   /**
-   * Strategy group ID
+   * Strategy group Id
    */
-  groupID?: number
+  groupId?: number
 }
 
 /**
@@ -608,7 +610,7 @@ export interface UpdateTeamDictStatusRequest {
 }
 
 export interface GetTeamDictRequest {
-  dictID?: number
+  dictId?: number
 }
 /**
  * api.palace.GetTeamDictReply
@@ -622,7 +624,7 @@ export interface GetTeamDictReply {
  */
 export interface SaveTeamDictRequest {
   color?: string
-  dictID?: number
+  dictId?: number
   dictType?: number
   key?: string
   lang?: string
@@ -630,7 +632,7 @@ export interface SaveTeamDictRequest {
 }
 
 export interface DeleteTeamDictRequest {
-  dictID?: number
+  dictId?: number
 }
 
 /**
@@ -653,13 +655,13 @@ export interface ListTeamMetricDatasourceReply {
  * api.palace.UpdateTeamMetricDatasourceStatusRequest
  */
 export interface UpdateTeamMetricDatasourceStatusRequest {
-  datasourceID?: number
+  datasourceId?: number
   metricDatasourceDriver?: number
   status?: number
 }
 
 export interface GetTeamMetricDatasourceRequest {
-  datasourceID?: number
+  datasourceId?: number
   metricDatasourceDriver?: number
 }
 /**
@@ -675,7 +677,7 @@ export interface GetTeamMetricDatasourceReply {
 export interface SaveTeamMetricDatasourceRequest {
   basicAuth?: BasicAuth
   ca?: string
-  datasourceID?: number
+  datasourceId?: number
   endpoint?: string
   extra?: { [key: string]: string }
   headers?: { [key: string]: string }
@@ -688,12 +690,12 @@ export interface SaveTeamMetricDatasourceRequest {
 }
 
 export interface DeleteTeamMetricDatasourceRequest {
-  datasourceID?: number
+  datasourceId?: number
   metricDatasourceDriver?: number
 }
 
 export interface GetTeamNoticeGroupRequest {
-  groupID?: number
+  groupId?: number
 }
 
 /**
@@ -707,16 +709,16 @@ export interface GetTeamNoticeGroupReply {
  * api.palace.DeleteTeamNoticeGroupRequest
  */
 export interface DeleteTeamNoticeGroupRequest {
-  groupID?: number
+  groupId?: number
 }
 
 /**
  * api.palace.ListTeamNoticeGroupRequest
  */
 export interface ListTeamNoticeGroupRequest {
-  hookIDs?: number[]
+  hookIds?: number[]
   keyword?: string
-  memberIDs?: number[]
+  memberIds?: number[]
   pagination?: PaginationRequest
   status?: number
 }
@@ -733,12 +735,12 @@ export interface ListTeamNoticeGroupReply {
  * api.palace.UpdateTeamNoticeGroupStatusRequest
  */
 export interface UpdateTeamNoticeGroupStatusRequest {
-  groupID?: number
+  groupId?: number
   status?: number
 }
 
 export interface GetTeamNoticeHookRequest {
-  hookID?: number
+  hookId?: number
 }
 
 /**
@@ -752,7 +754,7 @@ export interface GetTeamNoticeHookReply {
  * api.palace.DeleteTeamNoticeHookRequest
  */
 export interface DeleteTeamNoticeHookRequest {
-  hookID?: number
+  hookId?: number
 }
 
 /**
@@ -778,6 +780,6 @@ export interface ListTeamNoticeHookReply {
  * api.palace.UpdateTeamNoticeHookStatusRequest
  */
 export interface UpdateTeamNoticeHookStatusRequest {
-  hookID?: number
+  hookId?: number
   status?: number
 }
