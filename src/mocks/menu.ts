@@ -168,22 +168,6 @@ export const mockTreeMenuReply: TreeMenuReply = {
       updatedAt: '',
       children: [
         {
-          id: 11,
-          label: '策略组',
-          menuType: MenuType.MenuTypeMenu,
-          permission: 'group',
-          icon: 'icon-group',
-          component: 'StrategyGroup',
-          level: 2,
-          sort: 1,
-          key: '/strategy/group',
-          enName: 'Strategy Group',
-          parentId: 10,
-          status: Status.StatusEnable,
-          createdAt: '',
-          updatedAt: ''
-        },
-        {
           id: 12,
           label: '策略列表',
           menuType: MenuType.MenuTypeMenu,

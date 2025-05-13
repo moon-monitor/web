@@ -1,7 +1,7 @@
+import '@/api2/enum'
 import { createRoot } from 'react-dom/client'
-import App from './pages'
-
 import './index.css'
+import App from './pages'
 
 // 开发环境启用 Mock
 if (import.meta.env.DEV) {

@@ -1,5 +1,4 @@
-import { TeamStrategyGroupItem } from '@/api2/common.types'
-import { GlobalStatus } from '@/api2/enum'
+import { GlobalStatusKey, TeamStrategyGroupItem } from '@/api2/common.types'
 import { getTeamStrategyGroup, saveTeamStrategyGroup } from '@/api2/team/team-strategy'
 import { useRequest } from 'ahooks'
 import { Form, Input, Modal, type ModalProps } from 'antd'
@@ -9,7 +8,7 @@ import { useEffect, useState } from 'react'
 export type GroupEditModalFormData = {
   name: string
   remark: string
-  status?: keyof typeof GlobalStatus
+  status?: GlobalStatusKey
   // categoriesIds: number[]
   teamId?: number
 }

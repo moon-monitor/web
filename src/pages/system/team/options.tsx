@@ -1,5 +1,5 @@
 import { ActionKey, StatusData } from '@/api/global'
-import { TeamItem, TeamMemberItem, UserItem } from '@/api2/common.types'
+import { TeamItem, TeamMemberItem, TeamStatusKey, UserItem } from '@/api2/common.types'
 import { TeamStatus } from '@/api2/enum'
 // import type { TeamItem, TeamMemberItem, UserItem } from '@/api/model-types'
 import type { SearchFormItem } from '@/components/data/search-box'
@@ -148,7 +148,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> =>
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: keyof typeof TeamStatus) => {
+      render: (status: TeamStatusKey) => {
         return <div>{TeamStatus[status]}</div>
         // return <Badge color={UserStatusMap[status].color} text={UserStatus[status]} />
       }

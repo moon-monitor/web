@@ -1,5 +1,6 @@
 import {
   BasicAuth,
+  GlobalStatusKey,
   NoticeGroupItem,
   NoticeHookItem,
   PaginationReply,
@@ -14,7 +15,9 @@ import {
   TeamRoleItem,
   TeamStrategyGroupItem,
   TeamStrategyItem,
-  TLS
+  TeamStrategyMetricItemRuleItem,
+  TLS,
+  UserBaseItem
 } from '../common.types'
 import { GlobalStatus } from '../enum'
 
@@ -389,18 +392,28 @@ export interface DeleteTeamDashboardChartRequest {
   dashboardId?: number
 }
 
-export interface GetTeamStrategyRequest {
+export interface GetTeamMetricStrategyRequest {
   /**
    * Strategy Id
    */
   strategyId?: number
+  strategyType?: number
 }
 
 /**
  * api.palace.GetTeamStrategyReply, GetTeamStrategyReply contains the response data for
  * retrieving a team strategy
  */
-export interface GetTeamStrategyReply extends TeamStrategyItem {}
+export interface GetTeamMetricStrategyReply {
+  annotations?: { [key: string]: string }
+  base?: TeamStrategyItem
+  creator?: UserBaseItem
+  datasource?: TeamMetricDatasourceItem[]
+  expr?: string
+  labels?: { [key: string]: string }
+  StrategyMetricId?: number
+  strategyMetricRules?: TeamStrategyMetricItemRuleItem[]
+}
 
 /**
  * api.palace.SaveTeamStrategyRequest
@@ -486,7 +499,7 @@ export interface UpdateTeamStrategyGroupStatusRequest {
   /**
    * New status for the strategy group
    */
-  status?: keyof typeof GlobalStatus
+  status?: GlobalStatusKey
 }
 /**
  * api.palace.ListTeamStrategyRequest，ListTeamStrategyRequest represents the request data

@@ -1,6 +1,6 @@
 import { type Role } from '@/api/enum'
 import { ActionKey, RoleData } from '@/api/global'
-import { UserItem } from '@/api2/common.types'
+import { UserItem, UserStatusKey } from '@/api2/common.types'
 import { UserPosition, UserStatus, UserStatusMap } from '@/api2/enum'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -160,7 +160,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
       key: 'status',
       align: 'center',
       width: 120,
-      render: (status: keyof typeof UserStatus) => {
+      render: (status: UserStatusKey) => {
         return <Badge color={UserStatusMap[status].color} text={UserStatus[status]} />
       }
     },

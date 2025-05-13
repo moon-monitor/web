@@ -1,5 +1,12 @@
 import { Gender, GlobalStatus, StrategyType, TeamStatus, UserPosition, UserStatus } from './enum'
 
+export type GenderKey = keyof typeof Gender
+export type TeamStatusKey = keyof typeof TeamStatus
+export type UserStatusKey = keyof typeof UserStatus
+export type UserPositionKey = keyof typeof UserPosition
+export type GlobalStatusKey = keyof typeof GlobalStatus
+export type StrategyTypeKey = keyof typeof StrategyType
+
 /**
  * User basic information
  * api.palace.common.UserBaseItem
@@ -46,7 +53,7 @@ export interface UserItem {
   /**
    * User's gender
    */
-  gender?: keyof typeof Gender
+  gender?: GenderKey
   /**
    * User's nickname
    */
@@ -58,7 +65,7 @@ export interface UserItem {
   /**
    * User's position/role in the system
    */
-  position: keyof typeof UserPosition
+  position: UserPositionKey
   /**
    * Remarks about the user
    */
@@ -66,7 +73,7 @@ export interface UserItem {
   /**
    * User's status
    */
-  status: keyof typeof UserStatus
+  status: UserStatusKey
   /**
    * User's last update time
    */
@@ -422,7 +429,7 @@ export interface TeamItem {
   /**
    * Status of the team.
    */
-  status: keyof typeof TeamStatus
+  status: TeamStatusKey
   /**
    * Total number of strategies associated with the team.
    */
@@ -466,7 +473,7 @@ export interface TeamStrategyItem {
   /**
    * Id of the group to which the strategy belongs.
    */
-  groupId?: number
+  groupId: number
   /**
    * Name of the strategy.
    */
@@ -492,7 +499,7 @@ export interface TeamStrategyItem {
    * Timestamp indicating when the strategy was last updated.
    */
   updatedAt?: string
-  strategyType?: keyof typeof StrategyType
+  strategyType: StrategyTypeKey
   group: string
 }
 
@@ -506,7 +513,7 @@ export interface NoticeGroupItem {
   name?: string
   noticeGroupId?: number
   remark?: string
-  status: number
+  status: GlobalStatusKey
   updatedAt?: string
 }
 
@@ -800,7 +807,7 @@ export interface TeamStrategyGroupItem {
   /**
    * Status of the strategy group.
    */
-  status: keyof typeof GlobalStatus
+  status: GlobalStatusKey
   /**
    * Total number of strategies in the group.
    */
@@ -809,5 +816,5 @@ export interface TeamStrategyGroupItem {
    * Timestamp indicating when the group was last updated.
    */
   updatedAt?: string
-  strategyType?: keyof typeof StrategyType
+  strategyType?: StrategyTypeKey
 }

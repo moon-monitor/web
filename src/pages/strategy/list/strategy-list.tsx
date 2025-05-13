@@ -1,8 +1,9 @@
 /* eslint-disable prettier/prettier */
-import { Status, StrategyType } from '@/api/enum'
-import { ActionKey, StrategyTypeData } from '@/api/global'
+import { Status } from '@/api/enum'
+import { ActionKey } from '@/api/global'
 import { deleteStrategy, pushStrategy, updateStrategyStatus } from '@/api/strategy'
-import { TeamStrategyItem } from '@/api2/common.types'
+import { StrategyTypeKey, TeamStrategyItem } from '@/api2/common.types'
+import { StrategyType } from '@/api2/enum'
 import { listTeamStrategy } from '@/api2/team/team-strategy'
 import { ListTeamStrategyRequest } from '@/api2/team/types'
 import SearchBox from '@/components/data/search-box'
@@ -13,20 +14,8 @@ import { ExclamationCircleFilled } from '@ant-design/icons'
 import { Button, Modal, Space, message, theme } from 'antd'
 import { debounce } from 'lodash'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import StrategyCharts from './charts-modal-metric'
-import { StrategyDetailDomain } from './detail-modal-domain'
-import { StrategyDetailEvent } from './detail-modal-event'
-import { StrategyDetailHttp } from './detail-modal-http'
-import { StrategyDetailLog } from './detail-modal-log'
-import { MetricDetail } from './detail-modal-metric'
-import { StrategyDetailPort } from './detail-modal-port'
-import { DomainEditModal } from './edit-modal-domain'
-import EventEditModal from './edit-modal-event'
-import { HTTPEditModal } from './edit-modal-http'
-import { LogEditModal } from './edit-modal-log'
-import MetricEditModal from './edit-modal-metric'
-import { PortEditModal } from './edit-modal-port'
-import StrategyTypeModal from './edit-modal-strategy-type'
+import MetricEditModal from './components/edit-modal-metric'
+import StrategyTypeModal from './components/edit-modal-strategy-type'
 import { ModalSubscribe } from './modal-subscribe'
 import ModalSubscriber from './modal-subscriber'
 import { formList, getColumnList } from './options'
@@ -81,6 +70,7 @@ const StrategyList = (props: StrategyListProps) => {
   const AutoTableHeight = useContainerHeightTop(ADivRef, datasource, isFullscreen)
 
   const handleOpenMetricEditModal = (item?: TeamStrategyItem) => {
+    console.log('handleOpenMetricEditModal', item)
     setDetail(item)
     setOpenMetricEditModal(true)
   }
@@ -302,26 +292,26 @@ const StrategyList = (props: StrategyListProps) => {
 
   const handleOpenEditModal = (item: TeamStrategyItem) => {
     switch (item.strategyType) {
-      case StrategyType.StrategyTypeMetric:
+      case 'STRATEGY_TYPE_METRIC':
         handleOpenMetricEditModal(item)
         break
-      case StrategyType.StrategyTypeEvent:
+      case 'STRATEGY_TYPE_EVENT':
         handleOpenEventEditModal(item)
         break
-      case StrategyType.StrategyTypeDomainCertificate:
+      case 'STRATEGY_TYPE_CERT':
         handleOpenDomainEditModal(item)
         break
-      case StrategyType.StrategyTypeDomainPort:
+      case 'STRATEGY_TYPE_PORT':
         handleOpenPortEditModal(item)
         break
-      case StrategyType.StrategyTypeHTTP:
+      case 'STRATEGY_TYPE_HTTP':
         handleOpenHttpEditModal(item)
         break
-      case StrategyType.StrategyTypeLog:
+      case 'STRATEGY_TYPE_LOGS':
         handleOpenLogEditModal(item)
         break
       default:
-        message.warning(`${StrategyTypeData[item.strategyType]}未开通`)
+        message.warning(`${StrategyType[item.strategyType]}未开通`)
         break
     }
   }
@@ -397,29 +387,29 @@ const StrategyList = (props: StrategyListProps) => {
     setOpenStrategyTypeModal(true)
   }
 
-  const handleStrategyTypeSubmit = (type: StrategyType) => {
+  const handleStrategyTypeSubmit = (type: StrategyTypeKey) => {
     setOpenStrategyTypeModal(false)
     switch (type) {
-      case StrategyType.StrategyTypeMetric:
+      case 'STRATEGY_TYPE_METRIC':
         handleOpenMetricEditModal()
         break
-      case StrategyType.StrategyTypeEvent:
+      case 'STRATEGY_TYPE_EVENT':
         handleOpenEventEditModal()
         break
-      case StrategyType.StrategyTypeDomainCertificate:
-        handleOpenDomainEditModal()
-        break
-      case StrategyType.StrategyTypeDomainPort:
+      // case StrategyType.StrategyTypeDomainCertificate:
+      //   handleOpenDomainEditModal()
+      //   break
+      case 'STRATEGY_TYPE_PORT':
         handleOpenPortEditModal()
         break
-      case StrategyType.StrategyTypeHTTP:
+      case 'STRATEGY_TYPE_HTTP':
         handleOpenHttpEditModal()
         break
-      case StrategyType.StrategyTypeLog:
+      case 'STRATEGY_TYPE_LOGS':
         handleOpenLogEditModal()
         break
       default:
-        message.warning(`${StrategyTypeData[type]}未开通`)
+        message.warning(`${StrategyType[type]}未开通`)
         break
     }
   }
@@ -463,95 +453,6 @@ const StrategyList = (props: StrategyListProps) => {
         open={openMetricEditModal}
         onCancel={handleCloseMetricEditModal}
         onOk={handleMetricEditOk}
-      />
-      <DomainEditModal
-        title='证书策略编辑'
-        width='60%'
-        strategyDetail={detail}
-        open={openDomainEditModal}
-        onCancel={handleCloseDomainEditModal}
-        onOk={handleDomainEditOk}
-      />
-      <PortEditModal
-        title='端口策略编辑'
-        width='60%'
-        strategyDetail={detail}
-        open={openPortEditModal}
-        onCancel={handleClosePortEditModal}
-        onOk={handlePortEditOk}
-      />
-      <EventEditModal
-        title='事件策略编辑'
-        width='60%'
-        eventStrategyDetail={detail}
-        open={openEventEditModal}
-        onCancel={handleCloseEventEditModal}
-        onOk={handleEventEditOk}
-      />
-      <HTTPEditModal
-        title='HTTP策略编辑'
-        width='60%'
-        strategyDetail={detail}
-        open={openHttpEditModal}
-        onCancel={handleCloseHttpEditModal}
-        onOk={handleHttpEditOk}
-      />
-      <LogEditModal
-        title='Log策略编辑'
-        width='60%'
-        strategyDetail={detail}
-        open={openLogEditModal}
-        onCancel={handleCloseLogEditModal}
-        onOk={handleLogEditOk}
-      />
-      <StrategyCharts
-        title='策略图表'
-        width='60%'
-        strategyID={detail?.groupId}
-        open={openChartModal}
-        onCancel={handleCloseChartModal}
-      />
-      <MetricDetail
-        title='Metric 策略详情'
-        width='60%'
-        strategyId={detail?.groupId}
-        open={openMetricDetailModal}
-        onCancel={handleCloseDetailModal}
-      />
-      <StrategyDetailEvent
-        title='事件监控策略详情'
-        width='60%'
-        strategyId={detail?.groupId}
-        open={openEventDetailModal}
-        onCancel={handleCloseDetailModal}
-      />
-      <StrategyDetailDomain
-        title='证书监控策略详情'
-        width='60%'
-        strategyId={detail?.groupId}
-        open={openDomainDetailModal}
-        onCancel={handleCloseDetailModal}
-      />
-      <StrategyDetailPort
-        title='端口监控策略详情'
-        width='60%'
-        strategyId={detail?.groupId}
-        open={openPortDetailModal}
-        onCancel={handleCloseDetailModal}
-      />
-      <StrategyDetailHttp
-        title='HTTP监控策略详情'
-        width='60%'
-        strategyId={detail?.groupId}
-        open={openHttpDetailModal}
-        onCancel={handleCloseDetailModal}
-      />
-      <StrategyDetailLog
-        title='Log监控策略详情'
-        width='60%'
-        strategyId={detail?.groupId}
-        open={openLogDetailModal}
-        onCancel={handleCloseDetailModal}
       />
       <div
         style={{

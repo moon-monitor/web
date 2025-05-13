@@ -8,7 +8,7 @@ import { useRequest } from 'ahooks'
 import { Badge, Button, Dropdown, Input, MenuProps, Modal, Spin, message, theme } from 'antd'
 import type React from 'react'
 import { useEffect, useRef, useState } from 'react'
-import { GroupEditModal } from './group-edit-modal'
+import { GroupEditModal } from './components/group-edit-modal'
 import StrategyList from './strategy-list'
 
 const { confirm } = Modal

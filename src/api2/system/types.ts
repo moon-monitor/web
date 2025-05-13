@@ -5,7 +5,8 @@ import {
   SystemRoleItem,
   TeamAuditItem,
   TeamItem,
-  UserItem
+  UserItem,
+  UserStatusKey
 } from '../common.types'
 import { UserStatus } from '../enum'
 
@@ -318,7 +319,7 @@ export interface UpdateUserStatusRequest {
   /**
    * New status for the users
    */
-  status?: keyof typeof UserStatus
+  status?: UserStatusKey
   /**
    * List of user Ids to update
    */

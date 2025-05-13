@@ -2,10 +2,10 @@ import { EmptyReply } from '../common.types'
 import request from '../request'
 import {
   DeleteTeamStrategyRequest,
+  GetTeamMetricStrategyReply,
+  GetTeamMetricStrategyRequest,
   GetTeamStrategyGroupReply,
   GetTeamStrategyGroupRequest,
-  GetTeamStrategyReply,
-  GetTeamStrategyRequest,
   ListTeamStrategyGroupReply,
   ListTeamStrategyGroupRequest,
   ListTeamStrategyReply,
@@ -71,11 +71,11 @@ export function listTeamStrategy(params: ListTeamStrategyRequest): Promise<ListT
 
 /**
  * GetTeamStrategy retrieves a team strategy by Id
- * @param {GetTeamStrategyRequest} params
- * @returns {Promise<GetTeamStrategyReply>}
+ * @param {GetTeamMetricStrategyRequest} params
+ * @returns {Promise<GetTeamMetricStrategyReply>}
  */
-export function getTeamStrategy(params: GetTeamStrategyRequest): Promise<GetTeamStrategyReply> {
-  return request.GET<GetTeamStrategyReply>(`/api/team/strategy`, params)
+export function getTeamMetricStrategy(params: GetTeamMetricStrategyRequest): Promise<GetTeamMetricStrategyReply> {
+  return request.GET<GetTeamMetricStrategyReply>(`/api/team/strategy`, params)
 }
 
 /**

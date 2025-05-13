@@ -1,3 +1,5 @@
+import { GlobalStatusKey, StrategyTypeKey, UserStatusKey } from './common.types'
+
 export enum ResourceModule {
   // RESOURCE_MODULE_UNKNOWN is the default module for a resource.
   RESOURCE_MODULE_UNKNOWN = '未知',
@@ -30,7 +32,7 @@ export enum UserStatus {
   // The user status is deleted.
   USER_STATUS_DELETED = '已删除'
 }
-export const UserStatusMap: Record<keyof typeof UserStatus, { color: string }> = {
+export const UserStatusMap: Record<UserStatusKey, { color: string }> = {
   USER_STATUS_UNKNOWN: {
     color: '#f5222d'
   },
@@ -134,7 +136,7 @@ export enum GlobalStatus {
   GLOBAL_STATUS_DISABLE = '禁用'
 }
 
-export const GlobalStatusMap: Record<keyof typeof GlobalStatus, { color: string }> = {
+export const GlobalStatusMap: Record<GlobalStatusKey, { color: string }> = {
   GLOBAL_STATUS_UNKNOWN: {
     color: 'blue'
   },
@@ -150,7 +152,7 @@ export enum StrategyType {
   // STRATEGY_TYPE_UNKNOWN is the default type for a strategy.
   STRATEGY_TYPE_UNKNOWN = '未知',
   // STRATEGY_TYPE_METRIC indicates the strategy is based on metrics.
-  STRATEGY_TYPE_METRIC = '指标',
+  STRATEGY_TYPE_METRIC = 'Metric',
   // STRATEGY_TYPE_EVENT indicates the strategy is based on events.
   STRATEGY_TYPE_EVENT = '事件',
   // STRATEGY_TYPE_LOGS indicates the strategy is based on logs.
@@ -165,7 +167,7 @@ export enum StrategyType {
   STRATEGY_TYPE_CERT = '证书'
 }
 
-export const StrategyTypeMap: Record<keyof typeof StrategyType, { color: string }> = {
+export const StrategyTypeMap: Record<StrategyTypeKey, { color: string }> = {
   STRATEGY_TYPE_UNKNOWN: {
     color: ''
   },

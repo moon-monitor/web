@@ -1,8 +1,9 @@
 import { type Condition, Status, type SustainType } from '@/api/enum'
 import { ActionKey } from '@/api/global'
 import { listStrategyGroup } from '@/api/strategy'
-import { TeamStrategyGroupItem, TeamStrategyItem } from '@/api2/common.types'
+import { GlobalStatusKey, StrategyTypeKey, TeamStrategyGroupItem, TeamStrategyItem } from '@/api2/common.types'
 import { GlobalStatus, GlobalStatusMap, StrategyType, StrategyTypeMap } from '@/api2/enum'
+import { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
@@ -73,47 +74,39 @@ export const formList: SearchFormItem[] = [
   //     }
   //   }
   // },
-  // {
-  //   name: 'strategyTypes',
-  //   label: '策略类型',
-  //   dataProps: {
-  //     type: 'select',
-  //     itemProps: {
-  //       placeholder: '请选择策略类型',
-  //       allowClear: true,
-  //       mode: 'multiple',
-  //       maxTagCount: 2,
-  //       options: Object.entries(StrategyTypeData)
-  //         .filter(([key]) => +key !== StrategyType.StrategyTypeUnknown)
-  //         .map(([key]) => {
-  //           return {
-  //             label: StrategyTypeDataTag[+key as StrategyType],
-  //             value: Number(key)
-  //           }
-  //         })
-  //     }
-  //   }
-  // },
+  {
+    name: 'strategyTypes',
+    label: '策略类型',
+    dataProps: {
+      type: 'select',
+      itemProps: {
+        placeholder: '请选择策略类型',
+        allowClear: true,
+        mode: 'multiple',
+        maxTagCount: 2,
+        options: Object.entries(StrategyType)
+          .filter(([key]) => key !== 'STRATEGY_TYPE_UNKNOWN')
+          .map(([key, value]) => {
+            return {
+              label: <Tag color={StrategyTypeMap[key as StrategyTypeKey].color}>{value}</Tag>,
+              value: key
+            }
+          })
+      }
+    }
+  },
   {
     name: 'status',
     label: '策略状态',
     dataProps: {
-      type: 'select',
+      type: 'radio-group',
       itemProps: {
-        placeholder: '策略状态',
-        allowClear: true,
-        mode: 'multiple',
-        onChange: (value: string[]) => {
-          console.log('status change', value)
-        },
+        optionType: 'button',
+        buttonStyle: 'solid',
+        defaultValue: 'GLOBAL_STATUS_UNKNOWN',
         options: Object.entries(GlobalStatus).map(([key, value]) => {
           return {
-            label: (
-              <Badge
-                color={GlobalStatusMap[key as keyof typeof GlobalStatusMap].color}
-                text={key === 'GLOBAL_STATUS_UNKNOWN' ? '全部' : value}
-              />
-            ),
+            label: key === 'GLOBAL_STATUS_UNKNOWN' ? '全部' : value,
             value: key
           }
         })
@@ -216,7 +209,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       key: 'strategyType',
       align: 'center',
       width: 80,
-      render: (strategyType: keyof typeof StrategyType) => {
+      render: (strategyType: StrategyTypeKey) => {
         return <Tag color={StrategyTypeMap[strategyType].color}>{StrategyType[strategyType]}</Tag>
       }
     },
@@ -234,7 +227,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       key: 'status',
       align: 'center',
       width: 80,
-      render: (status: keyof typeof GlobalStatus) => {
+      render: (status: GlobalStatusKey) => {
         return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
       }
     },
@@ -278,3 +271,83 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
     }
   ]
 }
+
+export const basicFormItems: (DataFromItem | DataFromItem[])[] = [
+  {
+    name: 'name',
+    label: '名称',
+    type: 'input',
+    formProps: {
+      rules: [{ required: true, message: '请输入仪表盘名称' }]
+    },
+    props: {
+      placeholder: '请输入仪表盘名称'
+    }
+  },
+  {
+    name: 'groupId',
+    label: '策略组',
+    type: 'select',
+    props: {
+      placeholder: '请选择策略组',
+      mode: 'multiple',
+      maxTagCount: 'responsive',
+      options: [
+        {
+          label: '策略组1',
+          value: 1
+        },
+        {
+          label: '策略组2',
+          value: 2
+        }
+      ]
+    },
+    formProps: {
+      rules: [{ required: true, message: '请选择策略组' }]
+    }
+  },
+  {
+    name: 'remark',
+    label: '描述',
+    type: 'textarea',
+    props: {
+      placeholder: '请输入描述',
+      maxLength: 200,
+      showCount: true
+    }
+  }
+]
+
+export const metricStrategyFormItems: (DataFromItem | DataFromItem[])[] = [
+  {
+    name: 'metric',
+    label: '指标',
+    type: 'input',
+    props: {
+      placeholder: '请输入指标',
+      maxLength: 100
+    }
+  },
+  {
+    name: 'unit',
+    label: '单位',
+    type: 'input',
+    props: {
+      placeholder: '请输入单位',
+      maxLength: 100
+    }
+  }
+]
+
+export const metricStrategyLevelsformItems: (DataFromItem | DataFromItem[])[] = [
+  {
+    name: 'unit',
+    label: '单位',
+    type: 'input',
+    props: {
+      placeholder: '请输入单位',
+      maxLength: 100
+    }
+  }
+]
