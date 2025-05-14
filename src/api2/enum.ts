@@ -200,6 +200,12 @@ export enum DatasourceDriverMetric {
   DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS = 'VictoriaMetrics'
 }
 
+export enum DictType {
+  DICT_TYPE_UNKNOWN = '未知',
+  DICT_TYPE_ALARM_LEVEL = '告警级别',
+  DICT_TYPE_ALARM_PAGE = '告警页面'
+}
+
 // 操作
 export enum ActionKey {
   /** 新增 */

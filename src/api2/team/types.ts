@@ -1,5 +1,6 @@
 import {
   BasicAuth,
+  DictTypeKey,
   GlobalStatusKey,
   NoticeGroupItem,
   NoticeHookItem,
@@ -630,7 +631,7 @@ export interface ListTeamDictRequest {
   dictTypes?: number[]
   keyword?: string
   langs?: string[]
-  pagination?: PaginationRequest
+  pagination: PaginationRequest
   status?: number
 }
 
@@ -646,7 +647,7 @@ export interface ListTeamDictReply {
  */
 export interface UpdateTeamDictStatusRequest {
   dictIds?: number[]
-  status?: number
+  status?: GlobalStatusKey
 }
 
 export interface GetTeamDictRequest {
@@ -655,9 +656,7 @@ export interface GetTeamDictRequest {
 /**
  * api.palace.GetTeamDictReply
  */
-export interface GetTeamDictReply {
-  detail?: TeamDictItem
-}
+export interface GetTeamDictReply extends TeamDictItem {}
 
 /**
  * api.palace.SaveTeamDictRequest
@@ -665,10 +664,11 @@ export interface GetTeamDictReply {
 export interface SaveTeamDictRequest {
   color?: string
   dictId?: number
-  dictType?: number
+  dictType?: DictTypeKey
   key?: string
   lang?: string
   value?: string
+  status?: GlobalStatusKey
 }
 
 export interface DeleteTeamDictRequest {

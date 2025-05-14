@@ -1,5 +1,6 @@
 import {
   DatasourceDriverMetric,
+  DictType,
   Gender,
   GlobalStatus,
   StrategyType,
@@ -15,7 +16,7 @@ export type UserPositionKey = keyof typeof UserPosition
 export type GlobalStatusKey = keyof typeof GlobalStatus
 export type StrategyTypeKey = keyof typeof StrategyType
 export type DatasourceDriverMetricKey = keyof typeof DatasourceDriverMetric
-
+export type DictTypeKey = keyof typeof DictType
 /**
  * User basic information
  * api.palace.common.UserBaseItem
@@ -749,7 +750,7 @@ export interface TeamStrategyMetricItemRuleItem {
 export interface TeamDictItem {
   color?: string
   createdAt?: string
-  dictId?: number
+  dictId: number
   dictType?: number
   key?: string
   lang?: string

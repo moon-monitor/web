@@ -1,8 +1,9 @@
-import { type ListDictRequest, batchUpdateDictStatus, deleteDict, listDict } from '@/api/dict'
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { DictItem } from '@/api/model-types'
 import type { ListStrategyGroupRequest } from '@/api/strategy'
+import { TeamDictItem } from '@/api2/common.types'
+import { deleteTeamDict, listTeamDict, updateTeamDictStatus } from '@/api2/team/team-dict'
+import { ListTeamDictRequest } from '@/api2/team/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -18,9 +19,9 @@ import { formList, getColumnList } from './options'
 const { confirm } = Modal
 const { useToken } = theme
 
-const defaultSearchParams: ListDictRequest = {
+const defaultSearchParams: ListTeamDictRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 10
   },
   keyword: '',
@@ -32,8 +33,8 @@ const Group: React.FC = () => {
   const { token } = useToken()
   const { isFullscreen } = useContext(GlobalContext)
 
-  const [datasource, setDatasource] = useState<DictItem[]>([])
-  const [searchParams, setSearchParams] = useState<ListDictRequest>(defaultSearchParams)
+  const [datasource, setDatasource] = useState<TeamDictItem[]>([])
+  const [searchParams, setSearchParams] = useState<ListTeamDictRequest>(defaultSearchParams)
   const [refresh, setRefresh] = useState(false)
   const [total, setTotal] = useState(0)
   const [openGroupEditModal, setOpenGroupEditModal] = useState(false)
@@ -44,11 +45,27 @@ const Group: React.FC = () => {
   const ADivRef = useRef<HTMLDivElement>(null)
   const AutoTableHeight = useContainerHeightTop(ADivRef, datasource, isFullscreen)
 
-  const { run: initDictList, loading: initDictListLoading } = useRequest(listDict, {
+  const { run: initDictList, loading: initDictListLoading } = useRequest(listTeamDict, {
     manual: true,
     onSuccess: (data) => {
-      setDatasource(data.list || [])
+      setDatasource(data.items || [])
       setTotal(data.pagination?.total || 0)
+    }
+  })
+
+  const { run: batchUpdateDictStatus } = useRequest(updateTeamDictStatus, {
+    manual: true,
+    onSuccess: () => {
+      message.success('更改状态成功')
+      onRefresh()
+    }
+  })
+
+  const { run: deleteDict } = useRequest(deleteTeamDict, {
+    manual: true,
+    onSuccess: () => {
+      message.success('删除成功')
+      onRefresh()
     }
   })
 
@@ -88,7 +105,7 @@ const Group: React.FC = () => {
       ...searchParams,
       ...formData,
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: searchParams.pagination.pageSize
       }
     })
@@ -99,8 +116,8 @@ const Group: React.FC = () => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum: page,
-        pageSize: pageSize
+        page,
+        pageSize
       }
     })
   }
@@ -110,33 +127,27 @@ const Group: React.FC = () => {
     setSearchParams(defaultSearchParams)
   }
 
-  const onHandleMenuOnClick = (item: DictItem, key: ActionKey) => {
+  const onHandleMenuOnClick = (item: TeamDictItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
         batchUpdateDictStatus({
-          ids: [item.id],
-          status: Status.StatusEnable
-        }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
+          dictIds: [item.dictId],
+          status: 'GLOBAL_STATUS_ENABLE'
         })
         break
       case ActionKey.DISABLE:
         batchUpdateDictStatus({
-          ids: [item.id],
-          status: Status.StatusDisable
-        }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
+          dictIds: [item.dictId],
+          status: 'GLOBAL_STATUS_DISABLE'
         })
         break
       case ActionKey.OPERATION_LOG:
         break
       case ActionKey.DETAIL:
-        handleOpenDetailModal(item.id)
+        handleOpenDetailModal(item.dictId)
         break
       case ActionKey.EDIT:
-        handleEditModal(item.id)
+        handleEditModal(item.dictId)
         break
       case ActionKey.DELETE:
         confirm({
@@ -144,10 +155,7 @@ const Group: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteDict({ id: item.id }).then(() => {
-              message.success('删除成功')
-              onRefresh()
-            })
+            deleteDict({ dictId: item.dictId })
           },
           onCancel() {
             message.info('取消操作')
@@ -159,7 +167,7 @@ const Group: React.FC = () => {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.pageNum,
+    current: searchParams.pagination.page,
     pageSize: searchParams.pagination.pageSize
   })
 
@@ -211,7 +219,7 @@ const Group: React.FC = () => {
             columns={columns}
             handleTurnPage={handleTurnPage}
             pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.pageNum}
+            pageNum={searchParams.pagination.page}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

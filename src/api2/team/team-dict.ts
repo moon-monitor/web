@@ -43,7 +43,7 @@ export const deleteTeamDict = (params: DeleteTeamDictRequest): Promise<EmptyRepl
  * @returns {Promise<ListTeamDictReply>}
  */
 export const listTeamDict = (params: ListTeamDictRequest): Promise<ListTeamDictReply> => {
-  return request.GET<ListTeamDictReply>('/api/team/dict/list', params)
+  return request.POST<ListTeamDictReply>('/api/team/dict/list', params)
 }
 
 /**
