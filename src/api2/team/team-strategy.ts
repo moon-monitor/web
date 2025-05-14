@@ -15,7 +15,7 @@ import {
   SaveTeamStrategyGroupRequest,
   SaveTeamStrategyRequest,
   UpdateTeamStrategyGroupStatusRequest
-} from './types'
+} from './team-strategy.types'
 
 /**
  * ListTeamStrategyGroup lists team strategy groups based on specified filters

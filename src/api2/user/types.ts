@@ -4,12 +4,7 @@ import { PaginationReply, PaginationRequest, TeamItem, TeamStrategyItem, UserIte
  * api.palace.SelfInfoReply, SelfInfoReply contains the response data for retrieving the
  * current user's information
  */
-export interface SelfInfoReply {
-  /**
-   * Detailed information about the user
-   */
-  user: UserItem
-}
+export interface SelfInfoReply extends UserItem {}
 
 /**
  * api.palace.UpdateSelfInfoRequest, UpdateSelfInfoRequest represents the request data for

@@ -1,40 +1,37 @@
-import { deleteDict } from '@/api/dict'
-import { Status } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import type { TeamRole } from '@/api/model-types'
-import type { ListStrategyGroupRequest } from '@/api/strategy'
-import { type ListRoleRequest, listRole, updateRoleStatus } from '@/api/team/role'
+import { TeamRoleItem } from '@/api2/common.types'
+import { ActionKey } from '@/api2/enum'
+import { deleteTeamRole, getTeamRoles, updateTeamRoleStatus } from '@/api2/team'
+import { GetTeamRolesRequest } from '@/api2/team/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'
 import { ExclamationCircleFilled } from '@ant-design/icons'
+import { useRequest } from 'ahooks'
 import { Button, Modal, Space, message, theme } from 'antd'
-import { debounce } from 'lodash'
 import type React from 'react'
-import { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 import { GroupEditModal } from './group-edit-modal'
 import { formList, getColumnList } from './options'
 
 const { confirm } = Modal
 const { useToken } = theme
 
-const defaultSearchParams: ListRoleRequest = {
+const defaultSearchParams: GetTeamRolesRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 10
   },
   keyword: '',
-  status: Status.StatusAll
+  status: 'GLOBAL_STATUS_UNKNOWN'
 }
 
 const Group: React.FC = () => {
   const { token } = useToken()
   const { isFullscreen } = useContext(GlobalContext)
 
-  const [datasource, setDatasource] = useState<TeamRole[]>([])
-  const [searchParams, setSearchParams] = useState<ListRoleRequest>(defaultSearchParams)
-  const [loading, setLoading] = useState(false)
+  const [datasource, setDatasource] = useState<TeamRoleItem[]>([])
+  const [searchParams, setSearchParams] = useState<GetTeamRolesRequest>(defaultSearchParams)
   const [refresh, setRefresh] = useState(false)
   const [total, setTotal] = useState(0)
   const [openGroupEditModal, setOpenGroupEditModal] = useState(false)
@@ -66,19 +63,27 @@ const Group: React.FC = () => {
     setRefresh(!refresh)
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchData = useCallback(
-    debounce(async (params) => {
-      setLoading(true)
-      listRole(params)
-        .then(({ list, pagination }) => {
-          setDatasource(list || [])
-          setTotal(pagination?.total || 0)
-        })
-        .finally(() => setLoading(false))
-    }, 500),
-    []
-  )
+  const { run: fetchData, loading } = useRequest(getTeamRoles, {
+    manual: true,
+    onSuccess: (res) => {
+      setDatasource(res.items || [])
+      setTotal(res.pagination?.total || 0)
+    }
+  })
+  const { run: updateRoleStatus } = useRequest(updateTeamRoleStatus, {
+    manual: true,
+    onSuccess: () => {
+      message.success('更改状态成功')
+      onRefresh()
+    }
+  })
+  const { run: deleteDict } = useRequest(deleteTeamRole, {
+    manual: true,
+    onSuccess: () => {
+      message.success('删除成功')
+      onRefresh()
+    }
+  })
 
   const handleGroupEditModalSubmit = () => {
     message.success(`${editGroupId ? '编辑' : '添加'}成功`)
@@ -92,12 +97,12 @@ const Group: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [refresh, searchParams, fetchData])
 
-  const onSearch = (formData: ListStrategyGroupRequest) => {
+  const onSearch = (formData: GetTeamRolesRequest) => {
     setSearchParams({
       ...searchParams,
       ...formData,
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: searchParams.pagination.pageSize
       }
     })
@@ -108,7 +113,7 @@ const Group: React.FC = () => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum: page,
+        page: page,
         pageSize: pageSize
       }
     })
@@ -119,27 +124,21 @@ const Group: React.FC = () => {
     setSearchParams(defaultSearchParams)
   }
 
-  const onHandleMenuOnClick = (item: TeamRole, key: ActionKey) => {
+  const onHandleMenuOnClick = (item: TeamRoleItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
-        updateRoleStatus({ id: item.id, status: Status.StatusEnable }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
-        })
+        updateRoleStatus({ roleId: item.roleId, status: 'GLOBAL_STATUS_ENABLE' })
         break
       case ActionKey.DISABLE:
-        updateRoleStatus({ id: item.id, status: Status.StatusDisable }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
-        })
+        updateRoleStatus({ roleId: item.roleId, status: 'GLOBAL_STATUS_DISABLE' })
         break
       case ActionKey.OPERATION_LOG:
         break
       case ActionKey.DETAIL:
-        handleOpenDetailModal(item.id)
+        handleOpenDetailModal(item.roleId)
         break
       case ActionKey.EDIT:
-        handleEditModal(item.id)
+        handleEditModal(item.roleId)
         break
       case ActionKey.DELETE:
         confirm({
@@ -147,10 +146,7 @@ const Group: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteDict({ id: item.id }).then(() => {
-              message.success('删除成功')
-              onRefresh()
-            })
+            deleteDict({ roleId: item.roleId })
           },
           onCancel() {
             message.info('取消操作')
@@ -162,7 +158,7 @@ const Group: React.FC = () => {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.pageNum,
+    current: searchParams.pagination.page,
     pageSize: searchParams.pagination.pageSize
   })
 
@@ -213,7 +209,7 @@ const Group: React.FC = () => {
             columns={columns}
             handleTurnPage={handleTurnPage}
             pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.pageNum}
+            pageNum={searchParams.pagination.page}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

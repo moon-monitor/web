@@ -8,7 +8,7 @@ import {
   ListTeamDictRequest,
   SaveTeamDictRequest,
   UpdateTeamDictStatusRequest
-} from './types'
+} from './team-dict.types'
 
 /**
  * GetTeamDict gets a team dict

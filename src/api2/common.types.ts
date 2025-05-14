@@ -555,7 +555,7 @@ export interface TeamRoleItem {
   /**
    * Unique identifier for the role.
    */
-  id?: number
+  roleId: number
   /**
    * List of members assigned to the role.
    */

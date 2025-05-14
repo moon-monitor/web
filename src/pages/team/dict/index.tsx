@@ -1,7 +1,5 @@
-import { Status } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import type { ListStrategyGroupRequest } from '@/api/strategy'
 import { TeamDictItem } from '@/api2/common.types'
+import { ActionKey } from '@/api2/enum'
 import { deleteTeamDict, listTeamDict, updateTeamDictStatus } from '@/api2/team/team-dict'
 import { ListTeamDictRequest } from '@/api2/team/types'
 import SearchBox from '@/components/data/search-box'
@@ -25,7 +23,7 @@ const defaultSearchParams: ListTeamDictRequest = {
     pageSize: 10
   },
   keyword: '',
-  status: Status.StatusAll
+  status: 'GLOBAL_STATUS_UNKNOWN'
   // teamId: ''
 }
 
@@ -100,7 +98,7 @@ const Group: React.FC = () => {
     initDictList(searchParams)
   }, [refresh, searchParams, initDictList])
 
-  const onSearch = (formData: ListStrategyGroupRequest) => {
+  const onSearch = (formData: ListTeamDictRequest) => {
     setSearchParams({
       ...searchParams,
       ...formData,

@@ -1,5 +1,5 @@
 import request from '../request'
-import { ListTeamNoticeGroupReply, ListTeamNoticeGroupRequest } from './types'
+import { ListTeamNoticeGroupReply, ListTeamNoticeGroupRequest } from './team-notice.types'
 
 /**
  * ListTeamNoticeGroup

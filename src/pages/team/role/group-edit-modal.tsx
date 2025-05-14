@@ -1,6 +1,9 @@
-import type { ResourceItem, TeamRole } from '@/api/model-types'
+import type { ResourceItem } from '@/api/model-types'
 import { listResource } from '@/api/resource'
-import { type CreateRoleRequest, createRole, getRole, updateRole } from '@/api/team/role'
+import { getRole } from '@/api/team/role'
+import { TeamRoleItem } from '@/api2/common.types'
+import { saveTeamRole } from '@/api2/team'
+import { SaveTeamRoleRequest } from '@/api2/team/types'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Form, Modal, type ModalProps } from 'antd'
@@ -18,8 +21,8 @@ export interface GroupEditModalProps extends ModalProps {
 
 export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   const { onCancel, onOk, open, title, groupId, disabled } = props
-  const [form] = Form.useForm<CreateRoleRequest>()
-  const [grounpDetail, setGroupDetail] = useState<TeamRole>()
+  const [form] = Form.useForm<SaveTeamRoleRequest>()
+  const [grounpDetail, setGroupDetail] = useState<TeamRoleItem>()
   const [resourceList, setResourceList] = useState<ResourceItem[]>([])
 
   const { run: initRoleDetail, loading: initRoleDetailLoading } = useRequest(getRole, {
@@ -36,15 +39,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     }
   })
 
-  const { run: addRole, loading: addRoleLoading } = useRequest(createRole, {
-    manual: true,
-    onSuccess: () => {
-      form?.resetFields()
-      onOk?.()
-    }
-  })
-
-  const { run: editRole, loading: editRoleLoading } = useRequest(updateRole, {
+  const { run: updateRole, loading: editRoleLoading } = useRequest(saveTeamRole, {
     manual: true,
     onSuccess: () => {
       form?.resetFields()
@@ -65,8 +60,8 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   useEffect(() => {
     if (open && form && grounpDetail) {
       form?.setFieldsValue({
-        ...grounpDetail,
-        permissions: grounpDetail?.resources?.map((item) => item.id) || []
+        ...grounpDetail
+        // permissions: grounpDetail?.resources?.map((item) => item.id) || []
       })
       return
     }
@@ -82,14 +77,9 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   const handleOnOk = () => {
     form?.validateFields().then((formValues) => {
       const data = {
-        ...formValues,
-        id: groupId
+        ...formValues
       }
-      if (groupId) {
-        editRole({ id: groupId, data: formValues })
-      } else {
-        addRole(data)
-      }
+      updateRole({ ...data, ...(groupId && { roleId: groupId }) })
     })
   }
 
@@ -102,7 +92,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
         onCancel={handleOnCancel}
         onOk={handleOnOk}
         loading={initRoleDetailLoading || initResourceListLoading}
-        confirmLoading={addRoleLoading || editRoleLoading}
+        confirmLoading={editRoleLoading}
       >
         <DataFrom
           items={editModalFormItems}
@@ -110,7 +100,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
             form,
             layout: 'vertical',
             autoComplete: 'off',
-            disabled: disabled || addRoleLoading || editRoleLoading
+            disabled: disabled || editRoleLoading
           }}
         >
           <FormItem label='权限列表' name='permissions'>

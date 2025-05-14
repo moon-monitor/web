@@ -1,6 +1,6 @@
 import { Status } from '@/api/enum'
 import { ActionKey, StatusData } from '@/api/global'
-import type { TeamRole } from '@/api/model-types'
+import { TeamRoleItem } from '@/api2/common.types'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -40,14 +40,14 @@ export const formList: SearchFormItem[] = [
 ]
 
 interface GroupColumnProps {
-  onHandleMenuOnClick: (item: TeamRole, key: ActionKey) => void
+  onHandleMenuOnClick: (item: TeamRoleItem, key: ActionKey) => void
   current: number
   pageSize: number
 }
 
-export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamRole> => {
+export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamRoleItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
-  const tableOperationItems = (record: TeamRole): MoreMenuProps['items'] => [
+  const tableOperationItems = (record: TeamRoleItem): MoreMenuProps['items'] => [
     record.status === Status.StatusDisable
       ? {
           key: ActionKey.ENABLE,
@@ -142,7 +142,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamRole> =>
       ellipsis: true,
       fixed: 'right',
       width: 120,
-      render: (_, record: TeamRole) => (
+      render: (_, record: TeamRoleItem) => (
         <Space size={20}>
           <Button size='small' type='link' onClick={() => onHandleMenuOnClick(record, ActionKey.DETAIL)}>
             详情

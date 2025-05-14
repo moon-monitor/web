@@ -117,14 +117,14 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
   ]
 
   const getUserInfo = () => {
+    console.log('getUserInfo', userInfo)
     if (!userInfo) {
       return
     }
     selfInfo().then((res) => {
-      const { user: detail } = res
-      localStorage.setItem('user', JSON.stringify(detail))
-      setUserDetail(detail)
-      setUserInfo?.(detail)
+      localStorage.setItem('user', JSON.stringify(res))
+      setUserDetail(res)
+      setUserInfo?.(res)
     })
   }
 

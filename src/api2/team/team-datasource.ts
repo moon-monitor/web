@@ -2,21 +2,23 @@ import { EmptyReply } from '../common.types'
 import request from '../request'
 import {
   DeleteTeamMetricDatasourceRequest,
-  GetTeamMetricStrategyReply,
-  GetTeamMetricStrategyRequest,
+  GetTeamMetricDatasourceReply,
+  GetTeamMetricDatasourceRequest,
   ListTeamMetricDatasourceReply,
   ListTeamMetricDatasourceRequest,
   SaveTeamMetricDatasourceRequest,
   UpdateTeamMetricDatasourceStatusRequest
-} from './types'
+} from './team-datasource.types'
 
 /**
  * GetTeamMetricDatasource retrieves a team metric datasource by Id
- * @param {GetTeamMetricStrategyRequest} params
- * @returns {Promise<GetTeamMetricStrategyReply>}
+ * @param {GetTeamMetricDatasourceRequest} params
+ * @returns {Promise<GetTeamMetricDatasourceReply>}
  */
-export const getTeamMetricDatasource = (params: GetTeamMetricStrategyRequest): Promise<GetTeamMetricStrategyReply> => {
-  return request.GET<GetTeamMetricStrategyReply>(`/api/team/metric/datasource`, params)
+export const getTeamMetricDatasource = (
+  params: GetTeamMetricDatasourceRequest
+): Promise<GetTeamMetricDatasourceReply> => {
+  return request.GET<GetTeamMetricDatasourceReply>(`/api/team/metric/datasource`, params)
 }
 
 /**

@@ -7,6 +7,7 @@ import {
   GetTeamReply,
   GetTeamResourcesReply,
   GetTeamRolesReply,
+  GetTeamRolesRequest,
   InviteMemberRequest,
   RemoveMemberRequest,
   SaveEmailConfigRequest,
@@ -15,7 +16,8 @@ import {
   TransferTeamRequest,
   UpdateMemberPositionRequest,
   UpdateMemberRolesRequest,
-  UpdateMemberStatusRequest
+  UpdateMemberStatusRequest,
+  UpdateTeamRoleStatusRequest
 } from './types'
 
 /**
@@ -134,10 +136,11 @@ export function saveTeamRole(params: SaveTeamRoleRequest): Promise<EmptyReply> {
 
 /**
  * GetTeamRoles retrieves the roles available in the team
+ * @param {GetTeamRolesRequest} params
  * @returns {Promise<GetTeamRolesReply>}
  */
-export function getTeamRoles(): Promise<GetTeamRolesReply> {
-  return request.GET<GetTeamRolesReply>('/api/team/roles')
+export function getTeamRoles(params: GetTeamRolesRequest): Promise<GetTeamRolesReply> {
+  return request.POST<GetTeamRolesReply>('/api/team/roles', params)
 }
 
 /**
@@ -147,4 +150,13 @@ export function getTeamRoles(): Promise<GetTeamRolesReply> {
  */
 export function deleteTeamRole(prrams: DeleteTeamRoleRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/roles', prrams)
+}
+
+/**
+ * UpdateTeamRoleStatus updates the status of a team role
+ * @param {UpdateTeamRoleStatusRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeamRoleStatus(params: UpdateTeamRoleStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/roles/status', params)
 }
