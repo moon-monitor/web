@@ -10,6 +10,8 @@ import {
   ListTeamStrategyGroupRequest,
   ListTeamStrategyReply,
   ListTeamStrategyRequest,
+  SaveTeamMetricStrategyLevelsRequest,
+  SaveTeamMetricStrategyRequest,
   SaveTeamStrategyGroupRequest,
   SaveTeamStrategyRequest,
   UpdateTeamStrategyGroupStatusRequest
@@ -94,4 +96,22 @@ export function saveTeamStrategy(params: SaveTeamStrategyRequest): Promise<Empty
  */
 export function deleteTeamStrategyById(params: DeleteTeamStrategyRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/strategy', params)
+}
+
+/**
+ * SaveTeamMetricStrategy saves a new team metric strategy or updates an existing one
+ * @param {SaveTeamMetricStrategyRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveTeamMetricStrategy(params: SaveTeamMetricStrategyRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/strategy/metric', params)
+}
+
+/**
+ * SaveTeamMetricStrategyLevels saves a new team metric strategy level or updates an existing one
+ * @param {SaveTeamMetricStrategyLevelsRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveTeamMetricStrategyLevels(params: SaveTeamMetricStrategyLevelsRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/strategy/metric/levels', params)
 }

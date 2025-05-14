@@ -165,22 +165,22 @@ const StrategyList = (props: StrategyListProps) => {
   const handleDetailModal = (item: TeamStrategyItem) => {
     setDetail(item)
     switch (item.strategyType) {
-      case StrategyType.StrategyTypeMetric:
+      case 'STRATEGY_TYPE_METRIC':
         setOpenMetricDetailModal(true)
         break
-      case StrategyType.StrategyTypeEvent:
+      case 'STRATEGY_TYPE_EVENT':
         setOpenEventDetailModal(true)
         break
-      case StrategyType.StrategyTypeDomainCertificate:
+      case 'STRATEGY_TYPE_CERT':
         setOpenDomainDetailModal(true)
         break
-      case StrategyType.StrategyTypeDomainPort:
+      case 'STRATEGY_TYPE_PORT':
         setOpenPortDetailModal(true)
         break
-      case StrategyType.StrategyTypeHTTP:
+      case 'STRATEGY_TYPE_HTTP':
         setOpenHttpDetailModal(true)
         break
-      case StrategyType.StrategyTypeLog:
+      case 'STRATEGY_TYPE_LOGS':
         setOpenLogDetailModal(true)
         break
       default:

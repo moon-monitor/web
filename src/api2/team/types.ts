@@ -6,6 +6,7 @@ import {
   PaginationReply,
   PaginationRequest,
   ResourceItem,
+  StrategyTypeKey,
   TeamDashboardChartItem,
   TeamDashboardItem,
   TeamDictItem,
@@ -397,7 +398,7 @@ export interface GetTeamMetricStrategyRequest {
    * Strategy Id
    */
   strategyId?: number
-  strategyType?: number
+  strategyType?: StrategyTypeKey
 }
 
 /**
@@ -680,6 +681,7 @@ export interface DeleteTeamDictRequest {
 export interface ListTeamMetricDatasourceRequest {
   keyword?: string
   pagination?: PaginationRequest
+  status?: GlobalStatusKey
 }
 
 /**
@@ -821,4 +823,108 @@ export interface ListTeamNoticeHookReply {
 export interface UpdateTeamNoticeHookStatusRequest {
   hookId?: number
   status?: number
+}
+
+/**
+ * api.palace.SaveTeamMetricStrategyRequest，SaveTeamMetricStrategyRequest represents the
+ * request data for saving or updating a team metric strategy
+ */
+export interface SaveTeamMetricStrategyRequest {
+  /**
+   * Annotations
+   */
+  annotations?: { [key: string]: string }
+  /**
+   * Datasource
+   */
+  datasource?: number[]
+  /**
+   * Expression
+   */
+  expr?: string
+  /**
+   * Labels
+   */
+  labels?: { [key: string]: string }
+  /**
+   * Metric strategy id
+   */
+  metricStrategyId?: number
+  /**
+   * Strategy id
+   */
+  strategyId?: number
+}
+
+/**
+ * api.palace.SaveTeamMetricStrategyLevelsRequest
+ */
+export interface SaveTeamMetricStrategyLevelsRequest {
+  /**
+   * Levels
+   */
+  levels?: SaveTeamMetricStrategyLevelRequest[]
+  /**
+   * Strategy metric id
+   */
+  strategyMetricId?: number
+}
+
+/**
+ * api.palace.SaveTeamMetricStrategyLevelRequest
+ */
+export interface SaveTeamMetricStrategyLevelRequest {
+  /**
+   * Condition
+   */
+  condition?: number
+  /**
+   * Duration
+   */
+  duration?: string
+  /**
+   * Id
+   */
+  id?: number
+  /**
+   * Label notices
+   */
+  labelNotices?: LabelNotices[]
+  /**
+   * Level Id
+   */
+  levelId?: number
+  /**
+   * Level name
+   */
+  levelName?: string
+  /**
+   * Receiver routes
+   */
+  receiverRoutes?: number[]
+  /**
+   * Sample mode
+   */
+  sampleMode?: number
+  /**
+   * Status
+   */
+  status?: number
+  /**
+   * Total
+   */
+  total?: string
+  /**
+   * Values
+   */
+  values?: number[]
+}
+
+/**
+ * api.palace.LabelNotices
+ */
+export interface LabelNotices {
+  key?: string
+  receiverRoutes?: number[]
+  value?: string
 }

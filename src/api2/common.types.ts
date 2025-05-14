@@ -1,4 +1,12 @@
-import { Gender, GlobalStatus, StrategyType, TeamStatus, UserPosition, UserStatus } from './enum'
+import {
+  DatasourceDriverMetric,
+  Gender,
+  GlobalStatus,
+  StrategyType,
+  TeamStatus,
+  UserPosition,
+  UserStatus
+} from './enum'
 
 export type GenderKey = keyof typeof Gender
 export type TeamStatusKey = keyof typeof TeamStatus
@@ -6,6 +14,7 @@ export type UserStatusKey = keyof typeof UserStatus
 export type UserPositionKey = keyof typeof UserPosition
 export type GlobalStatusKey = keyof typeof GlobalStatus
 export type StrategyTypeKey = keyof typeof StrategyType
+export type DatasourceDriverMetricKey = keyof typeof DatasourceDriverMetric
 
 /**
  * User basic information
@@ -95,6 +104,7 @@ export interface UserItem {
  */
 export interface EmptyReply {
   message?: string
+  id?: number
 }
 
 /**
@@ -684,7 +694,7 @@ export interface TeamMetricDatasourceItem {
   ca?: string
   createdAt?: string
   datasourceId?: number
-  driver?: number
+  driver?: DatasourceDriverMetricKey
   endpoint?: string
   extra?: { [key: string]: string }
   headers?: { [key: string]: string }
@@ -695,6 +705,7 @@ export interface TeamMetricDatasourceItem {
   teamId?: number
   tls?: TLS
   updatedAt?: string
+  status?: GlobalStatusKey
 }
 
 /**
@@ -745,6 +756,7 @@ export interface TeamDictItem {
   teamId?: number
   updatedAt?: string
   value?: string
+  status: GlobalStatusKey
 }
 
 /**

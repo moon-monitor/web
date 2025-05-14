@@ -194,6 +194,12 @@ export const StrategyTypeMap: Record<StrategyTypeKey, { color: string }> = {
   }
 }
 
+export enum DatasourceDriverMetric {
+  DATASOURCE_DRIVER_METRIC_UNKNOWN = '未知',
+  DATASOURCE_DRIVER_METRIC_PROMETHEUS = 'Prometheus',
+  DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS = 'VictoriaMetrics'
+}
+
 // 操作
 export enum ActionKey {
   /** 新增 */
