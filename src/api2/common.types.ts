@@ -3,6 +3,7 @@ import {
   Gender,
   GlobalStatus,
   HookAPP,
+  HTTPMethod,
   StrategyType,
   TeamStatus,
   UserPosition,
@@ -528,8 +529,8 @@ export interface NoticeHookItem {
   app: HookAPP
   createdAt: string
   creator?: UserBaseItem
-  headers?: { [key: string]: string }
-  method: number
+  headers?: { key: string; value: string }[]
+  method: HTTPMethod
   name: string
   noticeGroups?: NoticeGroupItem[]
   noticeHookId: number

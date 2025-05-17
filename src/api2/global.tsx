@@ -4,6 +4,7 @@ import {
   Gender,
   GlobalStatus,
   HookAPP,
+  HTTPMethod,
   MemberStatus,
   ResourceModule,
   Role,
@@ -226,4 +227,39 @@ export const RoleData: Record<Role, string> = {
   [Role.ROLE_SUPER_ADMIN]: '超级管理员',
   [Role.ROLE_ADMIN]: '管理员',
   [Role.ROLE_USER]: '普通用户'
+}
+
+export const MethodData: Record<HTTPMethod, { color: string; text: string }> = {
+  [HTTPMethod.HTTP_METHOD_UNKNOWN]: {
+    color: 'gray',
+    text: '未知'
+  },
+  [HTTPMethod.HTTP_METHOD_GET]: {
+    color: 'green',
+    text: 'GET'
+  },
+  [HTTPMethod.HTTP_METHOD_POST]: {
+    color: 'orange',
+    text: 'POST'
+  },
+  [HTTPMethod.HTTP_METHOD_PUT]: {
+    color: 'cyan',
+    text: 'PUT'
+  },
+  [HTTPMethod.HTTP_METHOD_DELETE]: {
+    color: 'red',
+    text: 'DELETE'
+  },
+  [HTTPMethod.HTTP_METHOD_HEAD]: {
+    color: 'purple',
+    text: 'PATCH'
+  },
+  [HTTPMethod.HTTP_METHOD_OPTIONS]: {
+    color: 'gray',
+    text: 'OPTIONS'
+  },
+  [HTTPMethod.HTTP_METHOD_PATCH]: {
+    color: 'gray',
+    text: 'PATCH'
+  }
 }

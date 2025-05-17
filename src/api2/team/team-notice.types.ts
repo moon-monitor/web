@@ -114,7 +114,7 @@ export interface SaveTeamNoticeGroupRequestMember {
  */
 export interface SaveTeamNoticeHookRequest {
   app?: number
-  headers?: { [key: string]: string }
+  headers?: { key: string; value: string }[]
   hookId?: number
   method?: number
   name?: string

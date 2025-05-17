@@ -1,6 +1,6 @@
-import { GlobalStatusKey, NoticeGroupItem, NoticeHookItem } from '@/api2/common.types'
-import { ActionKey, GlobalStatus, GlobalStatusMap } from '@/api2/enum'
-import { defaultPaginationReq, HookAppData } from '@/api2/global'
+import { NoticeGroupItem, NoticeHookItem } from '@/api2/common.types'
+import { ActionKey, GlobalStatus } from '@/api2/enum'
+import { defaultPaginationReq, GlobalStatusData, HookAppData } from '@/api2/global'
 import { listTeamNoticeHook } from '@/api2/team/team-notice'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
@@ -51,7 +51,7 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<NoticeGroupItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
   const tableOperationItems = (record: NoticeGroupItem): MoreMenuProps['items'] => [
-    record.status === 'GLOBAL_STATUS_DISABLE'
+    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -116,8 +116,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<NoticeGroupI
       key: 'status',
       align: 'center',
       width: 120,
-      render: (status: GlobalStatusKey) => {
-        return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
+      render: (status: GlobalStatus) => {
+        return <Badge {...GlobalStatusData[status]} />
       }
     },
     {
@@ -233,7 +233,7 @@ export const editModalFormItems: (DataFromItem | DataFromItem[])[] = [
           res.items.map((item) => ({
             label: <HookAvatar {...item} />,
             value: item.noticeHookId,
-            disabled: item.status !== 'GLOBAL_STATUS_ENABLE'
+            disabled: item.status !== GlobalStatus.GLOBAL_STATUS_ENABLE
           }))
         )
       },

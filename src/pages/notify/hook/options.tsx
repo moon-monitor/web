@@ -1,10 +1,13 @@
 import { NoticeHookItem } from '@/api2/common.types'
-import { ActionKey, GlobalStatus, HookAPP } from '@/api2/enum'
-import { GlobalStatusData, HookAppData } from '@/api2/global'
+import { ActionKey, GlobalStatus, HookAPP, HTTPMethod } from '@/api2/enum'
+import { GlobalStatusData, HookAppData, MethodData } from '@/api2/global'
+import { DataFromItem } from '@/components/data/form'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
-import { Avatar, Badge, Button, Space } from 'antd'
+import { Avatar, Badge, Button, Space, Tooltip, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
+
+const { Text } = Typography
 
 export const formList: SearchFormItem[] = [
   {
@@ -27,9 +30,9 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(GlobalStatus).map(([key, value]) => {
+        options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: value,
+            label: value.text,
             value: key
           }
         })
@@ -54,7 +57,7 @@ export const formList: SearchFormItem[] = [
                 {text}
               </Space>
             ),
-            value: +key
+            value: key
           }
         })
       }
@@ -116,26 +119,17 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeH
 
   return [
     {
-      title: '序号',
-      dataIndex: 'index',
-      key: 'index',
-      width: 60,
-      render: (_, __, index: number) => {
-        return <span>{(current - 1) * pageSize + index + 1}</span>
-      }
-    },
-    {
       title: '类型',
       dataIndex: 'app',
       key: 'app',
       width: 100,
+      align: 'center',
       render: (app: HookAPP) => {
         const { text, icon } = HookAppData[app]
         return (
-          <Space direction='horizontal'>
-            <Avatar size='small' shape='square' icon={icon} />
-            {text}
-          </Space>
+          <Tooltip title={text}>
+            <Button type='link' icon={icon} />
+          </Tooltip>
         )
       }
     },
@@ -143,16 +137,16 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeH
       title: '名称',
       dataIndex: 'name',
       key: 'name',
-      width: 200
-    },
-    {
-      title: '状态',
-      dataIndex: 'status',
-      key: 'status',
-      align: 'center',
-      width: 160,
-      render: (status: GlobalStatus) => {
-        return <Badge {...GlobalStatusData[status]} />
+      width: 200,
+      render: (text: string, record: NoticeHookItem) => {
+        return (
+          <Space>
+            <Badge color={GlobalStatusData[record.status].color} />
+            <Text style={{ width: 180 }} ellipsis={{ tooltip: true }}>
+              {text}
+            </Text>
+          </Space>
+        )
       }
     },
     {
@@ -197,3 +191,103 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeH
     }
   ]
 }
+
+export const saveFormList: (DataFromItem | DataFromItem[])[] = [
+  [
+    {
+      name: 'app',
+      label: '类型',
+      type: 'select',
+      span: 6,
+      props: {
+        placeholder: '请选择类型',
+        options: Object.entries(HookAppData)
+          .filter(([key]) => key !== HookAPP.HOOK_APP_UNKNOWN.toString())
+          .map(([key, value]) => ({
+            label: (
+              <Space direction='horizontal'>
+                {value.icon}
+                {value.text}
+              </Space>
+            ),
+            value: +key
+          }))
+      },
+      formProps: {
+        rules: [{ required: true, message: '请选择类型' }]
+      }
+    },
+    {
+      name: 'name',
+      label: '名称',
+      type: 'input',
+      span: 18,
+      props: {
+        placeholder: '请输入名称'
+      },
+      formProps: {
+        rules: [
+          { required: true, message: '请输入名称' },
+          { max: 64, message: '名称长度不能超过64个字符' }
+        ]
+      }
+    }
+  ],
+  [
+    {
+      name: 'method',
+      label: '请求方法',
+      type: 'select',
+      span: 6,
+      props: {
+        placeholder: '请选择请求方法',
+        options: Object.entries(MethodData)
+          .filter(([key]) => key !== HTTPMethod.HTTP_METHOD_UNKNOWN.toString())
+          .map(([key, value]) => ({ label: <Badge {...value} />, value: +key }))
+      },
+      formProps: {
+        rules: [{ required: true, message: '请选择请求方法' }],
+        initialValue: HTTPMethod.HTTP_METHOD_POST
+      }
+    },
+    {
+      name: 'url',
+      label: 'URL',
+      type: 'input',
+      span: 18,
+      props: {
+        placeholder: '请输入URL'
+      },
+      formProps: {
+        rules: [
+          { required: true, message: '请输入URL' },
+          { max: 256, message: 'URL长度不能超过256个字符' },
+          { type: 'url', message: '请输入正确的URL' }
+        ]
+      }
+    }
+  ],
+  {
+    name: 'secret',
+    label: '密钥',
+    type: 'input',
+    props: {
+      placeholder: '请输入密钥'
+    }
+  },
+  {
+    name: 'headers',
+    label: '请求头',
+    type: 'textarea'
+  },
+  {
+    name: 'remark',
+    label: '备注',
+    type: 'textarea',
+    props: {
+      placeholder: '请输入备注',
+      maxLength: 255,
+      showCount: true
+    }
+  }
+]

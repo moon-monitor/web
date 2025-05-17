@@ -10,6 +10,7 @@ export type DataFromItem =
       label?: React.ReactNode
       formProps?: FormItemProps
       id?: string
+      span?: number
     } & DataInputProps)
   | null
 
@@ -76,7 +77,7 @@ const renderFormItem = (p: DataFromProps, item: DataFromItem, span = 24, validat
   const { name, label, id, formProps } = item
 
   return (
-    <Col span={span} key={name} id={id}>
+    <Col span={item.span || span} key={name} id={id}>
       <Form.Item {...formProps} name={name} label={label} key={name} {...validates?.[name]}>
         {p.slot?.[name] || <DataInput {...item} />}
       </Form.Item>

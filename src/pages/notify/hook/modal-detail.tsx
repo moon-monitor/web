@@ -1,8 +1,8 @@
 import { NoticeHookItem } from '@/api2/common.types'
-import { GlobalStatusData, HookAppData } from '@/api2/global'
+import { GlobalStatusData, HookAppData, MethodData } from '@/api2/global'
 import { getTeamNoticeHook } from '@/api2/team/team-notice'
 import { useRequest } from 'ahooks'
-import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tooltip } from 'antd'
+import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tooltip, Typography } from 'antd'
 import { useEffect, useState } from 'react'
 
 export interface HookDetailModalProps {
@@ -11,6 +11,8 @@ export interface HookDetailModalProps {
   onCancel?: () => void
   onOk?: () => void
 }
+
+const { Text } = Typography
 
 export function HookDetailModal(props: HookDetailModalProps) {
   const { hookId, open, onCancel, onOk } = props
@@ -64,6 +66,32 @@ export function HookDetailModal(props: HookDetailModalProps) {
     {
       label: '密钥',
       children: detail?.secret || '-',
+      span: 3
+    },
+    {
+      label: '请求方法',
+      children: detail ? <Badge {...MethodData[detail.method]} /> : '-',
+      span: 3
+    },
+    {
+      label: '请求头',
+      children: detail ? (
+        <div className='flex flex-col gap-2'>
+          {detail?.headers?.map((item) => (
+            <Text
+              copyable={{ text: `${item.key}:${item.value}` }}
+              key={item.key}
+              className='flex items-center gap-2 text-sm'
+            >
+              <div className='text-orange-500 font-bold'>{item.key}</div>
+              <div>:</div>
+              <div className='text-green-500'>{item.value}</div>
+            </Text>
+          ))}
+        </div>
+      ) : (
+        '-'
+      ),
       span: 3
     },
     {

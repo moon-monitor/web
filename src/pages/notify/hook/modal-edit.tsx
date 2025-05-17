@@ -1,29 +1,32 @@
 import { NoticeHookItem } from '@/api2/common.types'
-import { HookAppData } from '@/api2/global'
 import { getTeamNoticeHook, saveTeamNoticeHook } from '@/api2/team/team-notice'
+import { SaveTeamNoticeHookRequest } from '@/api2/team/team-notice.types'
+import { DataFrom } from '@/components/data/form'
 import { handleFormError } from '@/utils'
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
-import { Avatar, Form, Input, Modal, Select, Space } from 'antd'
+import { Button, Col, Form, Input, Modal, Row } from 'antd'
 import { useEffect, useState } from 'react'
+import { saveFormList } from './options'
 
 export interface EditHookModalProps {
   open?: boolean
   hookId?: number
-  onOk?: (hook: NoticeHookItem) => void
+  onOk?: (hook: SaveTeamNoticeHookRequest) => void
   onCancel?: () => void
 }
 
 export function EditHookModal(props: EditHookModalProps) {
   const { open, hookId, onOk, onCancel } = props
 
-  const [form] = Form.useForm()
-  const [loading, setLoading] = useState(false)
+  const [form] = Form.useForm<SaveTeamNoticeHookRequest>()
   const [detail, setDetail] = useState<NoticeHookItem>()
 
-  const { run: updateHook } = useRequest(saveTeamNoticeHook, {
+  const { run: saveHook, loading: saveLoading } = useRequest(saveTeamNoticeHook, {
     manual: true,
     onSuccess: () => {
       form.resetFields()
+      setDetail(undefined)
       onOk?.(form.getFieldsValue())
     },
     onError: (err: Error) => {
@@ -32,12 +35,13 @@ export function EditHookModal(props: EditHookModalProps) {
   })
   const handleOnOk = () => {
     form.validateFields().then((values) => {
-      setLoading(true)
-      updateHook({ ...values, ...(hookId && { hookId }), status: 'GLOBAL_STATUS_ENABLE' })
+      saveHook({ ...values, hookId })
     })
   }
 
   const handleOnCancel = () => {
+    form.resetFields()
+    setDetail(undefined)
     onCancel?.()
   }
 
@@ -50,18 +54,11 @@ export function EditHookModal(props: EditHookModalProps) {
 
   useEffect(() => {
     if (detail) {
-      form.setFieldsValue({
-        name: detail.name,
-        app: detail.app,
-        url: detail.url,
-        secret: detail.secret,
-        remark: detail.remark
-      })
+      form.setFieldsValue(detail)
     } else {
       form.resetFields()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [detail])
+  }, [detail, form])
 
   useEffect(() => {
     if (hookId && open) {
@@ -76,48 +73,51 @@ export function EditHookModal(props: EditHookModalProps) {
         open={open}
         onOk={handleOnOk}
         onCancel={handleOnCancel}
-        loading={loading}
+        confirmLoading={saveLoading}
+        width='60%'
       >
-        <Form form={form} layout='vertical' autoComplete='off'>
-          <Form.Item label='名称' name='name' rules={[{ required: true, message: '请输入名称' }]}>
-            <Input placeholder='请输入名称' />
-          </Form.Item>
-          <Form.Item label='类型' name='app' rules={[{ required: true, message: '请选择类型' }]}>
-            <Select
-              placeholder='请选择类型'
-              options={Object.entries(HookAppData)
-                .filter(([key]) => key !== 'HOOK_APP_UNKNOWN')
-                .map(([key, value]) => {
-                  const { icon, label } = value
-                  return {
-                    value: key,
-                    label: (
-                      <Space direction='horizontal'>
-                        <Avatar size='small' shape='square' icon={icon} />
-                        {label}
-                      </Space>
-                    )
-                  }
-                })}
-            />
-          </Form.Item>
-          <Form.Item
-            label='URL'
-            name='url'
-            rules={[
-              { required: true, message: '请输入URL' },
-              { type: 'url', message: '请输入正确的URL' }
-            ]}
-          >
-            <Input placeholder='请输入URL' />
-          </Form.Item>
-          <Form.Item label='密钥' name='secret'>
-            <Input placeholder='请输入密钥' />
-          </Form.Item>
-          <Form.Item label='备注' name='remark'>
-            <Input.TextArea placeholder='请输入备注' showCount maxLength={200} />
-          </Form.Item>
-        </Form>
+        <DataFrom
+          items={saveFormList}
+          props={{ form, layout: 'vertical' }}
+          slot={{
+            headers: (
+              <Form.List name='headers'>
+                {(fields, { add, remove }) => (
+                  <>
+                    {fields.map((field) => (
+                      <Row key={field.key} gutter={[16, 16]}>
+                        <Col span={10}>
+                          <Form.Item
+                            name={[field.name, 'key']}
+                            label={`请求头${field.key + 1}键`}
+                            rules={[{ required: true, message: `请输入请求头${field.key + 1}键` }]}
+                          >
+                            <Input placeholder={`请求头${field.key + 1}键`} />
+                          </Form.Item>
+                        </Col>
+                        <Col span={13}>
+                          <Form.Item
+                            name={[field.name, 'value']}
+                            label={`请求头${field.key + 1}值`}
+                            rules={[{ required: true, message: `请输入请求头${field.key + 1}值` }]}
+                          >
+                            <Input placeholder={`请求头${field.key + 1}值`} />
+                          </Form.Item>
+                        </Col>
+                        <Col span={1} className='flex justify-center items-center'>
+                          <Button type='link' danger icon={<DeleteOutlined />} onClick={() => remove(field.name)} />
+                        </Col>
+                      </Row>
+                    ))}
+                    <Button className='w-full mt-2' type='dashed' onClick={() => add({ key: '', value: '' })}>
+                      <PlusOutlined />
+                    </Button>
+                  </>
+                )}
+              </Form.List>
+            )
+          }}
+        />
       </Modal>
     </>
   )
