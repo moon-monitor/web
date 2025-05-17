@@ -1,9 +1,7 @@
-import { Status } from '@/api/enum'
-import { ActionKey, HookAppData, StatusData, defaultPaginationReq } from '@/api/global'
-import type { AlarmHookItem, AlarmNoticeGroupItem } from '@/api/model-types'
-import { listHook } from '@/api/notify/hook'
-import { getTemplateList } from '@/api/notify/template'
-import { listTimeEngine } from '@/api/notify/time-engine'
+import { GlobalStatusKey, NoticeGroupItem, NoticeHookItem } from '@/api2/common.types'
+import { ActionKey, GlobalStatus, GlobalStatusMap } from '@/api2/enum'
+import { defaultPaginationReq, HookAppData } from '@/api2/global'
+import { listTeamNoticeHook } from '@/api2/team/team-notice'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -32,10 +30,10 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '告警组状态',
         allowClear: true,
-        options: Object.entries(StatusData).map(([key, value]) => {
+        options: Object.entries(GlobalStatus).map(([key, value]) => {
           return {
-            label: value.text,
-            value: Number(key)
+            label: value,
+            value: key
           }
         })
       }
@@ -44,16 +42,16 @@ export const formList: SearchFormItem[] = [
 ]
 
 interface GroupColumnProps {
-  onHandleMenuOnClick: (item: AlarmNoticeGroupItem, key: ActionKey) => void
+  onHandleMenuOnClick: (item: NoticeGroupItem, key: ActionKey) => void
   current: number
   pageSize: number
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const getColumnList = (props: GroupColumnProps): ColumnsType<AlarmNoticeGroupItem> => {
+export const getColumnList = (props: GroupColumnProps): ColumnsType<NoticeGroupItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
-  const tableOperationItems = (record: AlarmNoticeGroupItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
+  const tableOperationItems = (record: NoticeGroupItem): MoreMenuProps['items'] => [
+    record.status === 'GLOBAL_STATUS_DISABLE'
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -118,9 +116,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<AlarmNoticeG
       key: 'status',
       align: 'center',
       width: 120,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
-        return <Badge color={color} text={text} />
+      render: (status: GlobalStatusKey) => {
+        return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
       }
     },
     {
@@ -146,7 +143,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<AlarmNoticeG
       ellipsis: true,
       fixed: 'right',
       width: 120,
-      render: (_, record: AlarmNoticeGroupItem) => (
+      render: (_, record: NoticeGroupItem) => (
         <Space size={20}>
           <Button size='small' type='link' onClick={() => onHandleMenuOnClick(record, ActionKey.DETAIL)}>
             详情
@@ -165,14 +162,14 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<AlarmNoticeG
   ]
 }
 
-export interface HookAvatarProps extends AlarmHookItem {}
+export interface HookAvatarProps extends NoticeHookItem {}
 
 export const HookAvatar: React.FC<HookAvatarProps> = (props) => {
-  const { name, hookApp } = props
+  const { name, app } = props
 
   return (
     <Space direction='horizontal'>
-      <Avatar size='small' shape='square' icon={HookAppData[hookApp].icon} />
+      <Avatar size='small' shape='square' icon={HookAppData[app].icon} />
       {name}
     </Space>
   )
@@ -201,42 +198,42 @@ export const editModalFormItems: (DataFromItem | DataFromItem[])[] = [
       showCount: true
     }
   },
-  {
-    name: 'timeEngines',
-    label: '时间引擎',
-    type: 'select-fetch',
-    props: {
-      handleFetch: (value: string) => {
-        return listTimeEngine({
-          keyword: value,
-          pagination: defaultPaginationReq
-        }).then((res) =>
-          res.list.map((item) => ({
-            label: item.name,
-            value: item.id
-          }))
-        )
-      },
-      selectProps: {
-        placeholder: '请选择时间引擎',
-        mode: 'multiple'
-      }
-    }
-  },
+  // {
+  //   name: 'timeEngines',
+  //   label: '时间引擎',
+  //   type: 'select-fetch',
+  //   props: {
+  //     handleFetch: (value: string) => {
+  //       return listTimeEngine({
+  //         keyword: value,
+  //         pagination: defaultPaginationReq
+  //       }).then((res) =>
+  //         res.list.map((item) => ({
+  //           label: item.name,
+  //           value: item.id
+  //         }))
+  //       )
+  //     },
+  //     selectProps: {
+  //       placeholder: '请选择时间引擎',
+  //       mode: 'multiple'
+  //     }
+  //   }
+  // },
   {
     name: 'hookIds',
     label: 'hook列表',
     type: 'select-fetch',
     props: {
       handleFetch: (value: string) => {
-        return listHook({
+        return listTeamNoticeHook({
           keyword: value,
-          pagination: { pageNum: 1, pageSize: 999 }
+          pagination: defaultPaginationReq
         }).then((res) =>
-          res.list.map((item) => ({
+          res.items.map((item) => ({
             label: <HookAvatar {...item} />,
-            value: item.id,
-            disabled: item.status !== Status.StatusEnable
+            value: item.noticeHookId,
+            disabled: item.status !== 'GLOBAL_STATUS_ENABLE'
           }))
         )
       },
@@ -245,27 +242,27 @@ export const editModalFormItems: (DataFromItem | DataFromItem[])[] = [
         mode: 'multiple'
       }
     }
-  },
-  {
-    name: 'templates',
-    label: '模板',
-    type: 'select-fetch',
-    props: {
-      handleFetch: (value: string) => {
-        return getTemplateList({
-          keyword: value,
-          pagination: defaultPaginationReq
-        }).then((res) =>
-          res.list.map((item) => ({
-            label: item.name,
-            value: item.id
-          }))
-        )
-      },
-      selectProps: {
-        placeholder: '请选择模板',
-        mode: 'multiple'
-      }
-    }
   }
+  // {
+  //   name: 'templates',
+  //   label: '模板',
+  //   type: 'select-fetch',
+  //   props: {
+  //     handleFetch: (value: string) => {
+  //       return getTemplateList({
+  //         keyword: value,
+  //         pagination: defaultPaginationReq
+  //       }).then((res) =>
+  //         res.list.map((item) => ({
+  //           label: item.name,
+  //           value: item.id
+  //         }))
+  //       )
+  //     },
+  //     selectProps: {
+  //       placeholder: '请选择模板',
+  //       mode: 'multiple'
+  //     }
+  //   }
+  // }
 ]

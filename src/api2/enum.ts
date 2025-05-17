@@ -1,209 +1,191 @@
-import { GlobalStatusKey, StrategyTypeKey, UserStatusKey } from './common.types'
-
 export enum ResourceModule {
   // RESOURCE_MODULE_UNKNOWN is the default module for a resource.
-  RESOURCE_MODULE_UNKNOWN = '未知',
-  // The module to which the resource belongs is unspecified.
-  RESOURCE_MODULE_UNSPECIFIED = '未指定',
+  RESOURCE_MODULE_UNKNOWN,
   // The resource belongs to the system module.
-  RESOURCE_MODULE_SYSTEM = '系统',
+  RESOURCE_MODULE_SYSTEM,
   // The resource belongs to the user module.
-  RESOURCE_MODULE_USER = '用户',
+  RESOURCE_MODULE_USER,
   // The resource belongs to the team module.
-  RESOURCE_MODULE_TEAM = '团队'
+  RESOURCE_MODULE_TEAM
 }
 
 export enum Gender {
   // Gender is unspecified.
-  GENDER_UNSPECIFIED = '未指定',
+  GENDER_UNSPECIFIED,
   // Gender is male.
-  GENDER_MALE = '男',
+  GENDER_MALE,
   // Gender is female.
-  GENDER_FEMALE = '女'
+  GENDER_FEMALE
 }
 
 export enum UserStatus {
   // The user status is unknown.
-  USER_STATUS_UNKNOWN = '未知',
+  USER_STATUS_UNKNOWN,
   // The user status is normal.
-  USER_STATUS_NORMAL = '正常',
+  USER_STATUS_NORMAL,
   // The user status is forbidden.
-  USER_STATUS_FORBIDDEN = '禁用',
+  USER_STATUS_FORBIDDEN,
   // The user status is deleted.
-  USER_STATUS_DELETED = '已删除'
-}
-export const UserStatusMap: Record<UserStatusKey, { color: string }> = {
-  USER_STATUS_UNKNOWN: {
-    color: '#f5222d'
-  },
-  USER_STATUS_NORMAL: {
-    color: '#1890ff'
-  },
-  USER_STATUS_FORBIDDEN: {
-    color: '#f5222d'
-  },
-  USER_STATUS_DELETED: {
-    color: '#f5222d'
-  }
+  USER_STATUS_DELETED
 }
 
 export enum UserPosition {
   // The user position is unknown.
-  USER_POSITION_UNKNOWN = '未知',
+  USER_POSITION_UNKNOWN,
   // The user position is super admin.
-  USER_POSITION_SUPER_ADMIN = '超级管理员',
+  USER_POSITION_SUPER_ADMIN,
   // The user position is admin.
-  USER_POSITION_ADMIN = '管理员',
+  USER_POSITION_ADMIN,
   // The user position is a regular user.
-  USER_POSITION_USER = '普通用户',
+  USER_POSITION_USER,
   // The user position is guest.
-  USER_POSITION_GUEST = '访客'
+  USER_POSITION_GUEST
+}
+
+export enum Role {
+  // The role is unknown.
+  ROLE_UNKNOWN,
+  // The role is super admin.
+  ROLE_SUPER_ADMIN,
+  // The role is admin.
+  ROLE_ADMIN,
+  // The role is user.
+  ROLE_USER
 }
 
 export enum TeamAuditStatus {
   // The team audit status is unknown.
-  TEAM_AUDIT_STATUS_UNKNOWN = '未知',
+  TEAM_AUDIT_STATUS_UNKNOWN,
   // The team audit status is pending.
-  TEAM_AUDIT_STATUS_PENDING = '待审核',
+  TEAM_AUDIT_STATUS_PENDING,
   // The team audit status is approved.
-  TEAM_AUDIT_STATUS_APPROVED = '已通过',
+  TEAM_AUDIT_STATUS_APPROVED,
   // The team audit status is rejected.
-  TEAM_AUDIT_STATUS_REJECTED = '已拒绝'
+  TEAM_AUDIT_STATUS_REJECTED
 }
 
 export enum TeamAuditAction {
   // The team audit action is unknown.
-  TEAM_AUDIT_ACTION_UNKNOWN = '未知',
+  TEAM_AUDIT_ACTION_UNKNOWN,
   // The team audit action is join.
-  TEAM_AUDIT_ACTION_JOIN = '加入',
+  TEAM_AUDIT_ACTION_JOIN,
   // The team audit action is leave.
-  TEAM_AUDIT_ACTION_LEAVE = '离开'
+  TEAM_AUDIT_ACTION_LEAVE
 }
 
 // TeamStatus represents the status of a team.
 export enum TeamStatus {
   // TEAM_STATUS_UNKNOWN is the default status for a team.
-  TEAM_STATUS_UNKNOWN = '未知',
+  TEAM_STATUS_UNKNOWN,
   // TEAM_STATUS_NORMAL indicates the team is operating normally.
-  TEAM_STATUS_NORMAL = '正常',
+  TEAM_STATUS_NORMAL,
   // TEAM_STATUS_FORBIDDEN indicates the team has been forbidden.
-  TEAM_STATUS_FORBIDDEN = '禁用',
+  TEAM_STATUS_FORBIDDEN,
   // TEAM_STATUS_DELETED indicates the team has been deleted.
-  TEAM_STATUS_DELETED = '已删除',
+  TEAM_STATUS_DELETED,
   // TEAM_STATUS_APPROVAL indicates the team is waiting for approval.
-  TEAM_STATUS_APPROVAL = '待审核',
+  TEAM_STATUS_APPROVAL,
   // TEAM_STATUS_REJECTED indicates the team has been rejected.
-  TEAM_STATUS_REJECTED = '已拒绝'
+  TEAM_STATUS_REJECTED
 }
 
 // MemberPosition represents the position of a member in a team.
 export enum MemberPosition {
   // MEMBER_POSITION_UNKNOWN is the default position for a member.
-  MEMBER_POSITION_UNKNOWN = '未知',
+  MEMBER_POSITION_UNKNOWN,
   // MEMBER_POSITION_SUPER_ADMIN indicates the member is the super administrator of the team.
-  MEMBER_POSITION_SUPER_ADMIN = '超级管理员',
+  MEMBER_POSITION_SUPER_ADMIN,
   // MEMBER_POSITION_ADMIN indicates the member is an administrator of the team.
-  MEMBER_POSITION_ADMIN = '管理员',
+  MEMBER_POSITION_ADMIN,
   // MEMBER_POSITION_MEMBER indicates the member is a regular member of the team.
-  MEMBER_POSITION_MEMBER = '普通成员',
+  MEMBER_POSITION_MEMBER,
   // MEMBER_POSITION_GUEST indicates the member is a guest of the team.
-  MEMBER_POSITION_GUEST = '访客'
+  MEMBER_POSITION_GUEST
 }
 
 // MemberStatus represents the status of a member in a team.
 export enum MemberStatus {
   // MEMBER_STATUS_UNKNOWN is the default status for a member.
-  MEMBER_STATUS_UNKNOWN = '未知',
+  MEMBER_STATUS_UNKNOWN,
   // MEMBER_STATUS_NORMAL indicates the member is active and normal.
-  MEMBER_STATUS_NORMAL = '正常',
+  MEMBER_STATUS_NORMAL,
   // MEMBER_STATUS_FORBIDDEN indicates the member has been forbidden.
-  MEMBER_STATUS_FORBIDDEN = '禁用',
+  MEMBER_STATUS_FORBIDDEN,
   // MEMBER_STATUS_DELETED indicates the member has been deleted.
-  MEMBER_STATUS_DELETED = '已删除',
+  MEMBER_STATUS_DELETED,
   // MEMBER_STATUS_PENDING_CONFIRM indicates the member is waiting for confirmation to join the team.
-  MEMBER_STATUS_PENDING_CONFIRM = '待确认',
+  MEMBER_STATUS_PENDING_CONFIRM,
   // MEMBER_STATUS_DEPARTED indicates the member has left the team.
-  MEMBER_STATUS_DEPARTED = '已离开'
+  MEMBER_STATUS_DEPARTED
 }
 
 // GlobalStatus represents the status of a global resource.
 export enum GlobalStatus {
   // GLOBAL_STATUS_UNKNOWN is the default status for a global resource.
-  GLOBAL_STATUS_UNKNOWN = '未知',
+  GLOBAL_STATUS_UNKNOWN,
   // GLOBAL_STATUS_ENABLE indicates the resource is enabled.
-  GLOBAL_STATUS_ENABLE = '启用',
+  GLOBAL_STATUS_ENABLE,
   // GLOBAL_STATUS_DISABLE indicates the resource is disabled.
-  GLOBAL_STATUS_DISABLE = '禁用'
-}
-
-export const GlobalStatusMap: Record<GlobalStatusKey, { color: string }> = {
-  GLOBAL_STATUS_UNKNOWN: {
-    color: 'blue'
-  },
-  GLOBAL_STATUS_ENABLE: {
-    color: 'green'
-  },
-  GLOBAL_STATUS_DISABLE: {
-    color: 'red'
-  }
+  GLOBAL_STATUS_DISABLE
 }
 
 export enum StrategyType {
   // STRATEGY_TYPE_UNKNOWN is the default type for a strategy.
-  STRATEGY_TYPE_UNKNOWN = '未知',
+  STRATEGY_TYPE_UNKNOWN,
   // STRATEGY_TYPE_METRIC indicates the strategy is based on metrics.
-  STRATEGY_TYPE_METRIC = 'Metric',
+  STRATEGY_TYPE_METRIC,
   // STRATEGY_TYPE_EVENT indicates the strategy is based on events.
-  STRATEGY_TYPE_EVENT = '事件',
+  STRATEGY_TYPE_EVENT,
   // STRATEGY_TYPE_LOGS indicates the strategy is based on logs.
-  STRATEGY_TYPE_LOGS = '日志',
+  STRATEGY_TYPE_LOGS,
   // STRATEGY_TYPE_PORT indicates the strategy is based on port monitoring.
-  STRATEGY_TYPE_PORT = '端口',
+  STRATEGY_TYPE_PORT,
   // STRATEGY_TYPE_HTTP indicates the strategy is based on HTTP monitoring.
-  STRATEGY_TYPE_HTTP = 'HTTP',
+  STRATEGY_TYPE_HTTP,
   // STRATEGY_TYPE_PING indicates the strategy is based on ping monitoring.
-  STRATEGY_TYPE_PING = 'Ping',
+  STRATEGY_TYPE_PING,
   // STRATEGY_TYPE_CERT indicates the strategy is based on certificate monitoring.
-  STRATEGY_TYPE_CERT = '证书'
-}
-
-export const StrategyTypeMap: Record<StrategyTypeKey, { color: string }> = {
-  STRATEGY_TYPE_UNKNOWN: {
-    color: ''
-  },
-  STRATEGY_TYPE_METRIC: {
-    color: 'green'
-  },
-  STRATEGY_TYPE_EVENT: {
-    color: 'blue'
-  },
-  STRATEGY_TYPE_LOGS: {
-    color: 'orange'
-  },
-  STRATEGY_TYPE_PORT: {
-    color: 'red'
-  },
-  STRATEGY_TYPE_HTTP: {
-    color: 'purple'
-  },
-  STRATEGY_TYPE_PING: {
-    color: 'cyan'
-  },
-  STRATEGY_TYPE_CERT: {
-    color: 'magenta'
-  }
+  STRATEGY_TYPE_CERT
 }
 
 export enum DatasourceDriverMetric {
-  DATASOURCE_DRIVER_METRIC_UNKNOWN = '未知',
-  DATASOURCE_DRIVER_METRIC_PROMETHEUS = 'Prometheus',
-  DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS = 'VictoriaMetrics'
+  DATASOURCE_DRIVER_METRIC_UNKNOWN,
+  DATASOURCE_DRIVER_METRIC_PROMETHEUS,
+  DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS
 }
 
 export enum DictType {
-  DICT_TYPE_UNKNOWN = '未知',
-  DICT_TYPE_ALARM_LEVEL = '告警级别',
-  DICT_TYPE_ALARM_PAGE = '告警页面'
+  DICT_TYPE_UNKNOWN,
+  DICT_TYPE_ALARM_LEVEL,
+  DICT_TYPE_ALARM_PAGE
+}
+export enum HookAPP {
+  HOOK_APP_UNKNOWN,
+  HOOK_APP_OTHER,
+  HOOK_APP_DING_TALK,
+  HOOK_APP_WECHAT,
+  HOOK_APP_FEI_SHU
+}
+
+export enum TimeEngineRuleType {
+  TIME_ENGINE_RULE_TYPE_UNKNOWN,
+  TIME_ENGINE_RULE_TYPE_HOUR_RANGE,
+  TIME_ENGINE_RULE_TYPE_HOUR,
+  TIME_ENGINE_RULE_TYPE_HOUR_MINUTE_RANGE,
+  TIME_ENGINE_RULE_TYPE_DAYS_OF_WEEK,
+  TIME_ENGINE_RULE_TYPE_DAY_OF_MONTH,
+  TIME_ENGINE_RULE_TYPE_MONTH
+}
+
+export enum HTTPMethod {
+  HTTP_METHOD_UNKNOWN,
+  HTTP_METHOD_GET,
+  HTTP_METHOD_POST,
+  HTTP_METHOD_PUT,
+  HTTP_METHOD_DELETE,
+  HTTP_METHOD_HEAD,
+  HTTP_METHOD_OPTIONS,
+  HTTP_METHOD_PATCH
 }
 
 // 操作

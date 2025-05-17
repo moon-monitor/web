@@ -1,7 +1,6 @@
-import { getMetric } from '@/api/datasource/metric'
-import { MetricType } from '@/api/enum'
-import { MetricTypeData } from '@/api/global'
-import { MetricItem, MetricLabelItem } from '@/api/model-types'
+import { MetadataItemLabel, TeamMetricDatasourceMetadataItem } from '@/api2/common.types'
+import { getMetricDatasourceMetadata } from '@/api2/team/team-datasource'
+import { MetricType, MetricTypeData } from '@/api2/team/team-datasource.types'
 import { GlobalContext } from '@/utils/context'
 import { message, Modal, ModalProps, Space, Table, Tag } from 'antd'
 import { ColumnsType } from 'antd/es/table'
@@ -10,15 +9,15 @@ import React, { useContext, useEffect } from 'react'
 import { LabelEditModal } from './label-edit-modal'
 
 export interface LabelProps extends ModalProps {
-  metricDetail?: MetricItem
+  metricDetail?: TeamMetricDatasourceMetadataItem
 }
 
 let searchTimer: NodeJS.Timeout | null = null
 export const Label: React.FC<LabelProps> = (props) => {
   const { theme } = useContext(GlobalContext)
   const { metricDetail, open, onCancel, onOk } = props
-  const [metricLabels, setMetricLabels] = React.useState<MetricLabelItem[]>([])
-  const [metricLabelDetail, setMetricLabelDetail] = React.useState<MetricLabelItem>()
+  const [metricLabels, setMetricLabels] = React.useState<MetadataItemLabel[]>([])
+  const [metricLabelDetail, setMetricLabelDetail] = React.useState<MetadataItemLabel>()
   const [openEditModal, setOpenEditModal] = React.useState(false)
 
   const handleEditModalOnOK = () => {
@@ -31,18 +30,18 @@ export const Label: React.FC<LabelProps> = (props) => {
     setMetricLabelDetail(undefined)
   }
 
-  const columns: ColumnsType<MetricLabelItem> = [
+  const columns: ColumnsType<MetadataItemLabel> = [
     {
       title: '标签名',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'key',
+      key: 'key',
       ellipsis: true,
       width: 400
     },
     {
       title: '标签值',
-      dataIndex: 'value',
-      key: 'value',
+      dataIndex: 'values',
+      key: 'values',
       ellipsis: true,
       render(_, record) {
         return (
@@ -69,29 +68,6 @@ export const Label: React.FC<LabelProps> = (props) => {
         )
       }
     }
-    // {
-    //   title: '备注',
-    //   dataIndex: 'remark',
-    //   key: 'remark',
-    //   render(value) {
-    //     return <div>{value || '-'}</div>
-    //   }
-    // }
-    // {
-    //   title: '操作',
-    //   key: 'op',
-    //   width: 120,
-    //   align: 'center',
-    //   render: (_, record) => {
-    //     return (
-    //       <Space>
-    //         <Button size='small' type='link' onClick={() => handleEdit(record)}>
-    //           编辑
-    //         </Button>
-    //       </Space>
-    //     )
-    //   }
-    // }
   ]
 
   const getMetricLabels = async () => {
@@ -100,21 +76,16 @@ export const Label: React.FC<LabelProps> = (props) => {
         clearTimeout(searchTimer)
       }
       searchTimer = setTimeout(async () => {
-        const res = await getMetric({
-          id: metricDetail.id
+        const res = await getMetricDatasourceMetadata({
+          metadataId: metricDetail.metadataId,
+          datasourceId: metricDetail.datasourceId
         })
-        setMetricLabels(res?.data?.labels || [])
+        setMetricLabels(res.labels)
       }, 500)
     }
   }
 
-  const getMetricType = (metricType?: MetricType) => {
-    if (!metricType) {
-      return {
-        color: '',
-        text: '未知'
-      }
-    }
+  const getMetricType = (metricType: MetricType) => {
     return MetricTypeData[metricType]
   }
 
@@ -136,7 +107,7 @@ export const Label: React.FC<LabelProps> = (props) => {
           <Space>
             <Network className='h-6 w-6 text-blue-500' />
             {metricDetail?.name}
-            <Tag color={getMetricType(metricDetail?.type).color}>{getMetricType(metricDetail?.type).text}</Tag>
+            <Tag color={getMetricType(metricDetail!.type).color}>{getMetricType(metricDetail!.type).text}</Tag>
           </Space>
         }
         width='60%'

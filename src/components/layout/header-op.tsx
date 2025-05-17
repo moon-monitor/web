@@ -1,5 +1,6 @@
 import { logout } from '@/api/authorization'
 import { removeToken } from '@/api/request'
+import { selfInfo } from '@/api2/user'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
 import { GithubOutlined, MoonOutlined, SunOutlined } from '@ant-design/icons'
@@ -23,9 +24,18 @@ export const HeaderOp: React.FC = () => {
   // 获取当前路由
   const location = useLocation()
   const { token } = useToken()
-  const { theme, setTheme, userInfo, setLocalURL } = useContext(GlobalContext)
+  const { theme, setTheme, userInfo, setUserInfo, removeUserInfo, setLocalURL } = useContext(GlobalContext)
   const { setOpen } = useCreateTeamModal()
   const [logoutURL, setLogoutURL] = useState<string>('')
+
+  // 如果用户不存在， 则获取用户信息
+  useEffect(() => {
+    if (!userInfo || !userInfo.userId) {
+      selfInfo().then((res) => {
+        setUserInfo?.(res)
+      })
+    }
+  }, [userInfo, setUserInfo])
 
   useEffect(() => {
     setLogoutURL(location.pathname)
@@ -33,8 +43,8 @@ export const HeaderOp: React.FC = () => {
 
   const dropdownItems: MenuProps['items'] = [
     {
-      label: userInfo?.name,
-      key: userInfo?.id || 0,
+      label: userInfo?.username,
+      key: userInfo?.userId || 0,
       type: 'group',
       children: [
         {
@@ -72,6 +82,7 @@ export const HeaderOp: React.FC = () => {
           onClick: () => {
             logout().then(() => {
               setLocalURL?.(logoutURL)
+              removeUserInfo?.()
               removeToken()
             })
           }
@@ -95,7 +106,7 @@ export const HeaderOp: React.FC = () => {
         }}
       />
       <Dropdown menu={{ items: dropdownItems }}>
-        <Avatar src={userInfo?.avatar}>{(userInfo?.nickname || userInfo?.name)?.at(0)?.toUpperCase()}</Avatar>
+        <Avatar src={userInfo?.avatar}>{(userInfo?.nickname || userInfo?.username)?.at(0)?.toUpperCase()}</Avatar>
       </Dropdown>
     </div>
   )

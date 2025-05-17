@@ -1,7 +1,7 @@
 import { TeamDictItem } from '@/api2/common.types'
 import { ActionKey } from '@/api2/enum'
 import { deleteTeamDict, listTeamDict, updateTeamDictStatus } from '@/api2/team/team-dict'
-import { ListTeamDictRequest } from '@/api2/team/types'
+import { ListTeamDictRequest } from '@/api2/team/team-dict.types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'

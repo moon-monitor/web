@@ -1,14 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-
-import { Status } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import { TimeEngineRuleItem } from '@/api/model-types'
-import {
-  deleteTimeEngineRule,
-  listTimeEngineRule,
-  ListTimeEngineRuleRequest,
-  updateTimeEngineRuleStatus
-} from '@/api/notify/rule'
+import { GlobalStatusKey } from '@/api2/common.types'
+import { ActionKey } from '@/api2/enum'
+import { deleteTimeEngineRule, listTimeEngineRule } from '@/api2/timeEngine'
+import { ListTimeEngineRuleRequest, TimeEngineItemRule } from '@/api2/timeEngine/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -16,6 +9,7 @@ import { GlobalContext } from '@/utils/context'
 import { QuestionCircleOutlined, SwapOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Button, Space, theme, Tooltip } from 'antd'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { RuleDetailModal } from './modal-detail-rule'
 import { EditRuleModal } from './modal-edit-rule'
 import { formList, getColumnList } from './options'
@@ -30,18 +24,18 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
   const { token } = useToken()
   const { isFullscreen } = useContext(GlobalContext)
 
-  const [datasource, setDatasource] = useState<TimeEngineRuleItem[]>([])
+  const [datasource, setDatasource] = useState<TimeEngineItemRule[]>([])
   const [total, setTotal] = useState(0)
   const [searchParams, setSearchParams] = useState({
     keyword: '',
     pagination: {
-      pageNum: 1,
+      page: 1,
       pageSize: 10
     }
   })
   const [refresh, setRefresh] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [ruleDetail, setRuleDetail] = useState<TimeEngineRuleItem>()
+  const [ruleDetail, setRuleDetail] = useState<TimeEngineItemRule>()
   const [openDetailModal, setOpenDetailModal] = useState(false)
 
   const searchRef = useRef<HTMLDivElement>(null)
@@ -51,11 +45,11 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
   const { run: handleGetRuleList, loading: loading } = useRequest(listTimeEngineRule, {
     manual: true,
     onSuccess: (res) => {
-      setDatasource(res?.list || [])
+      setDatasource(res?.items || [])
       setTotal(res?.pagination?.total)
     }
   })
-  const onOpenDetailModal = (item: TimeEngineRuleItem) => {
+  const onOpenDetailModal = (item: TimeEngineItemRule) => {
     setRuleDetail(item)
     setOpenDetailModal(true)
   }
@@ -74,7 +68,7 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
 
   const onReset = () => {}
 
-  const handleEditModal = (detail?: TimeEngineRuleItem) => {
+  const handleEditModal = (detail?: TimeEngineItemRule) => {
     setShowModal(true)
     setRuleDetail(detail)
   }
@@ -83,41 +77,43 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
     setRefresh(!refresh)
   }
 
-  const handleDelete = (id: number) => {
-    deleteTimeEngineRule(id).then(onRefresh)
+  const { run: handleDelete } = useRequest(deleteTimeEngineRule, {
+    manual: true,
+    onSuccess: onRefresh
+  })
+
+  const onChangeStatus = (hookId: number, status: GlobalStatusKey) => {
+    console.log('onChangeStatus', hookId, status)
+    // updateTimeEngineRuleStatus({ ids: [hookId], status }).then(onRefresh)
   }
 
-  const onChangeStatus = (hookId: number, status: Status) => {
-    updateTimeEngineRuleStatus({ ids: [hookId], status }).then(onRefresh)
-  }
-
-  const onHandleMenuOnClick = (item: TimeEngineRuleItem, key: ActionKey) => {
+  const onHandleMenuOnClick = (item: TimeEngineItemRule, key: ActionKey) => {
     switch (key) {
       case ActionKey.EDIT:
         handleEditModal(item)
         break
       case ActionKey.DELETE:
-        handleDelete(item.id)
+        handleDelete({ timeEngineRuleId: item.ruleId })
         break
       case ActionKey.DETAIL:
         onOpenDetailModal(item)
         break
       case ActionKey.DISABLE:
-        onChangeStatus(item.id, Status.StatusDisable)
+        onChangeStatus(item.ruleId, 'GLOBAL_STATUS_DISABLE')
         break
       case ActionKey.ENABLE:
-        onChangeStatus(item.id, Status.StatusEnable)
+        onChangeStatus(item.ruleId, 'GLOBAL_STATUS_ENABLE')
         break
       default:
         break
     }
   }
 
-  const handleTurnPage = (pageNum: number, pageSize: number) => {
+  const handleTurnPage = (page: number, pageSize: number) => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum,
+        page,
         pageSize
       }
     })
@@ -146,12 +142,12 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
     <>
       <EditRuleModal
         open={showModal}
-        ruleId={ruleDetail?.id}
+        ruleId={ruleDetail?.ruleId}
         onCancel={closeEditRuleModal}
         onOk={handleEditRuleModalOnOk}
       />
       <RuleDetailModal
-        ruleId={ruleDetail?.id || 0}
+        ruleId={ruleDetail?.ruleId || 0}
         open={openDetailModal}
         onCancel={onCloseDetailModal}
         onOk={onCloseDetailModal}
@@ -212,7 +208,7 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
               columns={columns}
               handleTurnPage={handleTurnPage}
               pageSize={searchParams.pagination.pageSize}
-              pageNum={searchParams.pagination.pageNum}
+              pageNum={searchParams.pagination.page}
               showSizeChanger={true}
               style={{
                 background: token.colorBgContainer,

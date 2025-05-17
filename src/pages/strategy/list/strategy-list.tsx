@@ -5,7 +5,7 @@ import { deleteStrategy, pushStrategy, updateStrategyStatus } from '@/api/strate
 import { StrategyTypeKey, TeamStrategyItem } from '@/api2/common.types'
 import { StrategyType } from '@/api2/enum'
 import { listTeamStrategy } from '@/api2/team/team-strategy'
-import { ListTeamStrategyRequest } from '@/api2/team/types'
+import { ListTeamStrategyRequest } from '@/api2/team/team-strategy.types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'

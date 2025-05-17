@@ -1,7 +1,6 @@
-import { type Role } from '@/api/enum'
-import { ActionKey, RoleData } from '@/api/global'
-import { UserItem, UserStatusKey } from '@/api2/common.types'
-import { UserPosition, UserStatus, UserStatusMap } from '@/api2/enum'
+import { UserItem } from '@/api2/common.types'
+import { ActionKey, Role, UserPosition, UserStatus } from '@/api2/enum'
+import { RoleData, UserStatusData } from '@/api2/global'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
@@ -67,7 +66,7 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
   const tableOperationItems = (record: UserItem): MoreMenuProps['items'] => [
-    record.status === 'USER_STATUS_FORBIDDEN'
+    record.status === UserStatus.USER_STATUS_FORBIDDEN
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -160,8 +159,9 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
       key: 'status',
       align: 'center',
       width: 120,
-      render: (status: UserStatusKey) => {
-        return <Badge color={UserStatusMap[status].color} text={UserStatus[status]} />
+      render: (status: UserStatus) => {
+        const { color, label } = UserStatusData[status]
+        return <Badge color={color} text={label} />
       }
     },
 

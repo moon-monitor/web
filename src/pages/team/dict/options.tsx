@@ -1,5 +1,6 @@
-import { DictTypeKey, GlobalStatusKey, TeamDictItem } from '@/api2/common.types'
-import { ActionKey, DictType, GlobalStatus, GlobalStatusMap } from '@/api2/enum'
+import { TeamDictItem } from '@/api2/common.types'
+import { ActionKey, DictType, GlobalStatus } from '@/api2/enum'
+import { GlobalStatusData } from '@/api2/global'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -66,7 +67,7 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
   const tableOperationItems = (record: TeamDictItem): MoreMenuProps['items'] => [
-    record.status === 'GLOBAL_STATUS_DISABLE'
+    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -151,7 +152,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem
       dataIndex: 'dictType',
       key: 'dictType',
       width: 160,
-      render: (dictType: DictTypeKey) => {
+      render: (dictType: DictType) => {
         return <>{DictType[dictType]}</>
       }
     },
@@ -161,8 +162,9 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: GlobalStatusKey) => {
-        return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
+      render: (status: GlobalStatus) => {
+        const { color, label } = GlobalStatusData[status]
+        return <Badge color={color} text={label} />
       }
     },
 

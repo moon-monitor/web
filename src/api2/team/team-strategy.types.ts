@@ -1,14 +1,13 @@
 import {
-  GlobalStatusKey,
   PaginationReply,
   PaginationRequest,
-  StrategyTypeKey,
   TeamMetricDatasourceItem,
   TeamStrategyGroupItem,
   TeamStrategyItem,
   TeamStrategyMetricItemRuleItem,
   UserBaseItem
 } from '../common.types'
+import { GlobalStatus, StrategyType } from '../enum'
 
 export interface DeleteTeamStrategyRequest {
   /**
@@ -40,7 +39,7 @@ export interface GetTeamMetricStrategyRequest {
    * Strategy Id
    */
   strategyId?: number
-  strategyType?: StrategyTypeKey
+  strategyType?: StrategyType
 }
 
 /**
@@ -120,7 +119,7 @@ export interface ListTeamStrategyRequest {
   /**
    * List of statuses to filter strategies by
    */
-  status?: GlobalStatusKey[]
+  status?: GlobalStatus[]
 }
 
 /**
@@ -288,5 +287,5 @@ export interface UpdateTeamStrategyGroupStatusRequest {
   /**
    * New status for the strategy group
    */
-  status?: GlobalStatusKey
+  status?: GlobalStatus
 }

@@ -1,13 +1,7 @@
-import { Status } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import type { AlarmNoticeGroupItem } from '@/api/model-types'
-import {
-  type ListAlarmGroupRequest,
-  deleteAlarmGroup,
-  listAlarmGroup,
-  updateAlarmGroupStatus
-} from '@/api/notify/alarm-group'
-import type { ListStrategyGroupRequest } from '@/api/strategy'
+import { NoticeGroupItem } from '@/api2/common.types'
+import { ActionKey } from '@/api2/enum'
+import { deleteTeamNoticeGroup, listTeamNoticeGroup, updateTeamNoticeGroupStatus } from '@/api2/team/team-notice'
+import { ListTeamNoticeGroupRequest } from '@/api2/team/team-notice.types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -23,21 +17,21 @@ import { formList, getColumnList } from './options'
 const { confirm } = Modal
 const { useToken } = theme
 
-const defaultSearchParams: ListAlarmGroupRequest = {
+const defaultSearchParams: ListTeamNoticeGroupRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 10
   },
   keyword: '',
-  status: Status.StatusAll
+  status: 'GLOBAL_STATUS_ENABLE'
 }
 
 const Group: React.FC = () => {
   const { token } = useToken()
   const { isFullscreen } = useContext(GlobalContext)
 
-  const [datasource, setDatasource] = useState<AlarmNoticeGroupItem[]>([])
-  const [searchParams, setSearchParams] = useState<ListAlarmGroupRequest>(defaultSearchParams)
+  const [datasource, setDatasource] = useState<NoticeGroupItem[]>([])
+  const [searchParams, setSearchParams] = useState<ListTeamNoticeGroupRequest>(defaultSearchParams)
   const [total, setTotal] = useState(0)
   const [openGroupEditModal, setOpenGroupEditModal] = useState(false)
   const [editGroupId, setEditGroupId] = useState<number>()
@@ -64,11 +58,27 @@ const Group: React.FC = () => {
     setDisabledEditGroupModal(true)
   }
 
-  const { run: fetchData, loading } = useRequest(listAlarmGroup, {
+  const { run: fetchData, loading } = useRequest(listTeamNoticeGroup, {
     manual: true,
     onSuccess: (res) => {
-      setDatasource(res.list || [])
+      setDatasource(res.items || [])
       setTotal(res.pagination?.total || 0)
+    }
+  })
+
+  const { run: updateAlarmGroupStatus } = useRequest(updateTeamNoticeGroupStatus, {
+    manual: true,
+    onSuccess: () => {
+      message.success('更改状态成功')
+      onRefresh()
+    }
+  })
+
+  const { run: deleteAlarmGroup } = useRequest(deleteTeamNoticeGroup, {
+    manual: true,
+    onSuccess: () => {
+      message.success('删除成功')
+      onRefresh()
     }
   })
 
@@ -80,12 +90,12 @@ const Group: React.FC = () => {
     fetchData(searchParams)
   }, [searchParams, fetchData])
 
-  const onSearch = (formData: ListStrategyGroupRequest) => {
+  const onSearch = (formData: ListTeamNoticeGroupRequest) => {
     setSearchParams({
       ...searchParams,
       ...formData,
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: searchParams.pagination.pageSize
       }
     })
@@ -96,7 +106,7 @@ const Group: React.FC = () => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum: page,
+        page: page,
         pageSize: pageSize
       }
     })
@@ -107,33 +117,27 @@ const Group: React.FC = () => {
     setSearchParams(defaultSearchParams)
   }
 
-  const onHandleMenuOnClick = (item: AlarmNoticeGroupItem, key: ActionKey) => {
+  const onHandleMenuOnClick = (item: NoticeGroupItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
         updateAlarmGroupStatus({
-          ids: [item.id],
-          status: Status.StatusEnable
-        }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
+          groupId: item.noticeGroupId,
+          status: 'GLOBAL_STATUS_ENABLE'
         })
         break
       case ActionKey.DISABLE:
         updateAlarmGroupStatus({
-          ids: [item.id],
-          status: Status.StatusDisable
-        }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
+          groupId: item.noticeGroupId,
+          status: 'GLOBAL_STATUS_DISABLE'
         })
         break
       case ActionKey.OPERATION_LOG:
         break
       case ActionKey.DETAIL:
-        handleOpenDetailModal(item.id)
+        handleOpenDetailModal(item.noticeGroupId)
         break
       case ActionKey.EDIT:
-        handleEditModal(item.id)
+        handleEditModal(item.noticeGroupId)
         break
       case ActionKey.DELETE:
         confirm({
@@ -141,10 +145,7 @@ const Group: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteAlarmGroup({ id: item.id }).then(() => {
-              message.success('删除成功')
-              onRefresh()
-            })
+            deleteAlarmGroup({ groupId: item.noticeGroupId })
           },
           onCancel() {
             message.info('取消操作')
@@ -156,7 +157,7 @@ const Group: React.FC = () => {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.pageNum,
+    current: searchParams.pagination.page,
     pageSize: searchParams.pagination.pageSize
   })
 
@@ -212,7 +213,7 @@ const Group: React.FC = () => {
             columns={columns}
             handleTurnPage={handleTurnPage}
             pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.pageNum}
+            pageNum={searchParams.pagination.page}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

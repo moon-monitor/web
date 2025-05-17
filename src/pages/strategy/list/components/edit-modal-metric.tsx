@@ -16,7 +16,7 @@ import {
   saveTeamMetricStrategy,
   saveTeamStrategy
 } from '@/api2/team/team-strategy'
-import { GetTeamMetricStrategyReply } from '@/api2/team/types'
+import { GetTeamMetricStrategyReply } from '@/api2/team/team-strategy.types'
 import { AnnotationsEditor } from '@/components/data/child/annotation-editor'
 import PromQLInput from '@/components/data/child/prom-ql'
 import { GlobalContext } from '@/utils/context'

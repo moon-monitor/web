@@ -30,10 +30,10 @@ export default function EmailVerification() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [email, setEmail] = useState('')
-  const [oauthID, setOauth] = useState(0)
+  const [openId, setOpenId] = useState('')
 
   const search = window.location.search
-  const searchOAuthID = new URLSearchParams(search).get('oauth_id')
+  const searchOpenId = new URLSearchParams(search).get('open_id')
   const searchOAuthToken = new URLSearchParams(search).get('token')
   const app = new URLSearchParams(search).get('app')
 
@@ -75,7 +75,7 @@ export default function EmailVerification() {
     oAuthLoginByEmail({
       email: email,
       code: value.emailCode?.toUpperCase(),
-      oauthID: oauthID,
+      openId: openId,
       token: searchOAuthToken || '',
       app: app ? parseInt(app) : 0
     })
@@ -94,10 +94,10 @@ export default function EmailVerification() {
   }
 
   useEffect(() => {
-    if (searchOAuthID) {
-      setOauth(parseInt(searchOAuthID))
+    if (searchOpenId) {
+      setOpenId(searchOpenId)
     }
-  }, [searchOAuthID])
+  }, [searchOpenId])
 
   useEffect(() => {
     generateCaptcha()

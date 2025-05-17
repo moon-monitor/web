@@ -53,7 +53,7 @@ request.interceptors.request.use(
   (config) => {
     const token = getToken()
     config.headers['Authorization'] = `Bearer ${token}`
-    config.headers['X-Team-ID'] = getTeamInfo()?.id
+    config.headers['X-Team-Id'] = +getTeamInfo()?.teamId
     // config.headers['X-Team-Member-ID'] = getTeamMemberID()
     return config
   },
@@ -63,7 +63,7 @@ request.interceptors.request.use(
 )
 
 export const getTeamInfo = (): TeamItem => {
-  return JSON.parse(localStorage.getItem('teamInfo') || '{"id":0}')
+  return JSON.parse(localStorage.getItem('teamInfo') || '{"teamId":0}')
 }
 
 export const getTeamMemberID = () => {
@@ -105,8 +105,8 @@ const PUT = async <R>(url: string, data?: any, config?: AxiosRequestConfig) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const DELETE = async <R>(url: string, data?: any, config?: AxiosRequestConfig) => {
-  return request.delete<NullObject, R>(url, { data, ...config })
+const DELETE = async <R>(url: string, params?: any, config?: AxiosRequestConfig) => {
+  return request.delete<NullObject, R>(url, { params, ...config })
 }
 
 export default {

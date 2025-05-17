@@ -1,7 +1,10 @@
-import { syncDatasourceMeta } from '@/api/datasource'
-import { listMetric, ListMetricRequest } from '@/api/datasource/metric'
-import { MetricTypeData } from '@/api/global'
-import { DatasourceItem, MetricItem } from '@/api/model-types'
+import { TeamMetricDatasourceItem, TeamMetricDatasourceMetadataItem } from '@/api2/common.types'
+import { listMetricDatasourceMetadata, syncMetricDatasourceMetadata } from '@/api2/team/team-datasource'
+import {
+  defaultSearchMetricDatasourceMetadataParams,
+  ListMetricDatasourceMetadataRequest,
+  MetricTypeData
+} from '@/api2/team/team-datasource.types'
 import { DataInput } from '@/components/data/child/data-input'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'
@@ -11,9 +14,8 @@ import { ColumnsType } from 'antd/es/table'
 import React, { useContext, useEffect, useRef } from 'react'
 import { Info } from './info'
 import { Label } from './label'
-
 export interface MetadataProps {
-  datasource?: DatasourceItem
+  datasource?: TeamMetricDatasourceItem
   toTimelyQuery?: (expr: string) => void
 }
 
@@ -24,33 +26,26 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
   const [form] = Form.useForm()
   const { isFullscreen } = useContext(GlobalContext)
 
-  const [searchMetricParams, setSearchMetricParams] = React.useState<ListMetricRequest>({
-    pagination: {
-      pageNum: 1,
-      pageSize: 20
-    },
-    datasourceId: datasource?.id
-  })
+  const [searchMetricParams, setSearchMetricParams] = React.useState<ListMetricDatasourceMetadataRequest>(
+    defaultSearchMetricDatasourceMetadataParams
+  )
   const [metricListTotal, setMetricListTotal] = React.useState(0)
-  const [metricList, setMetricList] = React.useState<MetricItem[]>([])
-  const [metricDetail, setMetricDetail] = React.useState<MetricItem>()
+  const [metricList, setMetricList] = React.useState<TeamMetricDatasourceMetadataItem[]>([])
+  const [metricDetail, setMetricDetail] = React.useState<TeamMetricDatasourceMetadataItem>()
   const [openMetricLabelModal, setOpenMetricLabelModal] = React.useState(false)
   const ADivRef = useRef<HTMLDivElement>(null)
   const AutoTableHeight = useContainerHeightTop(ADivRef, metricList, isFullscreen)
 
-  const { run: getMetricList, loading } = useRequest(listMetric, {
+  const { run: getMetricList, loading } = useRequest(listMetricDatasourceMetadata, {
     manual: true,
     onSuccess: (reply) => {
-      const {
-        list,
-        pagination: { total }
-      } = reply
-      setMetricList(list || [])
-      setMetricListTotal(total || 0)
+      const { items } = reply
+      setMetricList(items || [])
+      setMetricListTotal(reply.pagination?.total || 0)
     }
   })
 
-  const handleLabel = (record: MetricItem) => {
+  const handleLabel = (record: TeamMetricDatasourceMetadataItem) => {
     setMetricDetail(record)
     setOpenMetricLabelModal(true)
   }
@@ -69,7 +64,7 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
     toTimelyQuery?.(expr)
   }
 
-  const columns: ColumnsType<MetricItem> = [
+  const columns: ColumnsType<TeamMetricDatasourceMetadataItem> = [
     {
       title: '指标类型',
       dataIndex: 'type',
@@ -77,7 +72,7 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
       width: 100,
       fixed: 'left',
       render: (_, record) => {
-        const { text, color } = MetricTypeData[record.type] || { text: '未知' }
+        const { text, color } = MetricTypeData[record.type]
         return (
           <>
             <Tag color={color} style={{ width: '100%' }} className='center'>
@@ -135,18 +130,18 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
   ]
 
   const fetchSyncMetric = () => {
-    if (!datasource?.id) return
-    syncDatasourceMeta({
-      id: datasource?.id
+    if (!datasource?.datasourceId) return
+    syncMetricDatasourceMetadata({
+      datasourceId: datasource?.datasourceId
     }).then(() => getMetricList(searchMetricParams))
   }
 
   useEffect(() => {
-    if (!datasource?.id) return
+    if (!datasource?.datasourceId) return
     setSearchMetricParams((prev) => {
       return {
         ...prev,
-        datasourceId: datasource?.id
+        datasourceId: datasource?.datasourceId
       }
     })
   }, [datasource])
@@ -215,11 +210,7 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
                 setSearchMetricParams((prev) => {
                   return {
                     ...prev,
-                    keyword: value,
-                    pagination: {
-                      pageNum: 1,
-                      pageSize: 20
-                    }
+                    keyword: value
                   }
                 })
               }}
@@ -230,7 +221,7 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
       </Flex>
       <div ref={ADivRef}>
         <Table
-          rowKey={(record) => record.id}
+          rowKey={(record) => record.metadataId}
           loading={loading}
           size='small'
           dataSource={metricList}
@@ -251,7 +242,7 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
                 return {
                   ...prev,
                   pagination: {
-                    pageNum: page,
+                    page,
                     pageSize: pageSize
                   }
                 }

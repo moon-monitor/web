@@ -18,22 +18,10 @@ import type { Router } from '@remix-run/router'
 import { ConfigProvider, theme } from 'antd'
 import type { SpaceSize } from 'antd/es/space'
 import zhCN from 'antd/locale/zh_CN'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { RouterProvider, createHashRouter } from 'react-router-dom'
 
 const { useToken } = theme
-
-function getUserInfo() {
-  const userInfo = localStorage.getItem('userInfo')
-  if (userInfo) {
-    try {
-      return JSON.parse(userInfo)
-    } catch (e) {
-      return {}
-    }
-  }
-  return {}
-}
 
 function App() {
   const { token } = useToken()
@@ -42,20 +30,8 @@ function App() {
   const [lang, setLang] = useStorage<LangType>('lang', 'zh-CN')
   const [size, setSize] = useStorage<SpaceSize>('size', 'middle')
   const [collapsed, setCollapsed] = useStorage<boolean>('collapsed', false)
-  const [userInfo, setUserInfo] = useStorage<UserItem>('userInfo', getUserInfo())
-  const [teamInfo, setTeamInfo, removeTeamInfo] = useStorage<TeamItem>('teamInfo', {
-    admins: [],
-    createdAt: '',
-    creator: undefined,
-    id: 0,
-    leader: undefined,
-    logo: '',
-    name: '',
-    remark: '',
-    status: 0,
-    updatedAt: ''
-  })
-  const [teamMemberID, setTeamMemberID, removeTeamMemberID] = useStorage<number>('teamMemberID', 0)
+  const [userInfo, setUserInfo, removeUserInfo] = useStorage<UserItem>('userInfo', {} as UserItem)
+  const [teamInfo, setTeamInfo, removeTeamInfo] = useStorage<TeamItem>('teamInfo', {} as TeamItem)
   const [refreshMyTeamList, setRefreshMyTeamList] = useState<boolean>(false)
   const [localURL, setLocalURL] = useStorage<string>('localURL', localStorage.getItem('localURL') || '/')
   const [showLevelColor, setShowLevelColor] = useStorage<boolean>('showLevelColor', false)
@@ -72,7 +48,7 @@ function App() {
   })
   const [routers, setRouters] = useState<Router>(createHashRouter(defaultRouters))
 
-  const storageMenus = () => {
+  const storageMenus = useCallback(() => {
     getTreeMenu({})
       .then((res) => {
         setMenuItems?.(res.menuTree)
@@ -82,12 +58,16 @@ function App() {
           window.location.href = '/#/home'
         }
       })
-  }
+  }, [setMenuItems])
 
   useEffect(() => {
-    console.log('authToken====', authToken)
+    const token = new URLSearchParams(window.location.search).get('token')
+    if (token) {
+      setAuthToken(token)
+      setToken(token)
+    }
     storageMenus()
-  }, [authToken])
+  }, [authToken, storageMenus])
 
   const handleRouter = () => {
     if (!(menuItems?.length && isLogin())) {
@@ -117,12 +97,10 @@ function App() {
     setCollapsed: setCollapsed,
     userInfo: userInfo,
     setUserInfo: setUserInfo,
+    removeUserInfo: removeUserInfo,
     teamInfo: teamInfo,
     setTeamInfo: setTeamInfo,
     removeTeamInfo: removeTeamInfo,
-    teamMemberID: teamMemberID,
-    setTeamMemberID: setTeamMemberID,
-    removeTeamMemberID: removeTeamMemberID,
     refreshMyTeamList: refreshMyTeamList,
     setRefreshMyTeamList: () => setRefreshMyTeamList(!refreshMyTeamList),
     isFullscreen: isFullscreen,
@@ -158,6 +136,7 @@ function App() {
           cssVar: true,
           token: { colorPrimary: '#6c34e6' }
         }}
+        getPopupContainer={() => document.getElementById('content-body') || document.body}
       >
         <GlobalContext.Provider value={contextValue}>
           <Suspense fallback={null}>

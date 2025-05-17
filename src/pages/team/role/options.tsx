@@ -1,6 +1,6 @@
-import { Status } from '@/api/enum'
-import { ActionKey, StatusData } from '@/api/global'
 import { TeamRoleItem } from '@/api2/common.types'
+import { ActionKey, GlobalStatus } from '@/api2/enum'
+import { GlobalStatusData } from '@/api2/global'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -28,10 +28,10 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(StatusData).map(([key, value]) => {
+        options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: value.text,
-            value: Number(key)
+            label: value.label,
+            value: key
           }
         })
       }
@@ -48,7 +48,7 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamRoleItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
   const tableOperationItems = (record: TeamRoleItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
+    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -113,9 +113,9 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamRoleItem
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
-        return <Badge color={color} text={text} />
+      render: (status: GlobalStatus) => {
+        const { color, label } = GlobalStatusData[status]
+        return <Badge color={color} text={label} />
       }
     },
 

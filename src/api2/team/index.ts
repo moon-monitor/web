@@ -6,6 +6,8 @@ import {
   GetTeamMembersReply,
   GetTeamReply,
   GetTeamResourcesReply,
+  GetTeamRoleReply,
+  GetTeamRoleRequest,
   GetTeamRolesReply,
   GetTeamRolesRequest,
   InviteMemberRequest,
@@ -150,6 +152,14 @@ export function getTeamRoles(params: GetTeamRolesRequest): Promise<GetTeamRolesR
  */
 export function deleteTeamRole(prrams: DeleteTeamRoleRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/roles', prrams)
+}
+/**
+ * GetTeamRole retrieves a team role by Id
+ * @param {GetTeamRoleRequest} params
+ * @returns {Promise<GetTeamRoleReply>}
+ */
+export function getTeamRole(params: GetTeamRoleRequest): Promise<GetTeamRoleReply> {
+  return request.GET<GetTeamRoleReply>('/api/team/roles', params)
 }
 
 /**

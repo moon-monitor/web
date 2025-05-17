@@ -23,12 +23,10 @@ export type GlobalContextType = {
   setCollapsed?: (collapsed: boolean) => void
   userInfo?: UserItem
   setUserInfo?: (userInfo: UserItem) => void
+  removeUserInfo?: () => void
   teamInfo?: TeamItem
   setTeamInfo?: (teamInfo: TeamItem) => void
   removeTeamInfo?: () => void
-  teamMemberID?: number
-  setTeamMemberID?: (teamMemberID: number) => void
-  removeTeamMemberID?: () => void
   refreshMyTeamList?: boolean
   setRefreshMyTeamList?: () => void
   isFullscreen?: boolean

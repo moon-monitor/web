@@ -1,11 +1,11 @@
-import { ActionKey, StatusData } from '@/api/global'
-import { TeamItem, TeamMemberItem, TeamStatusKey, UserItem } from '@/api2/common.types'
-import { TeamStatus } from '@/api2/enum'
+import { TeamItem, TeamMemberItem, UserItem } from '@/api2/common.types'
+import { ActionKey, TeamStatus } from '@/api2/enum'
+import { GlobalStatusData, TeamStatusData } from '@/api2/global'
 // import type { TeamItem, TeamMemberItem, UserItem } from '@/api/model-types'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
-import { Avatar, Button, Col, Row, Space } from 'antd'
+import { Avatar, Badge, Button, Col, Row, Space } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 
 export const formList: SearchFormItem[] = [
@@ -28,10 +28,10 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(StatusData).map(([key, value]) => {
+        options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: value.text,
-            value: Number(key)
+            label: value.label,
+            value: key
           }
         })
       }
@@ -48,23 +48,23 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
   const tableOperationItems = (record: TeamItem): MoreMenuProps['items'] => [
-    // record.status === Status.StatusDisable
-    //   ? {
-    //       key: ActionKey.ENABLE,
-    //       label: (
-    //         <Button type='link' size='small'>
-    //           启用
-    //         </Button>
-    //       )
-    //     }
-    //   : {
-    //       key: ActionKey.DISABLE,
-    //       label: (
-    //         <Button type='link' size='small' danger>
-    //           禁用
-    //         </Button>
-    //       )
-    //     },
+    record.status === TeamStatus.TEAM_STATUS_DELETED
+      ? {
+          key: ActionKey.ENABLE,
+          label: (
+            <Button type='link' size='small'>
+              启用
+            </Button>
+          )
+        }
+      : {
+          key: ActionKey.DISABLE,
+          label: (
+            <Button type='link' size='small' danger>
+              禁用
+            </Button>
+          )
+        },
     {
       key: ActionKey.SYNC,
       label: (
@@ -148,8 +148,9 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> =>
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: TeamStatusKey) => {
-        return <div>{TeamStatus[status]}</div>
+      render: (status: TeamStatus) => {
+        const { color, label } = TeamStatusData[status]
+        return <Badge color={color} text={label} />
         // return <Badge color={UserStatusMap[status].color} text={UserStatus[status]} />
       }
     },

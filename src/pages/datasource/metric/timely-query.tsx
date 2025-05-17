@@ -1,5 +1,5 @@
-import { DatasourceItem } from '@/api/model-types'
-import { baseURL } from '@/api/request'
+import { TeamMetricDatasourceItem } from '@/api2/common.types'
+import { baseURL } from '@/api2/request'
 import { MetricsChart } from '@/components/chart/metrics-charts'
 import PromQLInput from '@/components/data/child/prom-ql'
 import { DataFrom } from '@/components/data/form'
@@ -14,7 +14,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import ReactJson from 'react-json-view'
 
 export interface TimelyQueryProps {
-  datasource?: DatasourceItem
+  datasource?: TeamMetricDatasourceItem
   apiPath?: string
   expr?: string
   setExpr?: (expr: string) => void
@@ -48,7 +48,7 @@ export const TimelyQuery: React.FC<TimelyQueryProps> = (props) => {
   const [timeRange, setTimeRange] = useState<Dayjs[]>([dayjs().subtract(5, 'minute'), dayjs()])
   const [showArea, setShowArea] = useState(true)
   const [step, setStep] = useState(14)
-  const pathPrefix = `${baseURL}/metric/${teamInfo?.id || 0}/${datasource?.id}`
+  const pathPrefix = `${baseURL}/datasource/metric/${teamInfo?.teamId || 0}/${datasource?.datasourceId}`
 
   const transformedData = React.useMemo(
     () => transformMetricsData(metricsData?.data || { result: [], resultType: '' }),

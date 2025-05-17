@@ -1,6 +1,6 @@
-import { Status } from '@/api/enum'
-import { DataSourceTypeData, StorageTypeData } from '@/api/global'
-import type { DatasourceItem } from '@/api/model-types'
+import { DatasourceType } from '@/api/enum'
+import type { TeamMetricDatasourceItem } from '@/api2/common.types'
+import { DatasourceDriverMetric } from '@/api2/enum'
 import { GlobalContext } from '@/utils/context'
 import { RedoOutlined } from '@ant-design/icons'
 import { Badge, Button, Descriptions, type DescriptionsProps, Tag, Typography, theme as antdTheme } from 'antd'
@@ -9,7 +9,7 @@ import { useContext } from 'react'
 import ReactJson from 'react-json-view'
 
 export interface BasicsProps {
-  datasource?: DatasourceItem
+  datasource?: TeamMetricDatasourceItem
   refresh?: () => void
   editDataSource?: () => void
 }
@@ -32,24 +32,24 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       label: '状态',
       children: (
         <Badge
-          status={datasource?.status === Status.StatusEnable ? 'success' : 'error'}
-          text={datasource?.status === Status.StatusEnable ? '启用' : '禁用'}
+          status={datasource?.status === 'GLOBAL_STATUS_ENABLE' ? 'success' : 'error'}
+          text={datasource?.status === 'GLOBAL_STATUS_ENABLE' ? '启用' : '禁用'}
         />
       )
     },
     {
-      key: 'datasourceType',
+      key: 'driver',
       label: '数据源类型',
       children: (
         <div className='flex flex-row items-center gap-2'>
-          <Tag color='blue'>{DataSourceTypeData[datasource.datasourceType]}</Tag>
-          <Tag color='pink'>{StorageTypeData[datasource.storageType]}</Tag>
+          <Tag color='blue'>{DatasourceType.DatasourceTypeMetric}</Tag>
+          <Tag color='pink'>{DatasourceDriverMetric[datasource.driver]}</Tag>
         </div>
       )
     },
     {
       label: '创建者',
-      children: `${datasource?.creator?.name || '-'}(${datasource?.creator?.nickname || '-'})`
+      children: `${datasource?.creator?.username || '-'}(${datasource?.creator?.nickname || '-'})`
     },
     {
       label: '创建时间',
@@ -71,7 +71,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       children: (
         <>
           <ReactJson
-            src={datasource?.config ? JSON.parse(datasource?.config) : {}}
+            src={datasource?.extra || {}}
             name={false}
             displayDataTypes={false}
             theme={theme === 'dark' ? 'bright' : 'bright:inverted'}

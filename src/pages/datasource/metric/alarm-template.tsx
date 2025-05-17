@@ -1,30 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { DatasourceType, Status, StorageType } from '@/api/enum'
-import { DatasourceItem } from '@/api/model-types'
+import { TeamMetricDatasourceItem } from '@/api2/common.types'
 import { Button, Flex, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import React from 'react'
 
 export interface AlarmTemplateProps {
-  datasource?: DatasourceItem
+  datasource?: TeamMetricDatasourceItem
 }
 
 export const AlarmTemplate: React.FC<AlarmTemplateProps> = () => {
-  const [data] = React.useState<DatasourceItem[]>([
-    {
-      id: 1,
-      name: '模板1',
-      status: Status.StatusEnable,
-      remark: '模板描述',
-      datasourceType: DatasourceType.DatasourceTypeUnknown,
-      endpoint: '',
-      createdAt: '',
-      updatedAt: '',
-      config: '',
-      storageType: StorageType.StorageTypeUnknown
-    }
-  ])
+  const [data] = React.useState<TeamMetricDatasourceItem[]>([])
   const columns: ColumnsType<any> = [
     {
       title: '模板名称',

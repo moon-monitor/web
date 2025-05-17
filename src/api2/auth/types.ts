@@ -196,7 +196,7 @@ export interface OAuthLoginByEmailRequest {
   /**
    * OAuth2.0 provider ID
    */
-  oauthID: number
+  openId: string
   /**
    * OAuth2.0 token
    */

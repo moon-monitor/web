@@ -1,11 +1,13 @@
 import {
   BasicAuth,
-  GlobalStatusKey,
   PaginationReply,
   PaginationRequest,
+  TagItemType,
   TeamMetricDatasourceItem,
+  TeamMetricDatasourceMetadataItem,
   TLS
 } from '../common.types'
+import { GlobalStatus, HTTPMethod } from '../enum'
 
 export interface DeleteTeamMetricDatasourceRequest {
   datasourceId?: number
@@ -37,7 +39,14 @@ export interface ListTeamMetricDatasourceReply {
 export interface ListTeamMetricDatasourceRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatusKey
+  status?: GlobalStatus
+}
+
+export const defaultSearchTeamMetricDatasourceParams: ListTeamMetricDatasourceRequest = {
+  pagination: {
+    page: 1,
+    pageSize: 100
+  }
 }
 
 /**
@@ -50,11 +59,11 @@ export interface SaveTeamMetricDatasourceRequest {
   endpoint?: string
   extra?: { [key: string]: string }
   headers?: { [key: string]: string }
-  metricDatasourceDriver?: number
-  name?: string
-  queryMethod?: number
-  remark?: string
-  scrapeInterval?: string
+  driver: number
+  name: string
+  queryMethod: HTTPMethod
+  remark: string
+  scrapeInterval: string
   tls?: TLS
 }
 
@@ -65,4 +74,65 @@ export interface UpdateTeamMetricDatasourceStatusRequest {
   datasourceId?: number
   metricDatasourceDriver?: number
   status?: number
+}
+
+/**
+ * api.palace.ListMetricDatasourceMetadataRequest
+ */
+export interface ListMetricDatasourceMetadataRequest {
+  datasourceId?: number
+  keyword?: string
+  pagination?: PaginationRequest
+  type?: string
+}
+
+export const defaultSearchMetricDatasourceMetadataParams: ListMetricDatasourceMetadataRequest = {
+  pagination: {
+    page: 1,
+    pageSize: 100
+  }
+}
+
+/**
+ * api.palace.ListMetricDatasourceMetadataReply
+ */
+export interface ListMetricDatasourceMetadataReply {
+  items?: TeamMetricDatasourceMetadataItem[]
+  pagination?: PaginationReply
+}
+
+/**
+ * api.palace.GetMetricDatasourceMetadataRequest
+ */
+export interface GetMetricDatasourceMetadataRequest {
+  metadataId: number
+  datasourceId: number
+}
+
+/**
+ * api.palace.SyncMetricDatasourceMetadataRequest
+ */
+export interface SyncMetricDatasourceMetadataRequest {
+  datasourceId?: number
+}
+
+export type MetricType = 'counter' | 'gauge' | 'histogram' | 'summary'
+
+export const MetricTypeData: Record<MetricType, TagItemType> = {
+  counter: {
+    text: 'Counter',
+    color: 'green'
+  },
+  gauge: {
+    text: 'Gauge',
+    color: 'blue'
+  },
+  histogram: {
+    text: 'Histogram',
+    color: 'purple'
+  },
+  summary: {
+    text: 'Summary',
+    color: 'orange'
+  }
 }

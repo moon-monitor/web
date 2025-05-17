@@ -1,5 +1,6 @@
 import { UserItem } from '@/api2/common.types'
-import { UserPosition, UserStatusMap } from '@/api2/enum'
+import { UserPosition } from '@/api2/enum'
+import { UserStatusData } from '@/api2/global'
 import { getUser } from '@/api2/system'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, type DescriptionsProps, Modal } from 'antd'
@@ -37,7 +38,7 @@ export function DetailModal(props: UserDetailModalProps) {
         <div className='flex items-center gap-2'>
           <Avatar src={detail?.avatar}>{detail?.nickname || detail?.username}</Avatar>
           {detail?.nickname || detail?.username}
-          <Badge color={UserStatusMap[detail?.status]?.color} />
+          <Badge color={UserStatusData[detail?.status]?.color} />
         </div>
       ),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }

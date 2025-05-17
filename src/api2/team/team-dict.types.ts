@@ -1,4 +1,5 @@
-import { DictTypeKey, GlobalStatusKey, PaginationReply, PaginationRequest, TeamDictItem } from '../common.types'
+import { PaginationReply, PaginationRequest, TeamDictItem } from '../common.types'
+import { DictType, GlobalStatus } from '../enum'
 
 export interface DeleteTeamDictRequest {
   dictId?: number
@@ -29,7 +30,7 @@ export interface ListTeamDictRequest {
   keyword?: string
   langs?: string[]
   pagination: PaginationRequest
-  status?: GlobalStatusKey
+  status?: GlobalStatus
 }
 
 /**
@@ -38,11 +39,11 @@ export interface ListTeamDictRequest {
 export interface SaveTeamDictRequest {
   color?: string
   dictId?: number
-  dictType?: DictTypeKey
+  dictType?: DictType
   key?: string
   lang?: string
   value?: string
-  status?: GlobalStatusKey
+  status?: GlobalStatus
 }
 
 /**
@@ -50,5 +51,5 @@ export interface SaveTeamDictRequest {
  */
 export interface UpdateTeamDictStatusRequest {
   dictIds?: number[]
-  status?: GlobalStatusKey
+  status?: GlobalStatus
 }

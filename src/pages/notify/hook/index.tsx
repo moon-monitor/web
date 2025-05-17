@@ -1,15 +1,15 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-
-import { Status } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import { AlarmHookItem } from '@/api/model-types'
-import { deleteHook, listHook, ListHookRequest, updateHookStatus } from '@/api/notify/hook'
+import { NoticeHookItem } from '@/api2/common.types'
+import { ActionKey, GlobalStatus } from '@/api2/enum'
+import { deleteTeamNoticeHook, listTeamNoticeHook, updateTeamNoticeHookStatus } from '@/api2/team/team-notice'
+import { ListTeamNoticeHookRequest } from '@/api2/team/team-notice.types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'
+import { ExclamationCircleFilled } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
-import { Button, Space, theme } from 'antd'
+import { Button, message, Modal, Space, theme } from 'antd'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { HookDetailModal } from './modal-detail'
 import { EditHookModal } from './modal-edit'
 import { formList, getColumnList } from './options'
@@ -17,30 +17,31 @@ import { formList, getColumnList } from './options'
 export interface HookProps {}
 
 const { useToken } = theme
+const { confirm } = Modal
 
 const Hook: React.FC<HookProps> = () => {
   const { token } = useToken()
   const { isFullscreen } = useContext(GlobalContext)
 
-  const [datasource, setDatasource] = useState<AlarmHookItem[]>([])
+  const [datasource, setDatasource] = useState<NoticeHookItem[]>([])
   const [total, setTotal] = useState(0)
   const [searchParams, setSearchParams] = useState({
     keyword: '',
     pagination: {
-      pageNum: 1,
+      page: 1,
       pageSize: 10
     }
   })
   const [refresh, setRefresh] = useState(true)
   const [showModal, setShowModal] = useState(false)
-  const [hookDetail, setHookDetail] = useState<AlarmHookItem>()
+  const [hookDetail, setHookDetail] = useState<NoticeHookItem>()
   const [openDetailModal, setOpenDetailModal] = useState(false)
 
   const searchRef = useRef<HTMLDivElement>(null)
   const ADivRef = useRef<HTMLDivElement>(null)
   const AutoTableHeight = useContainerHeightTop(ADivRef, datasource, isFullscreen)
 
-  const onOpenDetailModal = (item: AlarmHookItem) => {
+  const onOpenDetailModal = (item: NoticeHookItem) => {
     setHookDetail(item)
     setOpenDetailModal(true)
   }
@@ -50,24 +51,42 @@ const Hook: React.FC<HookProps> = () => {
     setHookDetail(undefined)
   }
 
-  const onSearch = (values: ListHookRequest) => {
+  const onSearch = (values: ListTeamNoticeHookRequest) => {
     setSearchParams({
       ...searchParams,
       ...values
     })
   }
 
-  const { run: handleGetHookList, loading } = useRequest((params: ListHookRequest) => listHook(params), {
-    manual: true, // 手动触发请求
+  const { run: handleGetHookList, loading } = useRequest(
+    (params: ListTeamNoticeHookRequest) => listTeamNoticeHook(params),
+    {
+      manual: true, // 手动触发请求
+      onSuccess: (res) => {
+        setDatasource(res?.items || [])
+        setTotal(res?.pagination?.total || 0)
+      }
+    }
+  )
+
+  const { run: deleteHook } = useRequest(deleteTeamNoticeHook, {
+    manual: true,
     onSuccess: (res) => {
-      setDatasource(res?.list || [])
-      setTotal(res?.pagination?.total || 0)
+      message.success(res?.message)
+      onRefresh()
+    }
+  })
+  const { run: updateHookStatus } = useRequest(updateTeamNoticeHookStatus, {
+    manual: true,
+    onSuccess: () => {
+      message.success('操作成功')
+      onRefresh()
     }
   })
 
   const onReset = () => {}
 
-  const handleEditModal = (detail?: AlarmHookItem) => {
+  const handleEditModal = (detail?: NoticeHookItem) => {
     setShowModal(true)
     setHookDetail(detail)
   }
@@ -77,40 +96,50 @@ const Hook: React.FC<HookProps> = () => {
   }
 
   const handleDelete = (id: number) => {
-    deleteHook({ id }).then(onRefresh)
+    deleteHook({ hookId: id })
   }
 
-  const onChangeStatus = (hookId: number, status: Status) => {
-    updateHookStatus({ ids: [hookId], status }).then(onRefresh)
+  const onChangeStatus = (hookId: number, status: GlobalStatus) => {
+    updateHookStatus({ hookId, status })
   }
 
-  const onHandleMenuOnClick = (item: AlarmHookItem, key: ActionKey) => {
+  const onHandleMenuOnClick = (item: NoticeHookItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.EDIT:
         handleEditModal(item)
         break
       case ActionKey.DELETE:
-        handleDelete(item.id)
+        confirm({
+          title: '请确认是否删除该告警Hook?',
+          icon: <ExclamationCircleFilled />,
+          content: '此操作不可逆',
+          onOk() {
+            handleDelete(item.noticeHookId)
+          },
+          onCancel() {
+            message.info('取消操作')
+          }
+        })
         break
       case ActionKey.DETAIL:
         onOpenDetailModal(item)
         break
       case ActionKey.DISABLE:
-        onChangeStatus(item.id, Status.StatusDisable)
+        onChangeStatus(item.noticeHookId, GlobalStatus.GLOBAL_STATUS_DISABLE)
         break
       case ActionKey.ENABLE:
-        onChangeStatus(item.id, Status.StatusEnable)
+        onChangeStatus(item.noticeHookId, GlobalStatus.GLOBAL_STATUS_ENABLE)
         break
       default:
         break
     }
   }
 
-  const handleTurnPage = (pageNum: number, pageSize: number) => {
+  const handleTurnPage = (page: number, pageSize: number) => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum,
+        page,
         pageSize
       }
     })
@@ -127,7 +156,7 @@ const Hook: React.FC<HookProps> = () => {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.pageNum,
+    current: searchParams.pagination.page,
     pageSize: searchParams.pagination.pageSize
   })
 
@@ -139,12 +168,12 @@ const Hook: React.FC<HookProps> = () => {
     <>
       <EditHookModal
         open={showModal}
-        hookId={hookDetail?.id}
+        hookId={hookDetail?.noticeHookId}
         onCancel={closeEditHookModal}
         onOk={handleEditHookModalOnOk}
       />
       <HookDetailModal
-        hookId={hookDetail?.id || 0}
+        hookId={hookDetail?.noticeHookId || 0}
         open={openDetailModal}
         onCancel={onCloseDetailModal}
         onOk={onCloseDetailModal}
@@ -186,7 +215,7 @@ const Hook: React.FC<HookProps> = () => {
               columns={columns}
               handleTurnPage={handleTurnPage}
               pageSize={searchParams.pagination.pageSize}
-              pageNum={searchParams.pagination.pageNum}
+              pageNum={searchParams.pagination.page}
               showSizeChanger={true}
               style={{
                 background: token.colorBgContainer,

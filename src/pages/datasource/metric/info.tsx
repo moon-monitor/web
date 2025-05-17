@@ -1,29 +1,29 @@
-import { StorageType } from '@/api/enum'
-import { DatasourceItem } from '@/api/model-types'
+import { TeamMetricDatasourceItem } from '@/api2/common.types'
+import { DatasourceDriverMetric } from '@/api2/enum'
 import { Prometheus, VictoriaMetrics } from '@/components/icon'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import { Alert, Typography } from 'antd'
 import React from 'react'
 
 export interface InfoProps {
-  datasource?: DatasourceItem
+  datasource?: TeamMetricDatasourceItem
 }
 
 const { Text } = Typography
 
-const InfoIcon = (props: { datasource?: DatasourceItem; className?: string }) => {
+const InfoIcon = (props: { datasource?: TeamMetricDatasourceItem; className?: string }) => {
   const { datasource, className } = props
-  switch (datasource?.storageType) {
-    case StorageType.StorageTypePrometheus:
+  switch (datasource?.driver) {
+    case DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS.toString():
       return <Prometheus className={className} />
-    case StorageType.StorageTypeVictoriaMetrics:
+    case DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS.toString():
       return <VictoriaMetrics className={className} />
     default:
       return <InfoCircleOutlined className={className} />
   }
 }
 
-const InfoContent = (props: { datasource?: DatasourceItem }) => {
+const InfoContent = (props: { datasource?: TeamMetricDatasourceItem }) => {
   const { datasource } = props
   return (
     <div className='flex gap-1 items-center'>

@@ -1,6 +1,5 @@
-import { Status } from '@/api/enum'
-import { updateTeamStatus } from '@/api/team'
 import { TeamItem } from '@/api2/common.types'
+import { TeamStatus } from '@/api2/enum'
 import { selfTeamList } from '@/api2/user'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
@@ -70,7 +69,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
   const handleChangeStatus = (teamId: number, checked: boolean) => {
     updateTeamStatus({
       id: teamId,
-      status: checked ? Status.StatusEnable : Status.StatusDisable
+      status: checked ? TeamStatus.TEAM_STATUS_REJECTED : TeamStatus.TEAM_STATUS_DELETED
     }).then(handleRefresh)
   }
 
@@ -96,7 +95,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
         open={openEditModal}
         onCancel={handleOnCancel}
         onOk={handleEditModalOnOK}
-        spaceId={operatorTeam?.id}
+        spaceId={operatorTeam?.teamId}
       />
       <div className='p-3 h-full flex flex-col gap-3'>
         <Row className='pb-3'>
@@ -118,7 +117,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
         ) : (
           <Row gutter={[12, 12]} className='flex-1 overflow-auto'>
             {teamList?.map((item, index) => {
-              const { name, logo, status, id, remark, leader, admins: admins, creator } = item
+              const { name, logo, status, teamId, remark, leader, admins: admins, creator } = item
               const items: DescriptionsProps['items'] = [
                 {
                   key: 'leader',
@@ -177,7 +176,11 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
               ]
               return (
                 <Col key={index + name} xs={24} sm={12} md={12} lg={12} xl={8} xxl={6}>
-                  <Badge.Ribbon style={{ display: teamInfo?.id === id ? '' : 'none' }} text='current' color='purple'>
+                  <Badge.Ribbon
+                    style={{ display: teamInfo?.teamId === teamId ? '' : 'none' }}
+                    text='current'
+                    color='purple'
+                  >
                     <Card
                       key={index + name}
                       className='min-h-[306px] border-none'
@@ -191,8 +194,8 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                           <Switch
                             checkedChildren='正常'
                             unCheckedChildren='禁用'
-                            value={status === Status.StatusEnable}
-                            onChange={(checked) => handleChangeStatus(id, checked)}
+                            value={status === TeamStatus.TEAM_STATUS_REJECTED}
+                            onChange={(checked) => handleChangeStatus(teamId, checked)}
                           />
                         </Space>
                       }

@@ -1,12 +1,16 @@
-import { EmptyReply } from '../common.types'
+import { EmptyReply, TeamMetricDatasourceMetadataItem } from '../common.types'
 import request from '../request'
 import {
   DeleteTeamMetricDatasourceRequest,
+  GetMetricDatasourceMetadataRequest,
   GetTeamMetricDatasourceReply,
   GetTeamMetricDatasourceRequest,
+  ListMetricDatasourceMetadataReply,
+  ListMetricDatasourceMetadataRequest,
   ListTeamMetricDatasourceReply,
   ListTeamMetricDatasourceRequest,
   SaveTeamMetricDatasourceRequest,
+  SyncMetricDatasourceMetadataRequest,
   UpdateTeamMetricDatasourceStatusRequest
 } from './team-datasource.types'
 
@@ -59,4 +63,35 @@ export const updateTeamMetricDatasourceStatus = (
   params: UpdateTeamMetricDatasourceStatusRequest
 ): Promise<EmptyReply> => {
   return request.PUT<EmptyReply>('/api/team/metric/datasource/status', params)
+}
+
+/**
+ * ListMetricDatasourceMetadata lists metric datasource metadata
+ * @param {ListMetricDatasourceMetadataRequest} params
+ * @returns {Promise<ListMetricDatasourceMetadataReply>}
+ */
+export const listMetricDatasourceMetadata = (
+  params: ListMetricDatasourceMetadataRequest
+): Promise<ListMetricDatasourceMetadataReply> => {
+  return request.POST<ListMetricDatasourceMetadataReply>('/api/team/metric/datasource/metadata/list', params)
+}
+
+/**
+ * GetMetricDatasourceMetadata retrieves a metric datasource metadata by Id
+ * @param {GetMetricDatasourceMetadataRequest} params
+ * @returns {Promise<GetMetricDatasourceMetadataReply>}
+ */
+export const getMetricDatasourceMetadata = (
+  params: GetMetricDatasourceMetadataRequest
+): Promise<TeamMetricDatasourceMetadataItem> => {
+  return request.GET<TeamMetricDatasourceMetadataItem>('/api/team/metric/datasource/metadata', params)
+}
+
+/**
+ * SyncMetricDatasourceMetadata syncs metric datasource metadata
+ * @param {SyncMetricDatasourceMetadataRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export const syncMetricDatasourceMetadata = (params: SyncMetricDatasourceMetadataRequest): Promise<EmptyReply> => {
+  return request.POST<EmptyReply>('/api/team/metric/datasource/sync/metadata', params)
 }

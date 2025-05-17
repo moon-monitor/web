@@ -1,22 +1,15 @@
 import {
   DatasourceDriverMetric,
-  DictType,
   Gender,
   GlobalStatus,
+  HookAPP,
   StrategyType,
   TeamStatus,
   UserPosition,
   UserStatus
 } from './enum'
+import { MetricType } from './team/team-datasource.types'
 
-export type GenderKey = keyof typeof Gender
-export type TeamStatusKey = keyof typeof TeamStatus
-export type UserStatusKey = keyof typeof UserStatus
-export type UserPositionKey = keyof typeof UserPosition
-export type GlobalStatusKey = keyof typeof GlobalStatus
-export type StrategyTypeKey = keyof typeof StrategyType
-export type DatasourceDriverMetricKey = keyof typeof DatasourceDriverMetric
-export type DictTypeKey = keyof typeof DictType
 /**
  * User basic information
  * api.palace.common.UserBaseItem
@@ -63,7 +56,7 @@ export interface UserItem {
   /**
    * User's gender
    */
-  gender?: GenderKey
+  gender?: Gender
   /**
    * User's nickname
    */
@@ -75,7 +68,7 @@ export interface UserItem {
   /**
    * User's position/role in the system
    */
-  position: UserPositionKey
+  position: UserPosition
   /**
    * Remarks about the user
    */
@@ -83,7 +76,7 @@ export interface UserItem {
   /**
    * User's status
    */
-  status: UserStatusKey
+  status: UserStatus
   /**
    * User's last update time
    */
@@ -416,7 +409,7 @@ export interface TeamItem {
   /**
    * Unique identifier for the team.
    */
-  id: number
+  teamId: number
   /**
    * Information about the leader of the team.
    */
@@ -440,7 +433,7 @@ export interface TeamItem {
   /**
    * Status of the team.
    */
-  status: TeamStatusKey
+  status: TeamStatus
   /**
    * Total number of strategies associated with the team.
    */
@@ -510,7 +503,7 @@ export interface TeamStrategyItem {
    * Timestamp indicating when the strategy was last updated.
    */
   updatedAt?: string
-  strategyType: StrategyTypeKey
+  strategyType: StrategyType
   group: string
 }
 
@@ -522,9 +515,9 @@ export interface NoticeGroupItem {
   hooks?: NoticeHookItem[]
   members?: TeamMemberItem[]
   name?: string
-  noticeGroupId?: number
+  noticeGroupId: number
   remark?: string
-  status: GlobalStatusKey
+  status: GlobalStatus
   updatedAt?: string
 }
 
@@ -532,16 +525,19 @@ export interface NoticeGroupItem {
  * api.palace.common.NoticeHookItem
  */
 export interface NoticeHookItem {
-  createdAt?: string
+  app: HookAPP
+  createdAt: string
+  creator?: UserBaseItem
   headers?: { [key: string]: string }
-  method?: number
-  name?: string
-  noticeHookId?: number
-  remark?: string
+  method: number
+  name: string
+  noticeGroups?: NoticeGroupItem[]
+  noticeHookId: number
+  remark: string
   secret?: string
-  status: number
-  updatedAt?: string
-  url?: string
+  status: GlobalStatus
+  updatedAt: string
+  url: string
 }
 
 /**
@@ -575,7 +571,7 @@ export interface TeamRoleItem {
   /**
    * Status of the role.
    */
-  status: number
+  status: GlobalStatus
   /**
    * Timestamp indicating when the role was last updated.
    */
@@ -695,18 +691,19 @@ export interface TeamMetricDatasourceItem {
   ca?: string
   createdAt?: string
   datasourceId?: number
-  driver?: DatasourceDriverMetricKey
-  endpoint?: string
+  driver: DatasourceDriverMetric
+  endpoint: string
   extra?: { [key: string]: string }
   headers?: { [key: string]: string }
-  name?: string
-  queryMethod?: number
-  remark?: string
-  scrapeInterval?: string
-  teamId?: number
+  name: string
+  queryMethod: number
+  remark: string
+  scrapeInterval: string
+  teamId: number
   tls?: TLS
-  updatedAt?: string
-  status?: GlobalStatusKey
+  updatedAt: string
+  status: GlobalStatus
+  creator: UserBaseItem
 }
 
 /**
@@ -722,7 +719,7 @@ export interface BasicAuth {
  */
 export interface TLS {
   clientCert?: string
-  clientKey?: string
+  client?: string
   serverName?: string
 }
 
@@ -757,7 +754,7 @@ export interface TeamDictItem {
   teamId?: number
   updatedAt?: string
   value?: string
-  status: GlobalStatusKey
+  status: GlobalStatus
 }
 
 /**
@@ -765,7 +762,7 @@ export interface TeamDictItem {
  */
 export interface StrategyMetricRuleLabelNotice {
   createdAt?: string
-  labelKey?: string
+  label?: string
   labelNoticeId?: number
   labelValue?: string
   notices?: NoticeGroupItem[]
@@ -820,7 +817,7 @@ export interface TeamStrategyGroupItem {
   /**
    * Status of the strategy group.
    */
-  status: GlobalStatusKey
+  status: GlobalStatus
   /**
    * Total number of strategies in the group.
    */
@@ -829,5 +826,33 @@ export interface TeamStrategyGroupItem {
    * Timestamp indicating when the group was last updated.
    */
   updatedAt?: string
-  strategyType?: StrategyTypeKey
+  strategyType?: StrategyType
+}
+
+/**
+ * api.palace.common.TeamMetricDatasourceMetadataItem
+ */
+export interface TeamMetricDatasourceMetadataItem {
+  createdAt: string
+  datasourceId: number
+  help: string
+  labels: MetadataItemLabel[]
+  metadataId: number
+  name: string
+  type: MetricType
+  unit: string
+  updatedAt: string
+}
+
+/**
+ * api.palace.common.TeamMetricDatasourceMetadataItem_Label
+ */
+export interface MetadataItemLabel {
+  key: string
+  values: string[]
+}
+
+export interface TagItemType {
+  text: string
+  color: string
 }

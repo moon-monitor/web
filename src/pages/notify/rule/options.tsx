@@ -1,9 +1,12 @@
-import { Status, TimeEngineRuleType } from '@/api/enum'
-import { ActionKey, PaginationReq, StatusData, TimeEngineRuleTypeData } from '@/api/global'
-import { TimeEngineItem, TimeEngineRuleItem } from '@/api/model-types'
+// import { Status, TimeEngineRuleType } from '@/api/enum'
+// import { ActionKey, PaginationRequest, StatusData, TimeEngineRuleTypeData } from '@/api/global'
+// import { TimeEngineItem, TimeEngineItemRule } from '@/api/model-types'
+import { GlobalStatusKey, PaginationRequest, TimeEngineRuleTypeKey } from '@/api2/common.types'
+import { ActionKey, GlobalStatus, GlobalStatusMap, TimeEngineRuleType } from '@/api2/enum'
+import { TimeEngineItem, TimeEngineItemRule } from '@/api2/timeEngine/types'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
-import { Avatar, Badge, Button, Space } from 'antd'
+import { Badge, Button, Space } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 
 export const formList: SearchFormItem[] = [
@@ -27,10 +30,10 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(StatusData).map(([key, value]) => {
+        options: Object.entries(GlobalStatus).map(([key, value]) => {
           return {
-            label: value.text,
-            value: +key
+            label: value,
+            value: key
           }
         })
       }
@@ -45,16 +48,20 @@ export const formList: SearchFormItem[] = [
         placeholder: '类型',
         allowClear: true,
         mode: 'multiple',
-        options: Object.entries(TimeEngineRuleTypeData).map(([key, value]) => {
-          const { label, icon } = value
+        options: Object.entries(TimeEngineRuleType).map(([key, value]) => {
+          // const { label, icon } = value
+          // return {
+          //   label: (
+          //     <Space direction='horizontal'>
+          //       <Avatar size='small' shape='square' icon={icon} />
+          //       {label}
+          //     </Space>
+          //   ),
+          //   value: key
+          // }
           return {
-            label: (
-              <Space direction='horizontal'>
-                <Avatar size='small' shape='square' icon={icon} />
-                {label}
-              </Space>
-            ),
-            value: +key
+            label: value,
+            value: key
           }
         })
       }
@@ -83,10 +90,10 @@ export const engineFormList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(StatusData).map(([key, value]) => {
+        options: Object.entries(GlobalStatus).map(([key, value]) => {
           return {
-            label: value.text,
-            value: +key
+            label: value,
+            value: key
           }
         })
       }
@@ -95,17 +102,17 @@ export const engineFormList: SearchFormItem[] = [
 ]
 
 interface NotifyRuleColumnProps {
-  onHandleMenuOnClick: (item: TimeEngineRuleItem, key: ActionKey) => void
-  pagination: PaginationReq
+  onHandleMenuOnClick: (item: TimeEngineItemRule, key: ActionKey) => void
+  pagination: PaginationRequest
 }
 
-export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEngineRuleItem> => {
+export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEngineItemRule> => {
   const {
     onHandleMenuOnClick,
-    pagination: { pageNum, pageSize }
+    pagination: { page, pageSize }
   } = props
-  const tableOperationItems = (record: TimeEngineRuleItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
+  const tableOperationItems = (record: TimeEngineItemRule): MoreMenuProps['items'] => [
+    record.status === 'GLOBAL_STATUS_DISABLE'
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -155,7 +162,7 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
       key: 'index',
       width: 60,
       render: (_, __, index: number) => {
-        return <span>{(pageNum - 1) * pageSize + index + 1}</span>
+        return <span>{(page - 1) * pageSize + index + 1}</span>
       }
     },
     {
@@ -169,14 +176,15 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
       dataIndex: 'category',
       key: 'category',
       width: 160,
-      render: (category: TimeEngineRuleType) => {
-        const { label, icon } = TimeEngineRuleTypeData[category]
-        return (
-          <Space direction='horizontal'>
-            <Avatar size='small' shape='square' icon={icon} />
-            {label}
-          </Space>
-        )
+      render: (category: TimeEngineRuleTypeKey) => {
+        // const { label, icon } = TimeEngineRuleTypeData[category]
+        // return (
+        //   <Space direction='horizontal'>
+        //     <Avatar size='small' shape='square' icon={icon} />
+        //     {label}
+        //   </Space>
+        // )
+        return TimeEngineRuleType[category]
       }
     },
     {
@@ -185,9 +193,8 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
-        return <Badge color={color} text={text} />
+      render: (status: GlobalStatusKey) => {
+        return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
       }
     },
     {
@@ -214,7 +221,7 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
       ellipsis: true,
       fixed: 'right',
       width: 120,
-      render: (record: TimeEngineRuleItem) => (
+      render: (record: TimeEngineItemRule) => (
         <Space size={20}>
           <Button size='small' type='link' onClick={() => onHandleMenuOnClick(record, ActionKey.DETAIL)}>
             详情
@@ -235,16 +242,16 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
 
 interface NotifyEngineColumnProps {
   onHandleMenuOnClick: (item: TimeEngineItem, key: ActionKey) => void
-  pagination: PaginationReq
+  pagination: PaginationRequest
 }
 
 export const getEngineColumnList = (props: NotifyEngineColumnProps): ColumnsType<TimeEngineItem> => {
   const {
     onHandleMenuOnClick,
-    pagination: { pageNum, pageSize }
+    pagination: { page, pageSize }
   } = props
   const tableOperationItems = (record: TimeEngineItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
+    record.status === 'GLOBAL_STATUS_DISABLE'
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -294,7 +301,7 @@ export const getEngineColumnList = (props: NotifyEngineColumnProps): ColumnsType
       key: 'index',
       width: 60,
       render: (_, __, index: number) => {
-        return <span>{(pageNum - 1) * pageSize + index + 1}</span>
+        return <span>{(page - 1) * pageSize + index + 1}</span>
       }
     },
     {
@@ -309,9 +316,8 @@ export const getEngineColumnList = (props: NotifyEngineColumnProps): ColumnsType
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
-        return <Badge color={color} text={text} />
+      render: (status: GlobalStatusKey) => {
+        return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
       }
     },
     {

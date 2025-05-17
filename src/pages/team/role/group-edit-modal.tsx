@@ -1,8 +1,6 @@
-import type { ResourceItem } from '@/api/model-types'
-import { listResource } from '@/api/resource'
-import { getRole } from '@/api/team/role'
-import { TeamRoleItem } from '@/api2/common.types'
-import { saveTeamRole } from '@/api2/team'
+import { ResourceItem, TeamRoleItem } from '@/api2/common.types'
+import { listResource } from '@/api2/resource'
+import { getTeamRole, saveTeamRole } from '@/api2/team'
 import { SaveTeamRoleRequest } from '@/api2/team/types'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
@@ -25,17 +23,17 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   const [grounpDetail, setGroupDetail] = useState<TeamRoleItem>()
   const [resourceList, setResourceList] = useState<ResourceItem[]>([])
 
-  const { run: initRoleDetail, loading: initRoleDetailLoading } = useRequest(getRole, {
+  const { run: initRoleDetail, loading: initRoleDetailLoading } = useRequest(getTeamRole, {
     manual: true,
     onSuccess: (res) => {
-      setGroupDetail(res.detail)
+      setGroupDetail(res)
     }
   })
 
   const { run: initResourceList, loading: initResourceListLoading } = useRequest(listResource, {
     manual: true,
     onSuccess: (res) => {
-      setResourceList(res.list || [])
+      setResourceList(res.items || [])
     }
   })
 
@@ -50,10 +48,10 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (groupId && open) {
-      initRoleDetail({ id: groupId })
+      initRoleDetail({ roleId: groupId })
     }
     if (open) {
-      initResourceList({ pagination: { pageNum: 1, pageSize: 999 } })
+      initResourceList({ pagination: { page: 1, pageSize: 999 } })
     }
   }, [open, groupId, initRoleDetail, initResourceList, disabled])
 

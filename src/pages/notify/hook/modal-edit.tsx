@@ -1,8 +1,6 @@
-import { HookApp } from '@/api/enum'
-import { HookAppData } from '@/api/global'
-import { AlarmHookItem } from '@/api/model-types'
-import { createHook, getHook, updateHook } from '@/api/notify/hook'
-import { ErrorResponse } from '@/api/request'
+import { NoticeHookItem } from '@/api2/common.types'
+import { HookAppData } from '@/api2/global'
+import { getTeamNoticeHook, saveTeamNoticeHook } from '@/api2/team/team-notice'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
 import { Avatar, Form, Input, Modal, Select, Space } from 'antd'
@@ -11,7 +9,7 @@ import { useEffect, useState } from 'react'
 export interface EditHookModalProps {
   open?: boolean
   hookId?: number
-  onOk?: (hook: AlarmHookItem) => void
+  onOk?: (hook: NoticeHookItem) => void
   onCancel?: () => void
 }
 
@@ -20,36 +18,22 @@ export function EditHookModal(props: EditHookModalProps) {
 
   const [form] = Form.useForm()
   const [loading, setLoading] = useState(false)
-  const [detail, setDetail] = useState<AlarmHookItem>()
+  const [detail, setDetail] = useState<NoticeHookItem>()
 
+  const { run: updateHook } = useRequest(saveTeamNoticeHook, {
+    manual: true,
+    onSuccess: () => {
+      form.resetFields()
+      onOk?.(form.getFieldsValue())
+    },
+    onError: (err: Error) => {
+      handleFormError(form, err)
+    }
+  })
   const handleOnOk = () => {
     form.validateFields().then((values) => {
       setLoading(true)
-      if (hookId) {
-        updateHook({ id: hookId, update: values })
-          .then(() => {
-            form.resetFields()
-            onOk?.(values)
-          })
-          .catch((err: ErrorResponse) => {
-            handleFormError(form, err)
-          })
-          .finally(() => {
-            setLoading(false)
-          })
-      } else {
-        createHook(values)
-          .then(() => {
-            form.resetFields()
-            onOk?.(values)
-          })
-          .catch((err: ErrorResponse) => {
-            handleFormError(form, err)
-          })
-          .finally(() => {
-            setLoading(false)
-          })
-      }
+      updateHook({ ...values, ...(hookId && { hookId }), status: 'GLOBAL_STATUS_ENABLE' })
     })
   }
 
@@ -57,10 +41,10 @@ export function EditHookModal(props: EditHookModalProps) {
     onCancel?.()
   }
 
-  const { run: handleGetHookDetail } = useRequest((id: number) => getHook({ id }), {
+  const { run: handleGetHookDetail } = useRequest(getTeamNoticeHook, {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
-      setDetail(res.detail)
+      setDetail(res)
     }
   })
 
@@ -68,7 +52,7 @@ export function EditHookModal(props: EditHookModalProps) {
     if (detail) {
       form.setFieldsValue({
         name: detail.name,
-        hookApp: detail.hookApp,
+        app: detail.app,
         url: detail.url,
         secret: detail.secret,
         remark: detail.remark
@@ -81,7 +65,7 @@ export function EditHookModal(props: EditHookModalProps) {
 
   useEffect(() => {
     if (hookId && open) {
-      handleGetHookDetail(hookId)
+      handleGetHookDetail({ hookId })
     }
   }, [hookId, open, handleGetHookDetail])
 
@@ -98,15 +82,15 @@ export function EditHookModal(props: EditHookModalProps) {
           <Form.Item label='名称' name='name' rules={[{ required: true, message: '请输入名称' }]}>
             <Input placeholder='请输入名称' />
           </Form.Item>
-          <Form.Item label='类型' name='hookApp' rules={[{ required: true, message: '请选择类型' }]}>
+          <Form.Item label='类型' name='app' rules={[{ required: true, message: '请选择类型' }]}>
             <Select
               placeholder='请选择类型'
               options={Object.entries(HookAppData)
-                .filter(([key]) => +key !== HookApp.HOOK_APP_UNKNOWN)
+                .filter(([key]) => key !== 'HOOK_APP_UNKNOWN')
                 .map(([key, value]) => {
                   const { icon, label } = value
                   return {
-                    value: +key,
+                    value: key,
                     label: (
                       <Space direction='horizontal'>
                         <Avatar size='small' shape='square' icon={icon} />

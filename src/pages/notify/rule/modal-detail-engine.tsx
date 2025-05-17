@@ -1,8 +1,11 @@
-import { StatusData } from '@/api/global'
-import { TimeEngineItem } from '@/api/model-types'
-import { getTimeEngine } from '@/api/notify/time-engine'
+// import { StatusData } from '@/api/global'
+// import { TimeEngineItem } from '@/api/model-types'
+// import { getTimeEngine } from '@/api/notify/time-engine'
+import { GlobalStatus, GlobalStatusMap } from '@/api2/enum'
+import { getTimeEngine } from '@/api2/timeEngine'
+import { TimeEngineItem } from '@/api2/timeEngine/types'
 import { useRequest } from 'ahooks'
-import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tag, Tooltip } from 'antd'
+import { Badge, Descriptions, DescriptionsProps, Modal, Space, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 
 export interface EngineDetailModalProps {
@@ -16,10 +19,10 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
   const { Id, open, onCancel, onOk } = props
 
   const [detail, setDetail] = useState<TimeEngineItem>()
-  const { run: getEngineDetail } = useRequest((id: number) => getTimeEngine(id), {
+  const { run: getEngineDetail } = useRequest(getTimeEngine, {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
-      setDetail(res.detail)
+      setDetail(res)
     }
   })
 
@@ -32,7 +35,7 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
     {
       label: '状态',
       children: detail ? (
-        <Badge color={StatusData[detail?.status].color} text={StatusData[detail?.status].text} />
+        <Badge color={GlobalStatusMap[detail?.status].color} text={GlobalStatus[detail?.status]} />
       ) : (
         '-'
       ),
@@ -49,18 +52,18 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
       )),
       span: 3
     },
-    {
-      label: '创建人',
-      children: (
-        <Tooltip title={detail?.creator?.nickname || detail?.creator?.name}>
-          <div className='flex items-center gap-2'>
-            <Avatar src={detail?.creator?.avatar}>{detail?.creator?.nickname || detail?.creator?.name}</Avatar>
-            {detail?.creator?.nickname || detail?.creator?.name}
-          </div>
-        </Tooltip>
-      ),
-      span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
-    },
+    // {
+    //   label: '创建人',
+    //   children: (
+    //     <Tooltip title={detail?.creator?.nickname || detail?.creator?.name}>
+    //       <div className='flex items-center gap-2'>
+    //         <Avatar src={detail?.creator?.avatar}>{detail?.creator?.nickname || detail?.creator?.name}</Avatar>
+    //         {detail?.creator?.nickname || detail?.creator?.name}
+    //       </div>
+    //     </Tooltip>
+    //   ),
+    //   span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
+    // },
     {
       label: '备注',
       children: detail?.remark || '-',
@@ -81,7 +84,7 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
 
   useEffect(() => {
     if (Id && open) {
-      getEngineDetail(Id)
+      getEngineDetail({ timeEngineId: Id })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Id, open])

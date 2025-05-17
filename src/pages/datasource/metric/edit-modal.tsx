@@ -1,18 +1,13 @@
-import {
-  type CreateDatasourceRequestFormData,
-  createDatasource,
-  datasourceHealth,
-  getDatasource,
-  updateDatasource
-} from '@/api/datasource'
-import { DatasourceType, Status, StorageType } from '@/api/enum'
-import { StatusData } from '@/api/global'
+import { StorageType } from '@/api/enum'
+import { HTTPMethod } from '@/api2/enum'
+import { getTeamMetricDatasource, saveTeamMetricDatasource } from '@/api2/team/team-datasource'
+import { SaveTeamMetricDatasourceRequest } from '@/api2/team/team-datasource.types'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { Prometheus, VictoriaMetrics } from '@/components/icon'
-import { CheckCircleTwoTone, CloseCircleTwoTone, MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
-import { Button, Col, Form, Input, Modal, type ModalProps, Radio, Row, Space, message, theme } from 'antd'
-import React, { useCallback, useEffect, useState } from 'react'
+import { Button, Col, Form, Input, Modal, type ModalProps, Radio, Row, Space, theme } from 'antd'
+import React, { useCallback, useEffect } from 'react'
 
 export interface EditModalProps extends ModalProps {
   datasourceId?: number
@@ -24,32 +19,17 @@ const { useToken } = theme
 export const EditModal: React.FC<EditModalProps> = (props) => {
   const { token } = useToken()
   const { onCancel, onOk, open, datasourceId } = props
-  const [form] = Form.useForm<CreateDatasourceRequestFormData>()
+  const [form] = Form.useForm<SaveTeamMetricDatasourceRequest>()
   const [loading, setLoading] = React.useState(false)
-  const [dataSourceHealthStatus, setDataSourceHealth] = useState(false)
 
-  const { run: getDatasourceDetail, loading: getDatasourceDetailLoading } = useRequest(getDatasource, {
+  const { run: getDatasourceDetail, loading: getDatasourceDetailLoading } = useRequest(getTeamMetricDatasource, {
     manual: true,
     onSuccess: ({ detail }) => {
-      let config: Record<string, string> = {}
-      try {
-        config = JSON.parse(detail.config)
-      } catch (error) {
-        message.error('数据源配置解析失败，请检查配置')
-      }
-      form.setFieldsValue({ ...detail, config })
+      form.setFieldsValue({ ...detail })
     }
   })
 
-  const { run: updateDatasourceDetail, loading: updateDatasourceDetailLoading } = useRequest(updateDatasource, {
-    manual: true,
-    onSuccess: () => {
-      form.resetFields()
-      onOk?.()
-    }
-  })
-
-  const { run: createDatasourceDetail, loading: createDatasourceDetailLoading } = useRequest(createDatasource, {
+  const { run: saveDatasourceDetail, loading: saveDatasourceDetailLoading } = useRequest(saveTeamMetricDatasource, {
     manual: true,
     onSuccess: () => {
       form.resetFields()
@@ -59,28 +39,13 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
 
   const handleOnOk = () => {
     form.validateFields().then((values) => {
-      const newValues = {
-        ...values,
-        datasourceType: DatasourceType.DatasourceTypeMetric
-      }
-      setLoading(true)
-      if (datasourceId) {
-        updateDatasourceDetail({ ...newValues, id: datasourceId, config: JSON.stringify(values.config) })
-        return
-      }
-      if (!dataSourceHealthStatus) {
-        message.error('数据源地址测试失败，请检查配置')
-        setLoading(false)
-        return
-      }
-      createDatasourceDetail({ ...newValues, config: JSON.stringify(values.config) })
-      return values
+      saveDatasourceDetail({ ...values, datasourceId })
     })
   }
 
   const handleGetDatasource = useCallback(() => {
     if (!datasourceId) return
-    getDatasourceDetail({ id: datasourceId })
+    getDatasourceDetail({ datasourceId })
   }, [datasourceId, getDatasourceDetail])
 
   useEffect(() => {
@@ -106,32 +71,12 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
         formProps: {
           rules: [{ required: true, message: '请输入数据源名称' }]
         }
-      },
-      {
-        label: '状态',
-        name: 'status',
-        type: 'radio-group',
-        props: {
-          options: Object.entries(StatusData)
-            .filter((item) => {
-              return +item[0] !== Status.StatusAll
-            })
-            .map((item) => {
-              return {
-                label: item[1].text,
-                value: +item[0]
-              }
-            })
-        },
-        formProps: {
-          rules: [{ required: true, message: '请选择状态' }]
-        }
       }
     ],
     [
       {
         label: '存储器类型',
-        name: 'storageType',
+        name: 'driver',
         type: 'radio-group',
         props: {
           optionType: 'button',
@@ -165,31 +110,26 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
       label: '数据源地址',
       name: 'endpoint',
       type: 'button-input',
-      onChange: () => {
-        setDataSourceHealth(false)
-      },
       props: {
-        placeholder: '请输入数据源地址',
-        enterButton: '连接测试',
-        onSearch: async (value: string) => {
-          setDataSourceHealth(false)
-          datasourceHealth({
-            url: value,
-            type: form.getFieldValue('storageType')
-          }).then(() => {
-            setDataSourceHealth(true)
-          })
-        },
-        suffix: dataSourceHealthStatus ? (
-          <CheckCircleTwoTone twoToneColor='#52c41a' />
-        ) : (
-          <CloseCircleTwoTone twoToneColor='#f5222d' />
-        )
+        placeholder: '请输入数据源地址'
       },
       formProps: {
         rules: [{ required: true, message: '请输入数据源地址' }]
       }
     },
+    [
+      {
+        label: '请求方式',
+        name: 'queryMethod',
+        type: 'radio-group',
+        props: {
+          options: Object.entries(HTTPMethod).map(([key, value]) => ({
+            label: key,
+            value: value
+          }))
+        }
+      }
+    ],
     {
       label: '说明信息',
       name: 'remark',
@@ -209,7 +149,7 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
       open={open}
       onCancel={handleOnCancel}
       onOk={handleOnOk}
-      confirmLoading={loading || updateDatasourceDetailLoading || createDatasourceDetailLoading}
+      confirmLoading={loading || saveDatasourceDetailLoading}
       loading={getDatasourceDetailLoading}
     >
       <DataFrom props={{ form, layout: 'vertical' }} items={formItems}>

@@ -1,7 +1,4 @@
 import {
-  GlobalStatusKey,
-  NoticeGroupItem,
-  NoticeHookItem,
   PaginationReply,
   PaginationRequest,
   ResourceItem,
@@ -12,6 +9,7 @@ import {
   TeamRoleItem,
   TeamStrategyItem
 } from '../common.types'
+import { GlobalStatus } from '../enum'
 
 /**
  * api.palace.GetTeamReply，GetTeamReply contains the response data for retrieving a team
@@ -264,7 +262,7 @@ export interface SaveTeamRoleRequest {
 export interface GetTeamRolesRequest {
   pagination: PaginationRequest
   keyword?: string
-  status?: GlobalStatusKey
+  status?: GlobalStatus
 }
 /**
  * api.palace.GetTeamRolesReply, GetTeamRolesReply contains the response data for retrieving
@@ -284,6 +282,12 @@ export interface DeleteTeamRoleRequest {
    */
   roleId?: number
 }
+
+export interface GetTeamRoleRequest {
+  roleId?: number
+}
+
+export interface GetTeamRoleReply extends TeamRoleItem {}
 
 /**
  * api.palace.ListTeamDashboardChartRequest
@@ -447,78 +451,7 @@ export interface DeleteTeamStrategyGroupRequest {
   groupId?: number
 }
 
-export interface GetTeamNoticeGroupRequest {
-  groupId?: number
-}
-
-/**
- * api.palace.GetTeamNoticeGroupReply
- */
-export interface GetTeamNoticeGroupReply {
-  detail?: NoticeGroupItem
-}
-
-/**
- * api.palace.DeleteTeamNoticeGroupRequest
- */
-export interface DeleteTeamNoticeGroupRequest {
-  groupId?: number
-}
-
-/**
- * api.palace.UpdateTeamNoticeGroupStatusRequest
- */
-export interface UpdateTeamNoticeGroupStatusRequest {
-  groupId?: number
-  status?: number
-}
-
-export interface GetTeamNoticeHookRequest {
-  hookId?: number
-}
-
-/**
- * api.palace.GetTeamNoticeHookReply
- */
-export interface GetTeamNoticeHookReply {
-  detail?: NoticeHookItem
-}
-
-/**
- * api.palace.DeleteTeamNoticeHookRequest
- */
-export interface DeleteTeamNoticeHookRequest {
-  hookId?: number
-}
-
-/**
- * api.palace.ListTeamNoticeHookRequest
- */
-export interface ListTeamNoticeHookRequest {
-  apps?: number[]
-  keyword?: string
-  pagination?: PaginationRequest
-  status?: number
-  url?: string
-}
-
-/**
- * api.palace.ListTeamNoticeHookReply
- */
-export interface ListTeamNoticeHookReply {
-  items?: NoticeHookItem[]
-  pagination?: PaginationReply
-}
-
-/**
- * api.palace.UpdateTeamNoticeHookStatusRequest
- */
-export interface UpdateTeamNoticeHookStatusRequest {
-  hookId?: number
-  status?: number
-}
-
 export interface UpdateTeamRoleStatusRequest {
   roleId?: number
-  status?: GlobalStatusKey
+  status?: GlobalStatus
 }

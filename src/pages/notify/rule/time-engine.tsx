@@ -1,14 +1,18 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
-import { Status } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import { TimeEngineItem } from '@/api/model-types'
-import {
-  deleteTimeEngine,
-  listTimeEngine,
-  ListTimeEngineRequest,
-  updateTimeEngineStatus
-} from '@/api/notify/time-engine'
+// import { Status } from '@/api/enum'
+// import { ActionKey } from '@/api/global'
+// import { TimeEngineItem } from '@/api/model-types'
+// import {
+//   deleteTimeEngine,
+//   listTimeEngine,
+//   ListTimeEngineRequest,
+//   updateTimeEngineStatus
+// } from '@/api/notify/time-engine'
+import { GlobalStatusKey } from '@/api2/common.types'
+import { ActionKey } from '@/api2/enum'
+import { deleteTimeEngine, listTimeEngine } from '@/api2/timeEngine'
+import { ListTimeEngineRequest, TimeEngineItem } from '@/api2/timeEngine/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -35,7 +39,7 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
   const [searchParams, setSearchParams] = useState({
     keyword: '',
     pagination: {
-      pageNum: 1,
+      page: 1,
       pageSize: 10
     }
   })
@@ -65,10 +69,10 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
     })
   }
 
-  const { run: handleGetList, loading } = useRequest((params: ListTimeEngineRequest) => listTimeEngine(params), {
+  const { run: handleGetList, loading } = useRequest(listTimeEngine, {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
-      setDatasource(res?.list || [])
+      setDatasource(res?.items || [])
       setTotal(res?.pagination?.total || 0)
     }
   })
@@ -84,12 +88,16 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
     setRefresh(!refresh)
   }
 
-  const handleDelete = (id: number) => {
-    deleteTimeEngine(id).then(onRefresh)
-  }
+  const { run: handleDelete } = useRequest(deleteTimeEngine, {
+    manual: true,
+    onSuccess: () => {
+      onRefresh()
+    }
+  })
 
-  const onChangeStatus = (hookId: number, status: Status) => {
-    updateTimeEngineStatus({ ids: [hookId], status }).then(onRefresh)
+  const onChangeStatus = (hookId: number, status: GlobalStatusKey) => {
+    console.log('onChangeStatus', hookId, status)
+    // updateTimeEngineStatus({ ids: [hookId], status }).then(onRefresh)
   }
 
   const onHandleMenuOnClick = (item: TimeEngineItem, key: ActionKey) => {
@@ -98,27 +106,27 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
         handleEditModal(item)
         break
       case ActionKey.DELETE:
-        handleDelete(item.id)
+        handleDelete({ timeEngineId: item.timeEngineId })
         break
       case ActionKey.DETAIL:
         onOpenDetailModal(item)
         break
       case ActionKey.DISABLE:
-        onChangeStatus(item.id, Status.StatusDisable)
+        onChangeStatus(item.timeEngineId, 'GLOBAL_STATUS_DISABLE')
         break
       case ActionKey.ENABLE:
-        onChangeStatus(item.id, Status.StatusEnable)
+        onChangeStatus(item.timeEngineId, 'GLOBAL_STATUS_ENABLE')
         break
       default:
         break
     }
   }
 
-  const handleTurnPage = (pageNum: number, pageSize: number) => {
+  const handleTurnPage = (page: number, pageSize: number) => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum,
+        page,
         pageSize
       }
     })
@@ -139,14 +147,20 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
   })
 
   useEffect(() => {
+    console.log('searchParams', searchParams)
     handleGetList(searchParams)
   }, [searchParams, refresh, handleGetList])
 
   return (
     <>
-      <EngineEditModal open={showModal} engineId={Detail?.id} onCancel={closeEditModal} onOk={handleEditModalOnOk} />
+      <EngineEditModal
+        open={showModal}
+        engineId={Detail?.timeEngineId}
+        onCancel={closeEditModal}
+        onOk={handleEditModalOnOk}
+      />
       <EngineDetailModal
-        Id={Detail?.id || 0}
+        Id={Detail?.timeEngineId || 0}
         open={openDetailModal}
         onCancel={onCloseDetailModal}
         onOk={onCloseDetailModal}
@@ -207,7 +221,7 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
               columns={columns}
               handleTurnPage={handleTurnPage}
               pageSize={searchParams.pagination.pageSize}
-              pageNum={searchParams.pagination.pageNum}
+              pageNum={searchParams.pagination.page}
               showSizeChanger={true}
               style={{
                 background: token.colorBgContainer,

@@ -1,6 +1,6 @@
-import { HookApp, Status } from '@/api/enum'
-import { ActionKey, HookAppData, StatusData } from '@/api/global'
-import { AlarmHookItem } from '@/api/model-types'
+import { NoticeHookItem } from '@/api2/common.types'
+import { ActionKey, GlobalStatus, HookAPP } from '@/api2/enum'
+import { GlobalStatusData, HookAppData } from '@/api2/global'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
 import { Avatar, Badge, Button, Space } from 'antd'
@@ -27,17 +27,17 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(StatusData).map(([key, value]) => {
+        options: Object.entries(GlobalStatus).map(([key, value]) => {
           return {
-            label: value.text,
-            value: +key
+            label: value,
+            value: key
           }
         })
       }
     }
   },
   {
-    name: 'hookApp',
+    name: 'app',
     label: '类型',
     dataProps: {
       type: 'select',
@@ -46,12 +46,12 @@ export const formList: SearchFormItem[] = [
         allowClear: true,
         mode: 'multiple',
         options: Object.entries(HookAppData).map(([key, value]) => {
-          const { label, icon } = value
+          const { text, icon } = value
           return {
             label: (
               <Space direction='horizontal'>
                 <Avatar size='small' shape='square' icon={icon} />
-                {label}
+                {text}
               </Space>
             ),
             value: +key
@@ -63,15 +63,15 @@ export const formList: SearchFormItem[] = [
 ]
 
 interface NotifyHookColumnProps {
-  onHandleMenuOnClick: (item: AlarmHookItem, key: ActionKey) => void
+  onHandleMenuOnClick: (item: NoticeHookItem, key: ActionKey) => void
   current: number
   pageSize: number
 }
 
-export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<AlarmHookItem> => {
+export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeHookItem> => {
   const { onHandleMenuOnClick, current, pageSize } = props
-  const tableOperationItems = (record: AlarmHookItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
+  const tableOperationItems = (record: NoticeHookItem): MoreMenuProps['items'] => [
+    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -125,25 +125,25 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<AlarmHo
       }
     },
     {
+      title: '类型',
+      dataIndex: 'app',
+      key: 'app',
+      width: 100,
+      render: (app: HookAPP) => {
+        const { text, icon } = HookAppData[app]
+        return (
+          <Space direction='horizontal'>
+            <Avatar size='small' shape='square' icon={icon} />
+            {text}
+          </Space>
+        )
+      }
+    },
+    {
       title: '名称',
       dataIndex: 'name',
       key: 'name',
       width: 200
-    },
-    {
-      title: '类型',
-      dataIndex: 'hookApp',
-      key: 'hookApp',
-      width: 160,
-      render: (hookApp: HookApp) => {
-        const { label, icon } = HookAppData[hookApp]
-        return (
-          <Space direction='horizontal'>
-            <Avatar size='small' shape='square' icon={icon} />
-            {label}
-          </Space>
-        )
-      }
     },
     {
       title: '状态',
@@ -151,9 +151,8 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<AlarmHo
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
-        return <Badge color={color} text={text} />
+      render: (status: GlobalStatus) => {
+        return <Badge {...GlobalStatusData[status]} />
       }
     },
     {
@@ -180,7 +179,7 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<AlarmHo
       ellipsis: true,
       fixed: 'right',
       width: 120,
-      render: (record: AlarmHookItem) => (
+      render: (record: NoticeHookItem) => (
         <Space size={20}>
           <Button size='small' type='link' onClick={() => onHandleMenuOnClick(record, ActionKey.DETAIL)}>
             详情

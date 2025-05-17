@@ -1,10 +1,14 @@
-import { type ListDatasourceRequest, listDatasource } from '@/api/datasource'
-import { DatasourceType } from '@/api/enum'
-import type { DatasourceItem } from '@/api/model-types'
+import { TeamMetricDatasourceItem } from '@/api2/common.types'
+import { listTeamMetricDatasource } from '@/api2/team/team-datasource'
+import {
+  defaultSearchTeamMetricDatasourceParams,
+  type ListTeamMetricDatasourceRequest
+} from '@/api2/team/team-datasource.types'
 import useStorage from '@/hooks/storage'
+import { useRequest } from 'ahooks'
 import { Button, Empty, Input, Menu, Tabs, type TabsProps, theme } from 'antd'
 import type React from 'react'
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { AlarmTemplate } from './alarm-template'
 import { Basics } from './basics'
 import { EditModal } from './edit-modal'
@@ -13,36 +17,33 @@ import { TimelyQuery } from './timely-query'
 
 const { useToken } = theme
 
-const defaultSearchDatasourceParams: ListDatasourceRequest = {
-  datasourceType: DatasourceType.DatasourceTypeMetric,
-  pagination: {
-    pageNum: 1,
-    pageSize: 100
-  }
-}
-
-let searchTimer: NodeJS.Timeout | null = null
 const Metric: React.FC = () => {
   const { token } = useToken()
 
-  const [datasource, setDatasource] = useState<DatasourceItem[]>([])
-  const [datasourceDetail, setDatasourceDetail] = useState<DatasourceItem>()
+  const [datasource, setDatasource] = useState<TeamMetricDatasourceItem[]>([])
+  const [datasourceDetail, setDatasourceDetail] = useState<TeamMetricDatasourceItem>()
 
-  const [searchDatasourceParams, setSearchDatasourceParams] =
-    useState<ListDatasourceRequest>(defaultSearchDatasourceParams)
+  const [searchDatasourceParams, setSearchDatasourceParams] = useState<ListTeamMetricDatasourceRequest>(
+    defaultSearchTeamMetricDatasourceParams
+  )
   const [openAddModal, setOpenAddModal] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const [editId, setEditId] = useState<number>()
   const [tabKey, setTabKey] = useStorage<string>('metricDatasourceTab', 'basics')
   const [expr, setExpr] = useStorage<string>('timelyQueryExpr', '')
 
+  const { run: handleDatasourceSearch } = useRequest(() => listTeamMetricDatasource(searchDatasourceParams), {
+    onSuccess: (res) => {
+      setDatasource(res.items || [])
+    }
+  })
   const handleRefresh = () => {
     setRefresh((prev) => !prev)
   }
 
   const editDataSource = () => {
     setOpenAddModal(true)
-    setEditId(datasourceDetail?.id)
+    setEditId(datasourceDetail?.datasourceId)
   }
 
   const handleToTimelyQuery = (expr: string) => {
@@ -91,19 +92,8 @@ const Metric: React.FC = () => {
   ]
 
   const handleDatasourceChange = (key: number) => {
-    setDatasourceDetail(datasource.find((item) => item.id === key))
+    setDatasourceDetail(datasource.find((item) => item.datasourceId === key))
   }
-
-  const handleDatasourceSearch = useCallback(() => {
-    if (searchTimer) {
-      clearTimeout(searchTimer)
-    }
-    searchTimer = setTimeout(() => {
-      listDatasource(searchDatasourceParams).then((res) => {
-        setDatasource(res?.list || [])
-      })
-    }, 500)
-  }, [searchDatasourceParams])
 
   const handleEditModalOnOK = () => {
     handleEditModalOnCancel()
@@ -134,6 +124,7 @@ const Metric: React.FC = () => {
   useEffect(() => {
     handleDatasourceSearch()
   }, [refresh, handleDatasourceSearch])
+
   return (
     <div className='p-3 flex flex-row gap-3 h-full w-full'>
       <EditModal
@@ -157,12 +148,12 @@ const Metric: React.FC = () => {
         <Menu
           items={datasource?.map((item) => {
             return {
-              key: item.id,
+              key: `${item.datasourceId}`,
               label: item.name
             }
           })}
           style={{ borderInlineEnd: 'none' }}
-          selectedKeys={[`${datasourceDetail?.id}`]}
+          selectedKeys={[`${datasourceDetail?.datasourceId}`]}
           className='w-full flex-1 overflow-auto text-start'
           onSelect={(k) => handleDatasourceChange(+k.key)}
         />

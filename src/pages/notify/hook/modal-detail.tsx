@@ -1,7 +1,6 @@
-import { HookApp } from '@/api/enum'
-import { HookAppData, StatusData } from '@/api/global'
-import { AlarmHookItem } from '@/api/model-types'
-import { getHook } from '@/api/notify/hook'
+import { NoticeHookItem } from '@/api2/common.types'
+import { GlobalStatusData, HookAppData } from '@/api2/global'
+import { getTeamNoticeHook } from '@/api2/team/team-notice'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
@@ -16,11 +15,11 @@ export interface HookDetailModalProps {
 export function HookDetailModal(props: HookDetailModalProps) {
   const { hookId, open, onCancel, onOk } = props
 
-  const [detail, setDetail] = useState<AlarmHookItem>()
-  const { run: getHookDetail } = useRequest((id: number) => getHook({ id }), {
+  const [detail, setDetail] = useState<NoticeHookItem>()
+  const { run: getHookDetail } = useRequest(getTeamNoticeHook, {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
-      setDetail(res.detail)
+      setDetail(res)
     }
   })
 
@@ -32,30 +31,26 @@ export function HookDetailModal(props: HookDetailModalProps) {
     },
     {
       label: '类型',
-      children: (
+      children: !!detail && (
         <Space direction='horizontal'>
-          <Avatar size='small' shape='square' icon={HookAppData[detail?.hookApp || HookApp.HOOK_APP_UNKNOWN]?.icon} />
-          {HookAppData[detail?.hookApp || HookApp.HOOK_APP_UNKNOWN].label}
+          <Avatar size='small' shape='square' icon={HookAppData[detail.app]?.icon} />
+          {HookAppData[detail.app].text}
         </Space>
       ),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },
     {
       label: '状态',
-      children: detail ? (
-        <Badge color={StatusData[detail?.status].color} text={StatusData[detail?.status].text} />
-      ) : (
-        '-'
-      ),
+      children: detail ? <Badge {...GlobalStatusData[detail.status]} /> : '-',
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },
     {
       label: '创建人',
       children: (
-        <Tooltip title={detail?.creator?.nickname || detail?.creator?.name}>
+        <Tooltip title={detail?.creator?.nickname || detail?.creator?.username}>
           <div className='flex items-center gap-2'>
-            <Avatar src={detail?.creator?.avatar}>{detail?.creator?.nickname || detail?.creator?.name}</Avatar>
-            {detail?.creator?.nickname || detail?.creator?.name}
+            <Avatar src={detail?.creator?.avatar}>{detail?.creator?.nickname || detail?.creator?.username}</Avatar>
+            {detail?.creator?.nickname || detail?.creator?.username}
           </div>
         </Tooltip>
       ),
@@ -91,7 +86,7 @@ export function HookDetailModal(props: HookDetailModalProps) {
 
   useEffect(() => {
     if (hookId && open) {
-      getHookDetail(hookId)
+      getHookDetail({ hookId })
     }
   }, [hookId, open, getHookDetail])
 
