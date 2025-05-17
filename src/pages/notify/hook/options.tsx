@@ -4,7 +4,7 @@ import { GlobalStatusData, HookAppData, MethodData } from '@/api2/global'
 import { DataFromItem } from '@/components/data/form'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
-import { Avatar, Badge, Button, Space, Tooltip, Typography } from 'antd'
+import { Badge, Button, Space, Tooltip, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 
 const { Text } = Typography
@@ -18,7 +18,9 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '名称模糊查询',
         allowClear: true,
-        autoComplete: 'off'
+        autoComplete: 'off',
+        maxLength: 20,
+        showCount: true
       }
     }
   },
@@ -30,17 +32,19 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(GlobalStatusData).map(([key, value]) => {
-          return {
-            label: value.text,
-            value: key
-          }
-        })
+        options: Object.entries(GlobalStatusData)
+          .filter(([key]) => +key !== GlobalStatus.GLOBAL_STATUS_UNKNOWN)
+          .map(([key, value]) => {
+            return {
+              label: <Badge {...value} />,
+              value: +key
+            }
+          })
       }
     }
   },
   {
-    name: 'app',
+    name: 'apps',
     label: '类型',
     dataProps: {
       type: 'select',
@@ -48,18 +52,21 @@ export const formList: SearchFormItem[] = [
         placeholder: '类型',
         allowClear: true,
         mode: 'multiple',
-        options: Object.entries(HookAppData).map(([key, value]) => {
-          const { text, icon } = value
-          return {
-            label: (
-              <Space direction='horizontal'>
-                <Avatar size='small' shape='square' icon={icon} />
-                {text}
-              </Space>
-            ),
-            value: key
-          }
-        })
+        maxTagCount: 1,
+        options: Object.entries(HookAppData)
+          .filter(([key]) => +key !== HookAPP.HOOK_APP_UNKNOWN)
+          .map(([key, value]) => {
+            const { text, icon } = value
+            return {
+              label: (
+                <Space direction='horizontal'>
+                  {icon}
+                  {text}
+                </Space>
+              ),
+              value: +key
+            }
+          })
       }
     }
   }
@@ -72,9 +79,9 @@ interface NotifyHookColumnProps {
 }
 
 export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeHookItem> => {
-  const { onHandleMenuOnClick, current, pageSize } = props
+  const { onHandleMenuOnClick } = props
   const tableOperationItems = (record: NoticeHookItem): MoreMenuProps['items'] => [
-    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
+    record.status !== GlobalStatus.GLOBAL_STATUS_ENABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -137,12 +144,12 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeH
       title: '名称',
       dataIndex: 'name',
       key: 'name',
-      width: 200,
+      width: 220,
       render: (text: string, record: NoticeHookItem) => {
         return (
           <Space>
             <Badge color={GlobalStatusData[record.status].color} />
-            <Text style={{ width: 180 }} ellipsis={{ tooltip: true }}>
+            <Text style={{ width: 180 }} ellipsis={true}>
               {text}
             </Text>
           </Space>
@@ -153,7 +160,6 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeH
       title: '描述',
       dataIndex: 'remark',
       key: 'remark',
-      width: 300,
       ellipsis: true,
       render: (text: string) => {
         return text || '-'
@@ -223,7 +229,9 @@ export const saveFormList: (DataFromItem | DataFromItem[])[] = [
       type: 'input',
       span: 18,
       props: {
-        placeholder: '请输入名称'
+        placeholder: '请输入名称',
+        maxLength: 64,
+        showCount: true
       },
       formProps: {
         rules: [
@@ -256,7 +264,9 @@ export const saveFormList: (DataFromItem | DataFromItem[])[] = [
       type: 'input',
       span: 18,
       props: {
-        placeholder: '请输入URL'
+        placeholder: '请输入URL',
+        maxLength: 256,
+        showCount: true
       },
       formProps: {
         rules: [
@@ -270,9 +280,11 @@ export const saveFormList: (DataFromItem | DataFromItem[])[] = [
   {
     name: 'secret',
     label: '密钥',
-    type: 'input',
+    type: 'textarea',
     props: {
-      placeholder: '请输入密钥'
+      placeholder: '请输入密钥',
+      maxLength: 255,
+      showCount: true
     }
   },
   {

@@ -61,7 +61,7 @@ const Hook: React.FC<HookProps> = () => {
   const { run: handleGetHookList, loading } = useRequest(
     (params: ListTeamNoticeHookRequest) => listTeamNoticeHook(params),
     {
-      manual: true, // 手动触发请求
+      manual: true,
       onSuccess: (res) => {
         setDatasource(res?.items || [])
         setTotal(res?.pagination?.total || 0)
@@ -201,7 +201,7 @@ const Hook: React.FC<HookProps> = () => {
                 添加
               </Button>
               <Button disabled>批量导入</Button>
-              <Button color='default' variant='filled' onClick={onRefresh}>
+              <Button color='default' variant='filled' onClick={onRefresh} loading={loading}>
                 刷新
               </Button>
             </Space>
