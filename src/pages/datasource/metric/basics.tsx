@@ -2,13 +2,10 @@ import type { TeamMetricDatasourceItem } from '@/api2/common.types'
 import { GlobalStatus } from '@/api2/enum'
 import { DatasourceDriverMetricData } from '@/api2/global'
 import { updateTeamMetricDatasourceStatus } from '@/api2/team/team-datasource'
-import { GlobalContext } from '@/utils/context'
 import { RedoOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Button, Descriptions, type DescriptionsProps, Space, Switch, Tag, Typography, theme as antdTheme } from 'antd'
 import type React from 'react'
-import { useContext } from 'react'
-import ReactJson from 'react-json-view'
 
 export interface BasicsProps {
   datasource?: TeamMetricDatasourceItem
@@ -20,7 +17,6 @@ const { useToken } = antdTheme
 
 export const Basics: React.FC<BasicsProps> = (props) => {
   const { datasource, refresh, editDataSource } = props
-  const { theme } = useContext(GlobalContext)
   const { token } = useToken()
 
   const { run: updateStatus, loading: updateStatusLoading } = useRequest(updateTeamMetricDatasourceStatus, {
@@ -111,12 +107,12 @@ export const Basics: React.FC<BasicsProps> = (props) => {
         <Space direction='vertical'>
           <div>
             <div className='flex flex-row items-center gap-2'>
-              <b>用户名：</b>
-              {datasource?.basicAuth?.username}
+              用户名：
+              <Typography.Text type='secondary'>{datasource?.basicAuth?.username}</Typography.Text>
             </div>
             <div className='flex flex-row items-center gap-2'>
-              <b>密码：</b>
-              {datasource?.basicAuth?.password}
+              密码：
+              <Typography.Text type='secondary'>{datasource?.basicAuth?.password}</Typography.Text>
             </div>
           </div>
         </Space>
@@ -128,9 +124,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       children: (
         <div className='flex flex-row items-center gap-2'>
           {datasource?.ca ? (
-            <Typography.Text type='secondary' copyable={{ text: datasource?.ca }}>
-              {datasource?.ca}
-            </Typography.Text>
+            <Typography.Text type='secondary'>{datasource?.ca}</Typography.Text>
           ) : (
             <Typography.Text type='secondary'>-</Typography.Text>
           )}
@@ -141,13 +135,24 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       label: 'TLS',
       span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
       children: (
-        <ReactJson
-          src={datasource?.tls || {}}
-          name={false}
-          displayDataTypes={false}
-          theme={theme === 'dark' ? 'bright' : 'bright:inverted'}
-          iconStyle='square'
-        />
+        <Space direction='vertical'>
+          <div>
+            服务器名称：
+            <Typography.Text type='secondary'>{datasource?.tls?.serverName}</Typography.Text>
+          </div>
+          <div>
+            客户端证书：
+            <Typography.Text type='secondary'>{datasource?.tls?.clientCert}</Typography.Text>
+          </div>
+          <div>
+            客户端密钥：
+            <Typography.Text type='secondary'>{datasource?.tls?.clientKey}</Typography.Text>
+          </div>
+          <div>
+            跳过证书验证：
+            <Typography.Text type='secondary'>{datasource?.tls?.skipVerify ? '是' : '否'}</Typography.Text>
+          </div>
+        </Space>
       )
     },
     {
