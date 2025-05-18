@@ -1,5 +1,5 @@
 import { TeamMetricDatasourceItem } from '@/api2/common.types'
-import { baseURL } from '@/api2/request'
+import request, { baseURL } from '@/api2/request'
 import { MetricsChart } from '@/components/chart/metrics-charts'
 import PromQLInput from '@/components/data/child/prom-ql'
 import { DataFrom } from '@/components/data/form'
@@ -38,7 +38,7 @@ const { Paragraph } = Typography
 
 let searchTimeout: NodeJS.Timeout | null = null
 export const TimelyQuery: React.FC<TimelyQueryProps> = (props) => {
-  const { teamInfo, theme } = useContext(GlobalContext)
+  const { theme } = useContext(GlobalContext)
   const { datasource, apiPath = 'api/v1', expr, setExpr } = props
   const [loading, setLoading] = useState(false)
   const [promDetailData, setPromDetailData] = React.useState<DetailValue[]>([])
@@ -48,7 +48,7 @@ export const TimelyQuery: React.FC<TimelyQueryProps> = (props) => {
   const [timeRange, setTimeRange] = useState<Dayjs[]>([dayjs().subtract(5, 'minute'), dayjs()])
   const [showArea, setShowArea] = useState(true)
   const [step, setStep] = useState(14)
-  const pathPrefix = `${baseURL}/datasource/metric/${teamInfo?.teamId || 0}/${datasource?.datasourceId}`
+  const pathPrefix = `${baseURL}/datasource/metric/${datasource?.datasourceId || 0}`
 
   const transformedData = React.useMemo(
     () => transformMetricsData(metricsData?.data || { result: [], resultType: '' }),
@@ -210,8 +210,6 @@ export const TimelyQuery: React.FC<TimelyQueryProps> = (props) => {
       query: expr
     })
 
-    const abortController = new AbortController()
-
     const start = timeRange?.[0]?.unix() || dayjs().subtract(5, 'minute').unix()
     const end = timeRange?.[1]?.unix() || dayjs().unix()
 
@@ -227,20 +225,14 @@ export const TimelyQuery: React.FC<TimelyQueryProps> = (props) => {
         params.append('time', dayjs().unix().toString())
     }
 
-    fetch(`${pathPrefix}/${apiPath}/${path}?${params}`, {
-      cache: 'no-store',
-      credentials: 'same-origin',
-      signal: abortController.signal,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then((resp) => resp?.json() || {})
+    request
+      .GET(`${pathPrefix}/${apiPath}/${path}?${params}`)
       .catch((err) => {
         console.log('err', err)
         return {}
       })
-      .then((query) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .then((query: any) => {
         if (query.data) {
           switch (query.data?.resultType) {
             case 'matrix':

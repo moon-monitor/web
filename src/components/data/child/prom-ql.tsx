@@ -130,7 +130,17 @@ const PromQLInput: React.FC<PromQLInputProps> = (props) => {
       completeStrategy: new HistoryCompleteStrategy(
         newCompleteStrategy({
           remote: {
-            url: prefix
+            url: prefix,
+            fetchFn: async (input: RequestInfo) => {
+              const response = await request.GET(input as string)
+              return new Response(JSON.stringify(response), {
+                status: 200,
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+            },
+            httpMethod: 'GET'
           }
         }),
         []
