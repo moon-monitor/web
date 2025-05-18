@@ -12,21 +12,18 @@ import {
   ViewUpdate
 } from '@codemirror/view'
 
+import request from '@/api2/request'
+import { GlobalContext } from '@/utils/context'
+import { ThunderboltOutlined } from '@ant-design/icons'
 import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete'
 import { lintKeymap } from '@codemirror/lint'
 import { highlightSelectionMatches } from '@codemirror/search'
 import { PromQLExtension } from '@prometheus-io/codemirror-promql'
 import { newCompleteStrategy } from '@prometheus-io/codemirror-promql/dist/esm/complete'
 import { Button, Form, Input, theme } from 'antd'
+import type { ValidateStatus } from 'antd/es/form/FormItem'
 import { baseTheme, darkPromqlHighlighter, darkTheme, lightTheme, promqlHighlighter } from './prom/CMTheme'
 import { HistoryCompleteStrategy } from './prom/HistoryCompleteStrategy'
-
-import { ThunderboltOutlined } from '@ant-design/icons'
-
-import type { ValidateStatus } from 'antd/es/form/FormItem'
-
-import { GlobalContext } from '@/utils/context'
-
 import './prom/index.css'
 
 export type PromValidate = {
@@ -71,16 +68,13 @@ export const formatExpressionFunc = (pathPrefix: string, doc?: string) => {
   if (!prefix || prefix === '') {
     return Promise.reject('请配置一个数据源用于智能提示')
   }
-  return fetch(
-    `${prefix}/api/v1/query?${new URLSearchParams({
-      query: doc || ''
-    })}`,
-    {
-      cache: 'no-store',
-      credentials: 'same-origin'
-    }
-  )
-    .then((resp) => {
+  return request
+    .GET(
+      `${prefix}/api/v1/query?${new URLSearchParams({
+        query: doc || ''
+      })}`
+    )
+    .then((resp: any) => {
       if (!resp.ok && resp.status !== 400) {
         return Promise.reject(`HTTP 请求失败: ${resp.statusText}`)
       }

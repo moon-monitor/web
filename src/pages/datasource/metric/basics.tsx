@@ -103,7 +103,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
     {
       label: '基础认证配置',
       span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
-      children: (
+      children: datasource?.basicAuth ? (
         <Space direction='vertical'>
           <div>
             <div className='flex flex-row items-center gap-2'>
@@ -116,6 +116,8 @@ export const Basics: React.FC<BasicsProps> = (props) => {
             </div>
           </div>
         </Space>
+      ) : (
+        <Typography.Text type='secondary'>-</Typography.Text>
       )
     },
     {
@@ -134,7 +136,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
     {
       label: 'TLS',
       span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
-      children: (
+      children: datasource?.tls ? (
         <Space direction='vertical'>
           <div>
             服务器名称：
@@ -153,6 +155,8 @@ export const Basics: React.FC<BasicsProps> = (props) => {
             <Typography.Text type='secondary'>{datasource?.tls?.skipVerify ? '是' : '否'}</Typography.Text>
           </div>
         </Space>
+      ) : (
+        <Typography.Text type='secondary'>-</Typography.Text>
       )
     },
     {
