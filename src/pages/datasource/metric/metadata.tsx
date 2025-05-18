@@ -111,7 +111,14 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
       dataIndex: 'labelCount',
       key: 'labelCount',
       width: 120,
-      align: 'center'
+      align: 'center',
+      render: (_, record) => {
+        return (
+          <Button type='link' size='small' onClick={() => handleLabel(record)}>
+            {record.labels?.length > 0 ? record.labels?.length : '-'}
+          </Button>
+        )
+      }
     },
     {
       title: '操作',

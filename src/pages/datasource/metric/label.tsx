@@ -20,13 +20,28 @@ export const Label: React.FC<LabelProps> = (props) => {
       dataIndex: 'key',
       key: 'key',
       ellipsis: true,
-      width: 400
+      width: '40%',
+      render(_, record) {
+        return (
+          <div
+            className='text-sm text-gray-500'
+            onClick={() => {
+              navigator.clipboard.writeText(record.key).then(() => {
+                message.success('复制成功')
+              })
+            }}
+          >
+            {record.key}
+          </div>
+        )
+      }
     },
     {
       title: '标签值',
       dataIndex: 'values',
       key: 'values',
       ellipsis: true,
+      width: '60%',
       render(_, record) {
         return (
           <Space size={4} wrap>
