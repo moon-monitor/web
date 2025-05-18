@@ -5,7 +5,7 @@ import { updateTeamMetricDatasourceStatus } from '@/api2/team/team-datasource'
 import { GlobalContext } from '@/utils/context'
 import { RedoOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
-import { Button, Descriptions, type DescriptionsProps, Switch, Tag, Typography, theme as antdTheme } from 'antd'
+import { Button, Descriptions, type DescriptionsProps, Space, Switch, Tag, Typography, theme as antdTheme } from 'antd'
 import type React from 'react'
 import { useContext } from 'react'
 import ReactJson from 'react-json-view'
@@ -78,22 +78,76 @@ export const Basics: React.FC<BasicsProps> = (props) => {
     {
       label: '地址',
       span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
-      children: <Tag color={token.colorPrimary}>{datasource?.endpoint}</Tag>
+      children: (
+        <Typography.Text type='secondary' copyable={{ text: datasource?.endpoint }}>
+          <Tag color={token.colorPrimary}>{datasource?.endpoint}</Tag>
+        </Typography.Text>
+      )
     },
 
     {
-      label: '配置明细',
+      label: '请求头',
       span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
       children: (
         <>
-          <ReactJson
-            src={datasource?.extra || {}}
-            name={false}
-            displayDataTypes={false}
-            theme={theme === 'dark' ? 'bright' : 'bright:inverted'}
-            iconStyle='square'
-          />
+          {datasource?.headers?.length ? (
+            <Space direction='vertical'>
+              {datasource?.headers?.map((header) => (
+                <Tag key={header.key} color={token.colorPrimary}>
+                  <b> {header.key}</b>: {header.value}
+                </Tag>
+              ))}
+            </Space>
+          ) : (
+            <Typography.Text type='secondary'>-</Typography.Text>
+          )}
         </>
+      )
+    },
+    {
+      label: '基础认证配置',
+      span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
+      children: (
+        <Space direction='vertical'>
+          <div>
+            <div className='flex flex-row items-center gap-2'>
+              <b>用户名：</b>
+              {datasource?.basicAuth?.username}
+            </div>
+            <div className='flex flex-row items-center gap-2'>
+              <b>密码：</b>
+              {datasource?.basicAuth?.password}
+            </div>
+          </div>
+        </Space>
+      )
+    },
+    {
+      label: '自签证书',
+      span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
+      children: (
+        <div className='flex flex-row items-center gap-2'>
+          {datasource?.ca ? (
+            <Typography.Text type='secondary' copyable={{ text: datasource?.ca }}>
+              {datasource?.ca}
+            </Typography.Text>
+          ) : (
+            <Typography.Text type='secondary'>-</Typography.Text>
+          )}
+        </div>
+      )
+    },
+    {
+      label: 'TLS',
+      span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
+      children: (
+        <ReactJson
+          src={datasource?.tls || {}}
+          name={false}
+          displayDataTypes={false}
+          theme={theme === 'dark' ? 'bright' : 'bright:inverted'}
+          iconStyle='square'
+        />
       )
     },
     {
@@ -101,7 +155,13 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
       children: (
         <>
-          <Typography.Text type='secondary'>{datasource?.remark}</Typography.Text>
+          {datasource?.remark ? (
+            <Typography.Text type='secondary' copyable={{ text: datasource?.remark }}>
+              {datasource?.remark}
+            </Typography.Text>
+          ) : (
+            <Typography.Text type='secondary'>-</Typography.Text>
+          )}
         </>
       )
     }

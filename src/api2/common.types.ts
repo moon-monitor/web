@@ -724,9 +724,10 @@ export interface BasicAuth {
  * api.palace.common.TLS
  */
 export interface TLS {
-  clientCert?: string
-  client?: string
   serverName?: string
+  clientCert?: string
+  clientKey?: string
+  skipVerify?: boolean
 }
 
 /**
