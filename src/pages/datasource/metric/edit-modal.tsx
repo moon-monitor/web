@@ -59,9 +59,14 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
 
   useEffect(() => {
     if (open) {
+      setConfigState({
+        basicAuth: false,
+        tls: false,
+        ca: false
+      })
       handleGetDatasource()
     }
-  }, [open, handleGetDatasource])
+  }, [open, handleGetDatasource, setConfigState])
 
   const handleOnCancel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     form.resetFields()

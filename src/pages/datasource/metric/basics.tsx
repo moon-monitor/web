@@ -1,9 +1,11 @@
 import type { TeamMetricDatasourceItem } from '@/api2/common.types'
 import { GlobalStatus } from '@/api2/enum'
 import { DatasourceDriverMetricData } from '@/api2/global'
+import { updateTeamMetricDatasourceStatus } from '@/api2/team/team-datasource'
 import { GlobalContext } from '@/utils/context'
 import { RedoOutlined } from '@ant-design/icons'
-import { Badge, Button, Descriptions, type DescriptionsProps, Tag, Typography, theme as antdTheme } from 'antd'
+import { useRequest } from 'ahooks'
+import { Button, Descriptions, type DescriptionsProps, Switch, Tag, Typography, theme as antdTheme } from 'antd'
 import type React from 'react'
 import { useContext } from 'react'
 import ReactJson from 'react-json-view'
@@ -21,6 +23,13 @@ export const Basics: React.FC<BasicsProps> = (props) => {
   const { theme } = useContext(GlobalContext)
   const { token } = useToken()
 
+  const { run: updateStatus, loading: updateStatusLoading } = useRequest(updateTeamMetricDatasourceStatus, {
+    manual: true,
+    onSuccess: () => {
+      refresh?.()
+    }
+  })
+
   if (!datasource) return null
 
   const items: DescriptionsProps['items'] = [
@@ -31,9 +40,17 @@ export const Basics: React.FC<BasicsProps> = (props) => {
     {
       label: '状态',
       children: (
-        <Badge
-          status={datasource?.status === GlobalStatus.GLOBAL_STATUS_ENABLE ? 'success' : 'error'}
-          text={datasource?.status === GlobalStatus.GLOBAL_STATUS_ENABLE ? '启用' : '禁用'}
+        <Switch
+          loading={updateStatusLoading}
+          checked={datasource?.status === GlobalStatus.GLOBAL_STATUS_ENABLE}
+          checkedChildren='启用'
+          unCheckedChildren='禁用'
+          onChange={(checked) => {
+            updateStatus({
+              datasourceId: datasource.datasourceId,
+              status: checked ? GlobalStatus.GLOBAL_STATUS_ENABLE : GlobalStatus.GLOBAL_STATUS_DISABLE
+            })
+          }}
         />
       )
     },
