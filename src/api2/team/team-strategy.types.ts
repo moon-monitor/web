@@ -1,4 +1,5 @@
 import {
+  KeyValueItem,
   PaginationReply,
   PaginationRequest,
   TeamMetricDatasourceItem,
@@ -24,14 +25,14 @@ export interface DeleteTeamStrategyRequest {
  * retrieving a team strategy
  */
 export interface GetTeamMetricStrategyReply {
-  annotations?: { [key: string]: string }
-  base?: TeamStrategyItem
-  creator?: UserBaseItem
-  datasource?: TeamMetricDatasourceItem[]
-  expr?: string
-  labels?: { [key: string]: string }
-  StrategyMetricId?: number
-  strategyMetricRules?: TeamStrategyMetricItemRuleItem[]
+  annotations: { summary: string; description: string }
+  base: TeamStrategyItem
+  creator: UserBaseItem
+  datasource: TeamMetricDatasourceItem[]
+  expr: string
+  labels: KeyValueItem[]
+  StrategyMetricId: number
+  strategyMetricRules: TeamStrategyMetricItemRuleItem[]
 }
 
 export interface GetTeamMetricStrategyRequest {

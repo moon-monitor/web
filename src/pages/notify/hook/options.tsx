@@ -1,6 +1,6 @@
 import { NoticeHookItem } from '@/api2/common.types'
 import { ActionKey, GlobalStatus, HookAPP, HTTPMethod } from '@/api2/enum'
-import { GlobalStatusData, HookAppData, MethodData } from '@/api2/global'
+import { GlobalStatusData, HookAppData, HTTPMethodData } from '@/api2/global'
 import { DataFromItem } from '@/components/data/form'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
@@ -208,7 +208,7 @@ export const saveFormList: (DataFromItem | DataFromItem[])[] = [
       props: {
         placeholder: '请选择类型',
         options: Object.entries(HookAppData)
-          .filter(([key]) => key !== HookAPP.HOOK_APP_UNKNOWN.toString())
+          .filter(([key]) => +key !== HookAPP.HOOK_APP_UNKNOWN)
           .map(([key, value]) => ({
             label: (
               <Space direction='horizontal'>
@@ -249,8 +249,8 @@ export const saveFormList: (DataFromItem | DataFromItem[])[] = [
       span: 6,
       props: {
         placeholder: '请选择请求方法',
-        options: Object.entries(MethodData)
-          .filter(([key]) => key !== HTTPMethod.HTTP_METHOD_UNKNOWN.toString())
+        options: Object.entries(HTTPMethodData)
+          .filter(([key]) => +key !== HTTPMethod.HTTP_METHOD_UNKNOWN)
           .map(([key, value]) => ({ label: <Badge {...value} />, value: +key }))
       },
       formProps: {

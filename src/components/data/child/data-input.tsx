@@ -120,6 +120,7 @@ export interface ButtonInputProps {
   enterButton?: string
   placeholder?: string
   suffix?: React.ReactNode
+  allowClear?: boolean
 }
 
 export const DataInput: FC<DataInputProps> = (props) => {

@@ -1,6 +1,6 @@
-import { DatasourceType } from '@/api/enum'
 import type { TeamMetricDatasourceItem } from '@/api2/common.types'
-import { DatasourceDriverMetric } from '@/api2/enum'
+import { GlobalStatus } from '@/api2/enum'
+import { DatasourceDriverMetricData } from '@/api2/global'
 import { GlobalContext } from '@/utils/context'
 import { RedoOutlined } from '@ant-design/icons'
 import { Badge, Button, Descriptions, type DescriptionsProps, Tag, Typography, theme as antdTheme } from 'antd'
@@ -32,8 +32,8 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       label: '状态',
       children: (
         <Badge
-          status={datasource?.status === 'GLOBAL_STATUS_ENABLE' ? 'success' : 'error'}
-          text={datasource?.status === 'GLOBAL_STATUS_ENABLE' ? '启用' : '禁用'}
+          status={datasource?.status === GlobalStatus.GLOBAL_STATUS_ENABLE ? 'success' : 'error'}
+          text={datasource?.status === GlobalStatus.GLOBAL_STATUS_ENABLE ? '启用' : '禁用'}
         />
       )
     },
@@ -42,8 +42,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       label: '数据源类型',
       children: (
         <div className='flex flex-row items-center gap-2'>
-          <Tag color='blue'>{DatasourceType.DatasourceTypeMetric}</Tag>
-          <Tag color='pink'>{DatasourceDriverMetric[datasource.driver]}</Tag>
+          <Tag color='blue'>{DatasourceDriverMetricData[datasource.driver].text}</Tag>
         </div>
       )
     },

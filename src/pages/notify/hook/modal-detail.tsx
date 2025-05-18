@@ -1,5 +1,5 @@
 import { NoticeHookItem } from '@/api2/common.types'
-import { GlobalStatusData, HookAppData, MethodData } from '@/api2/global'
+import { GlobalStatusData, HookAppData, HTTPMethodData } from '@/api2/global'
 import { getTeamNoticeHook } from '@/api2/team/team-notice'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tooltip, Typography } from 'antd'
@@ -70,7 +70,7 @@ export function HookDetailModal(props: HookDetailModalProps) {
     },
     {
       label: '请求方法',
-      children: detail ? <Badge {...MethodData[detail.method]} /> : '-',
+      children: detail ? <Badge {...HTTPMethodData[detail.method]} /> : '-',
       span: 3
     },
     {

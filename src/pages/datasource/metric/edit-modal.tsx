@@ -1,13 +1,11 @@
-import { StorageType } from '@/api/enum'
-import { HTTPMethod } from '@/api2/enum'
 import { getTeamMetricDatasource, saveTeamMetricDatasource } from '@/api2/team/team-datasource'
 import { SaveTeamMetricDatasourceRequest } from '@/api2/team/team-datasource.types'
-import { DataFrom, type DataFromItem } from '@/components/data/form'
-import { Prometheus, VictoriaMetrics } from '@/components/icon'
+import { DataFrom } from '@/components/data/form'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
-import { useRequest } from 'ahooks'
-import { Button, Col, Form, Input, Modal, type ModalProps, Radio, Row, Space, theme } from 'antd'
+import { useRequest, useSetState } from 'ahooks'
+import { Button, Col, Form, Input, Modal, type ModalProps, Radio, Row, Space, Switch, theme } from 'antd'
 import React, { useCallback, useEffect } from 'react'
+import { formItems } from './options'
 
 export interface EditModalProps extends ModalProps {
   datasourceId?: number
@@ -20,12 +18,23 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
   const { token } = useToken()
   const { onCancel, onOk, open, datasourceId } = props
   const [form] = Form.useForm<SaveTeamMetricDatasourceRequest>()
-  const [loading, setLoading] = React.useState(false)
+  const [configState, setConfigState] = useSetState({
+    basicAuth: false,
+    tls: false,
+    ca: false
+  })
 
   const { run: getDatasourceDetail, loading: getDatasourceDetailLoading } = useRequest(getTeamMetricDatasource, {
     manual: true,
-    onSuccess: ({ detail }) => {
-      form.setFieldsValue({ ...detail })
+    onSuccess: (data) => {
+      if (data) {
+        form.setFieldsValue(data)
+        setConfigState({
+          basicAuth: !!data.basicAuth,
+          tls: !!data.tls,
+          ca: !!data.ca
+        })
+      }
     }
   })
 
@@ -59,89 +68,6 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
     onCancel?.(e)
   }
 
-  const formItems: (DataFromItem | DataFromItem[])[] = [
-    [
-      {
-        label: '数据源名称',
-        name: 'name',
-        type: 'input',
-        props: {
-          placeholder: '请输入数据源名称'
-        },
-        formProps: {
-          rules: [{ required: true, message: '请输入数据源名称' }]
-        }
-      }
-    ],
-    [
-      {
-        label: '存储器类型',
-        name: 'driver',
-        type: 'radio-group',
-        props: {
-          optionType: 'button',
-          options: [
-            {
-              label: (
-                <Space>
-                  <Prometheus width={15} height={15} />
-                  Prometheus
-                </Space>
-              ),
-              value: StorageType.StorageTypePrometheus
-            },
-            {
-              label: (
-                <Space>
-                  <VictoriaMetrics width={15} height={15} />
-                  VictoriaMetrics
-                </Space>
-              ),
-              value: StorageType.StorageTypeVictoriaMetrics
-            }
-          ]
-        },
-        formProps: {
-          rules: [{ required: true, message: '请选择存储器类型' }]
-        }
-      }
-    ],
-    {
-      label: '数据源地址',
-      name: 'endpoint',
-      type: 'button-input',
-      props: {
-        placeholder: '请输入数据源地址'
-      },
-      formProps: {
-        rules: [{ required: true, message: '请输入数据源地址' }]
-      }
-    },
-    [
-      {
-        label: '请求方式',
-        name: 'queryMethod',
-        type: 'radio-group',
-        props: {
-          options: Object.entries(HTTPMethod).map(([key, value]) => ({
-            label: key,
-            value: value
-          }))
-        }
-      }
-    ],
-    {
-      label: '说明信息',
-      name: 'remark',
-      type: 'textarea',
-      props: {
-        placeholder: '请输入数据源说明信息',
-        maxLength: 200,
-        showCount: true
-      }
-    }
-  ]
-
   return (
     <Modal
       {...props}
@@ -149,12 +75,13 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
       open={open}
       onCancel={handleOnCancel}
       onOk={handleOnOk}
-      confirmLoading={loading || saveDatasourceDetailLoading}
+      confirmLoading={saveDatasourceDetailLoading}
       loading={getDatasourceDetailLoading}
+      style={{ minWidth: 800 }}
     >
       <DataFrom props={{ form, layout: 'vertical' }} items={formItems}>
         <Form.Item label='请求头'>
-          <Form.List name={['config', 'headers']}>
+          <Form.List name='headers'>
             {(fields, { add, remove }) => {
               return (
                 <div key={fields.length} className='w-full'>
@@ -162,12 +89,22 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
                     return (
                       <Row gutter={12}>
                         <Col span={12} key={key}>
-                          <Form.Item {...restField} name={[name, 'key']} label={['headers', name, 'key'].join('.')}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'key']}
+                            label={['headers', name, 'key'].join('.')}
+                            rules={[{ required: true, message: '请输入请求头KEY' }]}
+                          >
                             <Input placeholder='请输入请求头KEY' />
                           </Form.Item>
                         </Col>
                         <Col span={11} key={key}>
-                          <Form.Item {...restField} name={[name, 'value']} label={['headers', name, 'value'].join('.')}>
+                          <Form.Item
+                            {...restField}
+                            name={[name, 'value']}
+                            label={['headers', name, 'value'].join('.')}
+                            rules={[{ required: true, message: '请输入请求头VALUE' }]}
+                          >
                             <Input placeholder='请输入请求头VALUE' />
                           </Form.Item>
                         </Col>
@@ -185,83 +122,105 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
             }}
           </Form.List>
         </Form.Item>
-        <Form.Item label='请求参数'>
-          <Form.List name={['config', 'params']}>
-            {(fields, { add, remove }) => {
-              return (
-                <div key={fields.length}>
-                  {fields.map(({ key, name, ...restField }) => {
-                    return (
-                      <Row gutter={12}>
-                        <Col span={12} key={key}>
-                          <Form.Item {...restField} name={[name, 'key']} label={['params', name, 'key'].join('.')}>
-                            <Input placeholder='请输入请求参数KEY' />
-                          </Form.Item>
-                        </Col>
-                        <Col span={11} key={key}>
-                          <Form.Item {...restField} name={[name, 'value']} label={['params', name, 'value'].join('.')}>
-                            <Input placeholder='请输入请求参数VALUE' />
-                          </Form.Item>
-                        </Col>
-                        <Col span={1} className='flex items-center justify-center'>
-                          <MinusCircleOutlined onClick={() => remove(name)} style={{ color: token.colorError }} />
-                        </Col>
-                      </Row>
-                    )
-                  })}
-                  <Button type='dashed' onClick={() => add()} block icon={<PlusOutlined />}>
-                    添加新请求参数
-                  </Button>
-                </div>
-              )
-            }}
-          </Form.List>
+        <Form.Item
+          label={
+            <Space>
+              基础认证配置{' '}
+              <Switch
+                size='small'
+                checked={configState.basicAuth}
+                onChange={(checked) => setConfigState({ basicAuth: checked })}
+              />
+            </Space>
+          }
+        >
+          {configState.basicAuth && (
+            <Row gutter={[16, 0]}>
+              <Col span={12}>
+                <Form.Item
+                  name={['basicAuth', 'username']}
+                  label='用户名'
+                  rules={[{ required: true, message: '请输入用户名' }]}
+                >
+                  <Input placeholder='请输入用户名' />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name={['basicAuth', 'password']}
+                  label='密码'
+                  rules={[{ required: true, message: '请输入密码' }]}
+                >
+                  <Input placeholder='请输入密码' />
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
         </Form.Item>
-        <Form.Item label='基础认证配置'>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name={['config', 'username']} label='用户名'>
-                <Input placeholder='请输入用户名' />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name={['config', 'password']} label='密码'>
-                <Input placeholder='请输入密码' />
-              </Form.Item>
-            </Col>
-          </Row>
+        <Form.Item
+          label={
+            <Space>
+              自签证书
+              <Switch size='small' checked={configState.ca} onChange={(checked) => setConfigState({ ca: checked })} />
+            </Space>
+          }
+          required={configState.ca}
+        >
+          {configState.ca && (
+            <Form.Item name='ca' rules={[{ required: true, message: '请输入自签证书' }]}>
+              <Input.TextArea placeholder='请输入自签证书' />
+            </Form.Item>
+          )}
         </Form.Item>
-        <Form.Item name={['config', 'selfCACert']} label='自签证书'>
-          <Input placeholder='请输入自签证书' />
-        </Form.Item>
-        <Form.Item label='TLS'>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name={['config', 'serverName']} label='服务名'>
-                <Input placeholder='请输入服务名' />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name={['config', 'skipVerify']} label='跳过验证'>
-                <Radio.Group
-                  options={[
-                    { label: '是', value: true },
-                    { label: '否', value: false }
-                  ]}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name={['config', 'clientCert']} label='客户端证书'>
-                <Input placeholder='请输入客户端证书' />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name={['config', 'clientKey']} label='客户端密钥'>
-                <Input placeholder='请输入客户端密钥' />
-              </Form.Item>
-            </Col>
-          </Row>
+        <Form.Item
+          label={
+            <Space>
+              TLS
+              <Switch size='small' checked={configState.tls} onChange={(checked) => setConfigState({ tls: checked })} />
+            </Space>
+          }
+        >
+          {configState.tls && (
+            <Row gutter={[16, 0]}>
+              <Col span={12}>
+                <Form.Item
+                  name={['tls', 'serverName']}
+                  label='服务名'
+                  rules={[{ required: true, message: '请输入服务名' }]}
+                >
+                  <Input placeholder='请输入服务名' />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item name={['tls', 'skipVerify']} label='跳过验证'>
+                  <Radio.Group
+                    options={[
+                      { label: '是', value: true },
+                      { label: '否', value: false }
+                    ]}
+                  />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name={['tls', 'clientCert']}
+                  label='客户端证书'
+                  rules={[{ required: true, message: '请输入客户端证书' }]}
+                >
+                  <Input placeholder='请输入客户端证书' />
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item
+                  name={['tls', 'clientKey']}
+                  label='客户端密钥'
+                  rules={[{ required: true, message: '请输入客户端密钥' }]}
+                >
+                  <Input placeholder='请输入客户端密钥' />
+                </Form.Item>
+              </Col>
+            </Row>
+          )}
         </Form.Item>
       </DataFrom>
     </Modal>

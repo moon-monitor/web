@@ -1,5 +1,5 @@
-import { NoticeGroupItem, NoticeHookItem, PaginationReply, PaginationRequest } from '../common.types'
-import { GlobalStatus } from '../enum'
+import { KeyValueItem, NoticeGroupItem, NoticeHookItem, PaginationReply, PaginationRequest } from '../common.types'
+import { GlobalStatus, HookAPP, HTTPMethod } from '../enum'
 
 /**
  * api.palace.ListTeamNoticeGroupReply
@@ -113,13 +113,13 @@ export interface SaveTeamNoticeGroupRequestMember {
  * api.palace.SaveTeamNoticeHookRequest
  */
 export interface SaveTeamNoticeHookRequest {
-  app?: number
-  headers?: { key: string; value: string }[]
+  app: HookAPP
+  headers: KeyValueItem[]
   hookId?: number
-  method?: number
-  name?: string
-  remark?: string
-  secret?: string
-  status?: GlobalStatus
-  url?: string
+  method: HTTPMethod
+  name: string
+  remark: string
+  secret: string
+  status: GlobalStatus
+  url: string
 }

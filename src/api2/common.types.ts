@@ -11,6 +11,11 @@ import {
 } from './enum'
 import { MetricType } from './team/team-datasource.types'
 
+export interface KeyValueItem {
+  key: string
+  value: string
+}
+
 /**
  * User basic information
  * api.palace.common.UserBaseItem
@@ -529,7 +534,7 @@ export interface NoticeHookItem {
   app: HookAPP
   createdAt: string
   creator?: UserBaseItem
-  headers?: { key: string; value: string }[]
+  headers?: KeyValueItem[]
   method: HTTPMethod
   name: string
   noticeGroups?: NoticeGroupItem[]
@@ -694,8 +699,8 @@ export interface TeamMetricDatasourceItem {
   datasourceId?: number
   driver: DatasourceDriverMetric
   endpoint: string
-  extra?: { [key: string]: string }
-  headers?: { [key: string]: string }
+  extra?: KeyValueItem[]
+  headers?: KeyValueItem[]
   name: string
   queryMethod: number
   remark: string

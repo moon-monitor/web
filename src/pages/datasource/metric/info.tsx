@@ -14,9 +14,9 @@ const { Text } = Typography
 const InfoIcon = (props: { datasource?: TeamMetricDatasourceItem; className?: string }) => {
   const { datasource, className } = props
   switch (datasource?.driver) {
-    case DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS.toString():
+    case DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS:
       return <Prometheus className={className} />
-    case DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS.toString():
+    case DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS:
       return <VictoriaMetrics className={className} />
     default:
       return <InfoCircleOutlined className={className} />

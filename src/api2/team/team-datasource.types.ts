@@ -1,5 +1,6 @@
 import {
   BasicAuth,
+  KeyValueItem,
   PaginationReply,
   PaginationRequest,
   TagItemType,
@@ -7,7 +8,7 @@ import {
   TeamMetricDatasourceMetadataItem,
   TLS
 } from '../common.types'
-import { GlobalStatus, HTTPMethod } from '../enum'
+import { DatasourceDriverMetric, GlobalStatus, HTTPMethod } from '../enum'
 
 export interface DeleteTeamMetricDatasourceRequest {
   datasourceId?: number
@@ -21,9 +22,7 @@ export interface GetTeamMetricDatasourceRequest {
 /**
  * api.palace.GetTeamMetricDatasourceReply
  */
-export interface GetTeamMetricDatasourceReply {
-  detail?: TeamMetricDatasourceItem
-}
+export interface GetTeamMetricDatasourceReply extends TeamMetricDatasourceItem {}
 
 /**
  * api.palace.ListTeamMetricDatasourceReply
@@ -57,9 +56,9 @@ export interface SaveTeamMetricDatasourceRequest {
   ca?: string
   datasourceId?: number
   endpoint?: string
-  extra?: { [key: string]: string }
-  headers?: { [key: string]: string }
-  driver: number
+  extra?: KeyValueItem[]
+  headers?: KeyValueItem[]
+  driver: DatasourceDriverMetric
   name: string
   queryMethod: HTTPMethod
   remark: string

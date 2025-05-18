@@ -1,6 +1,8 @@
-import { IconFont } from '@/components/icon'
+import { IconFont, Prometheus, VictoriaMetrics } from '@/components/icon'
+import { Space } from 'antd'
 import { PaginationRequest } from './common.types'
 import {
+  DatasourceDriverMetric,
   Gender,
   GlobalStatus,
   HookAPP,
@@ -229,7 +231,7 @@ export const RoleData: Record<Role, string> = {
   [Role.ROLE_USER]: '普通用户'
 }
 
-export const MethodData: Record<HTTPMethod, { color: string; text: string }> = {
+export const HTTPMethodData: Record<HTTPMethod, { color: string; text: string }> = {
   [HTTPMethod.HTTP_METHOD_UNKNOWN]: {
     color: 'gray',
     text: '未知'
@@ -261,5 +263,33 @@ export const MethodData: Record<HTTPMethod, { color: string; text: string }> = {
   [HTTPMethod.HTTP_METHOD_PATCH]: {
     color: 'gray',
     text: 'PATCH'
+  }
+}
+
+export const DatasourceDriverMetricData: Record<
+  DatasourceDriverMetric,
+  { color: string; text: React.ReactNode | string }
+> = {
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_UNKNOWN]: {
+    color: 'gray',
+    text: '未知'
+  },
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS]: {
+    color: 'green',
+    text: (
+      <Space className='flex items-center'>
+        <Prometheus width={15} height={15} color='#DF5434' />
+        Prometheus
+      </Space>
+    )
+  },
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS]: {
+    color: 'blue',
+    text: (
+      <Space>
+        <VictoriaMetrics width={15} height={15} />
+        VictoriaMetrics
+      </Space>
+    )
   }
 }

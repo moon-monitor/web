@@ -1,34 +1,18 @@
 import { MetadataItemLabel, TeamMetricDatasourceMetadataItem } from '@/api2/common.types'
-import { getMetricDatasourceMetadata } from '@/api2/team/team-datasource'
 import { MetricType, MetricTypeData } from '@/api2/team/team-datasource.types'
 import { GlobalContext } from '@/utils/context'
 import { message, Modal, ModalProps, Space, Table, Tag } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import { Network } from 'lucide-react'
-import React, { useContext, useEffect } from 'react'
-import { LabelEditModal } from './label-edit-modal'
+import React, { useContext } from 'react'
 
 export interface LabelProps extends ModalProps {
   metricDetail?: TeamMetricDatasourceMetadataItem
 }
 
-let searchTimer: NodeJS.Timeout | null = null
 export const Label: React.FC<LabelProps> = (props) => {
   const { theme } = useContext(GlobalContext)
   const { metricDetail, open, onCancel, onOk } = props
-  const [metricLabels, setMetricLabels] = React.useState<MetadataItemLabel[]>([])
-  const [metricLabelDetail, setMetricLabelDetail] = React.useState<MetadataItemLabel>()
-  const [openEditModal, setOpenEditModal] = React.useState(false)
-
-  const handleEditModalOnOK = () => {
-    setOpenEditModal(false)
-    getMetricLabels()
-  }
-
-  const handleOnCancel = () => {
-    setOpenEditModal(false)
-    setMetricLabelDetail(undefined)
-  }
 
   const columns: ColumnsType<MetadataItemLabel> = [
     {
@@ -70,44 +54,26 @@ export const Label: React.FC<LabelProps> = (props) => {
     }
   ]
 
-  const getMetricLabels = async () => {
-    if (metricDetail) {
-      if (searchTimer) {
-        clearTimeout(searchTimer)
+  const getMetricType = (metricType?: MetricType) => {
+    if (!metricType) {
+      return {
+        color: 'gray',
+        text: '未知'
       }
-      searchTimer = setTimeout(async () => {
-        const res = await getMetricDatasourceMetadata({
-          metadataId: metricDetail.metadataId,
-          datasourceId: metricDetail.datasourceId
-        })
-        setMetricLabels(res.labels)
-      }, 500)
     }
-  }
-
-  const getMetricType = (metricType: MetricType) => {
     return MetricTypeData[metricType]
   }
 
-  useEffect(() => {
-    getMetricLabels()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [metricDetail])
-
   return (
     <>
-      <LabelEditModal
-        labelDetail={metricLabelDetail}
-        open={openEditModal}
-        onCancel={handleOnCancel}
-        onOk={handleEditModalOnOK}
-      />
       <Modal
         title={
           <Space>
             <Network className='h-6 w-6 text-blue-500' />
             {metricDetail?.name}
-            <Tag color={getMetricType(metricDetail!.type).color}>{getMetricType(metricDetail!.type).text}</Tag>
+            {metricDetail?.type && (
+              <Tag color={getMetricType(metricDetail.type).color}>{getMetricType(metricDetail.type).text}</Tag>
+            )}
           </Space>
         }
         width='60%'
@@ -121,7 +87,7 @@ export const Label: React.FC<LabelProps> = (props) => {
           pagination={false}
           scroll={{ y: 400, x: true }}
           columns={columns}
-          dataSource={metricLabels}
+          dataSource={metricDetail?.labels}
         />
       </Modal>
     </>
