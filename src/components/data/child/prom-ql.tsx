@@ -20,6 +20,7 @@ import { lintKeymap } from '@codemirror/lint'
 import { highlightSelectionMatches } from '@codemirror/search'
 import { PromQLExtension } from '@prometheus-io/codemirror-promql'
 import { newCompleteStrategy } from '@prometheus-io/codemirror-promql/dist/esm/complete'
+import { useRequest } from 'ahooks'
 import { Button, Form, Input, theme } from 'antd'
 import type { ValidateStatus } from 'antd/es/form/FormItem'
 import { baseTheme, darkPromqlHighlighter, darkTheme, lightTheme, promqlHighlighter } from './prom/CMTheme'
@@ -74,6 +75,14 @@ export const formatExpressionFunc = (pathPrefix: string, doc?: string) => {
         query: doc || ''
       })}`
     )
+    .then((data) => {
+      return Response.json(data, {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    })
     .then((resp: any) => {
       if (!resp.ok && resp.status !== 400) {
         return Promise.reject(`HTTP 请求失败: ${resp.statusText}`)
@@ -92,7 +101,6 @@ export const formatExpressionFunc = (pathPrefix: string, doc?: string) => {
     })
 }
 
-let timeoutInterval: NodeJS.Timeout | null = null
 const PromQLInput: React.FC<PromQLInputProps> = (props) => {
   const { token } = useToken()
   const {
@@ -234,30 +242,35 @@ const PromQLInput: React.FC<PromQLInputProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [disabled, containerRef, pathPrefix, placeholder, prefix, theme, value])
 
-  useEffect(() => {
-    if (disabled) return
-    if (timeoutInterval) {
-      clearTimeout(timeoutInterval)
+  const { run: formatExpressionRequest } = useRequest(formatExpressionFunc, {
+    manual: true,
+    onSuccess: () => {
+      onChange?.(value)
+      form?.setFields([
+        {
+          name: name,
+          errors: [],
+          value: value
+        }
+      ])
+    },
+    onError: (err) => {
+      form?.setFields([
+        {
+          name: name,
+          errors: [err.toString()],
+          value: undefined,
+          touched: true,
+          validating: false,
+          validated: false
+        }
+      ])
     }
-    timeoutInterval = setTimeout(() => {
-      formatExpressionFunc(prefix, value)
-        .then(() => {
-          onChange?.(value)
-        })
-        .catch((err) => {
-          form?.setFields([
-            {
-              name: name,
-              errors: [err],
-              value: undefined,
-              touched: true,
-              validating: false,
-              validated: false
-            }
-          ])
-        })
-    }, 500)
+  })
 
+  useEffect(() => {
+    if (disabled || !value) return
+    formatExpressionRequest(prefix, value)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
 

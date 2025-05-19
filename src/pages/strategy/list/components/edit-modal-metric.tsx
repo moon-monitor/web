@@ -64,7 +64,7 @@ export default function MetricEditModal(props: MetricEditModalProps) {
   const [alarmGroupList, setAlarmGroupList] = useState<NoticeGroupItem[]>([])
   const [strategyId, setStrategyId] = useState<number | undefined>()
   const [metricStrategyId, setMetricStrategyId] = useState<number | undefined>()
-  const pathPrefix = `${baseURL}/metric/${teamInfo?.id || 0}/${selectDatasource?.at(0) || 0}`
+  const pathPrefix = `${baseURL}/datasource/metric/${selectDatasource?.at(0) || 0}`
   const [datasourceList, setDatasourceList] = useState<TeamMetricDatasourceItem[]>([
     {
       datasourceId: 1,
