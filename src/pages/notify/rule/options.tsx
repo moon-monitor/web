@@ -1,8 +1,9 @@
 // import { Status, TimeEngineRuleType } from '@/api/enum'
 // import { ActionKey, PaginationRequest, StatusData, TimeEngineRuleTypeData } from '@/api/global'
 // import { TimeEngineItem, TimeEngineItemRule } from '@/api/model-types'
-import { GlobalStatusKey, PaginationRequest, TimeEngineRuleTypeKey } from '@/api2/common.types'
-import { ActionKey, GlobalStatus, GlobalStatusMap, TimeEngineRuleType } from '@/api2/enum'
+import { PaginationRequest } from '@/api2/common.types'
+import { ActionKey, GlobalStatus, TimeEngineRuleType } from '@/api2/enum'
+import { GlobalStatusData } from '@/api2/global'
 import { TimeEngineItem, TimeEngineItemRule } from '@/api2/timeEngine/types'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
@@ -112,7 +113,7 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
     pagination: { page, pageSize }
   } = props
   const tableOperationItems = (record: TimeEngineItemRule): MoreMenuProps['items'] => [
-    record.status === 'GLOBAL_STATUS_DISABLE'
+    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -176,7 +177,7 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
       dataIndex: 'category',
       key: 'category',
       width: 160,
-      render: (category: TimeEngineRuleTypeKey) => {
+      render: (category: TimeEngineRuleType) => {
         // const { label, icon } = TimeEngineRuleTypeData[category]
         // return (
         //   <Space direction='horizontal'>
@@ -193,8 +194,8 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: GlobalStatusKey) => {
-        return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
+      render: (status: GlobalStatus) => {
+        return <Badge color={GlobalStatusData[status].color} text={GlobalStatus[status]} />
       }
     },
     {
@@ -251,7 +252,7 @@ export const getEngineColumnList = (props: NotifyEngineColumnProps): ColumnsType
     pagination: { page, pageSize }
   } = props
   const tableOperationItems = (record: TimeEngineItem): MoreMenuProps['items'] => [
-    record.status === 'GLOBAL_STATUS_DISABLE'
+    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -316,8 +317,8 @@ export const getEngineColumnList = (props: NotifyEngineColumnProps): ColumnsType
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: GlobalStatusKey) => {
-        return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
+      render: (status: GlobalStatus) => {
+        return <Badge color={GlobalStatusData[status].color} text={GlobalStatus[status]} />
       }
     },
     {

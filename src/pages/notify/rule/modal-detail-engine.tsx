@@ -1,7 +1,8 @@
 // import { StatusData } from '@/api/global'
 // import { TimeEngineItem } from '@/api/model-types'
 // import { getTimeEngine } from '@/api/notify/time-engine'
-import { GlobalStatus, GlobalStatusMap } from '@/api2/enum'
+import { GlobalStatus } from '@/api2/enum'
+import { GlobalStatusData } from '@/api2/global'
 import { getTimeEngine } from '@/api2/timeEngine'
 import { TimeEngineItem } from '@/api2/timeEngine/types'
 import { useRequest } from 'ahooks'
@@ -35,7 +36,7 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
     {
       label: '状态',
       children: detail ? (
-        <Badge color={GlobalStatusMap[detail?.status].color} text={GlobalStatus[detail?.status]} />
+        <Badge color={GlobalStatusData[detail?.status].color} text={GlobalStatus[detail?.status]} />
       ) : (
         '-'
       ),

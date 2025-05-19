@@ -1,8 +1,9 @@
 import { type Condition, Status, type SustainType } from '@/api/enum'
 import { ActionKey } from '@/api/global'
 import { listStrategyGroup } from '@/api/strategy'
-import { GlobalStatusKey, StrategyTypeKey, TeamStrategyGroupItem, TeamStrategyItem } from '@/api2/common.types'
-import { GlobalStatus, GlobalStatusMap, StrategyType, StrategyTypeMap } from '@/api2/enum'
+import { TeamStrategyGroupItem, TeamStrategyItem } from '@/api2/common.types'
+import { GlobalStatus, StrategyType } from '@/api2/enum'
+import { GlobalStatusData, StrategyTypeData } from '@/api2/global'
 import { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -54,26 +55,12 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '请输入策略名称',
         allowClear: true,
-        autoComplete: 'off'
+        autoComplete: 'off',
+        maxLength: 20,
+        showCount: true
       }
     }
   },
-  // {
-  //   name: 'teamId',
-  //   label: '策略组',
-  //   dataProps: {
-  //     type: 'select-fetch',
-  //     itemProps: {
-  //       selectProps: {
-  //         placeholder: '请选择策略组',
-  //         mode: 'multiple',
-  //         maxTagCount: 'responsive'
-  //       },
-  //       handleFetch: getStrategyGroups,
-  //       defaultOptions: []
-  //     }
-  //   }
-  // },
   {
     name: 'strategyTypes',
     label: '策略类型',
@@ -83,12 +70,16 @@ export const formList: SearchFormItem[] = [
         placeholder: '请选择策略类型',
         allowClear: true,
         mode: 'multiple',
-        maxTagCount: 2,
-        options: Object.entries(StrategyType)
-          .filter(([key]) => key !== 'STRATEGY_TYPE_UNKNOWN')
+        maxTagCount: 1,
+        options: Object.entries(StrategyTypeData)
+          .filter(([key]) => +key !== StrategyType.STRATEGY_TYPE_UNKNOWN)
           .map(([key, value]) => {
             return {
-              label: <Tag color={StrategyTypeMap[key as StrategyTypeKey].color}>{value}</Tag>,
+              label: (
+                <Tag color={value.color} className='w-full'>
+                  {value.label}
+                </Tag>
+              ),
               value: key
             }
           })
@@ -103,11 +94,11 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         optionType: 'button',
         buttonStyle: 'solid',
-        defaultValue: 'GLOBAL_STATUS_UNKNOWN',
-        options: Object.entries(GlobalStatus).map(([key, value]) => {
+        defaultValue: GlobalStatus.GLOBAL_STATUS_UNKNOWN,
+        options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: key === 'GLOBAL_STATUS_UNKNOWN' ? '全部' : value,
-            value: key
+            label: +key === GlobalStatus.GLOBAL_STATUS_UNKNOWN ? '全部' : value.text,
+            value: +key
           }
         })
       }
@@ -124,7 +115,7 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategyItem> => {
   const { onHandleMenuOnClick } = props
   const tableOperationItems = (record: TeamStrategyItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
+    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -158,7 +149,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
         </Button>
       )
     },
-    record.strategyType === 'STRATEGY_TYPE_METRIC' || !record.strategyType
+    record.strategyType === StrategyType.STRATEGY_TYPE_METRIC || !record.strategyType
       ? {
           key: ActionKey.CHART,
           label: (
@@ -209,8 +200,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       key: 'strategyType',
       align: 'center',
       width: 80,
-      render: (strategyType: StrategyTypeKey) => {
-        return <Tag color={StrategyTypeMap[strategyType].color}>{StrategyType[strategyType]}</Tag>
+      render: (strategyType: StrategyType) => {
+        return <Tag color={StrategyTypeData[strategyType].color}>{StrategyType[strategyType]}</Tag>
       }
     },
     {
@@ -227,8 +218,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       key: 'status',
       align: 'center',
       width: 80,
-      render: (status: GlobalStatusKey) => {
-        return <Badge color={GlobalStatusMap[status].color} text={GlobalStatus[status]} />
+      render: (status: GlobalStatus) => {
+        return <Badge color={GlobalStatusData[status].color} text={GlobalStatus[status]} />
       }
     },
     {
