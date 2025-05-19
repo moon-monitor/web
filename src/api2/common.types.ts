@@ -709,7 +709,7 @@ export interface TeamMetricDatasourceItem {
   tls?: TLS
   updatedAt: string
   status: GlobalStatus
-  creator: UserBaseItem
+  creator?: UserBaseItem
 }
 
 /**

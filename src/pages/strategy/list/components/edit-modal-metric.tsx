@@ -5,6 +5,7 @@ import {
   TeamStrategyGroupItem,
   TeamStrategyItem
 } from '@/api2/common.types'
+import { DatasourceDriverMetric, GlobalStatus } from '@/api2/enum'
 import { defaultPaginationReq } from '@/api2/global'
 import { baseURL } from '@/api2/request'
 import { listTeamMetricDatasource } from '@/api2/team/team-datasource'
@@ -66,8 +67,15 @@ export default function MetricEditModal(props: MetricEditModalProps) {
     {
       datasourceId: 1,
       name: 'Prometheus',
-      driver: 'DATASOURCE_DRIVER_METRIC_PROMETHEUS',
-      status: 'GLOBAL_STATUS_ENABLE'
+      driver: DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS,
+      status: GlobalStatus.GLOBAL_STATUS_ENABLE,
+      endpoint: '',
+      queryMethod: 0,
+      remark: '',
+      scrapeInterval: '',
+      teamId: 0,
+      updatedAt: '',
+      creator: undefined
     }
   ])
   const [alarmLevelList, setAlarmLevelList] = useState<TeamDictItem[]>([])
@@ -154,7 +162,7 @@ export default function MetricEditModal(props: MetricEditModalProps) {
               options={strategyGroupList.map((item) => ({
                 label: item.name,
                 value: item.groupId,
-                disabled: item.status === 'GLOBAL_STATUS_DISABLE'
+                disabled: item.status !== GlobalStatus.GLOBAL_STATUS_ENABLE
               }))}
             />
           </Form.Item>
@@ -176,7 +184,7 @@ export default function MetricEditModal(props: MetricEditModalProps) {
               options={alarmGroupList.map((item) => ({
                 label: item.name,
                 value: item.noticeGroupId,
-                disabled: item.status === 'GLOBAL_STATUS_DISABLE'
+                disabled: item.status !== GlobalStatus.GLOBAL_STATUS_ENABLE
               }))}
             />
           </Form.Item>
@@ -200,7 +208,7 @@ export default function MetricEditModal(props: MetricEditModalProps) {
               options={datasourceList.map((item) => ({
                 label: item.name,
                 value: item.datasourceId,
-                disabled: item.status !== 'GLOBAL_STATUS_ENABLE'
+                disabled: item.status !== GlobalStatus.GLOBAL_STATUS_ENABLE
               }))}
             />
           </Form.Item>
@@ -372,7 +380,7 @@ export default function MetricEditModal(props: MetricEditModalProps) {
                                   </Tag>
                                 ),
                                 value: item.value,
-                                disabled: item.status === 'GLOBAL_STATUS_DISABLE'
+                                disabled: item.status !== GlobalStatus.GLOBAL_STATUS_ENABLE
                               }))}
                             />
                           </Form.Item>

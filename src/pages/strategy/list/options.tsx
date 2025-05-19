@@ -264,40 +264,42 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
 }
 
 export const basicFormItems: (DataFromItem | DataFromItem[])[] = [
-  {
-    name: 'name',
-    label: '名称',
-    type: 'input',
-    formProps: {
-      rules: [{ required: true, message: '请输入仪表盘名称' }]
+  [
+    {
+      name: 'name',
+      label: '名称',
+      type: 'input',
+      formProps: {
+        rules: [{ required: true, message: '请输入仪表盘名称' }]
+      },
+      props: {
+        placeholder: '请输入仪表盘名称'
+      }
     },
-    props: {
-      placeholder: '请输入仪表盘名称'
+    {
+      name: 'groupId',
+      label: '策略组',
+      type: 'select',
+      props: {
+        placeholder: '请选择策略组',
+        mode: 'multiple',
+        maxTagCount: 'responsive',
+        options: [
+          {
+            label: '策略组1',
+            value: 1
+          },
+          {
+            label: '策略组2',
+            value: 2
+          }
+        ]
+      },
+      formProps: {
+        rules: [{ required: true, message: '请选择策略组' }]
+      }
     }
-  },
-  {
-    name: 'groupId',
-    label: '策略组',
-    type: 'select',
-    props: {
-      placeholder: '请选择策略组',
-      mode: 'multiple',
-      maxTagCount: 'responsive',
-      options: [
-        {
-          label: '策略组1',
-          value: 1
-        },
-        {
-          label: '策略组2',
-          value: 2
-        }
-      ]
-    },
-    formProps: {
-      rules: [{ required: true, message: '请选择策略组' }]
-    }
-  },
+  ],
   {
     name: 'remark',
     label: '描述',
