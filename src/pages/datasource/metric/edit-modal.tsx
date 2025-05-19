@@ -97,20 +97,20 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
                           <Form.Item
                             {...restField}
                             name={[name, 'key']}
-                            label={['headers', name, 'key'].join('.')}
-                            rules={[{ required: true, message: '请输入请求头KEY' }]}
+                            label={['请求头', name, 'KEY'].join('.')}
+                            rules={[{ required: true, message: ['请求头', name, 'KEY'].join('.') }]}
                           >
-                            <Input placeholder='请输入请求头KEY' />
+                            <Input placeholder={['请输入请求头', name, 'KEY'].join('.')} />
                           </Form.Item>
                         </Col>
                         <Col span={11} key={key}>
                           <Form.Item
                             {...restField}
                             name={[name, 'value']}
-                            label={['headers', name, 'value'].join('.')}
-                            rules={[{ required: true, message: '请输入请求头VALUE' }]}
+                            label={['请求头', name, 'VALUE'].join('.')}
+                            rules={[{ required: true, message: ['请求头', name, 'VALUE'].join('.') }]}
                           >
-                            <Input placeholder='请输入请求头VALUE' />
+                            <Input placeholder={['请输入请求头', name, 'VALUE'].join('.')} />
                           </Form.Item>
                         </Col>
                         <Col span={1} className='flex items-center justify-center'>
@@ -140,7 +140,7 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
           }
         >
           {configState.basicAuth && (
-            <Row gutter={[16, 0]}>
+            <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
                   name={['basicAuth', 'username']}
@@ -186,7 +186,7 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
           }
         >
           {configState.tls && (
-            <Row gutter={[16, 0]}>
+            <Row gutter={16}>
               <Col span={12}>
                 <Form.Item
                   name={['tls', 'serverName']}
@@ -206,22 +206,22 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
                   />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={24}>
                 <Form.Item
                   name={['tls', 'clientCert']}
                   label='客户端证书'
                   rules={[{ required: true, message: '请输入客户端证书' }]}
                 >
-                  <Input placeholder='请输入客户端证书' />
+                  <Input.TextArea placeholder='请输入客户端证书' />
                 </Form.Item>
               </Col>
-              <Col span={12}>
+              <Col span={24}>
                 <Form.Item
                   name={['tls', 'clientKey']}
                   label='客户端密钥'
                   rules={[{ required: true, message: '请输入客户端密钥' }]}
                 >
-                  <Input placeholder='请输入客户端密钥' />
+                  <Input.TextArea placeholder='请输入客户端密钥' />
                 </Form.Item>
               </Col>
             </Row>

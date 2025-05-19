@@ -101,7 +101,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       )
     },
     {
-      label: '基础认证配置',
+      label: '基础认证',
       span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },
       children: datasource?.basicAuth ? (
         <Space direction='vertical'>

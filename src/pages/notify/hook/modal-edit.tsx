@@ -89,19 +89,19 @@ export function EditHookModal(props: EditHookModalProps) {
                         <Col span={10}>
                           <Form.Item
                             name={[field.name, 'key']}
-                            label={`请求头${field.key + 1}键`}
-                            rules={[{ required: true, message: `请输入请求头${field.key + 1}键` }]}
+                            label={`请求头.${field.key}.键`}
+                            rules={[{ required: true, message: `请输入请求头.${field.key}.键` }]}
                           >
-                            <Input placeholder={`请求头${field.key + 1}键`} />
+                            <Input placeholder={`请输入请求头.${field.key + 1}.键`} />
                           </Form.Item>
                         </Col>
                         <Col span={13}>
                           <Form.Item
                             name={[field.name, 'value']}
-                            label={`请求头${field.key + 1}值`}
-                            rules={[{ required: true, message: `请输入请求头${field.key + 1}值` }]}
+                            label={`请求头.${field.key}.值`}
+                            rules={[{ required: true, message: `请输入请求头.${field.key}.值` }]}
                           >
-                            <Input placeholder={`请求头${field.key + 1}值`} />
+                            <Input placeholder={`请输入请求头.${field.key}.值`} />
                           </Form.Item>
                         </Col>
                         <Col span={1} className='flex justify-center items-center'>
