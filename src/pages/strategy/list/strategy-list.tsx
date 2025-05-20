@@ -2,7 +2,7 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
 import { deleteStrategy, pushStrategy, updateStrategyStatus } from '@/api/strategy'
-import { StrategyTypeKey, TeamStrategyItem } from '@/api2/common.types'
+import { TeamStrategyItem } from '@/api2/common.types'
 import { StrategyType } from '@/api2/enum'
 import { listTeamStrategy } from '@/api2/team/team-strategy'
 import { ListTeamStrategyRequest } from '@/api2/team/team-strategy.types'
@@ -165,22 +165,22 @@ const StrategyList = (props: StrategyListProps) => {
   const handleDetailModal = (item: TeamStrategyItem) => {
     setDetail(item)
     switch (item.strategyType) {
-      case 'STRATEGY_TYPE_METRIC':
+      case StrategyType.STRATEGY_TYPE_METRIC:
         setOpenMetricDetailModal(true)
         break
-      case 'STRATEGY_TYPE_EVENT':
+      case StrategyType.STRATEGY_TYPE_EVENT:
         setOpenEventDetailModal(true)
         break
-      case 'STRATEGY_TYPE_CERT':
+      case StrategyType.STRATEGY_TYPE_CERT:
         setOpenDomainDetailModal(true)
         break
-      case 'STRATEGY_TYPE_PORT':
+      case StrategyType.STRATEGY_TYPE_PORT:
         setOpenPortDetailModal(true)
         break
-      case 'STRATEGY_TYPE_HTTP':
+      case StrategyType.STRATEGY_TYPE_HTTP:
         setOpenHttpDetailModal(true)
         break
-      case 'STRATEGY_TYPE_LOGS':
+      case StrategyType.STRATEGY_TYPE_LOGS:
         setOpenLogDetailModal(true)
         break
       default:
@@ -292,22 +292,22 @@ const StrategyList = (props: StrategyListProps) => {
 
   const handleOpenEditModal = (item: TeamStrategyItem) => {
     switch (item.strategyType) {
-      case 'STRATEGY_TYPE_METRIC':
+      case StrategyType.STRATEGY_TYPE_METRIC:
         handleOpenMetricEditModal(item)
         break
-      case 'STRATEGY_TYPE_EVENT':
+      case StrategyType.STRATEGY_TYPE_EVENT:
         handleOpenEventEditModal(item)
         break
-      case 'STRATEGY_TYPE_CERT':
+      case StrategyType.STRATEGY_TYPE_CERT:
         handleOpenDomainEditModal(item)
         break
-      case 'STRATEGY_TYPE_PORT':
+      case StrategyType.STRATEGY_TYPE_PORT:
         handleOpenPortEditModal(item)
         break
-      case 'STRATEGY_TYPE_HTTP':
+      case StrategyType.STRATEGY_TYPE_HTTP:
         handleOpenHttpEditModal(item)
         break
-      case 'STRATEGY_TYPE_LOGS':
+      case StrategyType.STRATEGY_TYPE_LOGS:
         handleOpenLogEditModal(item)
         break
       default:
@@ -384,28 +384,29 @@ const StrategyList = (props: StrategyListProps) => {
   })
 
   const handleOpenStrategyTypeModal = () => {
+    setDetail(undefined)
     setOpenStrategyTypeModal(true)
   }
 
-  const handleStrategyTypeSubmit = (type: StrategyTypeKey) => {
+  const handleStrategyTypeSubmit = (type: StrategyType) => {
     setOpenStrategyTypeModal(false)
     switch (type) {
-      case 'STRATEGY_TYPE_METRIC':
+      case StrategyType.STRATEGY_TYPE_METRIC:
         handleOpenMetricEditModal()
         break
-      case 'STRATEGY_TYPE_EVENT':
+      case StrategyType.STRATEGY_TYPE_EVENT:
         handleOpenEventEditModal()
         break
       // case StrategyType.StrategyTypeDomainCertificate:
       //   handleOpenDomainEditModal()
       //   break
-      case 'STRATEGY_TYPE_PORT':
+      case StrategyType.STRATEGY_TYPE_PORT:
         handleOpenPortEditModal()
         break
-      case 'STRATEGY_TYPE_HTTP':
+      case StrategyType.STRATEGY_TYPE_HTTP:
         handleOpenHttpEditModal()
         break
-      case 'STRATEGY_TYPE_LOGS':
+      case StrategyType.STRATEGY_TYPE_LOGS:
         handleOpenLogEditModal()
         break
       default:

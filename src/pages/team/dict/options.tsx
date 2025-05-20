@@ -1,6 +1,6 @@
 import { TeamDictItem } from '@/api2/common.types'
 import { ActionKey, DictType, GlobalStatus } from '@/api2/enum'
-import { GlobalStatusData } from '@/api2/global'
+import { DictTypeData, GlobalStatusData } from '@/api2/global'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -29,10 +29,10 @@ export const formList: SearchFormItem[] = [
         placeholder: '字典类型',
         allowClear: true,
         mode: 'multiple',
-        options: Object.entries(DictType).map(([key, value]) => {
+        options: Object.entries(DictTypeData).map(([key, value]) => {
           return {
             label: value,
-            value: key
+            value: +key
           }
         })
       }
@@ -47,10 +47,10 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(GlobalStatus).map(([key, value]) => {
+        options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: value,
-            value: key
+            label: value.text,
+            value: +key
           }
         })
       }
@@ -153,7 +153,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem
       key: 'dictType',
       width: 160,
       render: (dictType: DictType) => {
-        return <>{DictType[dictType]}</>
+        return <>{DictTypeData[dictType]}</>
       }
     },
     {
@@ -163,8 +163,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem
       align: 'center',
       width: 160,
       render: (status: GlobalStatus) => {
-        const { color, label } = GlobalStatusData[status]
-        return <Badge color={color} text={label} />
+        return <Badge {...GlobalStatusData[status]} />
       }
     },
 
@@ -220,14 +219,14 @@ export const editModalFormItems = (): (DataFromItem | DataFromItem[])[] => [
     },
     props: {
       placeholder: '请选择字典类型',
-      options: Object.entries(DictType)
+      options: Object.entries(DictTypeData)
         .filter(([key]) => {
-          return key !== 'DICT_TYPE_UNKNOWN'
+          return +key !== DictType.DICT_TYPE_UNKNOWN
         })
         .map(([key, value]) => {
           return {
             label: value,
-            value: key
+            value: +key
           }
         })
     }

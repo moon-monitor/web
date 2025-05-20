@@ -1,8 +1,5 @@
-import { type Condition, Status, type SustainType } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import { listStrategyGroup } from '@/api/strategy'
 import { TeamStrategyGroupItem, TeamStrategyItem } from '@/api2/common.types'
-import { GlobalStatus, StrategyType } from '@/api2/enum'
+import { ActionKey, ConditionMetric, GlobalStatus, SampleMode, StrategyType } from '@/api2/enum'
 import { GlobalStatusData, StrategyTypeData } from '@/api2/global'
 import { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
@@ -18,32 +15,15 @@ export type StrategyLabelType = {
 }
 
 export type LevelItemType = {
-  condition: Condition
+  condition: ConditionMetric
   count: number
   duration: number
   levelId: number
-  sustainType: SustainType
+  sustainType: SampleMode
   threshold: number
-  status: Status
+  status: GlobalStatus
   strategyLabels: StrategyLabelType[]
   id?: number
-}
-
-export const getStrategyGroups = (keyword: string) => {
-  return listStrategyGroup({
-    pagination: {
-      pageNum: 1,
-      pageSize: 10
-    },
-    keyword
-  }).then(({ list }) => {
-    return list.map((item) => {
-      return {
-        label: item.name,
-        value: item.id
-      }
-    })
-  })
 }
 
 export const formList: SearchFormItem[] = [
@@ -201,7 +181,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       align: 'center',
       width: 80,
       render: (strategyType: StrategyType) => {
-        return <Tag color={StrategyTypeData[strategyType].color}>{StrategyType[strategyType]}</Tag>
+        const { color, label } = StrategyTypeData[strategyType]
+        return <Tag color={color}>{label}</Tag>
       }
     },
     {
@@ -219,7 +200,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       align: 'center',
       width: 80,
       render: (status: GlobalStatus) => {
-        return <Badge color={GlobalStatusData[status].color} text={GlobalStatus[status]} />
+        return <Badge {...GlobalStatusData[status]} />
       }
     },
     {

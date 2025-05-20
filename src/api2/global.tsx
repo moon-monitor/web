@@ -2,7 +2,9 @@ import { IconFont, Prometheus, VictoriaMetrics } from '@/components/icon'
 import { Space } from 'antd'
 import { PaginationRequest } from './common.types'
 import {
+  ConditionMetric,
   DatasourceDriverMetric,
+  DictType,
   Gender,
   GlobalStatus,
   HookAPP,
@@ -10,6 +12,7 @@ import {
   MemberStatus,
   ResourceModule,
   Role,
+  SampleMode,
   StrategyType,
   TeamStatus,
   UserPosition,
@@ -292,4 +295,29 @@ export const DatasourceDriverMetricData: Record<
       </Space>
     )
   }
+}
+
+export const ConditionMetricData: Record<ConditionMetric, string> = {
+  [ConditionMetric.CONDITION_METRIC_UNKNOWN]: '全部',
+  [ConditionMetric.CONDITION_METRIC_EQ]: '等于',
+  [ConditionMetric.CONDITION_METRIC_NE]: '不等于',
+  [ConditionMetric.CONDITION_METRIC_GT]: '大于',
+  [ConditionMetric.CONDITION_METRIC_GTE]: '大于等于',
+  [ConditionMetric.CONDITION_METRIC_LT]: '小于',
+  [ConditionMetric.CONDITION_METRIC_LTE]: '小于等于',
+  [ConditionMetric.CONDITION_METRIC_IN]: '在范围内',
+  [ConditionMetric.CONDITION_METRIC_NOT_IN]: '不在范围内'
+}
+
+export const SampleModeData: Record<SampleMode, string> = {
+  [SampleMode.SAMPLE_MODE_UNKNOWN]: '全部',
+  [SampleMode.SAMPLE_MODE_AVERAGE]: '平均值',
+  [SampleMode.SAMPLE_MODE_MAX]: '最大值',
+  [SampleMode.SAMPLE_MODE_MIN]: '最小值'
+}
+
+export const DictTypeData: Record<DictType, string> = {
+  [DictType.DICT_TYPE_UNKNOWN]: '全部',
+  [DictType.DICT_TYPE_ALARM_LEVEL]: '告警级别',
+  [DictType.DICT_TYPE_ALARM_PAGE]: '告警页面'
 }

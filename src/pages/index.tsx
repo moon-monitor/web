@@ -1,5 +1,6 @@
 import type { MenuTree } from '@/api/model-types'
 import { getToken, isLogin, removeToken, setToken } from '@/api/request'
+import { refreshToken } from '@/api2/auth'
 import { TeamItem, UserItem } from '@/api2/common.types'
 import '@/assets/styles/index.scss'
 import { defaultRouters, unAuthRouters } from '@/config/router'
@@ -15,6 +16,7 @@ import {
   getUseTheme
 } from '@/utils/context'
 import type { Router } from '@remix-run/router'
+import { useRequest } from 'ahooks'
 import { ConfigProvider, theme } from 'antd'
 import type { SpaceSize } from 'antd/es/space'
 import zhCN from 'antd/locale/zh_CN'
@@ -48,6 +50,14 @@ function App() {
   })
   const [routers, setRouters] = useState<Router>(createHashRouter(defaultRouters))
 
+  const { run: refreshAuthToken } = useRequest(refreshToken, {
+    manual: true,
+    onSuccess: (res) => {
+      setAuthToken(res.token)
+      setToken(res.token)
+    }
+  })
+
   const storageMenus = useCallback(() => {
     getTreeMenu({})
       .then((res) => {
@@ -65,9 +75,16 @@ function App() {
     if (token) {
       setAuthToken(token)
       setToken(token)
+      // 每10分钟刷新一次token
+      setInterval(
+        () => {
+          refreshAuthToken()
+        },
+        1000 * 60 * 10
+      )
     }
     storageMenus()
-  }, [authToken, storageMenus])
+  }, [authToken, storageMenus, refreshAuthToken])
 
   const handleRouter = () => {
     if (!(menuItems?.length && isLogin())) {

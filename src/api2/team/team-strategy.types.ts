@@ -134,7 +134,7 @@ export interface SaveTeamMetricStrategyLevelsRequest {
   /**
    * Strategy metric id
    */
-  strategyMetricId?: number
+  strategyId?: number
 }
 
 /**
@@ -218,10 +218,6 @@ export interface SaveTeamMetricStrategyRequest {
    */
   labels?: { [key: string]: string }
   /**
-   * Metric strategy id
-   */
-  metricStrategyId?: number
-  /**
    * Strategy id
    */
   strategyId?: number
@@ -276,6 +272,7 @@ export interface SaveTeamStrategyRequest {
   strategyType?: number
 }
 
+export interface SaveTeamStrategyReply extends TeamStrategyItem {}
 /**
  * api.palace.UpdateTeamStrategyGroupStatusRequest，UpdateTeamStrategyGroupStatusRequest
  * represents the request data for updating the status of a team strategy group

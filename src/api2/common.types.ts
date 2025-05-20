@@ -455,19 +455,6 @@ export interface TeamItem {
 }
 
 /**
- * api.palace.common.SelectItem, SelectItem represents an option in a selection, including
- * its value, display label, and whether it is disabled.
- * value?: The actual value of the option.
- * label?: The label displayed for the option.
- * disabled?: Indicates whether the option is disabled, true for disabled, false for enabled.
- */
-export interface SelectItem {
-  disabled?: boolean
-  label?: string
-  value?: number
-}
-
-/**
  * api.palace.common.TeamStrategyItem, TeamStrategyItem represents the structure of a team
  * strategy item.
  */

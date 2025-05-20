@@ -13,6 +13,7 @@ import {
   SaveTeamMetricStrategyLevelsRequest,
   SaveTeamMetricStrategyRequest,
   SaveTeamStrategyGroupRequest,
+  SaveTeamStrategyReply,
   SaveTeamStrategyRequest,
   UpdateTeamStrategyGroupStatusRequest
 } from './team-strategy.types'
@@ -83,10 +84,10 @@ export function getTeamMetricStrategy(params: GetTeamMetricStrategyRequest): Pro
 /**
  * SaveTeamStrategy saves a new team strategy or updates an existing one
  * @param {SaveTeamStrategyRequest} params
- * @returns {Promise<EmptyReply>}
+ * @returns {Promise<SaveTeamStrategyReply>}
  */
-export function saveTeamStrategy(params: SaveTeamStrategyRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/strategy', params)
+export function saveTeamStrategy(params: SaveTeamStrategyRequest): Promise<SaveTeamStrategyReply> {
+  return request.POST<SaveTeamStrategyReply>('/api/team/strategy', params)
 }
 
 /**

@@ -1,3 +1,6 @@
+import { defaultPaginationReq } from '@/api2/global'
+import { listTeamNoticeGroup } from '@/api2/team/team-notice'
+import { listTeamStrategyGroup } from '@/api2/team/team-strategy'
 import { DataFromItem } from '@/components/data/form'
 
 export const basicFormItems: (DataFromItem | DataFromItem[])[] = [
@@ -21,7 +24,16 @@ export const basicFormItems: (DataFromItem | DataFromItem[])[] = [
       label: '策略组',
       type: 'select',
       props: {
-        placeholder: '请选择策略组'
+        placeholder: '请选择策略组',
+        async options() {
+          const res = await listTeamStrategyGroup({ pagination: defaultPaginationReq })
+          return (
+            res.items?.map((g) => ({
+              label: g.name,
+              value: g.groupId
+            })) || []
+          )
+        }
       },
       formProps: {
         rules: [{ required: true, message: '请选择策略组' }]
@@ -35,10 +47,17 @@ export const basicFormItems: (DataFromItem | DataFromItem[])[] = [
       type: 'select',
       props: {
         placeholder: '请选择通知对象',
-        mode: 'multiple'
-      },
-      formProps: {
-        rules: [{ required: true, message: '请选择通知对象' }]
+        mode: 'multiple',
+        allowClear: true,
+        async options() {
+          const res = await listTeamNoticeGroup({ pagination: defaultPaginationReq })
+          return (
+            res.items?.map((g) => ({
+              label: g.name,
+              value: g.noticeGroupId
+            })) || []
+          )
+        }
       }
     }
   ],
@@ -85,4 +104,14 @@ export const metricDatasourceFormItems: (DataFromItem | DataFromItem[])[] = [
     label: '注解kv集合',
     type: 'input'
   }
+]
+
+export const metricLevelsFormItems: (DataFromItem | DataFromItem[])[] = [
+  [
+    {
+      name: 'levels',
+      label: '告警等级',
+      type: 'input'
+    }
+  ]
 ]

@@ -7,6 +7,8 @@ import {
   ListTeamDictReply,
   ListTeamDictRequest,
   SaveTeamDictRequest,
+  SelectTeamDictReply,
+  SelectTeamDictRequest,
   UpdateTeamDictStatusRequest
 } from './team-dict.types'
 
@@ -53,4 +55,13 @@ export const listTeamDict = (params: ListTeamDictRequest): Promise<ListTeamDictR
  */
 export const updateTeamDictStatus = (params: UpdateTeamDictStatusRequest): Promise<EmptyReply> => {
   return request.PUT<EmptyReply>('/api/team/dict/status', params)
+}
+
+/**
+ * SelectTeamDict selects team dicts
+ * @param {SelectTeamDictRequest} params
+ * @returns {Promise<SelectTeamDictReply>}
+ */
+export const selectTeamDict = (params: SelectTeamDictRequest): Promise<SelectTeamDictReply> => {
+  return request.POST<SelectTeamDictReply>('/api/team/dict/select', params)
 }

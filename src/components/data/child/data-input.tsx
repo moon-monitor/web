@@ -12,7 +12,8 @@ import type {
 import { Checkbox, ColorPicker, DatePicker, Input, Radio, Segmented, Select } from 'antd'
 import type { RangePickerProps } from 'antd/es/date-picker'
 import type { PasswordProps, TextAreaProps } from 'antd/es/input'
-import type { FC } from 'react'
+import { DefaultOptionType } from 'antd/es/select'
+import { useEffect, useState, type FC } from 'react'
 import { AnnotationsEditor, type AnnotationsEditorProps } from './annotation-editor'
 import FetchSelect, { type FetchSelectProps } from './fetch-select'
 import { DingTemplateEditor, type DingTemplateEditorProps } from './template-editor-ding'
@@ -42,7 +43,7 @@ export type DataInputProps = {
     }
   | {
       type: 'select'
-      props?: SelectProps
+      props?: SelectProps | { options?: () => Promise<DefaultOptionType[]> }
     }
   | {
       type: 'select-fetch'
@@ -125,11 +126,25 @@ export interface ButtonInputProps {
 
 export const DataInput: FC<DataInputProps> = (props) => {
   const { type, value, onChange, defaultValue } = props
-
+  const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>([])
+  useEffect(() => {
+    if (type === 'select' && props.props?.options && typeof props.props.options === 'function') {
+      props.props.options().then(setSelectOptions)
+      console.log(selectOptions, 'selectOptions')
+    }
+  }, [])
   const renderInput = () => {
     switch (type) {
       case 'select':
-        return <Select {...props.props} value={value} defaultValue={defaultValue} onChange={onChange} />
+        return (
+          <Select
+            {...props.props}
+            options={selectOptions || props.props?.options}
+            value={value}
+            defaultValue={defaultValue}
+            onChange={onChange}
+          />
+        )
       case 'select-fetch':
         return <FetchSelect {...props.props} value={value} defaultValue={defaultValue} onChange={onChange} />
       case 'radio':

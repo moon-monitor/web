@@ -1,15 +1,15 @@
-import { StrategyTypeKey } from '@/api2/common.types'
+import { StrategyType } from '@/api2/enum'
 import { Modal, type ModalProps, message, theme } from 'antd'
 import { Activity, FileText, Gauge, Globe, Network, Radio, ScrollText, Stethoscope, Zap } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 export interface StrategyTypeModalProps extends ModalProps {
-  onSubmit: (data: StrategyTypeKey) => void
+  onSubmit: (data: StrategyType) => void
 }
 type StrategyTypeGroup = {
   name: string
   icon: React.ReactNode
-  strategies: { id: StrategyTypeKey; name: string; icon: React.ReactNode }[]
+  strategies: { id: StrategyType; name: string; icon: React.ReactNode }[]
 }
 
 const strategyGroups: StrategyTypeGroup[] = [
@@ -18,17 +18,17 @@ const strategyGroups: StrategyTypeGroup[] = [
     icon: <Gauge className='h-5 w-5' />,
     strategies: [
       {
-        id: 'STRATEGY_TYPE_METRIC',
+        id: StrategyType.STRATEGY_TYPE_METRIC,
         name: 'Metric',
         icon: <Activity className='h-5 w-5' />
       },
       {
-        id: 'STRATEGY_TYPE_EVENT',
+        id: StrategyType.STRATEGY_TYPE_EVENT,
         name: '事件',
         icon: <Zap className='h-5 w-5' />
       },
       {
-        id: 'STRATEGY_TYPE_LOGS',
+        id: StrategyType.STRATEGY_TYPE_LOGS,
         name: '日志',
         icon: <ScrollText className='h-5 w-5' />
       }
@@ -39,22 +39,22 @@ const strategyGroups: StrategyTypeGroup[] = [
     icon: <Radio className='h-5 w-5' />,
     strategies: [
       {
-        id: 'STRATEGY_TYPE_CERT',
+        id: StrategyType.STRATEGY_TYPE_CERT,
         name: '证书',
         icon: <FileText className='h-5 w-5' />
       },
       {
-        id: 'STRATEGY_TYPE_PORT',
+        id: StrategyType.STRATEGY_TYPE_PORT,
         name: '端口',
         icon: <Stethoscope className='h-5 w-5' />
       },
       {
-        id: 'STRATEGY_TYPE_HTTP',
+        id: StrategyType.STRATEGY_TYPE_HTTP,
         name: 'HTTP',
         icon: <Globe className='h-5 w-5' />
       },
       {
-        id: 'STRATEGY_TYPE_PING',
+        id: StrategyType.STRATEGY_TYPE_PING,
         name: 'Ping',
         icon: <Network className='h-5 w-5' />
       }
@@ -64,10 +64,10 @@ const strategyGroups: StrategyTypeGroup[] = [
 
 export default function StrategyTypeModal(props: StrategyTypeModalProps) {
   const { onSubmit, open, ...restProps } = props
-  const [selectedType, setSelectedType] = useState<StrategyTypeKey>('STRATEGY_TYPE_UNKNOWN')
+  const [selectedType, setSelectedType] = useState<StrategyType>(StrategyType.STRATEGY_TYPE_UNKNOWN)
   const { token } = theme.useToken()
   const handleSubmit = () => {
-    if (selectedType === 'STRATEGY_TYPE_UNKNOWN') {
+    if (selectedType === StrategyType.STRATEGY_TYPE_UNKNOWN) {
       message.error('请选择策略类型')
       return
     }
@@ -76,7 +76,7 @@ export default function StrategyTypeModal(props: StrategyTypeModalProps) {
 
   useEffect(() => {
     if (open) {
-      setSelectedType('STRATEGY_TYPE_UNKNOWN')
+      setSelectedType(StrategyType.STRATEGY_TYPE_UNKNOWN)
     }
   }, [open])
 

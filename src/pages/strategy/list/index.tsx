@@ -1,6 +1,7 @@
 import { ActionKey } from '@/api/global'
 import { deleteStrategyGroup } from '@/api/strategy'
 import { TeamStrategyGroupItem } from '@/api2/common.types'
+import { GlobalStatus } from '@/api2/enum'
 import { listTeamStrategyGroup, updateTeamStrategyGroupStatus } from '@/api2/team/team-strategy'
 import { ListTeamStrategyGroupRequest } from '@/api2/team/team-strategy.types'
 import { ExclamationCircleFilled, MoreOutlined, PlusOutlined } from '@ant-design/icons'
@@ -114,13 +115,13 @@ const StrategyMetric: React.FC = () => {
       case ActionKey.ENABLE:
         updateStrategyGroupStatus({
           groupId: item.groupId,
-          status: 'GLOBAL_STATUS_ENABLE'
+          status: GlobalStatus.GLOBAL_STATUS_ENABLE
         })
         break
       case ActionKey.DISABLE:
         updateStrategyGroupStatus({
           groupId: item.groupId,
-          status: 'GLOBAL_STATUS_DISABLE'
+          status: GlobalStatus.GLOBAL_STATUS_DISABLE
         })
         break
       case ActionKey.OPERATION_LOG:
@@ -151,7 +152,7 @@ const StrategyMetric: React.FC = () => {
   } // 策略组操作菜单
 
   const tableOperationItems = (record: TeamStrategyGroupItem): MenuProps['items'] => [
-    record.status === 'GLOBAL_STATUS_DISABLE'
+    record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -271,7 +272,7 @@ const StrategyMetric: React.FC = () => {
               }}
             >
               <div className='flex gap-2 w-[90%]' onClick={() => handleGroupClick(item)}>
-                <Badge status={item.status === 'GLOBAL_STATUS_ENABLE' ? 'success' : 'error'} />
+                <Badge status={item.status === GlobalStatus.GLOBAL_STATUS_ENABLE ? 'success' : 'error'} />
                 <div>
                   [<span className='text-green-500'>{item.enableStrategyCount}</span>/
                   <span className='text-red-500'>{item.strategyCount}</span>]
