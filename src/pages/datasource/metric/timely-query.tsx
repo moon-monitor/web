@@ -48,7 +48,7 @@ export const TimelyQuery: React.FC<TimelyQueryProps> = (props) => {
   const [timeRange, setTimeRange] = useState<Dayjs[]>([dayjs().subtract(5, 'minute'), dayjs()])
   const [showArea, setShowArea] = useState(true)
   const [step, setStep] = useState(14)
-  const pathPrefix = `${baseURL}/datasource/metric/${datasource?.datasourceId || 0}`
+  const pathPrefix = `${baseURL}/api/team/datasource/metric/${datasource?.datasourceId || 0}`
 
   const transformedData = React.useMemo(
     () => transformMetricsData(metricsData?.data || { result: [], resultType: '' }),

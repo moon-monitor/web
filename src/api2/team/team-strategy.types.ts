@@ -5,10 +5,10 @@ import {
   TeamMetricDatasourceItem,
   TeamStrategyGroupItem,
   TeamStrategyItem,
-  TeamStrategyMetricItemRuleItem,
+  TeamStrategyMetricLevelItem,
   UserBaseItem
 } from '../common.types'
-import { GlobalStatus, StrategyType } from '../enum'
+import { GlobalStatus } from '../enum'
 
 export interface DeleteTeamStrategyRequest {
   /**
@@ -31,8 +31,8 @@ export interface GetTeamMetricStrategyReply {
   datasource: TeamMetricDatasourceItem[]
   expr: string
   labels: KeyValueItem[]
-  StrategyMetricId: number
-  strategyMetricRules: TeamStrategyMetricItemRuleItem[]
+  strategyMetricId: number
+  strategyMetricRules: TeamStrategyMetricLevelItem[]
 }
 
 export interface GetTeamMetricStrategyRequest {
@@ -40,7 +40,6 @@ export interface GetTeamMetricStrategyRequest {
    * Strategy Id
    */
   strategyId?: number
-  strategyType?: StrategyType
 }
 
 /**
@@ -126,45 +125,27 @@ export interface ListTeamStrategyRequest {
 /**
  * api.palace.SaveTeamMetricStrategyLevelsRequest
  */
-export interface SaveTeamMetricStrategyLevelsRequest {
-  /**
-   * Levels
-   */
-  levels?: SaveTeamMetricStrategyLevelRequest[]
-  /**
-   * Strategy metric id
-   */
-  strategyId?: number
-}
-
-/**
- * api.palace.SaveTeamMetricStrategyLevelRequest
- */
 export interface SaveTeamMetricStrategyLevelRequest {
+  /**
+   * alarm pages of dict item
+   */
+  alarmPages?: number[]
   /**
    * Condition
    */
   condition?: number
   /**
-   * Duration
+   * Duration in seconds
    */
   duration?: string
   /**
-   * Id
-   */
-  id?: number
-  /**
    * Label notices
    */
-  labelNotices?: LabelNotices[]
+  labelReceiverRoutes?: LabelNotices[]
   /**
-   * Level Id
+   * Level Id of dict item
    */
   levelId?: number
-  /**
-   * Level name
-   */
-  levelName?: string
   /**
    * Receiver routes
    */
@@ -174,9 +155,13 @@ export interface SaveTeamMetricStrategyLevelRequest {
    */
   sampleMode?: number
   /**
-   * Status
+   * strategy metric id
    */
-  status?: number
+  strategyMetricId?: number
+  /**
+   * Id
+   */
+  strategyMetricLevelId?: number
   /**
    * Total
    */
@@ -286,4 +271,47 @@ export interface UpdateTeamStrategyGroupStatusRequest {
    * New status for the strategy group
    */
   status?: GlobalStatus
+}
+
+export interface TeamMetricStrategyLevelDetailRequest {
+  /**
+   * Strategy metric level id
+   */
+  strategyMetricLevelId?: number
+}
+export interface TeamMetricStrategyLevelDetailReply extends TeamStrategyMetricLevelItem {}
+/**
+ * api.palace.TeamMetricStrategyLevelListRequest，TeamMetricStrategyLevelListRequest
+ * represents the request data for getting the list of team metric strategy levels
+ */
+export interface TeamMetricStrategyLevelListRequest {
+  /**
+   * Keyword
+   */
+  keyword?: string
+  /**
+   * Level id
+   */
+  levelId?: number
+  /**
+   * Pagination
+   */
+  pagination?: PaginationRequest
+  /**
+   * Status
+   */
+  status?: number
+  /**
+   * Strategy metric id
+   */
+  strategyMetricId?: number
+}
+
+export interface TeamMetricStrategyLevelListReply {
+  items: TeamStrategyMetricLevelItem[]
+  pagination: PaginationReply
+}
+
+export interface DeleteTeamMetricStrategyLevelRequest {
+  strategyMetricLevelId: number
 }

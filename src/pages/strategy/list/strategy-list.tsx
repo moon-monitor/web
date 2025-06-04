@@ -1,21 +1,18 @@
-/* eslint-disable prettier/prettier */
-import { Status } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import { deleteStrategy, pushStrategy, updateStrategyStatus } from '@/api/strategy'
 import { TeamStrategyItem } from '@/api2/common.types'
-import { StrategyType } from '@/api2/enum'
-import { listTeamStrategy } from '@/api2/team/team-strategy'
+import { ActionKey, GlobalStatus } from '@/api2/enum'
+import { deleteTeamStrategy, listTeamStrategy, updateTeamStrategiesStatus } from '@/api2/team/team-strategy'
 import { ListTeamStrategyRequest } from '@/api2/team/team-strategy.types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'
 import { ExclamationCircleFilled } from '@ant-design/icons'
+import { useRequest } from 'ahooks'
 import { Button, Modal, Space, message, theme } from 'antd'
 import { debounce } from 'lodash'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import MetricEditModal from './components/edit-modal-metric'
-import StrategyTypeModal from './components/edit-modal-strategy-type'
+import { useNavigate } from 'react-router-dom'
+import { BasicModal } from './components/basic'
 import { ModalSubscribe } from './modal-subscribe'
 import ModalSubscriber from './modal-subscriber'
 import { formList, getColumnList } from './options'
@@ -34,6 +31,7 @@ interface StrategyListProps {
 }
 
 const StrategyList = (props: StrategyListProps) => {
+  const navigate = useNavigate()
   const { token } = useToken()
   const { isFullscreen } = useContext(GlobalContext)
   const { selectedGroups } = props
@@ -43,62 +41,33 @@ const StrategyList = (props: StrategyListProps) => {
   const [loading, setLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const [total, setTotal] = useState(0)
-  const [openMetricEditModal, setOpenMetricEditModal] = useState(false)
-  const [openEventEditModal, setOpenEventEditModal] = useState(false)
-  const [openDomainEditModal, setOpenDomainEditModal] = useState(false)
-  const [openPortEditModal, setOpenPortEditModal] = useState(false)
-  const [openHttpEditModal, setOpenHttpEditModal] = useState(false)
-  const [openLogEditModal, setOpenLogEditModal] = useState(false)
-
-  const [openMetricDetailModal, setOpenMetricDetailModal] = useState(false)
-  const [openEventDetailModal, setOpenEventDetailModal] = useState(false)
-  const [openDomainDetailModal, setOpenDomainDetailModal] = useState(false)
-  const [openPortDetailModal, setOpenPortDetailModal] = useState(false)
-  const [openHttpDetailModal, setOpenHttpDetailModal] = useState(false)
-  const [openLogDetailModal, setOpenLogDetailModal] = useState(false)
 
   const [openSubscribeModal, setOpenSubscribeModal] = useState(false)
   const [openSubscriberModal, setOpenSubscriberModal] = useState(false)
 
   const [detail, setDetail] = useState<TeamStrategyItem>()
 
-  const [openChartModal, setOpenChartModal] = useState(false)
-  const [openStrategyTypeModal, setOpenStrategyTypeModal] = useState(false)
+  const [openBasicModal, setOpenBasicModal] = useState(false)
 
   const searchRef = useRef<HTMLDivElement>(null)
   const ADivRef = useRef<HTMLDivElement>(null)
   const AutoTableHeight = useContainerHeightTop(ADivRef, datasource, isFullscreen)
 
-  const handleOpenMetricEditModal = (item?: TeamStrategyItem) => {
-    console.log('handleOpenMetricEditModal', item)
-    setDetail(item)
-    setOpenMetricEditModal(true)
-  }
+  const { run: updateStrategyStatus } = useRequest(updateTeamStrategiesStatus, {
+    manual: true,
+    onSuccess: () => {
+      message.success('更改状态成功')
+      onRefresh()
+    }
+  })
 
-  const handleOpenEventEditModal = (item?: TeamStrategyItem) => {
-    setDetail(item)
-    setOpenEventEditModal(true)
-  }
-
-  const handleOpenDomainEditModal = (item?: TeamStrategyItem) => {
-    setDetail(item)
-    setOpenDomainEditModal(true)
-  }
-
-  const handleOpenPortEditModal = (item?: TeamStrategyItem) => {
-    setDetail(item)
-    setOpenPortEditModal(true)
-  }
-
-  const handleOpenHttpEditModal = (item?: TeamStrategyItem) => {
-    setDetail(item)
-    setOpenHttpEditModal(true)
-  }
-
-  const handleOpenLogEditModal = (item?: TeamStrategyItem) => {
-    setDetail(item)
-    setOpenLogEditModal(true)
-  }
+  const { run: deleteStrategy } = useRequest(deleteTeamStrategy, {
+    manual: true,
+    onSuccess: () => {
+      message.success('删除成功')
+      onRefresh()
+    }
+  })
 
   const handleOpenSubscribeModal = (item?: TeamStrategyItem) => {
     setDetail(item)
@@ -108,42 +77,6 @@ const StrategyList = (props: StrategyListProps) => {
   const handleOpenSubscriberModal = (item?: TeamStrategyItem) => {
     setDetail(item)
     setOpenSubscriberModal(true)
-  }
-
-  const handleMetricEditOk = () => {
-    setOpenMetricEditModal(false)
-    setDetail(undefined)
-    onRefresh()
-  }
-
-  const handleDomainEditOk = () => {
-    setOpenDomainEditModal(false)
-    setDetail(undefined)
-    onRefresh()
-  }
-
-  const handlePortEditOk = () => {
-    setOpenPortEditModal(false)
-    setDetail(undefined)
-    onRefresh()
-  }
-
-  const handleEventEditOk = () => {
-    setOpenEventEditModal(false)
-    setDetail(undefined)
-    onRefresh()
-  }
-
-  const handleHttpEditOk = () => {
-    setOpenHttpEditModal(false)
-    setDetail(undefined)
-    onRefresh()
-  }
-
-  const handleLogEditOk = () => {
-    setOpenLogEditModal(false)
-    setDetail(undefined)
-    onRefresh()
   }
 
   const handleSubscribeOk = () => {
@@ -164,83 +97,10 @@ const StrategyList = (props: StrategyListProps) => {
 
   const handleDetailModal = (item: TeamStrategyItem) => {
     setDetail(item)
-    switch (item.strategyType) {
-      case StrategyType.STRATEGY_TYPE_METRIC:
-        setOpenMetricDetailModal(true)
-        break
-      case StrategyType.STRATEGY_TYPE_EVENT:
-        setOpenEventDetailModal(true)
-        break
-      case StrategyType.STRATEGY_TYPE_CERT:
-        setOpenDomainDetailModal(true)
-        break
-      case StrategyType.STRATEGY_TYPE_PORT:
-        setOpenPortDetailModal(true)
-        break
-      case StrategyType.STRATEGY_TYPE_HTTP:
-        setOpenHttpDetailModal(true)
-        break
-      case StrategyType.STRATEGY_TYPE_LOGS:
-        setOpenLogDetailModal(true)
-        break
-      default:
-        setOpenMetricDetailModal(true)
-        break
-    }
-  }
-
-  const handleCloseDetailModal = () => {
-    setDetail(undefined)
-    setOpenMetricDetailModal(false)
-    setOpenEventDetailModal(false)
-    setOpenDomainDetailModal(false)
-    setOpenPortDetailModal(false)
-    setOpenHttpDetailModal(false)
-    setOpenLogDetailModal(false)
-  }
-
-  const handleCloseMetricEditModal = () => {
-    setOpenMetricEditModal(false)
-    setDetail(undefined)
-  }
-
-  const handleCloseEventEditModal = () => {
-    setOpenEventEditModal(false)
-    setDetail(undefined)
-  }
-
-  const handleCloseDomainEditModal = () => {
-    setOpenDomainEditModal(false)
-    setDetail(undefined)
-  }
-
-  const handleClosePortEditModal = () => {
-    setOpenPortEditModal(false)
-    setDetail(undefined)
-  }
-
-  const handleCloseHttpEditModal = () => {
-    setOpenHttpEditModal(false)
-    setDetail(undefined)
-  }
-
-  const handleCloseLogEditModal = () => {
-    setOpenLogEditModal(false)
-    setDetail(undefined)
   }
 
   const onRefresh = () => {
     setRefresh(!refresh)
-  }
-
-  const handleOpenChartModal = (item: TeamStrategyItem) => {
-    setOpenChartModal(true)
-    setDetail(item)
-  }
-
-  const handleCloseChartModal = () => {
-    setOpenChartModal(false)
-    setDetail(undefined)
   }
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -290,50 +150,18 @@ const StrategyList = (props: StrategyListProps) => {
     setSearchParams(defaultSearchParams)
   }
 
-  const handleOpenEditModal = (item: TeamStrategyItem) => {
-    switch (item.strategyType) {
-      case StrategyType.STRATEGY_TYPE_METRIC:
-        handleOpenMetricEditModal(item)
-        break
-      case StrategyType.STRATEGY_TYPE_EVENT:
-        handleOpenEventEditModal(item)
-        break
-      case StrategyType.STRATEGY_TYPE_CERT:
-        handleOpenDomainEditModal(item)
-        break
-      case StrategyType.STRATEGY_TYPE_PORT:
-        handleOpenPortEditModal(item)
-        break
-      case StrategyType.STRATEGY_TYPE_HTTP:
-        handleOpenHttpEditModal(item)
-        break
-      case StrategyType.STRATEGY_TYPE_LOGS:
-        handleOpenLogEditModal(item)
-        break
-      default:
-        message.warning(`${StrategyType[item.strategyType]}未开通`)
-        break
-    }
-  }
-
   const onHandleMenuOnClick = (item: TeamStrategyItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
         updateStrategyStatus({
-          ids: [item.groupId],
-          status: Status.StatusEnable
-        }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
+          strategyIds: [item.strategyId],
+          status: GlobalStatus.GLOBAL_STATUS_ENABLE
         })
         break
       case ActionKey.DISABLE:
         updateStrategyStatus({
-          ids: [item.groupId],
-          status: Status.StatusDisable
-        }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
+          strategyIds: [item.strategyId],
+          status: GlobalStatus.GLOBAL_STATUS_DISABLE
         })
         break
       case ActionKey.OPERATION_LOG:
@@ -342,15 +170,15 @@ const StrategyList = (props: StrategyListProps) => {
         handleDetailModal(item)
         break
       case ActionKey.EDIT:
-        handleOpenEditModal(item)
+        handleOpenBasicModal()
+        setDetail(item)
         break
       case ActionKey.CHART:
-        handleOpenChartModal(item)
         break
       case ActionKey.IMMEDIATELY_PUSH:
-        pushStrategy(item.groupId)
-          .then(() => message.success('推送成功'))
-          .catch(() => message.error('推送失败'))
+        // pushStrategy(item.groupId)
+        //   .then(() => message.success('推送成功'))
+        //   .catch(() => message.error('推送失败'))
         break
       case ActionKey.SUBSCRIBE:
         handleOpenSubscribeModal(item)
@@ -364,13 +192,17 @@ const StrategyList = (props: StrategyListProps) => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteStrategy({ id: item.groupId }).then(() => {
-              message.success('删除成功')
-              onRefresh()
-            })
+            deleteStrategy({ strategyId: item.strategyId })
           },
           onCancel() {
             message.info('取消操作')
+          }
+        })
+        break
+      case ActionKey.ASSOCIATED_DATA:
+        navigate(`/home/strategy/list/${item.strategyId}`, {
+          state: {
+            detail: item
           }
         })
         break
@@ -383,40 +215,17 @@ const StrategyList = (props: StrategyListProps) => {
     pageSize: searchParams.pagination.pageSize
   })
 
-  const handleOpenStrategyTypeModal = () => {
-    setDetail(undefined)
-    setOpenStrategyTypeModal(true)
+  const handleCloseBasicModal = () => {
+    setOpenBasicModal(false)
   }
 
-  const handleStrategyTypeSubmit = (type: StrategyType) => {
-    setOpenStrategyTypeModal(false)
-    switch (type) {
-      case StrategyType.STRATEGY_TYPE_METRIC:
-        handleOpenMetricEditModal()
-        break
-      case StrategyType.STRATEGY_TYPE_EVENT:
-        handleOpenEventEditModal()
-        break
-      // case StrategyType.StrategyTypeDomainCertificate:
-      //   handleOpenDomainEditModal()
-      //   break
-      case StrategyType.STRATEGY_TYPE_PORT:
-        handleOpenPortEditModal()
-        break
-      case StrategyType.STRATEGY_TYPE_HTTP:
-        handleOpenHttpEditModal()
-        break
-      case StrategyType.STRATEGY_TYPE_LOGS:
-        handleOpenLogEditModal()
-        break
-      default:
-        message.warning(`${StrategyType[type]}未开通`)
-        break
-    }
+  const handleBasicOk = () => {
+    setOpenBasicModal(false)
+    onRefresh()
   }
 
-  const handleStrategyTypeCancel = () => {
-    setOpenStrategyTypeModal(false)
+  const handleOpenBasicModal = () => {
+    setOpenBasicModal(true)
   }
 
   useEffect(() => {
@@ -440,20 +249,13 @@ const StrategyList = (props: StrategyListProps) => {
         onOk={handleSubscribeOk}
         onCancel={handleCloseSubscribeModal}
       />
-      <StrategyTypeModal
-        width='780px'
-        title='选择策略类型'
-        open={openStrategyTypeModal}
-        onSubmit={handleStrategyTypeSubmit}
-        onCancel={handleStrategyTypeCancel}
-      />
-      <MetricEditModal
-        title='指标策略编辑'
+      <BasicModal
+        title={detail?.strategyId ? '编辑策略' : '添加策略'}
         width='60%'
+        open={openBasicModal}
+        onClose={handleCloseBasicModal}
+        onOk={handleBasicOk}
         strategyDetail={detail}
-        open={openMetricEditModal}
-        onCancel={handleCloseMetricEditModal}
-        onOk={handleMetricEditOk}
       />
       <div
         style={{
@@ -473,7 +275,7 @@ const StrategyList = (props: StrategyListProps) => {
         <div className='flex justify-between items-center'>
           <div className='font-bold text-lg'>策略列表</div>
           <Space size={8}>
-            <Button type='primary' onClick={handleOpenStrategyTypeModal}>
+            <Button type='primary' onClick={handleOpenBasicModal}>
               添加
             </Button>
             <Button color='default' variant='filled' onClick={onRefresh}>

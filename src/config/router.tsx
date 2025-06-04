@@ -47,6 +47,18 @@ export const defaultRouters: RouteObject[] = [
         // 403
         path: '/home/*',
         element: <Error403 />
+      },
+      {
+        path: '/home/strategy/list/:id',
+        Component: lazy(() => import('@/pages/strategy/list/associated-data')),
+        loader: () => [
+          {
+            title: '策略管理'
+          },
+          {
+            title: '策略列表'
+          }
+        ]
       }
     ]
   },

@@ -406,7 +406,7 @@ export interface UpdateTeamStrategiesStatusRequest {
   /**
    * List of strategy Ids to update
    */
-  strategyIds?: number[]
+  strategyIds: number[]
 }
 
 /**

@@ -1,6 +1,6 @@
-import { NotifyType } from '@/api/enum'
-import { StrategyItem } from '@/api/model-types'
 import { userSubscriberStrategy } from '@/api/subscriber'
+import { TeamStrategyItem } from '@/api2/common.types'
+import { NotifyType } from '@/api2/enum'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
 import { Checkbox, Form, Modal, ModalProps, Typography } from 'antd'
@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 
 export interface ModalSubscribeProps extends ModalProps {
   onOk?: () => void
-  item?: StrategyItem
+  item?: TeamStrategyItem
 }
 
 const { Text } = Typography
@@ -23,10 +23,10 @@ export const ModalSubscribe = (props: ModalSubscribeProps) => {
   })
 
   const handleSubmit = () => {
-    if (!item || !item.id) return
+    if (!item || !item.strategyId) return
     form.validateFields().then((values) => {
       subscribeStrategy({
-        strategyId: item?.id,
+        strategyId: item?.strategyId,
         notifyType: values.notifyTypes.reduce((prev, curr) => prev | curr, 0)
       })
         .then(() => {
@@ -60,7 +60,7 @@ export const ModalSubscribe = (props: ModalSubscribeProps) => {
       </Form>
       <div className='mt-4 text-sm text-gray-500 flex flex-col gap-2'>
         <label>备注</label>
-        <Text type='secondary'>{item?.annotations?.summary}</Text>
+        <Text type='secondary'>{item?.remark}</Text>
       </div>
     </Modal>
   )

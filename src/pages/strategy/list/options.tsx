@@ -1,6 +1,12 @@
-import { TeamStrategyGroupItem, TeamStrategyItem } from '@/api2/common.types'
+import {
+  StrategyMetricRuleLabelNotice,
+  TeamDictItem,
+  TeamStrategyGroupItem,
+  TeamStrategyItem,
+  TeamStrategyMetricLevelItem
+} from '@/api2/common.types'
 import { ActionKey, ConditionMetric, GlobalStatus, SampleMode, StrategyType } from '@/api2/enum'
-import { GlobalStatusData, StrategyTypeData } from '@/api2/global'
+import { ConditionMetricData, GlobalStatusData, SampleModeData, StrategyTypeData } from '@/api2/global'
 import { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -170,6 +176,14 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
           删除
         </Button>
       )
+    },
+    {
+      key: ActionKey.ASSOCIATED_DATA,
+      label: (
+        <Button size='small' type='link'>
+          关联数据
+        </Button>
+      )
     }
   ]
 
@@ -325,3 +339,118 @@ export const metricStrategyLevelsformItems: (DataFromItem | DataFromItem[])[] = 
     }
   }
 ]
+
+interface MetricLevelColumnsProps {
+  onHandleMenuOnClick: (item: TeamStrategyMetricLevelItem, key: ActionKey) => void
+}
+export const metricLevelColumns = (props: MetricLevelColumnsProps): ColumnsType<TeamStrategyMetricLevelItem> => {
+  const { onHandleMenuOnClick } = props
+  return [
+    {
+      title: '告警等级',
+      dataIndex: 'level',
+      key: 'level',
+      render: (level: TeamDictItem) => {
+        return level ? <Tag color={level.color}>{level.value}</Tag> : '-'
+      }
+    },
+    {
+      title: '判断条件',
+      dataIndex: 'condition',
+      key: 'condition',
+      render: (condition: ConditionMetric) => {
+        return ConditionMetricData[condition]
+      }
+    },
+    {
+      title: '阈值',
+      dataIndex: 'values',
+      key: 'values',
+      render: (values: number[]) => {
+        return values.join('~')
+      }
+    },
+    {
+      title: '触发类型',
+      dataIndex: 'sampleMode',
+      key: 'sampleMode',
+      render: (sampleMode: SampleMode) => {
+        return SampleModeData[sampleMode]
+      }
+    },
+    {
+      title: '持续时间(秒)',
+      dataIndex: 'duration',
+      key: 'duration'
+    },
+    {
+      title: '持续次数',
+      dataIndex: 'total',
+      key: 'total'
+    },
+    {
+      title: '告警页面',
+      dataIndex: 'alarmPages',
+      key: 'alarmPages',
+      render: (alarmPages: TeamDictItem[]) => {
+        return alarmPages.map((item) => <Tag color={item.color}>{item.value}</Tag>)
+      }
+    },
+    {
+      title: '通知对象',
+      dataIndex: 'receiverRoutes',
+      key: 'receiverRoutes'
+    },
+    // {
+    //   title: '自定义通知对象',
+    //   dataIndex: 'labelNotices',
+    //   key: 'labelNotices',
+    //   children: [
+    //     {
+    //       title: '标签Key',
+    //       dataIndex: 'key',
+    //       key: 'key'
+    //     },
+    //     {
+    //       title: '标签Value',
+    //       dataIndex: 'value',
+    //       key: 'value'
+    //     },
+    //     {
+    //       title: '通知对象',
+    //       dataIndex: 'receiverRoutes',
+    //       key: 'receiverRoutes'
+    //     }
+    //   ]
+    // },
+    {
+      title: '自定义通知对象',
+      dataIndex: 'labelNotices',
+      key: 'labelNotices',
+      render: (labelNotices: StrategyMetricRuleLabelNotice[]) => {
+        return (
+          <div>
+            {labelNotices &&
+              labelNotices.map((item) => (
+                <div key={item.labelKey}>
+                  {item.labelKey}:{item.labelValue}
+                </div>
+              ))}
+          </div>
+        )
+      }
+    },
+    {
+      title: '操作',
+      key: 'action',
+      width: 120,
+      render: (record: TeamStrategyMetricLevelItem) => {
+        return (
+          <Button type='link' size='small' onClick={() => onHandleMenuOnClick(record, ActionKey.EDIT)}>
+            编辑
+          </Button>
+        )
+      }
+    }
+  ]
+}

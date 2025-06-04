@@ -46,7 +46,7 @@ export const transformMenuTree = (menuTree: MenuTree[] | undefined): ItemType[] 
       key: `/home${item.key}`,
       label: item.label,
       title: item.label,
-      icon: renderIcon(item.icon),
+      icon: item.children ? renderIcon(item.icon) : undefined,
       children: item.children ? transformMenuTree(item.children) : undefined
     }
 

@@ -5,6 +5,7 @@ import { GlobalContext } from '@/utils/context'
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Layout, Menu, Space, Spin, theme } from 'antd'
 import { BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb'
+import { isArray } from 'lodash'
 import type React from 'react'
 import { Suspense, useContext, useEffect, useRef, useState } from 'react'
 import { Outlet, useLocation, useMatches, useNavigate } from 'react-router-dom'
@@ -78,6 +79,9 @@ const MoonLayout: React.FC = () => {
 
   useEffect(() => {
     setSelectedKeys([location.pathname])
+    if (location.pathname.includes('/strategy/list/')) {
+      setSelectedKeys(['/home/strategy/list'])
+    }
 
     const openKey = location.pathname.split('/').slice(1)
     const keys: string[] = []
@@ -95,8 +99,15 @@ const MoonLayout: React.FC = () => {
   useEffect(() => {
     if (!meta) return
     setBreadcrumbItems(() => {
-      return meta?.map((item) => {
-        return item?.data || []
+      return meta?.flatMap((item) => {
+        if (isArray(item.data) && item.data.length > 0) {
+          return item.data.map((subItem) => ({
+            title: subItem.title,
+            path: subItem.path
+          }))
+        } else {
+          return item.data ? [item.data] : []
+        }
       }) as BreadcrumbItemType[]
     })
   }, [location])

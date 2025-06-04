@@ -207,6 +207,21 @@ export enum SampleMode {
   SAMPLE_MODE_MIN
 }
 
+/** 通知类型 */
+export enum NotifyType {
+  /** UNKNOWN 未知 */
+  NOTIFY_UNKNOWN = 0,
+
+  /** 手机 */
+  NOTIFY_PHONE = 1,
+
+  /** 短信 */
+  NOTIFY_SMS = 2,
+
+  /** 邮箱 */
+  NOTIFY_EMAIL = 4
+}
+
 // 操作
 export enum ActionKey {
   /** 新增 */
@@ -256,5 +271,7 @@ export enum ActionKey {
   /** 图表排序-置底 */
   CHART_SORT_BOTTOM = '__chart_sort_bottom__',
   /** 同步 */
-  SYNC = '__sync__'
+  SYNC = '__sync__',
+  /** 关联数据 */
+  ASSOCIATED_DATA = '__associated_data__'
 }

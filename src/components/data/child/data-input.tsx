@@ -128,9 +128,12 @@ export const DataInput: FC<DataInputProps> = (props) => {
   const { type, value, onChange, defaultValue } = props
   const [selectOptions, setSelectOptions] = useState<DefaultOptionType[]>([])
   useEffect(() => {
-    if (type === 'select' && props.props?.options && typeof props.props.options === 'function') {
-      props.props.options().then(setSelectOptions)
-      console.log(selectOptions, 'selectOptions')
+    if (type === 'select' && props.props?.options) {
+      if (typeof props.props.options === 'function') {
+        props.props.options().then(setSelectOptions)
+      } else {
+        setSelectOptions(props.props.options)
+      }
     }
   }, [])
   const renderInput = () => {
@@ -139,7 +142,7 @@ export const DataInput: FC<DataInputProps> = (props) => {
         return (
           <Select
             {...props.props}
-            options={selectOptions || props.props?.options}
+            options={selectOptions}
             value={value}
             defaultValue={defaultValue}
             onChange={onChange}

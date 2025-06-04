@@ -466,7 +466,7 @@ export interface TeamStrategyItem {
   /**
    * Information about the UserItem of the strategy.
    */
-  UserItem?: UserItem
+  creator?: UserBaseItem
   /**
    * Id of the group to which the strategy belongs.
    */
@@ -487,7 +487,7 @@ export interface TeamStrategyItem {
   /**
    * Unique identifier for the strategy.
    */
-  strategyId?: number
+  strategyId: number
   /**
    * Information about the team associated with the strategy.
    */
@@ -720,10 +720,10 @@ export interface TLS {
 /**
  * api.palace.common.TeamStrategyMetricItem_RuleItem
  */
-export interface TeamStrategyMetricItemRuleItem {
+export interface TeamStrategyMetricLevelItem {
   alarmPages?: TeamDictItem[]
   condition?: number
-  count?: string
+  total?: string
   duration?: string
   labelNotices?: StrategyMetricRuleLabelNotice[]
   level?: TeamDictItem
@@ -733,6 +733,7 @@ export interface TeamStrategyMetricItemRuleItem {
   status: number
   strategyMetricId?: number
   values?: number[]
+  strategyMetricLevelId?: number
 }
 
 /**
@@ -756,7 +757,7 @@ export interface TeamDictItem {
  */
 export interface StrategyMetricRuleLabelNotice {
   createdAt?: string
-  label?: string
+  labelKey?: string
   labelNoticeId?: number
   labelValue?: string
   notices?: NoticeGroupItem[]
@@ -775,8 +776,8 @@ export interface TeamStrategyMetricItem {
   datasource?: TeamMetricDatasourceItem[]
   expr?: string
   labels?: { [key: string]: string }
-  StrategyMetricId?: number
-  strategyMetricRules?: TeamStrategyMetricItemRuleItem[]
+  strategyMetricId?: number
+  strategyMetricRules?: TeamStrategyMetricLevelItem[]
 }
 
 /**

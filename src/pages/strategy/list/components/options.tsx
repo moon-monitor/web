@@ -1,66 +1,89 @@
-import { defaultPaginationReq } from '@/api2/global'
+import { StrategyType } from '@/api2/enum'
+import { defaultPaginationReq, StrategyTypeData } from '@/api2/global'
 import { listTeamNoticeGroup } from '@/api2/team/team-notice'
 import { listTeamStrategyGroup } from '@/api2/team/team-strategy'
 import { DataFromItem } from '@/components/data/form'
+import { Tag } from 'antd'
 
 export const basicFormItems: (DataFromItem | DataFromItem[])[] = [
-  [
-    {
-      name: 'name',
-      label: '名称',
-      type: 'input',
-      props: {
-        placeholder: '请输入名称'
-      },
-      formProps: {
-        rules: [
-          { required: true, message: '请输入名称' },
-          { max: 20, message: '名称长度不能超过20个字符' }
-        ]
+  {
+    name: 'name',
+    label: '名称',
+    type: 'input',
+    span: 12,
+    props: {
+      placeholder: '请输入名称'
+    },
+    formProps: {
+      rules: [
+        { required: true, message: '请输入名称' },
+        { max: 20, message: '名称长度不能超过20个字符' }
+      ]
+    }
+  },
+  {
+    name: 'strategyType',
+    label: '策略类型',
+    type: 'select',
+    span: 12,
+    props: {
+      options: Object.entries(StrategyTypeData)
+        .filter(([key]) => +key !== StrategyType.STRATEGY_TYPE_UNKNOWN)
+        .map(([key, value]) => ({
+          label: (
+            <Tag color={value.color} className='w-full'>
+              {value.label}
+            </Tag>
+          ),
+          value: +key
+        }))
+    },
+    formProps: {
+      rules: [{ required: true, message: '请选择策略类型' }]
+    }
+  },
+  {
+    name: 'groupId',
+    label: '策略组',
+    type: 'select',
+    span: 12,
+    props: {
+      placeholder: '请选择策略组',
+      async options() {
+        const res = await listTeamStrategyGroup({ pagination: defaultPaginationReq })
+        return (
+          res.items?.map((g) => ({
+            label: g.name,
+            value: g.groupId
+          })) || []
+        )
       }
     },
-    {
-      name: 'groupId',
-      label: '策略组',
-      type: 'select',
-      props: {
-        placeholder: '请选择策略组',
-        async options() {
-          const res = await listTeamStrategyGroup({ pagination: defaultPaginationReq })
-          return (
-            res.items?.map((g) => ({
-              label: g.name,
-              value: g.groupId
-            })) || []
-          )
-        }
-      },
-      formProps: {
-        rules: [{ required: true, message: '请选择策略组' }]
+    formProps: {
+      rules: [{ required: true, message: '请选择策略组' }]
+    }
+  },
+  {
+    name: 'receiverRoutes',
+    label: '通知对象',
+    type: 'select',
+    span: 12,
+    props: {
+      placeholder: '请选择通知对象',
+      mode: 'multiple',
+      allowClear: true,
+      async options() {
+        const res = await listTeamNoticeGroup({ pagination: defaultPaginationReq })
+        return (
+          res.items?.map((g) => ({
+            label: g.name,
+            value: g.noticeGroupId
+          })) || []
+        )
       }
     }
-  ],
-  [
-    {
-      name: 'receiverRoutes',
-      label: '通知对象',
-      type: 'select',
-      props: {
-        placeholder: '请选择通知对象',
-        mode: 'multiple',
-        allowClear: true,
-        async options() {
-          const res = await listTeamNoticeGroup({ pagination: defaultPaginationReq })
-          return (
-            res.items?.map((g) => ({
-              label: g.name,
-              value: g.noticeGroupId
-            })) || []
-          )
-        }
-      }
-    }
-  ],
+  },
+
   {
     name: 'remark',
     label: '备注',

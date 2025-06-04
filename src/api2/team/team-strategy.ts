@@ -1,6 +1,7 @@
 import { EmptyReply } from '../common.types'
 import request from '../request'
 import {
+  DeleteTeamMetricStrategyLevelRequest,
   DeleteTeamStrategyRequest,
   GetTeamMetricStrategyReply,
   GetTeamMetricStrategyRequest,
@@ -10,13 +11,18 @@ import {
   ListTeamStrategyGroupRequest,
   ListTeamStrategyReply,
   ListTeamStrategyRequest,
-  SaveTeamMetricStrategyLevelsRequest,
+  SaveTeamMetricStrategyLevelRequest,
   SaveTeamMetricStrategyRequest,
   SaveTeamStrategyGroupRequest,
   SaveTeamStrategyReply,
   SaveTeamStrategyRequest,
+  TeamMetricStrategyLevelDetailReply,
+  TeamMetricStrategyLevelDetailRequest,
+  TeamMetricStrategyLevelListReply,
+  TeamMetricStrategyLevelListRequest,
   UpdateTeamStrategyGroupStatusRequest
 } from './team-strategy.types'
+import { UpdateTeamStrategiesStatusRequest } from './types'
 
 /**
  * ListTeamStrategyGroup lists team strategy groups based on specified filters
@@ -33,7 +39,7 @@ export function listTeamStrategyGroup(params: ListTeamStrategyGroupRequest): Pro
  * @returns {Promise<GetTeamStrategyGroupReply>}
  * */
 export function getTeamStrategyGroup(params: GetTeamStrategyGroupRequest): Promise<GetTeamStrategyGroupReply> {
-  return request.GET<GetTeamStrategyGroupReply>(`/api/team/strategy/group`, params)
+  return request.GET<GetTeamStrategyGroupReply>('/api/team/strategy/group', params)
 }
 
 /**
@@ -78,7 +84,7 @@ export function listTeamStrategy(params: ListTeamStrategyRequest): Promise<ListT
  * @returns {Promise<GetTeamMetricStrategyReply>}
  */
 export function getTeamMetricStrategy(params: GetTeamMetricStrategyRequest): Promise<GetTeamMetricStrategyReply> {
-  return request.GET<GetTeamMetricStrategyReply>(`/api/team/strategy`, params)
+  return request.GET<GetTeamMetricStrategyReply>('/api/team/strategy/metric', params)
 }
 
 /**
@@ -113,6 +119,45 @@ export function saveTeamMetricStrategy(params: SaveTeamMetricStrategyRequest): P
  * @param {SaveTeamMetricStrategyLevelsRequest} params
  * @returns {Promise<EmptyReply>}
  */
-export function saveTeamMetricStrategyLevels(params: SaveTeamMetricStrategyLevelsRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/strategy/metric/levels', params)
+export function saveTeamMetricStrategyLevel(params: SaveTeamMetricStrategyLevelRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/strategy/metric/level', params)
+}
+
+/**
+ * UpdateTeamStrategiesStatus updates the status of multiple team strategies
+ * @param {UpdateTeamStrategiesStatusRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeamStrategiesStatus(params: UpdateTeamStrategiesStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/strategy/status', params)
+}
+
+/**
+ * TeamMetricStrategyLevelDetail gets the detail of a team metric strategy level
+ * @param {TeamMetricStrategyLevelDetailRequest} params
+ * @returns {Promise<TeamMetricStrategyLevelDetailReply>}
+ */
+export function teamMetricStrategyLevelDetail(
+  params: TeamMetricStrategyLevelDetailRequest
+): Promise<TeamMetricStrategyLevelDetailReply> {
+  return request.GET<TeamMetricStrategyLevelDetailReply>('/api/team/strategy/metric/level', params)
+}
+
+/**
+ * DeleteTeamMetricStrategyLevel deletes a team metric strategy level
+ * @param {DeleteTeamMetricStrategyLevelRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export function deleteTeamMetricStrategyLevel(params: DeleteTeamMetricStrategyLevelRequest): Promise<EmptyReply> {
+  return request.DELETE<EmptyReply>('/api/team/strategy/metric/level', params)
+}
+/**
+ * ListTeamMetricStrategyLevels lists team metric strategy levels
+ * @param {TeamMetricStrategyLevelListRequest} params
+ * @returns {Promise<TeamMetricStrategyLevelListReply>}
+ */
+export function listTeamMetricStrategyLevels(
+  params: TeamMetricStrategyLevelListRequest
+): Promise<TeamMetricStrategyLevelListReply> {
+  return request.POST<TeamMetricStrategyLevelListReply>('/api/team/strategy/metric/level/list', params)
 }
