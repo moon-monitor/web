@@ -7,14 +7,14 @@ export type AutoTableColumnType<T> = ColumnType<T> | ColumnGroupType<T>
 export interface AutoTableProps<T = any> extends TableProps<T> {
   columns: AutoTableColumnType<T>[]
   dataSource: T[]
-  total: number
+  total?: number
   handleTurnPage?: (e: number, size: number) => void
   showQuickJumper?: boolean
   onShowSizeChange?: () => Promise<T[]>
   showSizeChanger?: boolean
   selectedRowKey?: string
-  pageSize: number
-  pageNum: number
+  pageSize?: number
+  pageNum?: number
   style?: React.CSSProperties
   size?: 'large' | 'middle' | 'small'
 }
@@ -40,7 +40,7 @@ export const AutoTable: React.FC<AutoTableProps> = (props) => {
   return (
     <div className={styles.a_table}>
       <Table {...props} columns={columns} dataSource={dataSource} pagination={false} style={style} />
-      {total > 0 && (
+      {total && total > 0 && (
         <Pagination
           className='text-right p-0 inline-block w-full'
           total={total}

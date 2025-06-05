@@ -222,6 +222,34 @@ export enum NotifyType {
   NOTIFY_EMAIL = 4
 }
 
+// MenuType represents the type of a menu
+export enum MenuType {
+  // Default unknown menu type
+  MENU_TYPE_UNKNOWN = 0,
+  // System menu type
+  MENU_TYPE_SYSTEM = 1,
+  // Team menu type
+  MENU_TYPE_TEAM = 2,
+  // User menu type
+  MENU_TYPE_USER = 3,
+  // None menu type
+  MENU_TYPE_NONE = 4
+}
+
+export enum MenuCategory {
+  MENU_CATEGORY_UNKNOWN = 0,
+  MENU_CATEGORY_MENU = 1,
+  MENU_CATEGORY_BUTTON = 2
+}
+
+export enum MenuProcessType {
+  MENU_PROCESS_TYPE_UNKNOWN = 0,
+  MENU_PROCESS_TYPE_LOGIN = 1,
+  MENU_PROCESS_TYPE_TEAM = 2,
+  MENU_PROCESS_TYPE_LOG = 4,
+  MENU_PROCESS_TYPE_DATA_PERMISSION = 8
+}
+
 // 操作
 export enum ActionKey {
   /** 新增 */

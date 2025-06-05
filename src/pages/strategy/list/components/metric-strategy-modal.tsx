@@ -53,7 +53,7 @@ export default function MetricStrategyModal(props: MetricStrategyModalProps) {
     manual: true,
     onSuccess: () => {
       message.success('保存成功')
-      props.onCancel?.(new MouseEvent('click') as unknown as React.MouseEvent<HTMLButtonElement>)
+      props.onOk?.(new MouseEvent('click') as unknown as React.MouseEvent<HTMLButtonElement>)
     }
   })
   const { run: getDatasourceList, loading: getDatasourceListLoading } = useRequest(listTeamMetricDatasource, {

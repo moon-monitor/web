@@ -36,7 +36,13 @@ export default function AssociatedData() {
     manual: true,
     onSuccess: (res) => {
       console.log('res', res)
-      setMetricLevels(res.items)
+
+      setMetricLevels(
+        res.items.map((item) => ({
+          ...item,
+          key: item.strategyMetricLevelId
+        }))
+      )
     }
   })
   const handleMetricStrategyModalCancel = () => {
@@ -124,15 +130,39 @@ export default function AssociatedData() {
     {
       key: 'labels',
       label: '自定义标签',
-      children: metricStrategy?.labels.map((item) => `${item.key}:${item.value}`).join(',')
+      children: (
+        <Tag color='blue' bordered={false}>
+          {metricStrategy?.labels.map((item) => `${item.key}=${item.value}`).join(' ; ')}
+        </Tag>
+      )
     },
     {
-      key: 'annotations',
-      label: '注解',
+      key: 'summary',
+      label: '摘要',
+      children: metricStrategy?.annotations.summary
+    },
+    {
+      key: 'description',
+      label: '描述',
+      children: metricStrategy?.annotations.description
+    }
+  ]
+  const metricLevelDescription = (record: TeamStrategyMetricLevelItem): DescriptionsProps['items'] => [
+    {
+      key: 'receiverRoutes',
+      label: '通知对象',
+      children: record.receiverRoutes?.map((item) => item.name).join(',')
+    },
+    {
+      key: 'labelReceiverRoutes',
+      label: '自定义通知对象',
       children: (
         <div>
-          <div>summary:{metricStrategy?.annotations.summary}</div>
-          <div>description:{metricStrategy?.annotations.description}</div>
+          {record.labelReceiverRoutes?.map((item) => (
+            <Tag key={item.labelKey} color='blue' bordered={false}>
+              {item.labelKey} = {item.labelValue}:{item.notices?.map((notice) => notice.name).join(',')}
+            </Tag>
+          ))}
         </div>
       )
     }
@@ -147,7 +177,7 @@ export default function AssociatedData() {
     }
   })
   return (
-    <div className='p-2 flex flex-col gap-2'>
+    <div className='p-2 flex flex-col gap-2 h-full'>
       <MetricStrategyModal
         open={metricStrategyModalOpen}
         onCancel={handleMetricStrategyModalCancel}
@@ -163,13 +193,6 @@ export default function AssociatedData() {
         strategyMetricLevel={strategyMetricLevel}
       />
       <div className=' bg-white p-4 rounded-lg'>
-        {/* <Space className='text-2xl font-bold'>
-          {detail?.name}
-          <Tag color={StrategyTypeData[detail?.strategyType].color}>{StrategyTypeData[detail?.strategyType].label}</Tag>
-        </Space>
-        <Button type='primary' onClick={() => navigate(-1)}>
-          返回
-        </Button> */}
         <Descriptions
           title='基本信息'
           items={baseInfo}
@@ -177,39 +200,72 @@ export default function AssociatedData() {
           extra={<Button type='link' size='small' icon={<RollbackOutlined />} onClick={() => navigate(-1)}></Button>}
         />
       </div>
-      <div className='bg-white p-4 rounded-lg'>
-        {!metricStrategy && (
-          <Button color='default' variant='dashed' className='w-full' onClick={handleMetricStrategyModalOpen}>
-            关联数据源
-          </Button>
-        )}
-        {metricStrategy && (
-          <Descriptions
-            title='关联数据源'
-            bordered
-            items={metricDescription}
-            extra={
-              <Button onClick={handleMetricStrategyModalOpen} type='link' size='small' icon={<EditOutlined />}></Button>
-            }
-            size='small'
-          />
-        )}
-      </div>
-      {strategyMetricId && (
+
+      <div className='flex flex-1 flex-col gap-2 overflow-y-auto h-full'>
         <div className='bg-white p-4 rounded-lg'>
-          <Button color='default' variant='dashed' className='w-full' onClick={handleMetricLevelModalOpen}>
-            添加告警等级
-          </Button>
+          {!metricStrategy && (
+            <Button color='default' variant='dashed' className='w-full' onClick={handleMetricStrategyModalOpen}>
+              关联数据源
+            </Button>
+          )}
+          {metricStrategy && (
+            <Descriptions
+              title='关联数据源'
+              bordered
+              column={1}
+              items={metricDescription}
+              extra={
+                <Button
+                  onClick={handleMetricStrategyModalOpen}
+                  type='link'
+                  size='small'
+                  icon={<EditOutlined />}
+                ></Button>
+              }
+              size='small'
+              labelStyle={{
+                width: '10rem'
+              }}
+            />
+          )}
         </div>
-      )}
-      <AutoTable
-        dataSource={metricLevels}
-        columns={getMetricLevelColumns}
-        pagination={false}
-        total={metricLevels.length}
-        pageSize={10}
-        pageNum={1}
-      />
+        {strategyMetricId && (
+          <div className='bg-white p-4 flex gap-2 justify-between rounded-lg'>
+            <Button color='default' onClick={handleMetricLevelModalOpen}>
+              添加告警等级
+            </Button>
+            <Button color='default' danger>
+              批量删除
+            </Button>
+          </div>
+        )}
+        <AutoTable
+          dataSource={metricLevels}
+          columns={getMetricLevelColumns}
+          rowSelection={{
+            type: 'checkbox',
+            onChange: (selectedRowKeys, selectedRows) => {
+              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
+            }
+          }}
+          expandable={{
+            expandedRowRender: (record) => (
+              <Descriptions
+                column={1}
+                bordered
+                labelStyle={{ width: '10rem' }}
+                size='small'
+                items={metricLevelDescription(record)}
+              />
+            )
+            //   rowExpandable: (record: TeamStrategyMetricLevelItem) =>
+            //     !!(
+            //       (record.receiverRoutes && record.receiverRoutes.length > 0) ||
+            //       (record.labelReceiverRoutes && record.labelReceiverRoutes.length > 0)
+            //     )
+          }}
+        />
+      </div>
     </div>
   )
 }

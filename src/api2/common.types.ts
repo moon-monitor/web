@@ -725,9 +725,9 @@ export interface TeamStrategyMetricLevelItem {
   condition?: number
   total?: string
   duration?: string
-  labelNotices?: StrategyMetricRuleLabelNotice[]
+  labelReceiverRoutes?: StrategyMetricRuleLabelNotice[]
   level?: TeamDictItem
-  notices?: NoticeGroupItem[]
+  receiverRoutes?: NoticeGroupItem[]
   ruleId?: number
   sampleMode?: number
   status: number

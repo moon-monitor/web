@@ -1,17 +1,12 @@
-import {
-  StrategyMetricRuleLabelNotice,
-  TeamDictItem,
-  TeamStrategyGroupItem,
-  TeamStrategyItem,
-  TeamStrategyMetricLevelItem
-} from '@/api2/common.types'
+import { TeamDictItem, TeamStrategyGroupItem, TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api2/common.types'
 import { ActionKey, ConditionMetric, GlobalStatus, SampleMode, StrategyType } from '@/api2/enum'
 import { ConditionMetricData, GlobalStatusData, SampleModeData, StrategyTypeData } from '@/api2/global'
 import { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
-import { Badge, Button, Space, Tag } from 'antd'
+import { EllipsisOutlined } from '@ant-design/icons'
+import { Badge, Button, Space, Tag, Tooltip } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 
 export type StrategyLabelType = {
@@ -358,6 +353,7 @@ export const metricLevelColumns = (props: MetricLevelColumnsProps): ColumnsType<
       title: '判断条件',
       dataIndex: 'condition',
       key: 'condition',
+      align: 'center',
       render: (condition: ConditionMetric) => {
         return ConditionMetricData[condition]
       }
@@ -366,6 +362,7 @@ export const metricLevelColumns = (props: MetricLevelColumnsProps): ColumnsType<
       title: '阈值',
       dataIndex: 'values',
       key: 'values',
+      align: 'center',
       render: (values: number[]) => {
         return values.join('~')
       }
@@ -374,6 +371,7 @@ export const metricLevelColumns = (props: MetricLevelColumnsProps): ColumnsType<
       title: '触发类型',
       dataIndex: 'sampleMode',
       key: 'sampleMode',
+      align: 'center',
       render: (sampleMode: SampleMode) => {
         return SampleModeData[sampleMode]
       }
@@ -381,63 +379,34 @@ export const metricLevelColumns = (props: MetricLevelColumnsProps): ColumnsType<
     {
       title: '持续时间(秒)',
       dataIndex: 'duration',
-      key: 'duration'
+      key: 'duration',
+      align: 'center'
     },
     {
       title: '持续次数',
       dataIndex: 'total',
-      key: 'total'
+      key: 'total',
+      align: 'center'
     },
     {
       title: '告警页面',
       dataIndex: 'alarmPages',
       key: 'alarmPages',
       render: (alarmPages: TeamDictItem[]) => {
-        return alarmPages.map((item) => <Tag color={item.color}>{item.value}</Tag>)
-      }
-    },
-    {
-      title: '通知对象',
-      dataIndex: 'receiverRoutes',
-      key: 'receiverRoutes'
-    },
-    // {
-    //   title: '自定义通知对象',
-    //   dataIndex: 'labelNotices',
-    //   key: 'labelNotices',
-    //   children: [
-    //     {
-    //       title: '标签Key',
-    //       dataIndex: 'key',
-    //       key: 'key'
-    //     },
-    //     {
-    //       title: '标签Value',
-    //       dataIndex: 'value',
-    //       key: 'value'
-    //     },
-    //     {
-    //       title: '通知对象',
-    //       dataIndex: 'receiverRoutes',
-    //       key: 'receiverRoutes'
-    //     }
-    //   ]
-    // },
-    {
-      title: '自定义通知对象',
-      dataIndex: 'labelNotices',
-      key: 'labelNotices',
-      render: (labelNotices: StrategyMetricRuleLabelNotice[]) => {
-        return (
-          <div>
-            {labelNotices &&
-              labelNotices.map((item) => (
-                <div key={item.labelKey}>
-                  {item.labelKey}:{item.labelValue}
-                </div>
-              ))}
-          </div>
-        )
+        if (alarmPages.length === 0) {
+          return '-'
+        } else if (alarmPages.length < 3) {
+          return alarmPages.map((item) => <Tag color={item.color}>{item.value}</Tag>)
+        } else {
+          return (
+            <Tooltip title={alarmPages.map((item) => item.value).join(',')}>
+              {/* 做省略 */}
+              <Tag color={alarmPages[0].color}>{alarmPages[0].value}</Tag>
+              <Tag color={alarmPages[1].color}>{alarmPages[1].value}</Tag>
+              <EllipsisOutlined />
+            </Tooltip>
+          )
+        }
       }
     },
     {

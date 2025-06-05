@@ -10,10 +10,15 @@ import {
   HookAPP,
   HTTPMethod,
   MemberStatus,
+  MenuCategory,
+  MenuProcessType,
+  MenuType,
   ResourceModule,
   Role,
   SampleMode,
   StrategyType,
+  TeamAuditAction,
+  TeamAuditStatus,
   TeamStatus,
   UserPosition,
   UserStatus
@@ -320,4 +325,39 @@ export const DictTypeData: Record<DictType, string> = {
   [DictType.DICT_TYPE_UNKNOWN]: '全部',
   [DictType.DICT_TYPE_ALARM_LEVEL]: '告警级别',
   [DictType.DICT_TYPE_ALARM_PAGE]: '告警页面'
+}
+
+export const MenuTypeData: Record<MenuType, string> = {
+  [MenuType.MENU_TYPE_UNKNOWN]: '全部',
+  [MenuType.MENU_TYPE_SYSTEM]: '系统',
+  [MenuType.MENU_TYPE_TEAM]: '团队',
+  [MenuType.MENU_TYPE_USER]: '用户',
+  [MenuType.MENU_TYPE_NONE]: '无'
+}
+
+export const MenuCategoryData: Record<MenuCategory, string> = {
+  [MenuCategory.MENU_CATEGORY_UNKNOWN]: '全部',
+  [MenuCategory.MENU_CATEGORY_MENU]: '菜单',
+  [MenuCategory.MENU_CATEGORY_BUTTON]: '按钮'
+}
+
+export const MenuProcessTypeData: Record<MenuProcessType, string> = {
+  [MenuProcessType.MENU_PROCESS_TYPE_UNKNOWN]: '全部',
+  [MenuProcessType.MENU_PROCESS_TYPE_LOGIN]: '登录',
+  [MenuProcessType.MENU_PROCESS_TYPE_TEAM]: '团队',
+  [MenuProcessType.MENU_PROCESS_TYPE_LOG]: '日志',
+  [MenuProcessType.MENU_PROCESS_TYPE_DATA_PERMISSION]: '数据权限'
+}
+
+export const TeamAuditStatusData: Record<TeamAuditStatus, string> = {
+  [TeamAuditStatus.TEAM_AUDIT_STATUS_UNKNOWN]: '未知',
+  [TeamAuditStatus.TEAM_AUDIT_STATUS_PENDING]: '待审核',
+  [TeamAuditStatus.TEAM_AUDIT_STATUS_APPROVED]: '审核通过',
+  [TeamAuditStatus.TEAM_AUDIT_STATUS_REJECTED]: '审核拒绝'
+}
+
+export const TeamAuditActionData: Record<TeamAuditAction, string> = {
+  [TeamAuditAction.TEAM_AUDIT_ACTION_UNKNOWN]: '未知',
+  [TeamAuditAction.TEAM_AUDIT_ACTION_JOIN]: '加入团队',
+  [TeamAuditAction.TEAM_AUDIT_ACTION_LEAVE]: '离开团队'
 }
