@@ -1,4 +1,4 @@
-import { Gender } from '@/api2/enum'
+import { GenderData } from '@/api2/global'
 import type { DataFromItem } from '@/components/data/form'
 
 export const baseInfoOptions: (DataFromItem | DataFromItem[])[] = [
@@ -16,9 +16,9 @@ export const baseInfoOptions: (DataFromItem | DataFromItem[])[] = [
       name: 'gender',
       type: 'radio-group',
       props: {
-        options: Object.entries(Gender).map(([key, value]) => ({
-          label: value,
-          value: key
+        options: Object.entries(GenderData).map(([key, value]) => ({
+          label: value.label,
+          value: +key
         }))
       },
       formProps: {

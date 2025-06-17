@@ -1,5 +1,5 @@
-import type { MenuTree } from '@/api/model-types'
 import { TeamItem, UserItem } from '@/api2/common.types'
+import { MenuTreeItem } from '@/api2/menu/types'
 import type { Router } from '@remix-run/router'
 import { theme } from 'antd'
 import type { SpaceSize } from 'antd/es/space'
@@ -17,8 +17,8 @@ export type GlobalContextType = {
   size?: SpaceSize
   setSize?: (size: SpaceSize) => void
   title?: string
-  menuItems?: MenuTree[]
-  setMenuItems?: (menuItems: MenuTree[]) => void
+  menuItems?: MenuTreeItem[]
+  setMenuItems?: (menuItems: MenuTreeItem[]) => void
   collapsed?: boolean
   setCollapsed?: (collapsed: boolean) => void
   userInfo?: UserItem

@@ -1,6 +1,6 @@
 import { NotifyType, Status } from '@/api/enum'
 import type { NoticeItem, TeamMemberItem, UserItem } from '@/api/model-types'
-import { listTeamMember } from '@/api/team'
+import { getTeamMembers } from '@/api2/team'
 import { useRequest } from 'ahooks'
 import { Avatar, Checkbox, Select, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
@@ -31,10 +31,10 @@ export const MemberSelect: React.FC<MemberSelectProps> = (props) => {
   const [memberList, setMemberList] = useState<TeamMemberItem[]>([])
   const [members, setMembers] = useState<{ [key: number]: NoticeItem }>({})
 
-  const { run: initMemberList, loading: initMemberListLoading } = useRequest(listTeamMember, {
+  const { run: initMemberList, loading: initMemberListLoading } = useRequest(getTeamMembers, {
     manual: true,
     onSuccess: (data) => {
-      setMemberList(data.list || [])
+      setMemberList(data.items || [])
     }
   })
 

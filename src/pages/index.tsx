@@ -1,12 +1,11 @@
-import type { MenuTree } from '@/api/model-types'
 import { getToken, isLogin, removeToken, setToken } from '@/api/request'
-import { refreshToken } from '@/api2/auth'
+import { getSelfMenuTree, refreshToken } from '@/api2/auth'
 import { TeamItem, UserItem } from '@/api2/common.types'
+import { MenuTreeItem } from '@/api2/menu/types'
 import '@/assets/styles/index.scss'
 import { defaultRouters, unAuthRouters } from '@/config/router'
 import useStorage from '@/hooks/storage'
-import { getTreeMenu } from '@/mocks'
-import { transformRoutersTree } from '@/utils'
+import { routeJoin, transformRoutersTree } from '@/utils'
 import {
   GlobalContext,
   type GlobalContextType,
@@ -21,7 +20,7 @@ import { ConfigProvider, theme } from 'antd'
 import type { SpaceSize } from 'antd/es/space'
 import zhCN from 'antd/locale/zh_CN'
 import { Suspense, useCallback, useEffect, useState } from 'react'
-import { RouterProvider, createHashRouter } from 'react-router-dom'
+import { Navigate, RouteObject, RouterProvider, createHashRouter } from 'react-router-dom'
 
 const { useToken } = theme
 
@@ -39,7 +38,7 @@ function App() {
   const [showLevelColor, setShowLevelColor] = useStorage<boolean>('showLevelColor', false)
   const [contentHeight, setContentHeight] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [menuItems, setMenuItems] = useStorage<MenuTree[]>(
+  const [menuItems, setMenuItems] = useStorage<MenuTreeItem[]>(
     'menuItems',
     JSON.parse(localStorage.getItem('menuItems') || '[]')
   )
@@ -59,9 +58,19 @@ function App() {
   })
 
   const storageMenus = useCallback(() => {
-    getTreeMenu({})
+    // getTreeMenu({})
+    //   .then((res) => {
+    //     setMenuItems?.(res.menuTree)
+    //   })
+    //   .finally(() => {
+    //     if (isLogin() && !window.location.href.includes('home')) {
+    //       window.location.href = '/#/home'
+    //     }
+    //   })
+    getSelfMenuTree()
       .then((res) => {
-        setMenuItems?.(res.menuTree)
+        console.log('res', res)
+        setMenuItems?.(res.items)
       })
       .finally(() => {
         if (isLogin() && !window.location.href.includes('home')) {
@@ -71,7 +80,7 @@ function App() {
   }, [setMenuItems])
 
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get('token')
+    const token = new URLSearchParams(window.location.search).get('token') || getToken()
     if (token) {
       setAuthToken(token)
       setToken(token)
@@ -84,20 +93,44 @@ function App() {
       )
     }
     storageMenus()
-  }, [authToken, storageMenus, refreshAuthToken])
+  }, [])
 
   const handleRouter = () => {
     if (!(menuItems?.length && isLogin())) {
       return createHashRouter(unAuthRouters)
     }
+
     const routersTree = defaultRouters.map((item) => {
-      if (item.path === '/home') {
-        item.children = [...transformRoutersTree(menuItems), ...(item.children || [])]
+      // 如果该路由有子路由，则确保不设置 index 或移除 index 字段
+      const hasChildren = item.children || (menuItems.length > 0 && item.path === '/home')
+      if (hasChildren) {
+        return {
+          ...item,
+          children: [
+            ...transformRoutersTree(menuItems),
+            ...(item.children || []),
+            {
+              path: '/home',
+              element: (
+                <Navigate
+                  to={routeJoin(
+                    '/home',
+                    menuItems.length && menuItems[0].children?.length
+                      ? menuItems[0].children[0].menuPath || ''
+                      : menuItems[0].menuPath || ''
+                  )}
+                  replace={true}
+                />
+              )
+            }
+          ]
+        }
       }
       return item
     })
+    console.log('routersTree', routersTree)
 
-    return createHashRouter(routersTree)
+    return createHashRouter(routersTree as RouteObject[])
   }
 
   const contextValue: GlobalContextType = {

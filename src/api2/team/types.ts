@@ -9,7 +9,7 @@ import {
   TeamRoleItem,
   TeamStrategyItem
 } from '../common.types'
-import { GlobalStatus } from '../enum'
+import { GlobalStatus, MemberStatus } from '../enum'
 
 /**
  * api.palace.GetTeamReply，GetTeamReply contains the response data for retrieving a team
@@ -129,6 +129,16 @@ export interface InviteMemberRequest {
 }
 
 /**
+ * api.palace.GetTeamMembersRequest
+ */
+export interface GetTeamMembersRequest {
+  keyword?: string
+  pagination: PaginationRequest
+  positions?: number[]
+  status?: MemberStatus[]
+}
+
+/**
  * api.palace.GetTeamMembersReply, GetTeamMembersReply contains the response data for
  * retrieving team members
  */
@@ -137,6 +147,7 @@ export interface GetTeamMembersReply {
    * List of team member items
    */
   items?: TeamMemberItem[]
+  pagination: PaginationReply
 }
 
 /**
@@ -144,10 +155,7 @@ export interface GetTeamMembersReply {
  * removing a member from the team
  */
 export interface RemoveMemberRequest {
-  /**
-   * Email of the user to remove
-   */
-  userEmail?: string
+  memberId: number
 }
 
 /**

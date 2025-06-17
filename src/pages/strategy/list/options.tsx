@@ -415,9 +415,14 @@ export const metricLevelColumns = (props: MetricLevelColumnsProps): ColumnsType<
       width: 120,
       render: (record: TeamStrategyMetricLevelItem) => {
         return (
-          <Button type='link' size='small' onClick={() => onHandleMenuOnClick(record, ActionKey.EDIT)}>
-            编辑
-          </Button>
+          <>
+            <Button type='link' size='small' onClick={() => onHandleMenuOnClick(record, ActionKey.EDIT)}>
+              编辑
+            </Button>
+            <Button type='link' size='small' danger onClick={() => onHandleMenuOnClick(record, ActionKey.DELETE)}>
+              删除
+            </Button>
+          </>
         )
       }
     }

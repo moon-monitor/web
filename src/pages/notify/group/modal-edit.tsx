@@ -1,11 +1,6 @@
-import { Status } from '@/api/enum'
-import type { AlarmNoticeGroupItem, NoticeItem } from '@/api/model-types'
-import {
-  type CreateAlarmGroupRequest,
-  createAlarmGroup,
-  getAlarmGroup,
-  updateAlarmGroup
-} from '@/api/notify/alarm-group'
+import { NoticeGroupItem } from '@/api2/common.types'
+import { getTeamNoticeGroup, saveTeamNoticeGroup } from '@/api2/team/team-notice'
+import { SaveTeamNoticeGroupRequest, SaveTeamNoticeGroupRequestMember } from '@/api2/team/team-notice.types'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Form, Modal, type ModalProps, message } from 'antd'
@@ -22,25 +17,17 @@ export interface GroupEditModalProps extends ModalProps {
 
 export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   const { onCancel, onOk, open, title, groupId, disabled } = props
-  const [form] = Form.useForm<CreateAlarmGroupRequest & { noticeMember: NoticeItem[] }>()
-  const [groupDetail, setGroupDetail] = useState<AlarmNoticeGroupItem>()
+  const [form] = Form.useForm<SaveTeamNoticeGroupRequest & { noticeMember: SaveTeamNoticeGroupRequestMember[] }>()
+  const [groupDetail, setGroupDetail] = useState<NoticeGroupItem>()
 
-  const { run: initGroupDetail, loading: initGroupDetailLoading } = useRequest(getAlarmGroup, {
+  const { run: initGroupDetail, loading: initGroupDetailLoading } = useRequest(getTeamNoticeGroup, {
     manual: true,
     onSuccess: (data) => {
-      setGroupDetail(data.detail)
+      setGroupDetail(data)
     }
   })
 
-  const { runAsync: addGroup, loading: addGroupLoading } = useRequest(createAlarmGroup, {
-    manual: true,
-    onSuccess: () => {
-      message.success('新建告警组成功')
-      onOk?.()
-    }
-  })
-
-  const { runAsync: editGroup, loading: editGroupLoading } = useRequest(updateAlarmGroup, {
+  const { runAsync: saveGroup, loading: saveGroupLoading } = useRequest(saveTeamNoticeGroup, {
     manual: true,
     onSuccess: () => {
       message.success('编辑告警组成功')
@@ -50,7 +37,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
 
   useEffect(() => {
     if (groupId) {
-      initGroupDetail({ id: groupId })
+      initGroupDetail({ groupId })
     }
   }, [groupId, initGroupDetail])
 
@@ -58,10 +45,13 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     if (open && form && groupDetail) {
       form?.setFieldsValue({
         ...groupDetail,
-        hookIds: groupDetail?.hooks?.map((item) => item.id),
-        noticeMember: groupDetail?.noticeUsers,
-        timeEngines: groupDetail?.timeEngines?.map((item) => item.id),
-        templates: groupDetail?.templates?.map((item) => item.id)
+        hookIds: groupDetail?.hooks?.map((item) => item.noticeHookId),
+        members: groupDetail?.members?.map((item) => ({
+          memberId: item.id,
+          noticeType: item.position
+        }))
+        // timeEngines: groupDetail?.timeEngines?.map((item) => item.id),
+        // templates: groupDetail?.templates?.map((item) => item.id)
       })
       return
     }
@@ -78,18 +68,12 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     form?.validateFields().then((formValues) => {
       const data = {
         ...formValues,
-        status: Status.StatusEnable,
-        id: groupId,
-        noticeMember: formValues.noticeMember?.map((item: NoticeItem) => ({
-          memberId: item.member.id,
-          notifyType: item.notifyType
+        members: formValues.noticeMember?.map((item: SaveTeamNoticeGroupRequestMember) => ({
+          memberId: item.memberId,
+          noticeType: item.noticeType
         }))
       }
-      if (groupId) {
-        editGroup({ update: data, id: groupId })
-      } else {
-        addGroup(data)
-      }
+      saveGroup({ ...data, groupId })
     })
   }
 
@@ -102,7 +86,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
         onCancel={handleOnCancel}
         loading={initGroupDetailLoading}
         onOk={handleOnOk}
-        confirmLoading={addGroupLoading || editGroupLoading}
+        confirmLoading={saveGroupLoading}
       >
         <DataFrom
           items={editModalFormItems}
@@ -110,7 +94,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
             form,
             layout: 'vertical',
             autoComplete: 'off',
-            disabled: disabled || initGroupDetailLoading || addGroupLoading || editGroupLoading
+            disabled: disabled || initGroupDetailLoading || saveGroupLoading
           }}
         >
           <Form.Item label='成员列表' name='noticeMember'>

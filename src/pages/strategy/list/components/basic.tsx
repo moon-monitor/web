@@ -1,9 +1,9 @@
 import { TeamStrategyItem } from '@/api2/common.types'
 import { saveTeamStrategy } from '@/api2/team/team-strategy'
-import { DataFrom, DataFromItem } from '@/components/data/form'
+import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Form, message, Modal, ModalProps } from 'antd'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { basicFormItems } from './options'
 
 export interface BasicModalProps extends ModalProps {
@@ -12,9 +12,9 @@ export interface BasicModalProps extends ModalProps {
 }
 
 export const BasicModal: React.FC<BasicModalProps> = (props) => {
-  const { onClose, onOk, loading, open } = props
+  const { onClose, onOk, loading, strategyDetail } = props
   const [form] = Form.useForm()
-  const [formItems, setFormItems] = useState<(DataFromItem | DataFromItem[])[]>([])
+  const strategyType = Form.useWatch('strategyType', form)
   const { run: saveStrategy } = useRequest(saveTeamStrategy, {
     manual: true,
     onSuccess: () => {
@@ -35,39 +35,18 @@ export const BasicModal: React.FC<BasicModalProps> = (props) => {
   const handleOnCancel = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
     onClose?.(e)
+    form?.resetFields()
   }
 
   useEffect(() => {
-    if (props.strategyDetail) {
-      form.setFieldsValue(props.strategyDetail)
+    if (strategyDetail && form) {
+      form.setFieldsValue(strategyDetail)
     }
-  }, [props.strategyDetail])
-
-  useEffect(() => {
-    if (open && !props.strategyDetail) {
-      setFormItems(basicFormItems)
-    } else {
-      setFormItems(
-        basicFormItems.map((item) => {
-          if (item && item?.name === 'strategyType') {
-            return {
-              ...item,
-              props: {
-                ...item?.props,
-                disabled: true
-              }
-            }
-          } else {
-            return item
-          }
-        })
-      )
-    }
-  }, [open])
+  }, [strategyDetail, form])
 
   return (
     <Modal {...props} onCancel={handleOnCancel} onOk={handleOnOk} confirmLoading={loading}>
-      <DataFrom items={formItems} props={{ form, layout: 'vertical' }} />
+      <DataFrom items={basicFormItems(strategyType)} props={{ form, layout: 'vertical' }} />
     </Modal>
   )
 }

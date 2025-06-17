@@ -35,3 +35,12 @@ export function rabStringToHex(input: string): string {
 
   return hexColor
 }
+
+/**
+ * 获取随机颜色
+ * @returns 随机颜色
+ */
+export function getRandomColor() {
+  const hue = Math.floor(Math.random() * 360)
+  return `hsl(${hue}, 70%, 60%)`
+}

@@ -1,5 +1,4 @@
-import { IconFont, Prometheus, VictoriaMetrics } from '@/components/icon'
-import { Space } from 'antd'
+import { IconFont } from '@/components/icon'
 import { PaginationRequest } from './common.types'
 import {
   ConditionMetric,
@@ -14,7 +13,6 @@ import {
   MenuProcessType,
   MenuType,
   ResourceModule,
-  Role,
   SampleMode,
   StrategyType,
   TeamAuditAction,
@@ -71,30 +69,30 @@ export const ResourceModuleData: Record<ResourceModule, { icon: React.ReactNode;
   }
 }
 
-export const MemberStatusData: Record<MemberStatus, { color: string; label: string }> = {
+export const MemberStatusData: Record<MemberStatus, { color: string; text: string }> = {
   [MemberStatus.MEMBER_STATUS_UNKNOWN]: {
     color: 'blue',
-    label: '未知'
+    text: '未知'
   },
   [MemberStatus.MEMBER_STATUS_NORMAL]: {
     color: 'green',
-    label: '正常'
+    text: '正常'
   },
   [MemberStatus.MEMBER_STATUS_FORBIDDEN]: {
     color: 'red',
-    label: '禁用'
+    text: '禁用'
   },
   [MemberStatus.MEMBER_STATUS_DELETED]: {
     color: 'red',
-    label: '已删除'
+    text: '已删除'
   },
   [MemberStatus.MEMBER_STATUS_PENDING_CONFIRM]: {
     color: 'yellow',
-    label: '待确认'
+    text: '待确认'
   },
   [MemberStatus.MEMBER_STATUS_DEPARTED]: {
     color: 'red',
-    label: '已离开'
+    text: '已离开'
   }
 }
 
@@ -169,11 +167,11 @@ export const UserStatusData: Record<UserStatus, { color: string; label: string }
 
 export const UserPositionData: Record<UserPosition, { color: string; label: string }> = {
   [UserPosition.USER_POSITION_UNKNOWN]: {
-    color: 'blue',
+    color: '',
     label: '未知'
   },
   [UserPosition.USER_POSITION_SUPER_ADMIN]: {
-    color: 'blue',
+    color: '#1890ff',
     label: '超级管理员'
   },
   [UserPosition.USER_POSITION_ADMIN]: {
@@ -181,7 +179,7 @@ export const UserPositionData: Record<UserPosition, { color: string; label: stri
     label: '管理员'
   },
   [UserPosition.USER_POSITION_USER]: {
-    color: 'blue',
+    color: 'gray',
     label: '普通用户'
   },
   [UserPosition.USER_POSITION_GUEST]: {
@@ -232,13 +230,6 @@ export const TeamStatusData: Record<TeamStatus, { color: string; label: string }
   }
 }
 
-export const RoleData: Record<Role, string> = {
-  [Role.ROLE_UNKNOWN]: '全部',
-  [Role.ROLE_SUPER_ADMIN]: '超级管理员',
-  [Role.ROLE_ADMIN]: '管理员',
-  [Role.ROLE_USER]: '普通用户'
-}
-
 export const HTTPMethodData: Record<HTTPMethod, { color: string; text: string }> = {
   [HTTPMethod.HTTP_METHOD_UNKNOWN]: {
     color: 'gray',
@@ -274,32 +265,10 @@ export const HTTPMethodData: Record<HTTPMethod, { color: string; text: string }>
   }
 }
 
-export const DatasourceDriverMetricData: Record<
-  DatasourceDriverMetric,
-  { color: string; text: React.ReactNode | string }
-> = {
-  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_UNKNOWN]: {
-    color: 'gray',
-    text: '未知'
-  },
-  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS]: {
-    color: 'green',
-    text: (
-      <Space className='flex items-center'>
-        <Prometheus width={15} height={15} color='#DF5434' />
-        Prometheus
-      </Space>
-    )
-  },
-  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS]: {
-    color: 'blue',
-    text: (
-      <Space>
-        <VictoriaMetrics width={15} height={15} />
-        VictoriaMetrics
-      </Space>
-    )
-  }
+export const DatasourceDriverMetricData: Record<DatasourceDriverMetric, string> = {
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_UNKNOWN]: '未知',
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS]: 'PROM',
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS]: 'VM'
 }
 
 export const ConditionMetricData: Record<ConditionMetric, string> = {
@@ -316,9 +285,9 @@ export const ConditionMetricData: Record<ConditionMetric, string> = {
 
 export const SampleModeData: Record<SampleMode, string> = {
   [SampleMode.SAMPLE_MODE_UNKNOWN]: '全部',
-  [SampleMode.SAMPLE_MODE_AVERAGE]: '平均值',
-  [SampleMode.SAMPLE_MODE_MAX]: '最大值',
-  [SampleMode.SAMPLE_MODE_MIN]: '最小值'
+  [SampleMode.SAMPLE_MODE_AVERAGE]: 'm时间内出现n次',
+  [SampleMode.SAMPLE_MODE_MAX]: 'm时间内最多出现n次',
+  [SampleMode.SAMPLE_MODE_MIN]: 'm时间内最少出现n次'
 }
 
 export const DictTypeData: Record<DictType, string> = {

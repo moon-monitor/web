@@ -1,13 +1,20 @@
 import { TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api2/common.types'
 import { ActionKey } from '@/api2/enum'
-import { defaultPaginationReq, StrategyTypeData } from '@/api2/global'
-import { getTeamMetricStrategy, listTeamMetricStrategyLevels } from '@/api2/team/team-strategy'
+import { DatasourceDriverMetricData, defaultPaginationReq, StrategyTypeData } from '@/api2/global'
+import { baseURL } from '@/api2/request'
+import {
+  deleteTeamMetricStrategyLevel,
+  getTeamMetricStrategy,
+  listTeamMetricStrategyLevels
+} from '@/api2/team/team-strategy'
 import { GetTeamMetricStrategyReply } from '@/api2/team/team-strategy.types'
+import PromQLInput, { PromQLInputProps } from '@/components/data/child/prom-ql'
 import AutoTable from '@/components/table'
-import { EditOutlined, RollbackOutlined } from '@ant-design/icons'
+import { getRandomColor } from '@/utils/color'
+import { ArrowLeftOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
-import { Button, Descriptions, DescriptionsProps, Tag } from 'antd'
-import { useEffect, useState } from 'react'
+import { Badge, Button, Card, Descriptions, DescriptionsProps, message, Modal, Tag } from 'antd'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import MetricLevelModal from './components/metric-level-modal'
 import MetricStrategyModal from './components/metric-strategy-modal'
@@ -23,7 +30,7 @@ export default function AssociatedData() {
   const [strategyMetricId, setStrategyMetricId] = useState<number>()
   const [strategyMetricLevel, setStrategyMetricLevel] = useState<TeamStrategyMetricLevelItem>()
   const [metricLevels, setMetricLevels] = useState<TeamStrategyMetricLevelItem[]>([])
-
+  const [selectedMetricLevelIds, setSelectedMetricLevelIds] = useState<number[]>([])
   const { run: getMetricStrategy } = useRequest(getTeamMetricStrategy, {
     manual: true,
     onSuccess: (res) => {
@@ -45,6 +52,23 @@ export default function AssociatedData() {
       )
     }
   })
+
+  const { run: deleteMetricLevel, loading: deleteMetricLevelLoading } = useRequest(deleteTeamMetricStrategyLevel, {
+    manual: true,
+    onSuccess: () => {
+      message.success('删除成功')
+      setSelectedMetricLevelIds([])
+      getMetricLevelList()
+    }
+  })
+
+  const getMetricLevelList = useCallback(() => {
+    getMetricLevels({
+      pagination: defaultPaginationReq,
+      strategyMetricId: strategyMetricId
+    })
+  }, [strategyMetricId])
+
   const handleMetricStrategyModalCancel = () => {
     setMetricStrategyModalOpen(false)
   }
@@ -58,19 +82,20 @@ export default function AssociatedData() {
       strategyId: detail?.strategyId
     })
   }
+
   const handleMetricLevelModalCancel = () => {
     setMetricLevelModalOpen(false)
   }
+
   const handleMetricLevelModalOpen = () => {
     setMetricLevelModalOpen(true)
   }
+
   const handleMetricLevelModalOk = () => {
     setMetricLevelModalOpen(false)
-    getMetricLevels({
-      pagination: defaultPaginationReq,
-      strategyMetricId: strategyMetricId
-    })
+    getMetricLevelList()
   }
+
   useEffect(() => {
     if (detail) {
       getMetricStrategy({
@@ -78,20 +103,30 @@ export default function AssociatedData() {
       })
     }
   }, [detail])
+
   useEffect(() => {
     if (strategyMetricId) {
-      getMetricLevels({
-        pagination: defaultPaginationReq,
-        strategyMetricId: strategyMetricId
-      })
+      getMetricLevelList()
     }
   }, [strategyMetricId])
+
+  const promqlRef = useRef<PromQLInputProps['ref']>(null)
+  useEffect(() => {
+    console.log('promqlRef.current', promqlRef)
+  }, [])
 
   const baseInfo: DescriptionsProps['items'] = [
     {
       key: 'strategyName',
       label: '策略名称',
-      children: detail?.name
+      children:
+        // <div className='flex items-center '>
+        //   {/* <Tag color={StrategyTypeData[detail?.strategyType].color} className='mr-1' bordered={false}>
+        //     {StrategyTypeData[detail?.strategyType].label}
+        //   </Tag> */}
+        //   <span className='text-lg font-bold'>{detail?.name}</span>
+        // </div>
+        detail?.name
     },
     {
       key: 'username',
@@ -104,11 +139,9 @@ export default function AssociatedData() {
       children: detail?.createdAt
     },
     {
-      key: 'strategyType',
-      label: '策略类型',
-      children: (
-        <Tag color={StrategyTypeData[detail?.strategyType].color}>{StrategyTypeData[detail?.strategyType].label}</Tag>
-      )
+      key: 'updatedAt',
+      label: '更新时间',
+      children: detail?.updatedAt
     },
     {
       key: 'remark',
@@ -120,20 +153,47 @@ export default function AssociatedData() {
     {
       key: 'datasource',
       label: '数据源',
-      children: metricStrategy?.datasource.map((item) => item.name).join(',')
+      children: (
+        <div className='flex flex-col gap-1 w-full'>
+          {metricStrategy?.datasource.map((item) => (
+            <div key={item.name} className='flex items-center text-white rounded-md '>
+              <div className='pl-1 pr-1 font-bold' style={{ backgroundColor: getRandomColor() }}>
+                {DatasourceDriverMetricData[item.driver]}
+              </div>
+              <div className='pl-1 pr-1 ' style={{ backgroundColor: getRandomColor() }}>
+                {item.name}
+              </div>
+            </div>
+          ))}
+        </div>
+      )
     },
     {
       key: 'expr',
       label: '表达式',
-      children: metricStrategy?.expr
+      children: (
+        <div className='pointer-events-auto'>
+          <PromQLInput
+            value={metricStrategy?.expr}
+            pathPrefix={`${baseURL}/api/team/datasource/metric/${metricStrategy?.datasource.at(0)?.driver}`}
+            formatExpression
+            disabled
+            subfix
+          />
+        </div>
+      )
     },
     {
       key: 'labels',
       label: '自定义标签',
       children: (
-        <Tag color='blue' bordered={false}>
-          {metricStrategy?.labels.map((item) => `${item.key}=${item.value}`).join(' ; ')}
-        </Tag>
+        <div>
+          {metricStrategy?.labels.map((item) => (
+            <Tag key={item.key} color='blue' bordered={false}>
+              {`${item.key}=${item.value}`}
+            </Tag>
+          ))}
+        </div>
       )
     },
     {
@@ -170,15 +230,37 @@ export default function AssociatedData() {
 
   const getMetricLevelColumns = metricLevelColumns({
     onHandleMenuOnClick: (record, key) => {
-      if (key === ActionKey.EDIT) {
-        handleMetricLevelModalOpen()
-        setStrategyMetricLevel(record)
+      switch (key) {
+        case ActionKey.EDIT:
+          handleMetricLevelModalOpen()
+          setStrategyMetricLevel(record)
+          break
+        case ActionKey.DELETE:
+          Modal.confirm({
+            title: '确定删除吗？',
+            onOk: () => {
+              deleteMetricLevel({
+                strategyMetricLevelIds: [record.strategyMetricLevelId]
+              })
+            }
+          })
+          break
       }
     }
   })
+  const handleBatchDeleteMetricLevel = () => {
+    if (selectedMetricLevelIds.length === 0) {
+      message.error('请选择要删除的告警等级')
+      return
+    }
+    deleteMetricLevel({
+      strategyMetricLevelIds: selectedMetricLevelIds
+    })
+  }
   return (
     <div className='p-2 flex flex-col gap-2 h-full'>
       <MetricStrategyModal
+        width='76%'
         open={metricStrategyModalOpen}
         onCancel={handleMetricStrategyModalCancel}
         onOk={handleMetricStrategyModalOk}
@@ -192,36 +274,53 @@ export default function AssociatedData() {
         strategyMetricId={strategyMetricId}
         strategyMetricLevel={strategyMetricLevel}
       />
-      <div className=' bg-white p-4 rounded-lg'>
-        <Descriptions
-          title='基本信息'
-          items={baseInfo}
-          size='small'
-          extra={<Button type='link' size='small' icon={<RollbackOutlined />} onClick={() => navigate(-1)}></Button>}
-        />
+      <div className='bg-white p-4 rounded-lg'>
+        <Badge.Ribbon
+          text={StrategyTypeData[detail?.strategyType].label}
+          color={StrategyTypeData[detail?.strategyType].color}
+        >
+          <Card
+            title={
+              <div className='text-lg font-bold flex items-center gap-2'>
+                <Button
+                  type='link'
+                  size='large'
+                  className=''
+                  onClick={() => navigate(-1)}
+                  style={{ padding: 0, fontSize: 20, fontWeight: 'bold' }}
+                >
+                  <ArrowLeftOutlined />
+                </Button>
+                基本信息
+              </div>
+            }
+            // bordered={false}s
+            size='small'
+          >
+            <Descriptions layout='vertical' bordered={false} column={4} items={baseInfo} size='small' />
+          </Card>
+        </Badge.Ribbon>
       </div>
-
       <div className='flex flex-1 flex-col gap-2 overflow-y-auto h-full'>
         <div className='bg-white p-4 rounded-lg'>
           {!metricStrategy && (
-            <Button color='default' variant='dashed' className='w-full' onClick={handleMetricStrategyModalOpen}>
+            <Button
+              color='default'
+              variant='dashed'
+              className='w-full'
+              onClick={handleMetricStrategyModalOpen}
+              icon={<PlusOutlined />}
+            >
               关联数据源
             </Button>
           )}
           {metricStrategy && (
             <Descriptions
-              title='关联数据源'
+              title={<div className='text-lg font-bold flex '>关联数据源</div>}
               bordered
               column={1}
               items={metricDescription}
-              extra={
-                <Button
-                  onClick={handleMetricStrategyModalOpen}
-                  type='link'
-                  size='small'
-                  icon={<EditOutlined />}
-                ></Button>
-              }
+              extra={<Button onClick={handleMetricStrategyModalOpen} type='link' icon={<EditOutlined />}></Button>}
               size='small'
               labelStyle={{
                 width: '10rem'
@@ -230,41 +329,52 @@ export default function AssociatedData() {
           )}
         </div>
         {strategyMetricId && (
-          <div className='bg-white p-4 flex gap-2 justify-between rounded-lg'>
-            <Button color='default' onClick={handleMetricLevelModalOpen}>
-              添加告警等级
-            </Button>
-            <Button color='default' danger>
-              批量删除
-            </Button>
-          </div>
+          <>
+            <div className='bg-white p-4 flex gap-2 justify-between rounded-lg'>
+              <Button color='default' variant='dashed' onClick={handleMetricLevelModalOpen} icon={<PlusOutlined />}>
+                添加告警等级
+              </Button>
+              <Button
+                danger
+                style={{
+                  display: !selectedMetricLevelIds || selectedMetricLevelIds.length === 0 ? 'none' : 'block'
+                }}
+                onClick={handleBatchDeleteMetricLevel}
+                loading={deleteMetricLevelLoading}
+                icon={<DeleteOutlined />}
+                disabled={deleteMetricLevelLoading}
+              >
+                批量删除
+              </Button>
+            </div>
+            <AutoTable
+              dataSource={metricLevels}
+              columns={getMetricLevelColumns}
+              rowSelection={{
+                type: 'checkbox',
+                onChange: (selectedRowKeys) => {
+                  setSelectedMetricLevelIds(selectedRowKeys as number[])
+                }
+              }}
+              expandable={{
+                expandedRowRender: (record) => (
+                  <Descriptions
+                    column={1}
+                    bordered
+                    labelStyle={{ width: '10rem' }}
+                    size='small'
+                    items={metricLevelDescription(record)}
+                  />
+                )
+                //   rowExpandable: (record: TeamStrategyMetricLevelItem) =>
+                //     !!(
+                //       (record.receiverRoutes && record.receiverRoutes.length > 0) ||
+                //       (record.labelReceiverRoutes && record.labelReceiverRoutes.length > 0)
+                //     )
+              }}
+            />
+          </>
         )}
-        <AutoTable
-          dataSource={metricLevels}
-          columns={getMetricLevelColumns}
-          rowSelection={{
-            type: 'checkbox',
-            onChange: (selectedRowKeys, selectedRows) => {
-              console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows)
-            }
-          }}
-          expandable={{
-            expandedRowRender: (record) => (
-              <Descriptions
-                column={1}
-                bordered
-                labelStyle={{ width: '10rem' }}
-                size='small'
-                items={metricLevelDescription(record)}
-              />
-            )
-            //   rowExpandable: (record: TeamStrategyMetricLevelItem) =>
-            //     !!(
-            //       (record.receiverRoutes && record.receiverRoutes.length > 0) ||
-            //       (record.labelReceiverRoutes && record.labelReceiverRoutes.length > 0)
-            //     )
-          }}
-        />
       </div>
     </div>
   )

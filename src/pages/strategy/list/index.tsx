@@ -221,7 +221,7 @@ const StrategyMetric: React.FC = () => {
         listElement.removeEventListener('scroll', handleScroll)
       }
     }
-  }, [loading]) // 初始化加载数据
+  }, [loading, searchParams]) // 初始化加载数据
 
   useEffect(() => {
     fetchData(searchParams)

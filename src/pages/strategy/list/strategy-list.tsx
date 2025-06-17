@@ -217,10 +217,12 @@ const StrategyList = (props: StrategyListProps) => {
 
   const handleCloseBasicModal = () => {
     setOpenBasicModal(false)
+    setDetail(undefined)
   }
 
   const handleBasicOk = () => {
     setOpenBasicModal(false)
+    setDetail(undefined)
     onRefresh()
   }
 

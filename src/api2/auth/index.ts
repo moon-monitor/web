@@ -97,7 +97,7 @@ export function refreshToken(): Promise<LoginReply> {
  * @returns {Promise<GetSelfMenuTreeReply>}
  */
 export function getSelfMenuTree(): Promise<GetSelfMenuTreeReply> {
-  return request.POST<GetSelfMenuTreeReply>('/api/auth/self/menu/tree')
+  return request.GET<GetSelfMenuTreeReply>('/api/auth/self/menu/tree')
 }
 
 /**

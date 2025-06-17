@@ -5,7 +5,7 @@ import { listTeamStrategyGroup } from '@/api2/team/team-strategy'
 import { DataFromItem } from '@/components/data/form'
 import { Tag } from 'antd'
 
-export const basicFormItems: (DataFromItem | DataFromItem[])[] = [
+export const basicFormItems: (strategyType: StrategyType) => (DataFromItem | DataFromItem[])[] = (strategyType) => [
   {
     name: 'name',
     label: '名称',
@@ -27,14 +27,12 @@ export const basicFormItems: (DataFromItem | DataFromItem[])[] = [
     type: 'select',
     span: 12,
     props: {
+      placeholder: '请选择策略类型',
+      disabled: !!strategyType,
       options: Object.entries(StrategyTypeData)
         .filter(([key]) => +key !== StrategyType.STRATEGY_TYPE_UNKNOWN)
         .map(([key, value]) => ({
-          label: (
-            <Tag color={value.color} className='w-full'>
-              {value.label}
-            </Tag>
-          ),
+          label: <Tag color={value.color}>{value.label}</Tag>,
           value: +key
         }))
     },

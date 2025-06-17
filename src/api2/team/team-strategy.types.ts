@@ -313,5 +313,5 @@ export interface TeamMetricStrategyLevelListReply {
 }
 
 export interface DeleteTeamMetricStrategyLevelRequest {
-  strategyMetricLevelId: number
+  strategyMetricLevelIds?: number[]
 }

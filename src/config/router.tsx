@@ -40,10 +40,6 @@ export const defaultRouters: RouteObject[] = [
     loader: () => ({ title: '首页', path: '/home' }),
     children: [
       {
-        path: '/home',
-        element: <Navigate to='/home/realtime/alarm' replace={true} />
-      },
-      {
         // 403
         path: '/home/*',
         element: <Error403 />

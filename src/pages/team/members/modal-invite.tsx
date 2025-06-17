@@ -1,4 +1,5 @@
-import { type InviteUserRequest, inviteUser } from '@/api/team/invite'
+import { inviteMember } from '@/api2/team'
+import { InviteMemberRequest } from '@/api2/team/types'
 import { DataFrom } from '@/components/data/form'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
@@ -15,9 +16,9 @@ export interface InviteProps {
 export const Invite: React.FC<InviteProps> = (props) => {
   const { open, setOpen } = props
 
-  const [form] = Form.useForm<InviteUserRequest>()
+  const [form] = Form.useForm<InviteMemberRequest>()
 
-  const { run: submitInvite, loading: inviteUserLoading } = useRequest(inviteUser, {
+  const { run: submitInvite, loading: inviteUserLoading } = useRequest(inviteMember, {
     manual: true,
     onSuccess: () => {
       message.info('邀请发送成功')

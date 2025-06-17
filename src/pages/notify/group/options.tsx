@@ -30,9 +30,9 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '告警组状态',
         allowClear: true,
-        options: Object.entries(GlobalStatus).map(([key, value]) => {
+        options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: value,
+            label: <Badge {...value} />,
             value: key
           }
         })

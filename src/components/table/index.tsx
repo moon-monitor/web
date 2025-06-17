@@ -40,7 +40,7 @@ export const AutoTable: React.FC<AutoTableProps> = (props) => {
   return (
     <div className={styles.a_table}>
       <Table {...props} columns={columns} dataSource={dataSource} pagination={false} style={style} />
-      {total && total > 0 && (
+      {total && total > 0 ? (
         <Pagination
           className='text-right p-0 inline-block w-full'
           total={total}
@@ -53,7 +53,7 @@ export const AutoTable: React.FC<AutoTableProps> = (props) => {
           onShowSizeChange={onShowSizeChange}
           showTotal={showTotal}
         />
-      )}
+      ) : null}
     </div>
   )
 }

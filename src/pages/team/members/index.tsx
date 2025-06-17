@@ -1,8 +1,7 @@
-import { Status } from '@/api/enum'
-import { ActionKey } from '@/api/global'
-import type { TeamMemberItem } from '@/api/model-types'
-import type { ListStrategyGroupRequest } from '@/api/strategy'
-import { type ListTeamMemberRequest, batchUpdateTeamMembersStatus, listTeamMember, removeTeamMember } from '@/api/team'
+import { TeamMemberItem } from '@/api2/common.types'
+import { ActionKey, GlobalStatus } from '@/api2/enum'
+import { getTeamMembers, removeMember, updateMemberStatus } from '@/api2/team'
+import { GetTeamMembersRequest } from '@/api2/team/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -18,13 +17,13 @@ import { formList, getColumnList } from './options'
 const { confirm } = Modal
 const { useToken } = theme
 
-const defaultSearchParams: ListTeamMemberRequest = {
+const defaultSearchParams: GetTeamMembersRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 10
   },
   keyword: '',
-  status: Status.StatusAll
+  status: []
 }
 
 export default function Index() {
@@ -32,7 +31,7 @@ export default function Index() {
 
   const { userInfo, isFullscreen } = useContext(GlobalContext)
   const [datasource, setDatasource] = useState<TeamMemberItem[]>([])
-  const [searchParams, setSearchParams] = useState<ListTeamMemberRequest>(defaultSearchParams)
+  const [searchParams, setSearchParams] = useState<GetTeamMembersRequest>(defaultSearchParams)
   const [refresh, setRefresh] = useState(false)
   const [total, setTotal] = useState(0)
   const [detail, setDetail] = useState<TeamMemberItem>()
@@ -43,11 +42,25 @@ export default function Index() {
   const ADivRef = useRef<HTMLDivElement>(null)
   const AutoTableHeight = useContainerHeightTop(ADivRef, datasource, isFullscreen)
 
-  const { run: featchMemberList, loading: featchMemberListLoading } = useRequest(listTeamMember, {
+  const { run: featchMemberList, loading: featchMemberListLoading } = useRequest(getTeamMembers, {
     manual: true,
     onSuccess: (res) => {
-      setDatasource(res.list || [])
+      setDatasource(res.items || [])
       setTotal(res.pagination?.total || 0)
+    }
+  })
+  const { run: batchUpdateTeamMembersStatus } = useRequest(updateMemberStatus, {
+    manual: true,
+    onSuccess: () => {
+      message.success('更改状态成功')
+      onRefresh()
+    }
+  })
+  const { run: removeTeamMember } = useRequest(removeMember, {
+    manual: true,
+    onSuccess: () => {
+      message.success('删除成功')
+      onRefresh()
     }
   })
 
@@ -65,13 +78,13 @@ export default function Index() {
     featchMemberList(searchParams)
   }, [refresh, searchParams, featchMemberList])
 
-  const onSearch = (formData: ListStrategyGroupRequest) => {
+  const onSearch = (formData: GetTeamMembersRequest) => {
     setSearchParams({
       ...searchParams,
       ...formData,
       pagination: {
-        pageNum: 1,
-        pageSize: searchParams.pagination.pageSize
+        page: 1,
+        pageSize: formData.pagination?.pageSize || 10
       }
     })
   }
@@ -81,7 +94,7 @@ export default function Index() {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum: page,
+        page: page,
         pageSize: pageSize
       }
     })
@@ -96,20 +109,14 @@ export default function Index() {
     switch (key) {
       case ActionKey.ENABLE:
         batchUpdateTeamMembersStatus({
-          memberIds: [item.id],
-          status: Status.StatusEnable
-        }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
+          memberIds: [item.teamMemberId],
+          status: GlobalStatus.GLOBAL_STATUS_ENABLE
         })
         break
       case ActionKey.DISABLE:
         batchUpdateTeamMembersStatus({
-          memberIds: [item.id],
-          status: Status.StatusDisable
-        }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
+          memberIds: [item.teamMemberId],
+          status: GlobalStatus.GLOBAL_STATUS_DISABLE
         })
         break
       case ActionKey.OPERATION_LOG:
@@ -123,10 +130,7 @@ export default function Index() {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            removeTeamMember({ memberID: item.id }).then(() => {
-              message.success('删除成功')
-              onRefresh()
-            })
+            removeTeamMember({ memberId: item.teamMemberId })
           },
           onCancel() {
             message.info('取消操作')
@@ -138,9 +142,9 @@ export default function Index() {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.pageNum,
+    current: searchParams.pagination.page,
     pageSize: searchParams.pagination.pageSize,
-    userId: userInfo?.id || 0
+    userId: userInfo?.userId || 0
   })
 
   const onCloseDetailModal = () => {
@@ -195,7 +199,7 @@ export default function Index() {
             columns={columns}
             handleTurnPage={handleTurnPage}
             pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.pageNum}
+            pageNum={searchParams.pagination.page}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

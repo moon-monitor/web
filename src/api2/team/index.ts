@@ -4,6 +4,7 @@ import {
   DeleteTeamRoleRequest,
   GetEmailConfigReply,
   GetTeamMembersReply,
+  GetTeamMembersRequest,
   GetTeamReply,
   GetTeamResourcesReply,
   GetTeamRoleReply,
@@ -59,10 +60,11 @@ export function inviteMember(params: InviteMemberRequest): Promise<EmptyReply> {
 
 /**
  * GetTeamMembers retrieves the list of members in the team
+ * @param {GetTeamMembersRequest} params
  * @returns {Promise<GetTeamMembersReply>}
  */
-export function getTeamMembers(): Promise<GetTeamMembersReply> {
-  return request.POST<GetTeamMembersReply>('/api/team/members', {})
+export function getTeamMembers(params: GetTeamMembersRequest): Promise<GetTeamMembersReply> {
+  return request.POST<GetTeamMembersReply>('/api/team/members', params)
 }
 
 /**

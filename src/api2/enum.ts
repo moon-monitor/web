@@ -42,17 +42,6 @@ export enum UserPosition {
   USER_POSITION_GUEST
 }
 
-export enum Role {
-  // The role is unknown.
-  ROLE_UNKNOWN,
-  // The role is super admin.
-  ROLE_SUPER_ADMIN,
-  // The role is admin.
-  ROLE_ADMIN,
-  // The role is user.
-  ROLE_USER
-}
-
 export enum TeamAuditStatus {
   // The team audit status is unknown.
   TEAM_AUDIT_STATUS_UNKNOWN,

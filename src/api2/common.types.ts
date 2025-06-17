@@ -4,6 +4,7 @@ import {
   GlobalStatus,
   HookAPP,
   HTTPMethod,
+  MemberStatus,
   StrategyType,
   TeamStatus,
   UserPosition,
@@ -582,7 +583,7 @@ export interface TeamMemberItem {
   /**
    * Unique identifier for the member.
    */
-  id?: number
+  teamMemberId: number
   /**
    * Information about the user who invited the member.
    */
@@ -598,7 +599,7 @@ export interface TeamMemberItem {
   /**
    * Status of the member.
    */
-  status: number
+  status: MemberStatus
   /**
    * Timestamp indicating when the member's information was last updated.
    */
@@ -636,7 +637,7 @@ export interface TeamMemberItem {
   /**
    * Status of the member.
    */
-  status: number
+  status: MemberStatus
   /**
    * Timestamp indicating when the member's information was last updated.
    */
@@ -733,7 +734,7 @@ export interface TeamStrategyMetricLevelItem {
   status: number
   strategyMetricId?: number
   values?: number[]
-  strategyMetricLevelId?: number
+  strategyMetricLevelId: number
 }
 
 /**

@@ -27,9 +27,7 @@ export interface GetTeamNoticeGroupRequest {
 /**
  * api.palace.GetTeamNoticeGroupReply
  */
-export interface GetTeamNoticeGroupReply {
-  detail?: NoticeGroupItem
-}
+export interface GetTeamNoticeGroupReply extends NoticeGroupItem {}
 
 /**
  * api.palace.DeleteTeamNoticeGroupRequest

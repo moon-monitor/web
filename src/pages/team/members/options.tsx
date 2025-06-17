@@ -1,7 +1,7 @@
-import { type Role, Status } from '@/api/enum'
-import { ActionKey, RoleData, StatusData } from '@/api/global'
-import type { TeamMemberItem } from '@/api/model-types'
-import { getRoleSelectList } from '@/api/team/role'
+import { TeamMemberItem } from '@/api2/common.types'
+import { ActionKey, GlobalStatus, MemberStatus, Role } from '@/api2/enum'
+import { defaultPaginationReq, GlobalStatusData, MemberStatusData, RoleData } from '@/api2/global'
+import { getTeamRoles } from '@/api2/team'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -29,9 +29,10 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(StatusData).map(([key, value]) => {
+        mode: 'multiple',
+        options: Object.entries(MemberStatusData).map(([key, value]) => {
           return {
-            label: value.text,
+            label: <Badge {...value} />,
             value: Number(key)
           }
         })
@@ -50,7 +51,7 @@ interface GroupColumnProps {
 export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamMemberItem> => {
   const { onHandleMenuOnClick, current, pageSize, userId } = props
   const tableOperationItems = (record: TeamMemberItem): MoreMenuProps['items'] => [
-    record.status === Status.StatusDisable
+    record.status === MemberStatus.MEMBER_STATUS_NORMAL
       ? {
           key: ActionKey.ENABLE,
           label: (
@@ -102,13 +103,11 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamMemberIt
       key: 'name',
       width: 200,
       render: (_: string, record: TeamMemberItem) => {
-        const {
-          user: { avatar, name, nickname }
-        } = record
+        const { avatar, username, nickname } = record.user || {}
         return (
           <div className='flex items-center gap-2'>
-            <Avatar src={avatar}>{(nickname || name).at(0)?.toUpperCase()}</Avatar>
-            {nickname || name}
+            <Avatar src={avatar}>{(nickname || username || '').at(0)?.toUpperCase()}</Avatar>
+            {nickname || username || '-'}
           </div>
         )
       }
@@ -130,21 +129,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamMemberIt
       key: 'status',
       align: 'center',
       width: 160,
-      render: (status: Status) => {
-        const { text, color } = StatusData[status]
+      render: (status: GlobalStatus) => {
+        const { text, color } = GlobalStatusData[status]
         return <Badge color={color} text={text} />
       }
     },
-    {
-      title: '描述',
-      dataIndex: 'remark',
-      key: 'remark',
-      width: 300,
-      ellipsis: true,
-      render: (_: string, { user: { remark } }) => {
-        return remark || '-'
-      }
-    },
+    // {
+    //   title: '描述',
+    //   dataIndex: 'remark',
+    //   key: 'remark',
+    //   width: 300,
+    //   ellipsis: true,
+    //   render: (_: string, { user: { remark } }) => {
+    //     return remark || '-'
+    //   }
+    // },
     {
       title: '更新时间',
       dataIndex: 'updatedAt',
@@ -166,7 +165,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamMemberIt
           <Button size='small' type='link' onClick={() => onHandleMenuOnClick(record, ActionKey.DETAIL)}>
             详情
           </Button>
-          {userId !== record.userId && tableOperationItems && tableOperationItems?.length > 0 && (
+          {userId !== record.user?.userId && tableOperationItems && tableOperationItems?.length > 0 && (
             <MoreMenu
               items={tableOperationItems(record)}
               onClick={(key: ActionKey) => {
@@ -182,7 +181,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamMemberIt
 
 export const inviteModalFormItems: (DataFromItem | DataFromItem[])[] = [
   {
-    name: 'inviteCode',
+    name: 'userEmail',
     label: '邮箱或电话号码',
     type: 'input',
     formProps: {
@@ -193,7 +192,7 @@ export const inviteModalFormItems: (DataFromItem | DataFromItem[])[] = [
     }
   },
   {
-    name: 'role',
+    name: 'position',
     label: '团队角色',
     type: 'select',
     props: {
@@ -212,11 +211,11 @@ export const inviteModalFormItems: (DataFromItem | DataFromItem[])[] = [
     type: 'select-fetch',
     props: {
       handleFetch: (keyword: string) => {
-        return getRoleSelectList({
+        return getTeamRoles({
           keyword,
-          pagination: { pageNum: 1, pageSize: 999 }
+          pagination: defaultPaginationReq
         }).then((res) => {
-          return res.list
+          return res.items || []
         })
       },
       selectProps: {

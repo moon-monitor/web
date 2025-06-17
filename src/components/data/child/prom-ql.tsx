@@ -21,7 +21,7 @@ import { highlightSelectionMatches } from '@codemirror/search'
 import { PromQLExtension } from '@prometheus-io/codemirror-promql'
 import { newCompleteStrategy } from '@prometheus-io/codemirror-promql/dist/esm/complete'
 import { useRequest } from 'ahooks'
-import { Button, Form, Input, theme } from 'antd'
+import { Button, Form, theme } from 'antd'
 import type { ValidateStatus } from 'antd/es/form/FormItem'
 import { baseTheme, darkPromqlHighlighter, darkTheme, lightTheme, promqlHighlighter } from './prom/CMTheme'
 import { HistoryCompleteStrategy } from './prom/HistoryCompleteStrategy'
@@ -168,6 +168,8 @@ const PromQLInput: React.FC<PromQLInputProps> = (props) => {
         highlightSpecialChars(),
         history(),
         EditorState.allowMultipleSelections.of(true),
+        // 设置为不可编辑
+        EditorView.editable.of(disabled ? false : true),
         indentOnInput(),
         bracketMatching(),
         closeBrackets(),
@@ -285,22 +287,18 @@ const PromQLInput: React.FC<PromQLInputProps> = (props) => {
   return (
     <div ref={ref}>
       <div className='promInputContent'>
-        {disabled ? (
-          <Input.TextArea value={value} disabled minLength={1} />
-        ) : (
-          <div
-            className={`cm-expression-input promInput input-border ${status}`}
-            style={{
-              minHeight: 40,
-              padding: '4px 11px',
-              fontSize: '14px',
-              lineHeight: 1.5714285714285714,
-              background: showBorder ? (disabled ? token.colorBgContainerDisabled : token.colorBgContainer) : '',
-              color: token.colorTextBase
-            }}
-            ref={containerRef}
-          />
-        )}
+        <div
+          className={`${!disabled ? 'promInput' : 'w-full'} cm-expression-input input-border ${status}`}
+          style={{
+            minHeight: 40,
+            padding: '4px 11px',
+            fontSize: '14px',
+            lineHeight: 1.5714285714285714,
+            background: showBorder ? (disabled ? token.colorBgContainerDisabled : token.colorBgContainer) : '',
+            color: token.colorTextBase
+          }}
+          ref={containerRef}
+        />
 
         {!subfix && formatExpression && (
           <Button

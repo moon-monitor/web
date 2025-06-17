@@ -1,6 +1,6 @@
 import { UserItem } from '@/api2/common.types'
-import { ActionKey, Role, UserPosition, UserStatus } from '@/api2/enum'
-import { RoleData, UserStatusData } from '@/api2/global'
+import { ActionKey, UserPosition, UserStatus } from '@/api2/enum'
+import { UserPositionData, UserStatusData } from '@/api2/global'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
@@ -15,7 +15,9 @@ export const formList: SearchFormItem[] = [
       type: 'input',
       itemProps: {
         placeholder: '用户名称',
-        allowClear: true
+        allowClear: true,
+        maxLength: 20,
+        showCount: true
       }
     }
   },
@@ -28,17 +30,17 @@ export const formList: SearchFormItem[] = [
         placeholder: '状态',
         allowClear: true,
         mode: 'multiple',
-        options: Object.entries(UserStatus).map(([key, value]) => {
+        options: Object.entries(UserStatusData).map(([key, value]) => {
           return {
-            label: key === 'USER_STATUS_UNKNOWN' ? '全部' : value,
-            value: key
+            label: +key === UserStatus.USER_STATUS_UNKNOWN ? '全部' : value.label,
+            value: +key
           }
         })
       }
     }
   },
   {
-    name: 'role',
+    name: 'position',
     label: '角色',
     dataProps: {
       type: 'select',
@@ -46,10 +48,10 @@ export const formList: SearchFormItem[] = [
         placeholder: '角色',
         allowClear: true,
         mode: 'multiple',
-        options: Object.entries(UserPosition).map(([key, value]) => {
+        options: Object.entries(UserPositionData).map(([key, value]) => {
           return {
-            label: key === 'USER_POSITION_UNKNOWN' ? '全部' : value,
-            value: key
+            label: +key === UserPosition.USER_POSITION_UNKNOWN ? '全部' : value.label,
+            value: +key
           }
         })
       }
@@ -117,24 +119,25 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
       dataIndex: 'avatar',
       key: 'avatar',
       align: 'center',
-      width: 50,
+      width: 100,
       render: (avatar: string, record: UserItem) => {
         return <Avatar src={avatar}>{avatar ? '' : record.username?.at(0)?.toUpperCase()}</Avatar>
       }
     },
     {
       title: '用户名',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'username',
+      key: 'username',
       width: 200
     },
     {
       title: '角色',
-      dataIndex: 'role',
-      key: 'role',
+      dataIndex: 'position',
+      key: 'position',
       width: 120,
-      render: (role: Role) => {
-        return <Tag color='blue'>{RoleData[role]}</Tag>
+      render: (position: UserPosition) => {
+        const { color, label } = UserPositionData[position]
+        return <Tag color={color}>{label}</Tag>
       }
     },
     {

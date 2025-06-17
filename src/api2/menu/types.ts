@@ -1,3 +1,5 @@
+import { GlobalStatus, MenuCategory, MenuProcessType, MenuType } from '../enum'
+
 /**
  * api.palace.common.MenuTreeItem
  */
@@ -17,7 +19,7 @@ export interface MenuTreeItem {
   /**
    * Category of the menu tree item
    */
-  menuCategory?: number
+  menuCategory?: MenuCategory
   /**
    * Icon of the menu tree item
    */
@@ -33,7 +35,7 @@ export interface MenuTreeItem {
   /**
    * Type of the menu tree item
    */
-  menuType?: number
+  menuType?: MenuType
   /**
    * Name of the menu tree item
    */
@@ -49,7 +51,7 @@ export interface MenuTreeItem {
   /**
    * Status of the menu tree item
    */
-  status?: number
+  status?: GlobalStatus
 }
 
 export interface GetMenuRequest {
@@ -61,5 +63,59 @@ export interface GetMenuTreeRequest {}
 
 export interface GetMenuTreeReply {
   menus: MenuTreeItem[]
-  total: number
+}
+export interface GetTeamMenuTreeRequest {}
+
+export interface GetTeamMenuTreeReply {
+  menus: MenuTreeItem[]
+}
+/**
+ * api.palace.SaveMenuRequest，SaveMenuRequest represents the request data for creating or
+ * updating a system menu
+ */
+export interface SaveMenuRequest {
+  /**
+   * Api path of the menu
+   */
+  apiPath?: string
+  /**
+   * Whether the menu is rely on brother
+   */
+  isRelyOnBrother?: boolean
+  /**
+   * Category of the menu
+   */
+  menuCategory?: MenuCategory
+  /**
+   * Icon of the menu
+   */
+  menuIcon?: string
+  /**
+   * Id of the menu (0 for create, >0 for update)
+   */
+  menuId?: number
+  /**
+   * Path of the menu
+   */
+  menuPath?: string
+  /**
+   * Type of the menu
+   */
+  menuType?: MenuType
+  /**
+   * Name of the menu
+   */
+  name?: string
+  /**
+   * Parent menu Id (0 for root menu)
+   */
+  parentId?: number
+  /**
+   * Process type of the menu
+   */
+  processType?: MenuProcessType
+  /**
+   * Status of the menu
+   */
+  status?: GlobalStatus
 }
