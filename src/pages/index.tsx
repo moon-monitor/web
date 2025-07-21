@@ -58,18 +58,8 @@ function App() {
   })
 
   const storageMenus = useCallback(() => {
-    // getTreeMenu({})
-    //   .then((res) => {
-    //     setMenuItems?.(res.menuTree)
-    //   })
-    //   .finally(() => {
-    //     if (isLogin() && !window.location.href.includes('home')) {
-    //       window.location.href = '/#/home'
-    //     }
-    //   })
     getSelfMenuTree()
       .then((res) => {
-        console.log('res', res)
         setMenuItems?.(res.items)
       })
       .finally(() => {
@@ -128,7 +118,6 @@ function App() {
       }
       return item
     })
-    console.log('routersTree', routersTree)
 
     return createHashRouter(routersTree as RouteObject[])
   }

@@ -1,6 +1,9 @@
-import { GlobalStatus, MenuCategory, MenuType } from '@/api2/enum'
-import { GlobalStatusData, MenuCategoryData, MenuTypeData } from '@/api2/global'
+import { GlobalStatus, MenuCategory, MenuProcessType, MenuType } from '@/api2/enum'
+import { GlobalStatusData, MenuCategoryData, MenuProcessTypeData, MenuTypeData } from '@/api2/global'
+import { MenuTreeItem } from '@/api2/menu/types'
 import { DataFromItem } from '@/components/data/form'
+import { numberToBinary } from '@/utils'
+import { Badge, DescriptionsProps, Tag } from 'antd'
 
 interface EditFormItemsProps {
   isMenuType: boolean
@@ -59,6 +62,7 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
     ],
     [
       {
+        span: 8,
         name: 'menuCategory',
         label: '菜单类目',
         type: 'radio-group',
@@ -76,6 +80,7 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
       },
       menuCategory === MenuCategory.MENU_CATEGORY_BUTTON
         ? {
+            span: 16,
             name: 'apiPath',
             label: '后端接口',
             type: 'input',
@@ -84,6 +89,7 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
             }
           }
         : {
+            span: 16,
             name: 'menuPath',
             label: '前端路由',
             type: 'input',
@@ -113,9 +119,6 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
         name: 'isRelyOnBrother',
         label: '依赖兄弟菜单',
         type: 'radio-group',
-        formProps: {
-          labelCol: { span: 8 }
-        },
         props: {
           options: [
             {
@@ -128,6 +131,27 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
             }
           ]
         }
+      },
+      {
+        name: 'sort',
+        label: '排序',
+        type: 'input',
+        formProps: {
+          rules: [
+            {
+              validator: (_, value) => {
+                if (value < 0) {
+                  return Promise.reject(new Error('排序不能小于0'))
+                }
+                return Promise.resolve()
+              }
+            }
+          ]
+        },
+        props: {
+          placeholder: '请输入排序',
+          type: 'number'
+        }
       }
     ],
     [
@@ -137,5 +161,74 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
         type: 'checkbox'
       }
     ]
+  ]
+}
+
+export const descriptionItems = (detail: {
+  menuDetail: MenuTreeItem
+  parentDetail: MenuTreeItem
+}): DescriptionsProps['items'] => {
+  const { menuDetail, parentDetail } = detail
+  return [
+    {
+      key: 'name',
+      label: '菜单名称',
+      children: menuDetail?.name
+    },
+    {
+      key: 'parentId',
+      label: '父级菜单',
+      children: parentDetail?.name
+    },
+    {
+      key: 'menuIcon',
+      label: '菜单图标',
+      children: menuDetail?.menuIcon
+    },
+    {
+      key: 'menuType',
+      label: '菜单类型',
+      children: MenuTypeData[menuDetail?.menuType || MenuType.MENU_TYPE_UNKNOWN]
+    },
+    {
+      key: 'menuCategory',
+      label: '菜单类目',
+      children: MenuCategoryData[menuDetail?.menuCategory || MenuCategory.MENU_CATEGORY_UNKNOWN]
+    },
+    menuDetail?.menuCategory === MenuCategory.MENU_CATEGORY_BUTTON
+      ? {
+          key: 'apiPath',
+          label: '后端接口',
+          children: menuDetail?.apiPath
+        }
+      : {
+          key: 'menuPath',
+          label: '前端路由',
+          children: menuDetail?.menuPath
+        },
+    {
+      key: 'status',
+      label: '启用状态',
+      children: <Badge {...GlobalStatusData[menuDetail?.status || GlobalStatus.GLOBAL_STATUS_UNKNOWN]}></Badge>
+    },
+    {
+      key: 'sort',
+      label: '排序',
+      children: menuDetail?.sort
+    },
+    {
+      key: 'isRelyOnBrother',
+      label: '依赖兄弟菜单',
+      children: menuDetail?.isRelyOnBrother ? '是' : '否'
+    },
+    {
+      key: 'processType',
+      label: '菜单鉴权',
+      children: numberToBinary(menuDetail?.processType || 0).map((item) => (
+        <Tag key={item} color='blue'>
+          {MenuProcessTypeData[item as MenuProcessType]}
+        </Tag>
+      ))
+    }
   ]
 }

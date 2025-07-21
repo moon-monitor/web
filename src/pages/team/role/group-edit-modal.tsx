@@ -1,27 +1,26 @@
-import { ResourceItem, TeamRoleItem } from '@/api2/common.types'
-import { listResource } from '@/api2/resource'
+import { TeamRoleItem } from '@/api2/common.types'
+import { getTeamMenuTree } from '@/api2/menu'
+import { MenuTreeItem } from '@/api2/menu/types'
 import { getTeamRole, saveTeamRole } from '@/api2/team'
 import { SaveTeamRoleRequest } from '@/api2/team/types'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
-import { Form, Modal, type ModalProps } from 'antd'
+import { Form, Modal, Tree, TreeProps, type ModalProps } from 'antd'
 import FormItem from 'antd/es/form/FormItem'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 import { editModalFormItems } from './options'
-import PermissionTree from './permission-tree'
 
 export interface GroupEditModalProps extends ModalProps {
   groupId?: number
   disabled?: boolean
   onOk?: () => void
 }
-
 export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   const { onCancel, onOk, open, title, groupId, disabled } = props
   const [form] = Form.useForm<SaveTeamRoleRequest>()
   const [grounpDetail, setGroupDetail] = useState<TeamRoleItem>()
-  const [resourceList, setResourceList] = useState<ResourceItem[]>([])
+  const [menuTree, setMenuTree] = useState<TreeProps['treeData']>([])
 
   const { run: initRoleDetail, loading: initRoleDetailLoading } = useRequest(getTeamRole, {
     manual: true,
@@ -30,10 +29,18 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     }
   })
 
-  const { run: initResourceList, loading: initResourceListLoading } = useRequest(listResource, {
+  const { run: initMenuTree } = useRequest(getTeamMenuTree, {
     manual: true,
     onSuccess: (res) => {
-      setResourceList(res.items || [])
+      const tree = convertToTree(res.menus || []) || []
+      setMenuTree([
+        {
+          title: '根节点',
+          key: 0,
+          children: tree
+        }
+      ])
+      console.log('menuTree', menuTree)
     }
   })
 
@@ -45,15 +52,26 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     }
   })
 
+  // 将menuTree转换为树形结构
+  const convertToTree = (menuTree: MenuTreeItem[]): TreeProps['treeData'] => {
+    return menuTree.map((item) => {
+      return {
+        title: item.name,
+        key: item.menuId,
+        children: item.children?.length ? convertToTree(item.children) : undefined
+      }
+    })
+  }
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (groupId && open) {
       initRoleDetail({ roleId: groupId })
     }
     if (open) {
-      initResourceList({ pagination: { page: 1, pageSize: 999 } })
+      initMenuTree({})
     }
-  }, [open, groupId, initRoleDetail, initResourceList, disabled])
+  }, [open, groupId, initRoleDetail, initMenuTree, disabled])
 
   useEffect(() => {
     if (open && form && grounpDetail) {
@@ -69,7 +87,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     onCancel?.(e)
     form?.resetFields()
     setGroupDetail(undefined)
-    setResourceList([])
+    setMenuTree([])
   }
 
   const handleOnOk = () => {
@@ -81,6 +99,44 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     })
   }
 
+  const handleOnCheck: TreeProps['onCheck'] = (checkedKeys, info) => {
+    console.log('checkedKeys', checkedKeys)
+    console.log('info', info.halfCheckedKeys)
+    const checkedAllKeys = [...checkedKeys, ...(info.halfCheckedKeys || [])]
+    console.log('checkedAllKeys', checkedAllKeys)
+  }
+
+  // 判断是否为叶子节点
+  const isLeafNode = (node: TreeProps['treeData'][0]) => {
+    return !node.children || node.children.length === 0
+  }
+  // 获取所有叶子节点的 key
+  const getLeafKeys = (treeData: TreeProps['treeData']) => {
+    const leafKeys: number[] = []
+
+    const traverse = (nodes: TreeProps['treeData']) => {
+      nodes?.forEach((node) => {
+        if (isLeafNode(node)) {
+          leafKeys.push(node.key as number)
+        } else if (node.children) {
+          traverse(node.children)
+        }
+      })
+    }
+
+    traverse(treeData)
+    return leafKeys
+  }
+
+  useEffect(() => {
+    if (menuTree?.length && open) {
+      const leafKeys = getLeafKeys(menuTree)
+      const backendKeys = [0, 55, 59]
+      const checkedKeys = leafKeys.filter((key) => backendKeys.includes(key))
+      console.log('checkedKeys', checkedKeys)
+    }
+  }, [menuTree, open])
+
   return (
     <>
       <Modal
@@ -89,7 +145,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
         open={open}
         onCancel={handleOnCancel}
         onOk={handleOnOk}
-        loading={initRoleDetailLoading || initResourceListLoading}
+        loading={initRoleDetailLoading}
         confirmLoading={editRoleLoading}
       >
         <DataFrom
@@ -101,8 +157,19 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
             disabled: disabled || editRoleLoading
           }}
         >
-          <FormItem label='权限列表' name='permissions'>
-            <PermissionTree items={resourceList} disabled={disabled} />
+          <FormItem label='权限列表' name='menuIds'>
+            {/* <TreeSelect
+              treeData={menuTree}
+              multiple
+              treeCheckable
+              treeDefaultExpandAll
+              maxTagCount={5}
+              showCheckedStrategy={SHOW_ALL}
+              onChange={handleOnChange}
+            /> */}
+            <div className='h-[40vh] overflow-y-auto'>
+              <Tree treeData={menuTree} checkable defaultExpandAll multiple onCheck={handleOnCheck} />
+            </div>
           </FormItem>
         </DataFrom>
       </Modal>

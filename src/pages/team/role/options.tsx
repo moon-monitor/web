@@ -30,7 +30,7 @@ export const formList: SearchFormItem[] = [
         allowClear: true,
         options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: value.label,
+            label: <Badge {...value} />,
             value: key
           }
         })

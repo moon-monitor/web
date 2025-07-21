@@ -1,6 +1,6 @@
 import { TeamMemberItem } from '@/api2/common.types'
-import { ActionKey, GlobalStatus, MemberStatus, Role } from '@/api2/enum'
-import { defaultPaginationReq, GlobalStatusData, MemberStatusData, RoleData } from '@/api2/global'
+import { ActionKey, GlobalStatus, MemberStatus } from '@/api2/enum'
+import { defaultPaginationReq, GlobalStatusData, MemberStatusData } from '@/api2/global'
 import { getTeamRoles } from '@/api2/team'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
@@ -118,10 +118,10 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamMemberIt
       dataIndex: 'role',
       key: 'role',
       align: 'center',
-      width: 160,
-      render: (role: Role) => {
-        return <>{RoleData[role]}</>
-      }
+      width: 160
+      // render: (role: Role) => {
+      //   return <>{RoleData[role]}</>
+      // }
     },
     {
       title: '状态',
@@ -196,13 +196,13 @@ export const inviteModalFormItems: (DataFromItem | DataFromItem[])[] = [
     label: '团队角色',
     type: 'select',
     props: {
-      placeholder: '请选择角色',
-      options: Object.entries(RoleData).map(([key, value]) => {
-        return {
-          label: value,
-          value: Number(key)
-        }
-      })
+      placeholder: '请选择角色'
+      // options: Object.entries(RoleData).map(([key, value]) => {
+      //   return {
+      //     label: value,
+      //     value: Number(key)
+      //   }
+      // })
     }
   },
   {

@@ -1,6 +1,6 @@
 import { MenuCategory, MenuProcessType } from '@/api2/enum'
 import { MenuProcessTypeData } from '@/api2/global'
-import { getMenu, getMenuTree, getTeamMenuTree, saveMenu } from '@/api2/menu'
+import { deleteMenu, getMenu, getMenuTree, getTeamMenuTree, saveMenu } from '@/api2/menu'
 import { MenuTreeItem } from '@/api2/menu/types'
 import { DataFrom, DataFromItem } from '@/components/data/form'
 import { numberToBinary, routeJoin } from '@/utils'
@@ -11,6 +11,7 @@ import {
   Card,
   Checkbox,
   CheckboxProps,
+  Descriptions,
   Form,
   Input,
   message,
@@ -21,7 +22,7 @@ import {
   TreeSelect
 } from 'antd'
 import { useEffect, useMemo, useState } from 'react'
-import { editFormItems } from './options'
+import { descriptionItems, editFormItems } from './options'
 interface MenuItem extends TreeDataNode, MenuTreeItem {
   children: MenuItem[]
 }
@@ -55,6 +56,14 @@ const Menu: React.FC = () => {
   const menuCategoryWatch = Form.useWatch('menuCategory', form)
   const [isMenuType, setIsMenuType] = useState<boolean>(false)
   const [parentPath, setParentPath] = useState<string>('')
+  const [isCheck, setIsCheck] = useState<boolean>(false)
+  const [detail, setDetail] = useState<{
+    menuDetail: MenuTreeItem
+    parentDetail: MenuTreeItem
+  }>({
+    menuDetail: {},
+    parentDetail: {}
+  })
 
   const { run: handleSaveMenu } = useRequest(saveMenu, {
     manual: true,
@@ -74,13 +83,19 @@ const Menu: React.FC = () => {
   const { run: getMenuDetail } = useRequest(getMenu, {
     manual: true,
     onSuccess: (data) => {
-      setTitle('编辑菜单')
       const menuPath = data.menuPath?.replace(parentPath, '') || ''
       form.setFieldsValue({
         ...data,
         menuPath
       })
       setCheckedList(numberToBinary(data.processType || 0).map((item) => item.toString()))
+    }
+  })
+  const { run: handleDeleteMenu } = useRequest(deleteMenu, {
+    manual: true,
+    onSuccess: () => {
+      message.success('删除成功')
+      loadMenuTree()
     }
   })
 
@@ -141,22 +156,26 @@ const Menu: React.FC = () => {
     setHoverItem(item)
   }
   const onEditMenu = (item: MenuItem) => {
+    setTitle('编辑菜单')
+    setIsCheck(false)
     setIsDisabled(false)
     setMenuId(item.menuId || 0)
     setAddItem(undefined)
     setParentPath(item.menuPath?.substring(0, item.menuPath.lastIndexOf('/')) || '')
     getMenuDetail({ menuId: item.menuId })
+    console.log('isCheck', isCheck)
   }
   const onDeleteMenu = (item: MenuItem) => {
     Modal.confirm({
       title: '确定删除该菜单吗？',
       onOk: () => {
-        console.log('onDeleteMenu', item)
+        handleDeleteMenu({ menuId: item.menuId })
       }
     })
   }
   const onAddMenu = (item: MenuItem) => {
     setTitle('新增菜单')
+    setIsCheck(false)
     form.resetFields()
     form.setFieldValue('parentId', item.menuId || 0)
     form.setFieldValue('menuType', item.menuType)
@@ -171,7 +190,8 @@ const Menu: React.FC = () => {
       const data = {
         ...formData,
         processType: checkedList.reduce((acc, curr) => acc + +curr, 0),
-        menuPath: routeJoin(parentPath, formData.menuPath || ''),
+        menuPath: formData.menuPath ? routeJoin(parentPath, formData.menuPath || '') : '',
+        sort: formData.sort ? +formData.sort : 0,
         menuId
       }
       handleSaveMenu(data)
@@ -235,6 +255,27 @@ const Menu: React.FC = () => {
     setExpandedKeys(newExpandedKeys)
     setAutoExpandParent(false)
   }
+  const onSelect = (menuItem: MenuItem) => {
+    setIsCheck(true)
+    setMenuId(menuItem.menuId || 0)
+    menuItem.parentId
+      ? getMenu({ menuId: menuItem.parentId }).then((data) => {
+          setDetail({
+            menuDetail: menuItem,
+            parentDetail: data
+          })
+          console.log('detail', detail)
+        })
+      : setDetail({
+          menuDetail: menuItem,
+          parentDetail: {
+            name: '根节点'
+          }
+        })
+    setAddItem(undefined)
+    setTitle('菜单详情')
+  }
+
   return (
     <div className='flex p-4 gap-4 h-full'>
       <div className='w-1/3 bg-white rounded-md p-4'>
@@ -248,10 +289,10 @@ const Menu: React.FC = () => {
           className='h-[calc(100vh-220px)] overflow-y-auto'
           treeData={treeData as unknown as TreeDataNode[]}
           blockNode
-          selectable={false}
           onExpand={onExpand}
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
+          selectable={false}
           titleRender={(item) => {
             const menuItem = item as unknown as MenuItem
             const title = item.title as React.ReactNode
@@ -259,6 +300,7 @@ const Menu: React.FC = () => {
               <div
                 onMouseEnter={() => onMouseEnter(menuItem)}
                 onMouseLeave={() => setHoverItem(null)}
+                onClick={() => onSelect(menuItem)}
                 className='flex items-center gap-3 '
                 style={{
                   color:
@@ -274,20 +316,29 @@ const Menu: React.FC = () => {
                       type='text'
                       size='small'
                       icon={<EditOutlined className='text-blue-500 ' />}
-                      onClick={() => onEditMenu(menuItem)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onEditMenu(menuItem)
+                      }}
                     />
                     <Button
                       type='text'
                       size='small'
                       icon={<MinusCircleOutlined className='text-red-500 ' />}
-                      onClick={() => onDeleteMenu(menuItem)}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        onDeleteMenu(menuItem)
+                      }}
                     />
                     {menuItem.menuCategory !== MenuCategory.MENU_CATEGORY_BUTTON && (
                       <Button
                         type='text'
                         size='small'
                         icon={<PlusCircleOutlined className='text-green-500 ' />}
-                        onClick={() => onAddMenu(menuItem)}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          onAddMenu(menuItem)
+                        }}
                       />
                     )}
                   </div>
@@ -298,50 +349,60 @@ const Menu: React.FC = () => {
         />
       </div>
       <Card title={title} className='flex-1 '>
-        <DataFrom
-          items={editFormItems({ isMenuType, menuCategory: menuCategoryWatch }) as unknown as DataFromItem[]}
-          props={{
-            // labelCol: { span: 6 },
-            layout: 'vertical',
-            form
-          }}
-          slot={{
-            processType: (
-              <>
-                <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
-                  全部
-                </Checkbox>
-                <div>
-                  <Checkbox.Group options={processTypeOptions} value={checkedList} onChange={onChange} />
-                </div>
-              </>
-            ),
-            parentId: (
-              <TreeSelect
-                disabled={isDisabled}
-                placeholder='请选择父级菜单'
-                treeData={[{ key: 0, title: '根节点', children: parentTree }]}
-                fieldNames={{ label: 'title', value: 'key', children: 'children' }}
-                allowClear
-              />
-            ),
-            menuPath: (
-              <Input
-                placeholder='请输入菜单路径'
-                prefix={parentPath}
-                onChange={(e) => form.setFieldValue('menuPath', e.target.value)}
-                styles={{
-                  prefix: {
-                    marginRight: '0px'
-                  }
-                }}
-              />
-            )
-          }}
-        />
-        <Button type='primary' onClick={onSaveMenu}>
-          保存
-        </Button>
+        {isCheck ? (
+          <Descriptions
+            column={1}
+            bordered
+            labelStyle={{ width: '200px' }}
+            items={descriptionItems(detail || { menuDetail: {}, parentDetail: {} })}
+          />
+        ) : (
+          <div>
+            <DataFrom
+              items={editFormItems({ isMenuType, menuCategory: menuCategoryWatch }) as unknown as DataFromItem[]}
+              props={{
+                layout: 'vertical',
+                form
+              }}
+              slot={{
+                processType: (
+                  <>
+                    <Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll}>
+                      全部
+                    </Checkbox>
+                    <div>
+                      <Checkbox.Group options={processTypeOptions} value={checkedList} onChange={onChange} />
+                    </div>
+                  </>
+                ),
+                parentId: (
+                  <TreeSelect
+                    disabled={isDisabled}
+                    placeholder='请选择父级菜单'
+                    treeData={[{ key: 0, title: '根节点', children: parentTree }]}
+                    fieldNames={{ label: 'title', value: 'key', children: 'children' }}
+                    allowClear
+                  />
+                ),
+                menuPath: (
+                  <Input
+                    placeholder='请输入菜单路径'
+                    prefix={parentPath}
+                    onChange={(e) => form.setFieldValue('menuPath', e.target.value)}
+                    styles={{
+                      prefix: {
+                        marginRight: '0px'
+                      }
+                    }}
+                  />
+                )
+              }}
+            />
+            <Button type='primary' onClick={onSaveMenu}>
+              保存
+            </Button>
+          </div>
+        )}
       </Card>
     </div>
   )

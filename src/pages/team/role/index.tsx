@@ -1,5 +1,5 @@
 import { TeamRoleItem } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
+import { ActionKey, GlobalStatus } from '@/api2/enum'
 import { deleteTeamRole, getTeamRoles, updateTeamRoleStatus } from '@/api2/team'
 import { GetTeamRolesRequest } from '@/api2/team/types'
 import SearchBox from '@/components/data/search-box'
@@ -23,7 +23,7 @@ const defaultSearchParams: GetTeamRolesRequest = {
     pageSize: 10
   },
   keyword: '',
-  status: 'GLOBAL_STATUS_UNKNOWN'
+  status: GlobalStatus.GLOBAL_STATUS_UNKNOWN
 }
 
 const Group: React.FC = () => {
@@ -127,10 +127,10 @@ const Group: React.FC = () => {
   const onHandleMenuOnClick = (item: TeamRoleItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
-        updateRoleStatus({ roleId: item.roleId, status: 'GLOBAL_STATUS_ENABLE' })
+        updateRoleStatus({ roleId: item.roleId, status: GlobalStatus.GLOBAL_STATUS_ENABLE })
         break
       case ActionKey.DISABLE:
-        updateRoleStatus({ roleId: item.roleId, status: 'GLOBAL_STATUS_DISABLE' })
+        updateRoleStatus({ roleId: item.roleId, status: GlobalStatus.GLOBAL_STATUS_DISABLE })
         break
       case ActionKey.OPERATION_LOG:
         break

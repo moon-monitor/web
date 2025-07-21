@@ -52,6 +52,10 @@ export interface MenuTreeItem {
    * Status of the menu tree item
    */
   status?: GlobalStatus
+  /**
+   * Sort of the menu tree item
+   */
+  sort?: number
 }
 
 export interface GetMenuRequest {
@@ -118,4 +122,11 @@ export interface SaveMenuRequest {
    * Status of the menu
    */
   status?: GlobalStatus
+  /**
+   * Sort of the menu
+   */
+  sort?: number
+}
+export interface DeleteMenuRequest {
+  menuId?: number
 }

@@ -1,6 +1,7 @@
 import { EmptyReply } from '../common.types'
 import request from '../request'
 import {
+  DeleteMenuRequest,
   GetMenuReply,
   GetMenuRequest,
   GetMenuTreeReply,
@@ -44,4 +45,13 @@ export function getTeamMenuTree(params: GetTeamMenuTreeRequest): Promise<GetTeam
  */
 export function saveMenu(params: SaveMenuRequest): Promise<EmptyReply> {
   return request.PUT<EmptyReply>('/api/menu/save', params)
+}
+
+/**
+ * DeleteMenu deletes a menu by Id
+ * @param {DeleteMenuRequest} params
+ * @returns {Promise<EmptyReply>}
+ */
+export function deleteMenu(params: DeleteMenuRequest): Promise<EmptyReply> {
+  return request.DELETE<EmptyReply>('/api/menu/delete', params)
 }
