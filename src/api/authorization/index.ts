@@ -100,9 +100,9 @@ export function registerWithEmail(params: RegisterWithEmailRequest): Promise<Reg
  */
 export interface LoginByPasswordRequest {
   /**
-   * 用户名
+   * 邮箱
    */
-  username: string
+  email: string
   /**
    * 密码
    */
