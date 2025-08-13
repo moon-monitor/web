@@ -18,7 +18,7 @@ export type LoginParams = {
 }
 
 type formData = {
-  username: string
+  email: string
   password: string
   code: string
 }
@@ -66,8 +66,8 @@ const LoginForm: FC = () => {
       cookie.remove('account')
     }
     handleLogin({
-      username: values.username,
-      password: hashMd5(values.password),
+      email: values.email,
+      password: hashMd5(values.password), // 添加密码哈希处理
       captcha: { answer: values.code, captchaId: captcha?.captchaId || '' }
     })
   }
@@ -96,7 +96,7 @@ const LoginForm: FC = () => {
   useEffect(() => {
     if (cookie.load('account')) {
       const account: LoginByPasswordRequest = cookie.load('account')
-      form.setFieldsValue({ username: account.username, password: account.password })
+      form.setFieldsValue({ email: account.email, password: account.password })
     }
     // 获取验证码
     handleCaptcha()
@@ -116,7 +116,7 @@ const LoginForm: FC = () => {
         autoComplete='off'
       >
         <Form.Item
-          name='username'
+          name='email'
           rules={[
             { required: true, message: '请输入邮箱' },
             { type: 'email', message: '请输入正确的邮箱' }
