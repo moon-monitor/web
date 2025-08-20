@@ -26,7 +26,7 @@ export const formItems: (DataFromItem | DataFromItem[])[] = [
         options: Object.entries(DatasourceDriverMetricData)
           .filter(([key]) => +key !== DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_UNKNOWN)
           .map(([key, value]) => ({
-            label: value.text,
+            label: value,
             value: +key
           }))
       },

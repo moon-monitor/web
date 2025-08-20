@@ -690,7 +690,7 @@ export interface TeamMetricDatasourceItem {
   extra?: KeyValueItem[]
   headers?: KeyValueItem[]
   name: string
-  queryMethod: number
+  queryMethod: HTTPMethod
   remark: string
   scrapeInterval: string
   teamId: number

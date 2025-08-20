@@ -44,3 +44,16 @@ export function getRandomColor() {
   const hue = Math.floor(Math.random() * 360)
   return `hsl(${hue}, 70%, 60%)`
 }
+
+/**
+ * 根据字符串获取颜色
+ * @param str 字符串
+ * @returns 颜色
+ */
+export function getColorByString(str: string) {
+  const hash = str.split('').reduce((acc, char) => {
+    return char.charCodeAt(0) + ((acc << 5) - acc)
+  }, 0)
+  const hue = hash % 360
+  return `hsl(${hue}, 70%, 60%)`
+}

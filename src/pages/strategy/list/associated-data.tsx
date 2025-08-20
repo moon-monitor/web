@@ -10,7 +10,7 @@ import {
 import { GetTeamMetricStrategyReply } from '@/api2/team/team-strategy.types'
 import PromQLInput, { PromQLInputProps } from '@/components/data/child/prom-ql'
 import AutoTable from '@/components/table'
-import { getRandomColor } from '@/utils/color'
+import { getColorByString } from '@/utils/color'
 import { ArrowLeftOutlined, DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Badge, Button, Card, Descriptions, DescriptionsProps, message, Modal, Tag } from 'antd'
@@ -119,34 +119,56 @@ export default function AssociatedData() {
     {
       key: 'strategyName',
       label: '策略名称',
-      children:
-        // <div className='flex items-center '>
-        //   {/* <Tag color={StrategyTypeData[detail?.strategyType].color} className='mr-1' bordered={false}>
-        //     {StrategyTypeData[detail?.strategyType].label}
-        //   </Tag> */}
-        //   <span className='text-lg font-bold'>{detail?.name}</span>
-        // </div>
-        detail?.name
+      children: detail?.name,
+      span: {
+        xs: 24,
+        sm: 12,
+        md: 6,
+        lg: 6,
+        xl: 6
+      }
     },
     {
       key: 'username',
       label: '创建人',
-      children: detail?.creator?.username
+      children: detail?.creator?.username,
+      span: {
+        xs: 24,
+        sm: 12,
+        md: 6,
+        lg: 6,
+        xl: 6
+      }
     },
     {
       key: 'createTime',
       label: '创建时间',
-      children: detail?.createdAt
+      children: detail?.createdAt,
+      span: {
+        xs: 24,
+        sm: 12,
+        md: 6,
+        lg: 6,
+        xl: 6
+      }
     },
     {
       key: 'updatedAt',
       label: '更新时间',
-      children: detail?.updatedAt
+      children: detail?.updatedAt,
+      span: {
+        xs: 24,
+        sm: 12,
+        md: 6,
+        lg: 6,
+        xl: 6
+      }
     },
     {
       key: 'remark',
       label: '备注',
-      children: detail?.remark
+      children: detail?.remark,
+      span: 24
     }
   ]
   const metricDescription: DescriptionsProps['items'] = [
@@ -157,10 +179,13 @@ export default function AssociatedData() {
         <div className='flex flex-col gap-1 w-full'>
           {metricStrategy?.datasource.map((item) => (
             <div key={item.name} className='flex items-center text-white rounded-md '>
-              <div className='pl-1 pr-1 font-bold' style={{ backgroundColor: getRandomColor() }}>
+              <div
+                className='pl-1 pr-1 font-bold'
+                style={{ backgroundColor: getColorByString(DatasourceDriverMetricData[item.driver]) }}
+              >
                 {DatasourceDriverMetricData[item.driver]}
               </div>
-              <div className='pl-1 pr-1 ' style={{ backgroundColor: getRandomColor() }}>
+              <div className='pl-1 pr-1 ' style={{ backgroundColor: getColorByString(item.name) }}>
                 {item.name}
               </div>
             </div>
@@ -297,7 +322,7 @@ export default function AssociatedData() {
             // bordered={false}s
             size='small'
           >
-            <Descriptions layout='vertical' bordered={false} column={4} items={baseInfo} size='small' />
+            <Descriptions layout='vertical' bordered={false} column={24} items={baseInfo} size='small' />
           </Card>
         </Badge.Ribbon>
       </div>

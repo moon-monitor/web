@@ -1,6 +1,6 @@
 import type { TeamMetricDatasourceItem } from '@/api2/common.types'
 import { GlobalStatus } from '@/api2/enum'
-import { DatasourceDriverMetricData } from '@/api2/global'
+import { DatasourceDriverMetricData, HTTPMethodData } from '@/api2/global'
 import { updateTeamMetricDatasourceStatus } from '@/api2/team/team-datasource'
 import { RedoOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
@@ -55,7 +55,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       label: '数据源类型',
       children: (
         <div className='flex flex-row items-center gap-2'>
-          <Tag color='blue'>{DatasourceDriverMetricData[datasource.driver].text}</Tag>
+          <Tag color='blue'>{DatasourceDriverMetricData[datasource.driver]}</Tag>
         </div>
       )
     },
@@ -80,7 +80,16 @@ export const Basics: React.FC<BasicsProps> = (props) => {
         </Typography.Text>
       )
     },
-
+    {
+      label: '请求方式',
+      children: (
+        <Tag color={HTTPMethodData[datasource.queryMethod].color}>{HTTPMethodData[datasource.queryMethod].text}</Tag>
+      )
+    },
+    {
+      label: '取样间隔',
+      children: datasource.scrapeInterval + 's'
+    },
     {
       label: '请求头',
       span: { xs: 1, sm: 2, md: 2, lg: 2, xl: 2, xxl: 2 },

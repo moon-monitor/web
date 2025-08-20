@@ -233,7 +233,7 @@ export const TeamStatusData: Record<TeamStatus, { color: string; label: string }
 export const HTTPMethodData: Record<HTTPMethod, { color: string; text: string }> = {
   [HTTPMethod.HTTP_METHOD_UNKNOWN]: {
     color: 'gray',
-    text: '未知'
+    text: 'unknown'
   },
   [HTTPMethod.HTTP_METHOD_GET]: {
     color: 'green',
@@ -266,9 +266,9 @@ export const HTTPMethodData: Record<HTTPMethod, { color: string; text: string }>
 }
 
 export const DatasourceDriverMetricData: Record<DatasourceDriverMetric, string> = {
-  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_UNKNOWN]: '未知',
-  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS]: 'PROM',
-  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS]: 'VM'
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_UNKNOWN]: 'unknown',
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS]: 'Prometheus',
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS]: 'VictoriaMetrics'
 }
 
 export const ConditionMetricData: Record<ConditionMetric, string> = {

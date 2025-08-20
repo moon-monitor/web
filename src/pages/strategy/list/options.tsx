@@ -56,11 +56,7 @@ export const formList: SearchFormItem[] = [
           .filter(([key]) => +key !== StrategyType.STRATEGY_TYPE_UNKNOWN)
           .map(([key, value]) => {
             return {
-              label: (
-                <Tag color={value.color} className='w-full'>
-                  {value.label}
-                </Tag>
-              ),
+              label: <Tag color={value.color}>{value.label}</Tag>,
               value: key
             }
           })
