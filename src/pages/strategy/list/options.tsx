@@ -119,13 +119,14 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       )
     },
     {
-      key: ActionKey.IMMEDIATELY_PUSH,
+      key: ActionKey.ASSOCIATED_DATA,
       label: (
         <Button size='small' type='link'>
-          立即推送
+          关联数据
         </Button>
       )
     },
+
     record.strategyType === StrategyType.STRATEGY_TYPE_METRIC || !record.strategyType
       ? {
           key: ActionKey.CHART,
@@ -136,6 +137,9 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
           )
         }
       : null,
+    {
+      type: 'divider'
+    },
     {
       key: ActionKey.SUBSCRIBE,
       label: (
@@ -161,18 +165,13 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       )
     },
     {
+      type: 'divider'
+    },
+    {
       key: ActionKey.DELETE,
       label: (
         <Button type='link' size='small' danger>
           删除
-        </Button>
-      )
-    },
-    {
-      key: ActionKey.ASSOCIATED_DATA,
-      label: (
-        <Button size='small' type='link'>
-          关联数据
         </Button>
       )
     }
