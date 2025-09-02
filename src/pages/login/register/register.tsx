@@ -1,7 +1,6 @@
-import { registerWithEmail } from '@/api/authorization'
-import { getCaptcha, verifyEmail } from '@/api2/auth'
-import { GetCaptchaReply } from '@/api2/auth/types'
-import { ErrorResponse } from '@/api2/request'
+import { ErrorResponse } from '@/api/request'
+import { getCaptcha, register, verifyEmail } from '@/api/request/auth'
+import { GetCaptchaReply } from '@/api/request/types'
 import { DataFrom } from '@/components/data/form'
 import { githubURL } from '@/components/layout/header-op'
 import { GlobalContext } from '@/utils/context'
@@ -38,7 +37,7 @@ export default function Register() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const generateCaptcha = useCallback(
     debounce(async () => {
-      getCaptcha().then((res) => {
+      getCaptcha({}).then((res) => {
         setCaptcha(res)
       })
     }, 500),
@@ -70,7 +69,7 @@ export default function Register() {
     setIsLoading(true)
     setError('')
 
-    registerWithEmail({
+    register({
       email: email,
       code: value.emailCode?.toUpperCase(),
       password: hashMd5(value.password),
@@ -78,7 +77,7 @@ export default function Register() {
     })
       .then((res) => {
         setSuccess('注册成功！')
-        setAuthToken?.(res.token)
+        setAuthToken?.(res.token || '')
         return res.token
       })
       .then((token) => {

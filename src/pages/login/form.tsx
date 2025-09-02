@@ -1,7 +1,6 @@
-import { type GetCaptchaReply, type LoginByPasswordRequest, getCaptcha, LoginByPassword } from '@/api/authorization'
 import { type ErrorResponse } from '@/api/request'
-import { oAuth2List } from '@/api2/auth'
-import { OAuthItem } from '@/api2/auth/types'
+import { getCaptcha, loginByPassword, oAuth2List } from '@/api/request/auth'
+import { GetCaptchaReply, LoginByPasswordRequest, OAuth2ListReply_OAuthItem as OAuthItem } from '@/api/request/types'
 import { Gitee, Github } from '@/components/icon'
 import { GlobalContext } from '@/utils/context'
 import { hashMd5 } from '@/utils/hash'
@@ -45,10 +44,10 @@ const LoginForm: FC = () => {
     setAuthToken?.(
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoyLCJpc3MiOiJtb29uLXBhbGFjZSIsImV4cCI6MTc0MzY5NDM0NX0.LGVJpMGxolSfBqp7jXZiKSO1ax_Lvz9Ma0or20oFnNg'
     )
-    LoginByPassword(loginParams)
+    loginByPassword(loginParams)
       .then((res) => {
-        setAuthToken?.(res.token)
-        setUserInfo?.(res.user)
+        setAuthToken?.(res?.token || '')
+        setUserInfo?.(res?.user)
       })
       .catch((e: ErrorResponse) => {
         setErr(e)
@@ -66,14 +65,14 @@ const LoginForm: FC = () => {
       cookie.remove('account')
     }
     handleLogin({
-      username: values.username,
+      email: values.username,
       password: hashMd5(values.password),
       captcha: { answer: values.code, captchaId: captcha?.captchaId || '' }
     })
   }
 
   const handleCaptcha = () => {
-    getCaptcha().then((res) => {
+    getCaptcha({}).then((res) => {
       setCaptcha(res)
     })
   }
@@ -88,7 +87,7 @@ const LoginForm: FC = () => {
   }
 
   const handleOAuthList = () => {
-    oAuth2List().then((res) => {
+    oAuth2List({}).then((res) => {
       setOAuthList(res.items || [])
     })
   }
@@ -96,7 +95,7 @@ const LoginForm: FC = () => {
   useEffect(() => {
     if (cookie.load('account')) {
       const account: LoginByPasswordRequest = cookie.load('account')
-      form.setFieldsValue({ username: account.username, password: account.password })
+      form.setFieldsValue({ username: account.email, password: account.password })
     }
     // 获取验证码
     handleCaptcha()
@@ -204,7 +203,7 @@ const LoginForm: FC = () => {
                 variant='filled'
                 className='flex items-center gap-2'
               >
-                {iconMap[item.icon]} {item.label}
+                {iconMap[item.icon || '']} {item.label}
               </Button>
             </Form.Item>
           ))}

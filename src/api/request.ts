@@ -1,6 +1,5 @@
 import { message, notification } from 'antd'
 import axios, { type AxiosError, type AxiosRequestConfig } from 'axios'
-import { TeamItem } from './model-types'
 
 const host = window.location.origin
 
@@ -14,7 +13,7 @@ export const baseURL = hostMap[host] || `${host}/api`
 
 const request = axios.create({
   baseURL: baseURL,
-  timeout: 10000
+  timeout: 50000
 })
 
 export type ErrorResponse = {
@@ -43,6 +42,7 @@ request.interceptors.response.use(
       }
     }
     const respData = resp.data
+    console.log('errorHandle', respData)
     errorHandle(respData)
     return Promise.reject(respData)
   }
@@ -52,7 +52,8 @@ request.interceptors.request.use(
   (config) => {
     const token = getToken()
     config.headers['Authorization'] = `Bearer ${token}`
-    config.headers['X-Team-ID'] = getTeamInfo()?.id
+    const teamInfo = JSON.parse(localStorage.getItem('teamInfo') || '{"teamId":0}')
+    config.headers['X-Team-Id'] = +teamInfo?.teamId || 0
     // config.headers['X-Team-Member-ID'] = getTeamMemberID()
     return config
   },
@@ -60,14 +61,6 @@ request.interceptors.request.use(
     return Promise.reject(error)
   }
 )
-
-export const getTeamInfo = (): TeamItem => {
-  return JSON.parse(localStorage.getItem('teamInfo') || '{"id":0}')
-}
-
-export const getTeamMemberID = () => {
-  return +(localStorage.getItem('teamMemberID') || '0')
-}
 
 export const setToken = (token: string) => {
   sessionStorage.setItem('token', token)
@@ -104,8 +97,8 @@ const PUT = async <R>(url: string, data?: any, config?: AxiosRequestConfig) => {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const DELETE = async <R>(url: string, data?: any, config?: AxiosRequestConfig) => {
-  return request.delete<NullObject, R>(url, { data, ...config })
+const DELETE = async <R>(url: string, params?: any, config?: AxiosRequestConfig) => {
+  return request.delete<NullObject, R>(url, { params, ...config })
 }
 
 export default {

@@ -1,6 +1,6 @@
-import { getCaptcha, oAuthLoginByEmail, verifyEmail } from '@/api2/auth'
-import { GetCaptchaReply } from '@/api2/auth/types'
-import { ErrorResponse } from '@/api2/request'
+import { ErrorResponse } from '@/api/request'
+import { getCaptcha, oAuthLoginByEmail, verifyEmail } from '@/api/request/auth'
+import { GetCaptchaReply } from '@/api/request/types'
 import { DataFrom } from '@/components/data/form'
 import { githubURL } from '@/components/layout/header-op'
 import { GlobalContext } from '@/utils/context'
@@ -40,7 +40,7 @@ export default function EmailVerification() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const generateCaptcha = useCallback(
     debounce(async () => {
-      getCaptcha().then((res) => {
+      getCaptcha({}).then((res) => {
         setCaptcha(res)
       })
     }, 500),
@@ -81,7 +81,7 @@ export default function EmailVerification() {
     })
       .then((res) => {
         setSuccess('邮箱验证成功！')
-        setAuthToken?.(res.token)
+        setAuthToken?.(res.token || '')
         return res.token
       })
       .then((token) => {

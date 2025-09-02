@@ -1,7 +1,7 @@
-import { NoticeGroupItem } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
-import { deleteTeamNoticeGroup, listTeamNoticeGroup, updateTeamNoticeGroupStatus } from '@/api2/team/team-notice'
-import { ListTeamNoticeGroupRequest } from '@/api2/team/team-notice.types'
+import { ActionKey } from '@/api/global'
+import { deleteTeamNoticeGroup, listTeamNoticeGroup, updateTeamNoticeGroupStatus } from '@/api/request/teamnotice'
+import { ListTeamNoticeGroupRequest, NoticeGroupItem } from '@/api/request/types'
+import { GlobalStatus } from '@/api/request/types/enum'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -23,7 +23,7 @@ const defaultSearchParams: ListTeamNoticeGroupRequest = {
     pageSize: 10
   },
   keyword: '',
-  status: 'GLOBAL_STATUS_ENABLE'
+  status: GlobalStatus.GLOBAL_STATUS_ENABLE
 }
 
 const Group: React.FC = () => {

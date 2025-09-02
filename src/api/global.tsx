@@ -1,410 +1,448 @@
 import { IconFont } from '@/components/icon'
-import { BadgeProps, Button, Tag } from 'antd'
-import { Calendar1, CalendarRange, Hourglass, SunMoon } from 'lucide-react'
-import React from 'react'
+import { CSSProperties } from 'react'
+import { PaginationRequest } from './request/types'
 import {
-  AlarmInterventionAction,
-  AlarmSendType,
-  AlertStatus,
-  Condition,
-  DatasourceType,
+  ConditionMetric,
+  DatasourceDriverMetric,
   DictType,
-  DomainType,
-  EventDataType,
   Gender,
-  HookApp,
+  GlobalStatus,
+  HookAPP,
   HTTPMethod,
-  LogActionType,
-  LogModuleType,
-  MetricType,
-  ModuleType,
-  MQCondition,
-  Role,
-  Status,
-  StatusCodeCondition,
-  StorageType,
+  MemberStatus,
+  MenuCategory,
+  MenuProcessType,
+  MenuType,
+  SampleMode,
   StrategyType,
-  SustainType,
-  TimeEngineRuleType
-} from './enum'
+  TeamAuditAction,
+  TeamAuditStatus,
+  TeamStatus,
+  UserPosition,
+  UserStatus
+} from './request/types/enum'
 
-export interface PaginationReq {
-  pageNum: number
-  pageSize: number
+export const defaultPaginationReq: PaginationRequest = {
+  page: 1,
+  pageSize: 50
 }
 
-export const defaultPaginationReq: PaginationReq = {
-  pageNum: 1,
-  pageSize: 999
+export type EnumData = {
+  color?: CSSProperties['color']
+  label: React.ReactNode | string
+  icon?: React.ReactNode
 }
 
-export interface PaginationReply extends PaginationReq {
-  total: number
-}
-
-export interface PaginationResponse<T> {
-  pagination: PaginationReply
-  list: T[]
-}
-
-export interface SelectExtendType {
-  icon?: string
-  color?: string
-  remark?: string
-  image?: string
-}
-
-export interface SelectType {
-  value: number
-  label: string
-  children?: SelectType[]
-  disabled: boolean
-  extend?: SelectExtendType
-}
-
-// 枚举类型
-export interface EnumItem {
-  // 枚举值
-  value: number
-  // 枚举描述
-  label: string
-}
-
-export const StatusData: Record<Status, BadgeProps> = {
-  [Status.StatusAll]: {
-    color: 'blue',
-    text: '全部'
-  },
-  [Status.StatusEnable]: {
-    color: 'green',
-    text: '启用'
-  },
-  [Status.StatusDisable]: {
-    color: 'red',
-    text: '禁用'
-  }
-}
-
-export const GenderData: Record<Gender, string> = {
-  [Gender.GenderAll]: '全部',
-  [Gender.GenderMale]: '男',
-  [Gender.GenderFemale]: '女'
-}
-
-export const RoleData: Record<Role, string> = {
-  [Role.RoleAll]: '全部',
-  [Role.RoleSupperAdmin]: '超级管理员',
-  [Role.RoleAdmin]: '管理员',
-  [Role.RoleUser]: '普通用户'
-}
-
-export type TagItemType = {
-  text: string
-  color: string
-}
-
-export const MetricTypeData: Record<MetricType, TagItemType> = {
-  [MetricType.MetricTypeUnknown]: {
-    text: '全部',
-    color: ''
-  },
-  [MetricType.MetricTypeCounter]: {
-    text: 'Counter',
-    color: 'green'
-  },
-  [MetricType.MetricTypeGauge]: {
-    text: 'Gauge',
-    color: 'blue'
-  },
-  [MetricType.MetricTypeHistogram]: {
-    text: 'Histogram',
-    color: 'purple'
-  },
-  [MetricType.MetricTypeSummary]: {
-    text: 'Summary',
-    color: 'orange'
-  }
-}
-
-export const DataSourceTypeData: Record<DatasourceType, string> = {
-  [DatasourceType.DatasourceTypeUnknown]: '全部',
-  [DatasourceType.DatasourceTypeMetric]: 'Metric',
-  [DatasourceType.DatasourceTypeLog]: 'Log',
-  [DatasourceType.DatasourceTypeTrace]: 'Trace',
-  [DatasourceType.DatasourceTypeEvent]: 'Event'
-}
-
-export const StorageTypeData: Record<StorageType, string> = {
-  [StorageType.StorageTypeUnknown]: '全部',
-  [StorageType.StorageTypePrometheus]: 'Prometheus',
-  [StorageType.StorageTypeVictoriaMetrics]: 'VictoriaMetrics',
-  [StorageType.StorageTypeKafka]: 'Kafka',
-  [StorageType.StorageTypeRocketmq]: 'Rocketmq',
-  [StorageType.StorageTypeRabbitmq]: 'Rabbitmq',
-  [StorageType.StorageTypeMQTT]: 'MQTT',
-  [StorageType.StorageTypeElasticsearch]: 'Elasticsearch',
-  [StorageType.StorageTypeLoki]: 'Loki',
-  [StorageType.StorageAliYunSLS]: 'AliYunSLS'
-}
-
-export const ConditionData: Record<Condition, string> = {
-  [Condition.ConditionUnknown]: '全部',
-  [Condition.ConditionEQ]: '等于(==)',
-  [Condition.ConditionNE]: '不等于(!=)',
-  [Condition.ConditionGT]: '大于(>)',
-  [Condition.ConditionGTE]: '大于等于(>=)',
-  [Condition.ConditionLT]: '小于(<)',
-  [Condition.ConditionLTE]: '小于等于(<=)'
-}
-
-export const MQConditionData: Record<MQCondition, string> = {
-  [MQCondition.MQConditionUnknown]: '全部',
-  [MQCondition.MQConditionEQ]: '等于(==)',
-  [MQCondition.MQConditionNE]: '不等于(!=)',
-  [MQCondition.MQConditionGTE]: '大于等于(>=)',
-  [MQCondition.MQConditionLT]: '小于(<)',
-  [MQCondition.MQConditionLTE]: '小于等于(<=)',
-  [MQCondition.MQConditionContain]: '包含(contains)',
-  [MQCondition.MQConditionPrefix]: '前缀(prefix)',
-  [MQCondition.MQConditionSuffix]: '后缀(suffix)',
-  [MQCondition.MQConditionRegular]: '正则(regular)'
-}
-
-export const StatusCodeConditionData: Record<StatusCodeCondition, string> = {
-  [StatusCodeCondition.StatusCodeConditionUnknown]: '全部',
-  [StatusCodeCondition.StatusCodeConditionEQ]: '等于(==)',
-  [StatusCodeCondition.StatusCodeConditionNE]: '不等于(!=)'
-}
-
-export const EventDataTypeData: Record<EventDataType, string> = {
-  [EventDataType.EventDataTypeUnknown]: '全部',
-  [EventDataType.EventDataTypeString]: 'String',
-  [EventDataType.EventDataTypeNumber]: 'Number',
-  [EventDataType.EventDataTypeObject]: 'Object'
-}
-
-export const StrategyTypeData: Record<StrategyType, string> = {
-  [StrategyType.StrategyTypeUnknown]: '全部',
-  [StrategyType.StrategyTypeMetric]: 'Metric',
-  [StrategyType.StrategyTypeDomainCertificate]: '证书',
-  [StrategyType.StrategyTypeDomainPort]: '端口',
-  [StrategyType.StrategyTypePing]: 'Ping',
-  [StrategyType.StrategyTypeHTTP]: 'HTTP',
-  [StrategyType.StrategyTypeEvent]: '事件',
-  [StrategyType.StrategyTypeLog]: '日志'
-}
-
-export const StrategyTypeDataTag: Record<StrategyType, React.ReactNode> = {
-  [StrategyType.StrategyTypeUnknown]: <Tag bordered={false}>全部</Tag>,
-  [StrategyType.StrategyTypeMetric]: (
-    <Tag bordered={false} color='green'>
-      Metric
-    </Tag>
-  ),
-  [StrategyType.StrategyTypeDomainCertificate]: (
-    <Tag bordered={false} color='blue'>
-      证书
-    </Tag>
-  ),
-  [StrategyType.StrategyTypeDomainPort]: (
-    <Tag bordered={false} color='orange'>
-      端口
-    </Tag>
-  ),
-  [StrategyType.StrategyTypePing]: (
-    <Tag bordered={false} color='red'>
-      Ping
-    </Tag>
-  ),
-  [StrategyType.StrategyTypeHTTP]: (
-    <Tag bordered={false} color='purple'>
-      HTTP
-    </Tag>
-  ),
-  [StrategyType.StrategyTypeEvent]: (
-    <Tag bordered={false} color='cyan'>
-      事件
-    </Tag>
-  ),
-  [StrategyType.StrategyTypeLog]: (
-    <Tag bordered={false} color='magenta'>
-      日志
-    </Tag>
-  )
-}
-
-export const HTTPMethodData: Record<HTTPMethod, React.ReactNode> = {
-  [HTTPMethod.HTTPMethodUnknown]: <Tag bordered={false}>全部</Tag>,
-  [HTTPMethod.HTTPMethodGET]: (
-    <Tag bordered={false} color='green'>
-      GET
-    </Tag>
-  ),
-  [HTTPMethod.HTTPMethodPOST]: (
-    <Tag bordered={false} color='blue'>
-      POST
-    </Tag>
-  ),
-  [HTTPMethod.HTTPMethodPUT]: (
-    <Tag bordered={false} color='orange'>
-      PUT
-    </Tag>
-  ),
-  [HTTPMethod.HTTPMethodDELETE]: (
-    <Tag bordered={false} color='red'>
-      DELETE
-    </Tag>
-  ),
-  [HTTPMethod.HTTPMethodPATCH]: (
-    <Tag bordered={false} color='purple'>
-      PATCH
-    </Tag>
-  ),
-  [HTTPMethod.HTTPMethodHEAD]: (
-    <Tag bordered={false} color='cyan'>
-      HEAD
-    </Tag>
-  ),
-  [HTTPMethod.HTTPMethodOPTIONS]: (
-    <Tag bordered={false} color='magenta'>
-      OPTIONS
-    </Tag>
-  )
-}
-
-export const SustainTypeData: Record<SustainType, string> = {
-  [SustainType.SustainTypeUnknown]: '全部',
-  [SustainType.SustainTypeFor]: 'm时间内出现n次',
-  [SustainType.SustainTypeMax]: 'm时间内最多出现n次',
-  [SustainType.SustainTypeMin]: 'm时间内最少出现n次'
-}
-
-export const HookAppData: Record<HookApp, { icon: React.ReactNode; label: React.ReactNode }> = {
-  [HookApp.HOOK_APP_UNKNOWN]: {
+export const HookAppData: Record<HookAPP, EnumData> = {
+  [HookAPP.HOOK_APP_UNKNOWN]: {
     label: '全部',
     icon: <IconFont type='icon-disable3' />
   },
-  [HookApp.HOOK_APP_DING_TALK]: {
+  [HookAPP.HOOK_APP_DING_TALK]: {
     label: '钉钉',
     icon: <IconFont type='icon-dingding' />
   },
-  [HookApp.HOOK_APP_FEI_SHU]: {
+  [HookAPP.HOOK_APP_FEI_SHU]: {
     icon: <IconFont type='icon-feishu' />,
     label: '飞书'
   },
-  [HookApp.HOOK_APP_WEB_HOOK]: {
+  [HookAPP.HOOK_APP_OTHER]: {
     label: 'WebHook',
     icon: <IconFont type='icon-zidingyi' />
   },
-  [HookApp.HOOK_APP_WE_CHAT]: {
+  [HookAPP.HOOK_APP_WECHAT]: {
     icon: <IconFont type='icon-qiyeweixin' />,
     label: '企业微信'
   }
 }
 
-export const AlarmSendTypeData: Record<AlarmSendType, { icon: React.ReactNode; label: React.ReactNode }> = {
-  [AlarmSendType.StrategyTypeUnknown]: {
-    label: '全部',
-    icon: <IconFont type='icon-disable3' />
+export const MemberStatusData: Record<MemberStatus, EnumData> = {
+  [MemberStatus.MEMBER_STATUS_UNKNOWN]: {
+    color: 'blue',
+    label: '未知'
   },
-  [AlarmSendType.AlarmSendTypeEmail]: {
-    label: '邮件',
-    icon: <IconFont type='icon-youjian' />
+  [MemberStatus.MEMBER_STATUS_NORMAL]: {
+    color: 'green',
+    label: '正常'
   },
-  [AlarmSendType.AlarmSendTypeSMS]: {
-    label: '短信',
-    icon: <IconFont type='icon-duanxin' />
+  [MemberStatus.MEMBER_STATUS_FORBIDDEN]: {
+    color: 'red',
+    label: '禁用'
   },
-  [AlarmSendType.AlarmSendTypeWeChat]: {
-    label: '企业微信',
-    icon: <IconFont type='icon-qiyeweixin' />
+  [MemberStatus.MEMBER_STATUS_DELETED]: {
+    color: 'red',
+    label: '已删除'
   },
-  [AlarmSendType.AlarmSendTypeDingTalk]: {
-    label: '钉钉',
-    icon: <IconFont type='icon-dingding' />
+  [MemberStatus.MEMBER_STATUS_PENDING_CONFIRM]: {
+    color: 'yellow',
+    label: '待确认'
   },
-  [AlarmSendType.AlarmSendTypeFeiShu]: {
-    label: '飞书',
-    icon: <IconFont type='icon-feishu' />
-  },
-  [AlarmSendType.AlarmSendTypeCustom]: {
-    label: '自定义',
-    icon: <IconFont type='icon-zidingyi' />
+  [MemberStatus.MEMBER_STATUS_DEPARTED]: {
+    color: 'red',
+    label: '已离开'
   }
 }
 
-export const DictTypeData: Record<DictType, string> = {
-  [DictType.DictTypeUnknown]: '全部',
-  [DictType.DictTypeAlarmLevel]: '告警级别',
-  [DictType.DictTypeAlarmPage]: '告警页面',
-  [DictType.DictTypeStrategyCategory]: '策略分类',
-  [DictType.DictTypeStrategyGroupCategory]: '策略组分类'
-}
-
-export const ModuleTypeData: Record<ModuleType, string> = {
-  [ModuleType.ModuleTypeUnknown]: '全局模块',
-  [ModuleType.ModelTypeApi]: '资源管理模块',
-  [ModuleType.ModelTypeMenu]: '菜单管理模块',
-  [ModuleType.ModelTypeRole]: '角色管理模块',
-  [ModuleType.ModelTypeUser]: '用户管理模块',
-  [ModuleType.ModelTypeDict]: '字典管理模块',
-  [ModuleType.ModelTypeConfig]: '配置管理模块',
-  [ModuleType.ModelTypeLog]: '日志管理模块',
-  [ModuleType.ModelTypeJob]: '任务管理模块',
-  [ModuleType.ModelTypeNotify]: '通知管理模块',
-  [ModuleType.ModelTypeSystem]: '系统管理模块',
-  [ModuleType.ModelTypeMonitor]: '告警管理模块'
-}
-
-export const DomainTypeData: Record<DomainType, string> = {
-  [DomainType.DomainTypeUnknown]: '全局领域',
-  [DomainType.DomainTypeSystem]: '系统领域',
-  [DomainType.DomainTypeMonitor]: '告警领域'
-}
-
-export const AlertStatusData: Record<AlertStatus, React.ReactNode> = {
-  [AlertStatus.ALERT_STATUS_UNKNOWN]: <Tag bordered={false}>全部</Tag>,
-  [AlertStatus.ALERT_STATUS_FIRING]: (
-    <Tag bordered={false} color='red'>
-      告警中 (Firang)
-    </Tag>
-  ),
-  [AlertStatus.ALERT_STATUS_RESOLVED]: (
-    <Tag bordered={false} color='green'>
-      已恢复 (Resolved)
-    </Tag>
-  ),
-  [AlertStatus.ALERT_STATUS_Silenced]: (
-    <Tag bordered={false} color='orange'>
-      已静音 (Silenced)
-    </Tag>
-  )
-}
-
-export const TimeEngineRuleTypeData: Record<TimeEngineRuleType, { label: string; icon: React.ReactNode }> = {
-  [TimeEngineRuleType.TimeEngineRuleTypeUnknown]: {
-    label: '全部',
-    icon: <IconFont type='icon-disable3' className='h-5 w-5' />
+export const GlobalStatusData: Record<GlobalStatus, EnumData> = {
+  [GlobalStatus.GLOBAL_STATUS_UNKNOWN]: {
+    color: 'blue',
+    label: '未知'
   },
-  [TimeEngineRuleType.TimeEngineRuleTypeHourRange]: {
-    label: '小时范围',
-    icon: <Hourglass className='h-5 w-5' />
+  [GlobalStatus.GLOBAL_STATUS_ENABLE]: {
+    color: 'green',
+    label: '启用'
   },
-  [TimeEngineRuleType.TimeEngineRuleTypeDaysOfWeek]: {
-    label: '星期',
-    icon: <SunMoon className='h-5 w-5' />
-  },
-  [TimeEngineRuleType.TimeEngineRuleTypeDaysOfMonth]: {
-    label: '日期',
-    icon: <CalendarRange className='h-5 w-5' />
-  },
-  [TimeEngineRuleType.TimeEngineRuleTypeMonths]: {
-    label: '月份',
-    icon: <Calendar1 className='h-5 w-5' />
+  [GlobalStatus.GLOBAL_STATUS_DISABLE]: {
+    color: 'red',
+    label: '禁用'
   }
 }
 
-// 操作
+export const StrategyTypeData: Record<StrategyType, EnumData> = {
+  [StrategyType.STRATEGY_TYPE_UNKNOWN]: {
+    color: 'blue',
+    label: '未知'
+  },
+  [StrategyType.STRATEGY_TYPE_METRIC]: {
+    color: 'green',
+    label: 'Metric'
+  },
+  [StrategyType.STRATEGY_TYPE_EVENT]: {
+    color: 'blue',
+    label: '事件'
+  },
+  [StrategyType.STRATEGY_TYPE_LOGS]: {
+    color: 'orange',
+    label: '日志'
+  },
+  [StrategyType.STRATEGY_TYPE_PORT]: {
+    color: 'red',
+    label: '端口'
+  },
+  [StrategyType.STRATEGY_TYPE_HTTP]: {
+    color: 'purple',
+    label: 'HTTP'
+  },
+  [StrategyType.STRATEGY_TYPE_PING]: {
+    color: 'cyan',
+    label: 'Ping'
+  },
+  [StrategyType.STRATEGY_TYPE_CERT]: {
+    color: 'magenta',
+    label: '证书'
+  }
+}
+
+export const UserStatusData: Record<UserStatus, EnumData> = {
+  [UserStatus.USER_STATUS_UNKNOWN]: {
+    color: '#f5222d',
+    label: '未知'
+  },
+  [UserStatus.USER_STATUS_NORMAL]: {
+    color: '#1890ff',
+    label: '正常'
+  },
+  [UserStatus.USER_STATUS_FORBIDDEN]: {
+    color: '#f5222d',
+    label: '禁用'
+  },
+  [UserStatus.USER_STATUS_DELETED]: {
+    color: '#f5222d',
+    label: '已删除'
+  }
+}
+
+export const UserPositionData: Record<UserPosition, EnumData> = {
+  [UserPosition.USER_POSITION_UNKNOWN]: {
+    color: 'gray',
+    label: '未知'
+  },
+  [UserPosition.USER_POSITION_SUPER_ADMIN]: {
+    color: '#1890ff',
+    label: '超级管理员'
+  },
+  [UserPosition.USER_POSITION_ADMIN]: {
+    color: 'blue',
+    label: '管理员'
+  },
+  [UserPosition.USER_POSITION_USER]: {
+    color: 'gray',
+    label: '普通用户'
+  },
+  [UserPosition.USER_POSITION_GUEST]: {
+    color: 'blue',
+    label: '访客'
+  }
+}
+
+export const GenderData: Record<Gender, EnumData> = {
+  [Gender.GENDER_UNSPECIFIED]: {
+    color: 'blue',
+    label: '未知'
+  },
+  [Gender.GENDER_MALE]: {
+    color: 'blue',
+    label: '男'
+  },
+  [Gender.GENDER_FEMALE]: {
+    color: 'blue',
+    label: '女'
+  },
+  [Gender.GENDER_OTHER]: {
+    color: 'gray',
+    label: '其他'
+  }
+}
+
+export const TeamStatusData: Record<TeamStatus, EnumData> = {
+  [TeamStatus.TEAM_STATUS_UNKNOWN]: {
+    color: 'blue',
+    label: '未知'
+  },
+  [TeamStatus.TEAM_STATUS_NORMAL]: {
+    color: 'green',
+    label: '正常'
+  },
+  [TeamStatus.TEAM_STATUS_DELETED]: {
+    color: 'red',
+    label: '已删除'
+  },
+  [TeamStatus.TEAM_STATUS_FORBIDDEN]: {
+    color: 'red',
+    label: '禁用'
+  },
+  [TeamStatus.TEAM_STATUS_APPROVAL]: {
+    color: 'yellow',
+    label: '待确认'
+  },
+  [TeamStatus.TEAM_STATUS_REJECTED]: {
+    color: 'red',
+    label: '已拒绝'
+  }
+}
+
+export const HTTPMethodData: Record<HTTPMethod, EnumData> = {
+  [HTTPMethod.HTTP_METHOD_UNKNOWN]: {
+    color: 'gray',
+    label: 'unknown'
+  },
+  [HTTPMethod.HTTP_METHOD_GET]: {
+    color: 'green',
+    label: 'GET'
+  },
+  [HTTPMethod.HTTP_METHOD_POST]: {
+    color: 'orange',
+    label: 'POST'
+  },
+  [HTTPMethod.HTTP_METHOD_PUT]: {
+    color: 'cyan',
+    label: 'PUT'
+  },
+  [HTTPMethod.HTTP_METHOD_DELETE]: {
+    color: 'red',
+    label: 'DELETE'
+  },
+  [HTTPMethod.HTTP_METHOD_HEAD]: {
+    color: 'purple',
+    label: 'PATCH'
+  },
+  [HTTPMethod.HTTP_METHOD_OPTIONS]: {
+    color: 'gray',
+    label: 'OPTIONS'
+  },
+  [HTTPMethod.HTTP_METHOD_PATCH]: {
+    color: 'gray',
+    label: 'PATCH'
+  }
+}
+
+export const DatasourceDriverMetricData: Record<DatasourceDriverMetric, EnumData> = {
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_UNKNOWN]: {
+    color: 'gray',
+    label: 'unknown'
+  },
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_PROMETHEUS]: {
+    color: 'orange',
+    label: 'Prometheus'
+  },
+  [DatasourceDriverMetric.DATASOURCE_DRIVER_METRIC_VICTORIAMETRICS]: {
+    color: 'cyan',
+    label: 'VictoriaMetrics'
+  }
+}
+
+export const ConditionMetricData: Record<ConditionMetric, EnumData> = {
+  [ConditionMetric.CONDITION_METRIC_UNKNOWN]: {
+    color: 'gray',
+    label: '全部'
+  },
+  [ConditionMetric.CONDITION_METRIC_EQ]: {
+    color: 'green',
+    label: '等于'
+  },
+  [ConditionMetric.CONDITION_METRIC_NE]: {
+    color: 'red',
+    label: '不等于'
+  },
+  [ConditionMetric.CONDITION_METRIC_GT]: {
+    color: 'red',
+    label: '大于'
+  },
+  [ConditionMetric.CONDITION_METRIC_GTE]: {
+    color: 'red',
+    label: '大于等于'
+  },
+  [ConditionMetric.CONDITION_METRIC_LT]: {
+    color: 'red',
+    label: '小于'
+  },
+  [ConditionMetric.CONDITION_METRIC_LTE]: {
+    color: 'red',
+    label: '小于等于'
+  },
+  [ConditionMetric.CONDITION_METRIC_IN]: {
+    color: 'red',
+    label: '在范围内'
+  },
+  [ConditionMetric.CONDITION_METRIC_NOT_IN]: {
+    color: 'red',
+    label: '不在范围内'
+  }
+}
+
+export const SampleModeData: Record<SampleMode, EnumData> = {
+  [SampleMode.SAMPLE_MODE_UNKNOWN]: {
+    color: 'gray',
+    label: '全部'
+  },
+  [SampleMode.SAMPLE_MODE_FOR]: {
+    color: 'red',
+    label: 'm时间内出现n次'
+  },
+  [SampleMode.SAMPLE_MODE_MAX]: {
+    color: 'red',
+    label: 'm时间内最多出现n次'
+  },
+  [SampleMode.SAMPLE_MODE_MIN]: {
+    color: 'red',
+    label: 'm时间内最少出现n次'
+  }
+}
+
+export const DictTypeData: Record<DictType, EnumData> = {
+  [DictType.DICT_TYPE_UNKNOWN]: {
+    color: 'gray',
+    label: '全部'
+  },
+  [DictType.DICT_TYPE_ALARM_LEVEL]: {
+    color: 'red',
+    label: '告警级别'
+  },
+  [DictType.DICT_TYPE_ALARM_PAGE]: {
+    color: 'red',
+    label: '告警页面'
+  }
+}
+
+export const MenuTypeData: Record<MenuType, EnumData> = {
+  [MenuType.MENU_TYPE_UNKNOWN]: {
+    color: 'gray',
+    label: '全部'
+  },
+  [MenuType.MENU_TYPE_SYSTEM]: {
+    color: 'blue',
+    label: '系统'
+  },
+  [MenuType.MENU_TYPE_TEAM]: {
+    color: 'blue',
+    label: '团队'
+  },
+  [MenuType.MENU_TYPE_USER]: {
+    color: 'blue',
+    label: '用户'
+  },
+  [MenuType.MENU_TYPE_NONE]: {
+    color: 'gray',
+    label: '无'
+  }
+}
+
+export const MenuCategoryData: Record<MenuCategory, EnumData> = {
+  [MenuCategory.MENU_CATEGORY_UNKNOWN]: {
+    color: 'gray',
+    label: '全部'
+  },
+  [MenuCategory.MENU_CATEGORY_MENU]: {
+    color: 'blue',
+    label: '菜单'
+  },
+  [MenuCategory.MENU_CATEGORY_BUTTON]: {
+    color: 'blue',
+    label: '按钮'
+  }
+}
+
+export const MenuProcessTypeData: Record<MenuProcessType, EnumData> = {
+  [MenuProcessType.MENU_PROCESS_TYPE_UNKNOWN]: {
+    color: 'gray',
+    label: '全部'
+  },
+  [MenuProcessType.MENU_PROCESS_TYPE_LOGIN]: {
+    color: 'blue',
+    label: '登录'
+  },
+  [MenuProcessType.MENU_PROCESS_TYPE_TEAM]: {
+    color: 'blue',
+    label: '团队'
+  },
+  [MenuProcessType.MENU_PROCESS_TYPE_LOG]: {
+    color: 'blue',
+    label: '日志'
+  },
+  [MenuProcessType.MENU_PROCESS_TYPE_DATA_PERMISSION]: {
+    color: 'blue',
+    label: '数据权限'
+  },
+  [MenuProcessType.MENU_PROCESS_TYPE_ADMIN]: {
+    color: 'blue',
+    label: '管理员'
+  }
+}
+
+export const TeamAuditStatusData: Record<TeamAuditStatus, EnumData> = {
+  [TeamAuditStatus.TEAM_AUDIT_STATUS_UNKNOWN]: {
+    color: 'gray',
+    label: '未知'
+  },
+  [TeamAuditStatus.TEAM_AUDIT_STATUS_PENDING]: {
+    color: 'yellow',
+    label: '待审核'
+  },
+  [TeamAuditStatus.TEAM_AUDIT_STATUS_APPROVED]: {
+    color: 'green',
+    label: '审核通过'
+  },
+  [TeamAuditStatus.TEAM_AUDIT_STATUS_REJECTED]: {
+    color: 'red',
+    label: '审核拒绝'
+  }
+}
+
+export const TeamAuditActionData: Record<TeamAuditAction, EnumData> = {
+  [TeamAuditAction.TEAM_AUDIT_ACTION_UNKNOWN]: {
+    color: 'gray',
+    label: '未知'
+  },
+  [TeamAuditAction.TEAM_AUDIT_ACTION_JOIN]: {
+    color: 'green',
+    label: '加入团队'
+  },
+  [TeamAuditAction.TEAM_AUDIT_ACTION_LEAVE]: {
+    color: 'red',
+    label: '离开团队'
+  }
+}
+
 export enum ActionKey {
   /** 新增 */
   ADD = '__add__',
@@ -453,54 +491,7 @@ export enum ActionKey {
   /** 图表排序-置底 */
   CHART_SORT_BOTTOM = '__chart_sort_bottom__',
   /** 同步 */
-  SYNC = '__sync__'
-}
-
-export const AlarmInterventionActionData: Record<
-  AlarmInterventionAction,
-  { key: ActionKey; label: string | React.ReactNode }
-> = {
-  [AlarmInterventionAction.Mark]: {
-    key: ActionKey.ALARM_INTERVENTION,
-    label: (
-      <Button size='small' type='link'>
-        介入
-      </Button>
-    )
-  },
-  [AlarmInterventionAction.Silence]: {
-    key: ActionKey.ALARM_SILENCE,
-    label: (
-      <Button size='small' type='link'>
-        抑制
-      </Button>
-    )
-  },
-  [AlarmInterventionAction.Upgrade]: {
-    key: ActionKey.ALARM_UPGRADE,
-    label: (
-      <Button size='small' type='link'>
-        升级
-      </Button>
-    )
-  },
-  [AlarmInterventionAction.Delete]: {
-    key: ActionKey.DELETE,
-    label: (
-      <Button size='small' type='link' danger>
-        删除
-      </Button>
-    )
-  }
-}
-
-export const LogModuleTypeData: Record<LogModuleType, string> = {
-  [LogModuleType.DICT]: '字典'
-}
-
-export const LogActionTypeData: Record<LogActionType, string> = {
-  [LogActionType.ADD]: '新增',
-  [LogActionType.DELETE]: '删除',
-  [LogActionType.MODIFY]: '修改',
-  [LogActionType.MODIFY_STATUS]: '修改状态'
+  SYNC = '__sync__',
+  /** 关联数据 */
+  ASSOCIATED_DATA = '__associated_data__'
 }
