@@ -1,7 +1,7 @@
-import { StrategyType } from '@/api2/enum'
-import { defaultPaginationReq, StrategyTypeData } from '@/api2/global'
-import { listTeamNoticeGroup } from '@/api2/team/team-notice'
-import { listTeamStrategyGroup } from '@/api2/team/team-strategy'
+import { StrategyType } from '@/api/enum'
+import { defaultPaginationReq, StrategyTypeData } from '@/api/global'
+import { listTeamNoticeGroup } from '@/api/request/teamnotice'
+import { listTeamStrategyGroup } from '@/api/request/teamstrategy'
 import { DataFromItem } from '@/components/data/form'
 import { Tag } from 'antd'
 
@@ -30,7 +30,7 @@ export const basicFormItems: (strategyType: StrategyType) => (DataFromItem | Dat
       placeholder: '请选择策略类型',
       disabled: !!strategyType,
       options: Object.entries(StrategyTypeData)
-        .filter(([key]) => +key !== StrategyType.STRATEGY_TYPE_UNKNOWN)
+        .filter(([key]) => +key !== StrategyType.StrategyTypeUnknown)
         .map(([key, value]) => ({
           label: <Tag color={value.color}>{value.label}</Tag>,
           value: +key

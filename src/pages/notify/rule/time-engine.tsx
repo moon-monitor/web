@@ -1,18 +1,10 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 
-// import { Status } from '@/api/enum'
-// import { ActionKey } from '@/api/global'
-// import { TimeEngineItem } from '@/api/model-types'
-// import {
-//   deleteTimeEngine,
-//   listTimeEngine,
-//   ListTimeEngineRequest,
-//   updateTimeEngineStatus
-// } from '@/api/notify/time-engine'
-import { GlobalStatusKey } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
-import { deleteTimeEngine, listTimeEngine } from '@/api2/timeEngine'
-import { ListTimeEngineRequest, TimeEngineItem } from '@/api2/timeEngine/types'
+
+import { ActionKey, GlobalStatus } from '@/api/enum'
+import { deleteTimeEngine, listTimeEngine } from '@/api/request/timeengine'
+import { ListTimeEngineRequest } from '@/api/request/types'
+import { TimeEngineItem } from '@/api/request/types/model-types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -65,19 +57,23 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
   const onSearch = (values: ListTimeEngineRequest) => {
     setSearchParams({
       ...searchParams,
-      ...values
+      ...values,
+      pagination: {
+        page: values.pagination?.page || 1,
+        pageSize: values.pagination?.pageSize || 10
+      }
     })
   }
 
   const { run: handleGetList, loading } = useRequest(listTimeEngine, {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
-      setDatasource(res?.items || [])
+      setDatasource(res?.items as TimeEngineItem[])
       setTotal(res?.pagination?.total || 0)
     }
   })
 
-  const onReset = () => {}
+  const onReset = () => { }
 
   const handleEditModal = (detail?: TimeEngineItem) => {
     setShowModal(true)
@@ -95,7 +91,7 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
     }
   })
 
-  const onChangeStatus = (hookId: number, status: GlobalStatusKey) => {
+  const onChangeStatus = (hookId: number, status: GlobalStatus) => {
     console.log('onChangeStatus', hookId, status)
     // updateTimeEngineStatus({ ids: [hookId], status }).then(onRefresh)
   }
@@ -106,16 +102,16 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
         handleEditModal(item)
         break
       case ActionKey.DELETE:
-        handleDelete({ timeEngineId: item.timeEngineId })
+        handleDelete({ timeEngineId: item.id })
         break
       case ActionKey.DETAIL:
         onOpenDetailModal(item)
         break
       case ActionKey.DISABLE:
-        onChangeStatus(item.timeEngineId, 'GLOBAL_STATUS_DISABLE')
+        onChangeStatus(item.id, 'GLOBAL_STATUS_DISABLE')
         break
       case ActionKey.ENABLE:
-        onChangeStatus(item.timeEngineId, 'GLOBAL_STATUS_ENABLE')
+        onChangeStatus(item.id, 'GLOBAL_STATUS_ENABLE')
         break
       default:
         break
@@ -155,12 +151,12 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
     <>
       <EngineEditModal
         open={showModal}
-        engineId={Detail?.timeEngineId}
+        engineId={Detail?.id}
         onCancel={closeEditModal}
         onOk={handleEditModalOnOk}
       />
       <EngineDetailModal
-        Id={Detail?.timeEngineId || 0}
+        Id={Detail?.id || 0}
         open={openDetailModal}
         onCancel={onCloseDetailModal}
         onOk={onCloseDetailModal}

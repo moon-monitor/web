@@ -1,5 +1,5 @@
-import { getFilingInformation } from '@/api2/auth'
-import { GetFilingInformationReply } from '@/api2/auth/types'
+import { getFilingInformation } from '@/api/request/auth'
+import { GetFilingInformationReply } from '@/api/request/types'
 import { CopyrightOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { useEffect, useState } from 'react'

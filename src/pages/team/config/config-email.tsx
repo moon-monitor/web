@@ -1,4 +1,4 @@
-import { EmailConfigItem } from '@/api/model-types'
+import { EmailConfigItem } from '@/api/request/types/model-types'
 import { Button, Col, Form, FormInstance, Input, Row, Select, Table } from 'antd'
 import { TeamConfigFormData } from '.'
 

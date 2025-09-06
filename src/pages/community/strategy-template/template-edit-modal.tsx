@@ -1,9 +1,3 @@
-import { ConditionData, SustainTypeData } from '@/api/global'
-import {
-  getTemplateStrategy,
-  MutationStrategyLevelTemplateItem,
-  validateAnnotationsTemplate
-} from '@/api/strategy/template'
 import { AnnotationsEditor } from '@/components/data/child/annotation-editor'
 import PromQLInput from '@/components/data/child/prom-ql'
 import { MinusCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'

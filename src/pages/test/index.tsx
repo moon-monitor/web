@@ -1,4 +1,4 @@
-import { MenuTree } from '@/api/model-types'
+import { MenuTree } from '@/api/request/types/model-types'
 import { GlobalContext } from '@/utils/context'
 import { Tree, TreeDataNode } from 'antd'
 import type { DataNode, EventDataNode, TreeProps } from 'antd/es/tree'

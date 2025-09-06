@@ -1,6 +1,6 @@
-import { TeamDictItem, TeamStrategyGroupItem, TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api2/common.types'
-import { ActionKey, ConditionMetric, GlobalStatus, SampleMode, StrategyType } from '@/api2/enum'
-import { ConditionMetricData, GlobalStatusData, SampleModeData, StrategyTypeData } from '@/api2/global'
+import { TeamDictItem, TeamStrategyGroupItem, TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api/common.types'
+import { ActionKey, ConditionMetric, GlobalStatus, SampleMode, StrategyType } from '@/api/enum'
+import { ConditionMetricData, GlobalStatusData, SampleModeData, StrategyTypeData } from '@/api/global'
 import { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -53,7 +53,7 @@ export const formList: SearchFormItem[] = [
         mode: 'multiple',
         maxTagCount: 1,
         options: Object.entries(StrategyTypeData)
-          .filter(([key]) => +key !== StrategyType.STRATEGY_TYPE_UNKNOWN)
+          .filter(([key]) => +key !== StrategyType.StrategyTypeUnknown)
           .map(([key, value]) => {
             return {
               label: <Tag color={value.color}>{value.label}</Tag>,
@@ -94,21 +94,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
   const tableOperationItems = (record: TeamStrategyItem): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
 
     {
       key: ActionKey.EDIT,
@@ -129,13 +129,13 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
 
     record.strategyType === StrategyType.STRATEGY_TYPE_METRIC || !record.strategyType
       ? {
-          key: ActionKey.CHART,
-          label: (
-            <Button size='small' type='link'>
-              策略图表
-            </Button>
-          )
-        }
+        key: ActionKey.CHART,
+        label: (
+          <Button size='small' type='link'>
+            策略图表
+          </Button>
+        )
+      }
       : null,
     {
       type: 'divider'
@@ -204,7 +204,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
       align: 'center',
       width: 80,
       render: (status: GlobalStatus) => {
-        return <Badge {...GlobalStatusData[status]} />
+        const data = GlobalStatusData[status]
+        return <Badge color={data?.color} text={data?.label} />
       }
     },
     {
@@ -350,7 +351,8 @@ export const metricLevelColumns = (props: MetricLevelColumnsProps): ColumnsType<
       key: 'condition',
       align: 'center',
       render: (condition: ConditionMetric) => {
-        return ConditionMetricData[condition]
+        const data = ConditionMetricData[condition]
+        return <Tag color={data?.color}>{data?.label}</Tag>
       }
     },
     {
@@ -368,7 +370,8 @@ export const metricLevelColumns = (props: MetricLevelColumnsProps): ColumnsType<
       key: 'sampleMode',
       align: 'center',
       render: (sampleMode: SampleMode) => {
-        return SampleModeData[sampleMode]
+        const data = SampleModeData[sampleMode]
+        return <Tag color={data?.color}>{data?.label}</Tag>
       }
     },
     {

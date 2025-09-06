@@ -1,5 +1,5 @@
-import type { DashboardItem, SelectItem } from '@/api/model-types'
-import { listDashboardSelect, listMyDashboard, updateMyDashboard } from '@/api/realtime/dashboard'
+import { listTeamDashboard, saveTeamDashboard, selectTeamDashboard } from '@/api/request/teamdashboard'
+import type { DashboardItem, SelectItem } from '@/api/request/types/model-types'
 import { DataFrom } from '@/components/data/form'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
@@ -18,21 +18,21 @@ export default function ModalAppendDashboard(props: ModalAppendDashboardProps) {
   const [dashboardList, setDashboardList] = useState<SelectItem[]>([])
   const [myDashboardList, setMyDashboardList] = useState<DashboardItem[]>([])
 
-  const { run: getMyDashboardList, loading: myDashboardLoading } = useRequest(listMyDashboard, {
+  const { run: getMyDashboardList, loading: myDashboardLoading } = useRequest(listTeamDashboard, {
     manual: true,
     onSuccess: (data) => {
-      setMyDashboardList(data.list || [])
+      setMyDashboardList(data.items || [])
     }
   })
 
-  const { run: getDashboardList, loading: dashboardLoading } = useRequest(listDashboardSelect, {
+  const { run: getDashboardList, loading: dashboardLoading } = useRequest(selectTeamDashboard, {
     manual: true,
     onSuccess: (data) => {
-      setDashboardList(data.list || [])
+      setDashboardList(data.items || [])
     }
   })
 
-  const { run: appendDashboard, loading: appendDashboardLoading } = useRequest(updateMyDashboard, {
+  const { run: appendDashboard, loading: appendDashboardLoading } = useRequest(saveTeamDashboard, {
     manual: true,
     onSuccess: () => {
       onOk()

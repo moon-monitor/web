@@ -1,6 +1,7 @@
 import { NotifyType } from '@/api/enum'
-import { StrategySubscriberItem, UserItem } from '@/api/model-types'
-import { getStrategySubscriber, StrategySubscriberRequest } from '@/api/subscriber'
+import { subscribeTeamStrategy } from '@/api/request/teamstrategy'
+import { SubscribeTeamStrategyRequest } from '@/api/request/types/index'
+import { StrategySubscriberItem, UserItem } from '@/api/request/types/model-types'
 import AutoTable from '@/components/table'
 import { useRequest } from 'ahooks'
 import { Avatar, Checkbox, Modal, ModalProps, theme } from 'antd'
@@ -17,14 +18,14 @@ export default function ModalSubscriber({ open, strategyId = 0, onClose, ...rese
   const { token } = useToken()
   const [datasource, setDatasource] = useState<StrategySubscriberItem[]>([])
   const [total, setTotal] = useState(0)
-  const { run: initStrategySubscriber, loading } = useRequest(getStrategySubscriber, {
+  const { run: initStrategySubscriber, loading } = useRequest(subscribeTeamStrategy, {
     manual: true,
     onSuccess: (res) => {
-      setDatasource(res.subscribers)
+      setDatasource(res.items || [])
       setTotal(res.pagination.total)
     }
   })
-  const [searchParams, setSearchParams] = useState<StrategySubscriberRequest>({
+  const [searchParams, setSearchParams] = useState<SubscribeTeamStrategyRequest>({
     strategyId: strategyId,
     pagination: { pageNum: 1, pageSize: 100 }
   })

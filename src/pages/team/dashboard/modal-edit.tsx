@@ -1,6 +1,6 @@
 import { Status } from '@/api/enum'
-import type { DashboardItem } from '@/api/model-types'
-import { createDashboard, getDashboard, updateDashboard } from '@/api/realtime/dashboard'
+import { getTeamDashboard, saveTeamDashboard } from '@/api/request/teamdashboard'
+import type { DashboardItem } from '@/api/request/types/model-types'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Form, Modal, type ModalProps, message } from 'antd'
@@ -19,7 +19,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   const [form] = Form.useForm<CreateDashobardFormType>()
   const [grounpDetail, setGroupDetail] = useState<DashboardItem>()
 
-  const { run: getGroupDetail, loading } = useRequest(getDashboard, {
+  const { run: getGroupDetail, loading } = useRequest(getTeamDashboard, {
     manual: true,
     onSuccess: (res) => {
       setGroupDetail(res.detail)
@@ -56,7 +56,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     return cssClass.toHexString()
   }
 
-  const { run: addDashboard, loading: addDashboardLoading } = useRequest(createDashboard, {
+  const { run: addDashboard, loading: addDashboardLoading } = useRequest(saveTeamDashboard, {
     manual: true,
     onSuccess: () => {
       message.success('新建成功')
@@ -64,7 +64,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
     }
   })
 
-  const { run: editDashboard, loading: editDashboardLoading } = useRequest(updateDashboard, {
+  const { run: editDashboard, loading: editDashboardLoading } = useRequest(saveTeamDashboard, {
     manual: true,
     onSuccess: () => {
       message.success('编辑成功')

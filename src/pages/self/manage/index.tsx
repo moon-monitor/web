@@ -1,13 +1,11 @@
+import { EmptyReply, UserItem } from '@/api/common.types'
 import {
   type ResetUserPasswordBySelfRequest,
   type UpdateUserAvatarRequest,
   type UpdateUserBaseInfoRequest,
-  type UpdateUserRequest,
-  updateUserEmail,
-  updateUserPhone
-} from '@/api/user'
-import { EmptyReply, UserItem } from '@/api2/common.types'
-import { selfInfo, updateSelfInfo, updateSelfPassword } from '@/api2/user'
+  type UpdateUserRequest
+} from '@/api/request/types'
+import { selfInfo, updateSelfInfo, updateSelfPassword } from '@/api/request/user'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { GlobalContext } from '@/utils/context'
 import { hashMd5 } from '@/utils/hash'
@@ -19,6 +17,15 @@ import { useContext, useEffect, useState } from 'react'
 import { BaseInfo } from './base-info'
 import { MyTeam } from './my-team'
 import { avatarOptions, emailOptions, passwordOptions, phoneOptions } from './options'
+// import { updateUserEmail, updateUserPhone } from '@/api/request/user' // TODO: 实现这些 API 函数
+
+// 占位符函数，待实现
+const updateUserEmail = async (params: any): Promise<EmptyReply> => {
+  throw new Error('updateUserEmail API not implemented yet')
+}
+const updateUserPhone = async (params: any): Promise<EmptyReply> => {
+  throw new Error('updateUserPhone API not implemented yet')
+}
 
 export interface SelfManageProps {
   children?: React.ReactNode

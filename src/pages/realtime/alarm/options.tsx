@@ -1,7 +1,7 @@
 import { dictSelectList } from '@/api/dict'
 import { DictType } from '@/api/enum'
 import { ActionKey, AlarmInterventionActionData } from '@/api/global'
-import type { RealtimeAlarmItem, StrategyMetricLevelItem } from '@/api/model-types'
+import type { RealtimeAlarmItem, StrategyMetricLevelItem } from '@/api/request/types/model-types'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'

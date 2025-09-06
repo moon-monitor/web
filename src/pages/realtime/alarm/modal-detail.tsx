@@ -1,7 +1,7 @@
 import { StrategyType } from '@/api/enum'
 import { AlertStatusData } from '@/api/global'
-import type { RealtimeAlarmItem } from '@/api/model-types'
 import { getAlarm } from '@/api/realtime/alarm'
+import type { RealtimeAlarmItem } from '@/api/request/types/model-types'
 import { StrategyLevelDetailDomain } from '@/pages/strategy/list/detail-modal-domain'
 import { StrategyLevelDetailEvent } from '@/pages/strategy/list/detail-modal-event'
 import { StrategyLevelDetailHttp } from '@/pages/strategy/list/detail-modal-http'
@@ -68,7 +68,7 @@ export const ModalDetail: React.FC<ModalDetailProps> = (props) => {
         label: '告警状态',
         children: (
           <>
-            {AlertStatusData[status]} {duration}
+            {AlertStatusData[status]?.label} {duration}
           </>
         ),
         span: 2

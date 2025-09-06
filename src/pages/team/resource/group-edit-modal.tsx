@@ -1,4 +1,4 @@
-import type { ResourceItem } from '@/api/model-types'
+import type { ResourceItem } from '@/api/request/types/model-types'
 import { getResource } from '@/api/resource'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'

@@ -1,5 +1,5 @@
-import { TeamItem } from '@/api2/common.types'
-import { selfTeamList } from '@/api2/user'
+import { TeamItem } from '@/api/common.types'
+import { selfTeamList } from '@/api/request/user'
 import { useRequest } from 'ahooks'
 import { Avatar, Card, Skeleton, Space } from 'antd'
 import Meta from 'antd/es/card/Meta'

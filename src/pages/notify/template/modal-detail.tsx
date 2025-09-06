@@ -1,7 +1,7 @@
 import { AlarmSendType } from '@/api/enum'
 import { AlarmSendTypeData, StatusData } from '@/api/global'
-import type { SendTemplateItem } from '@/api/model-types'
 import { getTemplate } from '@/api/notify/template'
+import type { SendTemplateItem } from '@/api/request/types/model-types'
 import { GlobalContext } from '@/utils/context'
 import { CopyOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
@@ -74,7 +74,7 @@ export function SendTemplateDetailModal(props: SendTemplateDetailModalProps) {
     {
       label: '状态',
       children: detail ? (
-        <Badge color={StatusData[detail?.status].color} text={StatusData[detail?.status].text} />
+        <Badge color={StatusData[detail?.status]?.color} text={StatusData[detail?.status]?.text} />
       ) : (
         '-'
       ),

@@ -1,6 +1,6 @@
 import { RoleData, StatusData } from '@/api/global'
-import type { TeamMemberItem } from '@/api/model-types'
-import { getTeamMemberDetail } from '@/api/team'
+import { getTeam } from '@/api/request/team'
+import type { TeamMemberItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, type DescriptionsProps, Modal } from 'antd'
 import { useEffect, useState } from 'react'
@@ -17,10 +17,10 @@ export function DetailModal(props: HookDetailModalProps) {
 
   const [detail, setDetail] = useState<TeamMemberItem>({} as TeamMemberItem)
 
-  const { run: initTeamMemberDetail, loading: initTeamMemberDetailLoading } = useRequest(getTeamMemberDetail, {
+  const { run: initTeamMemberDetail, loading: initTeamMemberDetailLoading } = useRequest(getTeam, {
     manual: true,
     onSuccess: (res) => {
-      setDetail(res.detail)
+      setDetail(res)
     }
   })
 

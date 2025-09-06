@@ -1,5 +1,5 @@
-import type { UserItem } from '@/api/model-types'
 import { baseURL, getToken } from '@/api/request'
+import type { UserItem } from '@/api/request/types/model-types'
 import logoIcon from '@/assets/images/logo.svg'
 import useStorage from '@/hooks/storage'
 import { GlobalContext } from '@/utils/context'
@@ -234,13 +234,13 @@ export default function MoonChat() {
                   style={
                     item.role === 'user'
                       ? {
-                          backgroundColor: token.colorPrimary,
-                          color: '#FFFFFFD9'
-                        }
+                        backgroundColor: token.colorPrimary,
+                        color: '#FFFFFFD9'
+                      }
                       : {
-                          backgroundColor: token.colorBgTextActive,
-                          color: token.colorText
-                        }
+                        backgroundColor: token.colorBgTextActive,
+                        color: token.colorText
+                      }
                   }
                 >
                   {item.role === 'user' ? (

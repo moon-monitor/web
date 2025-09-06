@@ -1,6 +1,6 @@
 import { Status } from '@/api/enum'
 import { ActionKey, StatusData } from '@/api/global'
-import type { ResourceItem } from '@/api/model-types'
+import type { ResourceItem } from '@/api/request/types/model-types'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -50,21 +50,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<ResourceItem
   const tableOperationItems = (record: ResourceItem): MoreMenuProps['items'] => [
     record.status === Status.StatusDisable
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        }
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      }
   ]
 
   return [

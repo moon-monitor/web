@@ -1,13 +1,11 @@
 import { Status, TimeEngineRuleType } from '@/api/enum'
-import { TimeEngineRuleTypeData } from '@/api/global'
-import { TimeEngineRuleItem } from '@/api/model-types'
-import {
-  createTimeEngineRule,
-  CreateTimeEngineRuleRequest,
-  getTimeEngineRule,
-  updateTimeEngineRule
-} from '@/api/notify/rule'
 import { ErrorResponse } from '@/api/request'
+import {
+  getTimeEngineRule,
+  saveTimeEngineRule,
+} from '@/api/request/timeengine'
+import { SaveTimeEngineRuleRequest } from '@/api/request/types'
+import { TimeEngineRuleItem } from '@/api/request/types/model-types'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
 import { Avatar, Col, Form, Input, Modal, Row, Select, Space } from 'antd'
@@ -17,14 +15,14 @@ import { dayOptions, hourOptions, monthOptions, weekOptions } from './options'
 export interface EditRuleModalProps {
   open?: boolean
   ruleId?: number
-  onOk?: (rule: CreateTimeEngineRuleRequest) => void
+  onOk?: (rule: SaveTimeEngineRuleRequest) => void
   onCancel?: () => void
 }
 
 export function EditRuleModal(props: EditRuleModalProps) {
   const { open, ruleId, onOk, onCancel } = props
 
-  const [form] = Form.useForm<CreateTimeEngineRuleRequest>()
+  const [form] = Form.useForm<SaveTimeEngineRuleRequest>()
 
   const category = Form.useWatch('category', form)
 
@@ -40,19 +38,9 @@ export function EditRuleModal(props: EditRuleModalProps) {
     form.validateFields().then((values) => {
       setLoading(true)
       if (ruleId) {
-        updateTimeEngineRule({ id: ruleId, data: values })
-          .then(() => {
-            init()
-            onOk?.(values)
-          })
-          .catch((err: ErrorResponse) => {
-            handleFormError(form, err)
-          })
-          .finally(() => {
-            setLoading(false)
-          })
+
       } else {
-        createTimeEngineRule({ ...values, status: Status.StatusEnable })
+        saveTimeEngineRule({ ...values, status: Status.StatusEnable })
           .then(() => {
             init()
             onOk?.(values)
@@ -74,7 +62,7 @@ export function EditRuleModal(props: EditRuleModalProps) {
   const { run: handleGetRuleDetail } = useRequest((id: number) => getTimeEngineRule(id), {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
-      setDetail(res.detail)
+      setDetail(res)
     }
   })
 
