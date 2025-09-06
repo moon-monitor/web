@@ -1,5 +1,5 @@
-import type { DashboardItem, SelectItem } from '@/api/model-types'
 import { listDashboardSelect, listMyDashboard, updateMyDashboard } from '@/api/realtime/dashboard'
+import type { DashboardItem, SelectItem } from '@/api/request/types/model-types'
 import { DataFrom } from '@/components/data/form'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'

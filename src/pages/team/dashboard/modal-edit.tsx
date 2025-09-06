@@ -1,6 +1,6 @@
 import { Status } from '@/api/enum'
-import type { DashboardItem } from '@/api/model-types'
 import { createDashboard, getDashboard, updateDashboard } from '@/api/realtime/dashboard'
+import type { DashboardItem } from '@/api/request/types/model-types'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Form, Modal, type ModalProps, message } from 'antd'

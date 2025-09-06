@@ -1,10 +1,10 @@
-import { TeamMetricDatasourceItem, TeamMetricDatasourceMetadataItem } from '@/api2/common.types'
-import { listMetricDatasourceMetadata, syncMetricDatasourceMetadata } from '@/api2/team/team-datasource'
+import { TeamMetricDatasourceItem, TeamMetricDatasourceMetadataItem } from '@/api/common.types'
+import { listMetricDatasourceMetadata, syncMetricDatasourceMetadata } from '@/api/team/team-datasource'
 import {
   defaultSearchMetricDatasourceMetadataParams,
   ListMetricDatasourceMetadataRequest,
   MetricTypeData
-} from '@/api2/team/team-datasource.types'
+} from '@/api/team/team-datasource.types'
 import { DataInput } from '@/components/data/child/data-input'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'

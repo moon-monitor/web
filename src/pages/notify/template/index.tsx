@@ -1,12 +1,12 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { SendTemplateItem } from '@/api/model-types'
 import {
   type GetTemplateListRequest,
   deleteTemplate,
   getTemplateList,
   updateTemplateStatus
 } from '@/api/notify/template'
+import type { SendTemplateItem } from '@/api/request/types/model-types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'

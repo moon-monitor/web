@@ -1,7 +1,7 @@
 import { TimeEngineRuleType } from '@/api/enum'
 import { StatusData, TimeEngineRuleTypeData } from '@/api/global'
-import { TimeEngineRuleItem } from '@/api/model-types'
 import { getTimeEngineRule } from '@/api/notify/rule'
+import { TimeEngineRuleItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'

@@ -1,7 +1,7 @@
-import { TeamMemberItem } from '@/api2/common.types'
-import { ActionKey, GlobalStatus, MemberStatus } from '@/api2/enum'
-import { defaultPaginationReq, GlobalStatusData, MemberStatusData } from '@/api2/global'
-import { getTeamRoles } from '@/api2/team'
+import { TeamMemberItem } from '@/api/common.types'
+import { ActionKey, GlobalStatus, MemberStatus } from '@/api/enum'
+import { defaultPaginationReq, GlobalStatusData, MemberStatusData } from '@/api/global'
+import { getTeamRoles } from '@/api/team'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -53,21 +53,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamMemberIt
   const tableOperationItems = (record: TeamMemberItem): MoreMenuProps['items'] => [
     record.status === MemberStatus.MEMBER_STATUS_NORMAL
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (

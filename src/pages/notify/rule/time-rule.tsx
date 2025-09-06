@@ -1,7 +1,7 @@
-import { GlobalStatusKey } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
-import { deleteTimeEngineRule, listTimeEngineRule } from '@/api2/timeEngine'
-import { ListTimeEngineRuleRequest, TimeEngineItemRule } from '@/api2/timeEngine/types'
+import { GlobalStatusKey } from '@/api/common.types'
+import { ActionKey } from '@/api/enum'
+import { deleteTimeEngineRule, listTimeEngineRule } from '@/api/timeEngine'
+import { ListTimeEngineRuleRequest, TimeEngineItemRule } from '@/api/timeEngine/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -66,7 +66,7 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
     })
   }
 
-  const onReset = () => {}
+  const onReset = () => { }
 
   const handleEditModal = (detail?: TimeEngineItemRule) => {
     setShowModal(true)

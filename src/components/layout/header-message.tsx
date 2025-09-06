@@ -1,20 +1,18 @@
 import { baseURL, getToken } from '@/api/request'
-import { getInvite } from '@/api/user/invite'
 import {
   type MessageCategory,
   type NoticeUserMessageItem,
   cancelMessage,
   confirmMessage,
   deleteMessage,
-  getBizName,
-  listMessage
-} from '@/api/user/message'
+  getBizName, getInvite, listMessage
+} from '@/api/request/user'
 import { GlobalContext } from '@/utils/context'
 import { BellOutlined, CheckOutlined, XOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Badge, Button, Divider, Modal, Popover, Space, Tag, theme as antTheme } from 'antd'
 import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn' // 导入中文语言包
+import 'dayjs/locale/zh-cn'; // 导入中文语言包
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type React from 'react'
 import { useCallback, useContext, useEffect, useState } from 'react'

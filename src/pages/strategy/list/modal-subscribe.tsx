@@ -1,6 +1,6 @@
+import { TeamStrategyItem } from '@/api/common.types'
+import { NotifyType } from '@/api/enum'
 import { userSubscriberStrategy } from '@/api/subscriber'
-import { TeamStrategyItem } from '@/api2/common.types'
-import { NotifyType } from '@/api2/enum'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
 import { Checkbox, Form, Modal, ModalProps, Typography } from 'antd'

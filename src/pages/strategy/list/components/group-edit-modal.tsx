@@ -1,5 +1,5 @@
-import { GlobalStatusKey, TeamStrategyGroupItem } from '@/api2/common.types'
-import { getTeamStrategyGroup, saveTeamStrategyGroup } from '@/api2/team/team-strategy'
+import { GlobalStatusKey, TeamStrategyGroupItem } from '@/api/common.types'
+import { getTeamStrategyGroup, saveTeamStrategyGroup } from '@/api/team/team-strategy'
 import { useRequest } from 'ahooks'
 import { Form, Input, Modal, type ModalProps } from 'antd'
 import type React from 'react'

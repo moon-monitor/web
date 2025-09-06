@@ -9,10 +9,10 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 //   ListTimeEngineRequest,
 //   updateTimeEngineStatus
 // } from '@/api/notify/time-engine'
-import { GlobalStatusKey } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
-import { deleteTimeEngine, listTimeEngine } from '@/api2/timeEngine'
-import { ListTimeEngineRequest, TimeEngineItem } from '@/api2/timeEngine/types'
+import { GlobalStatusKey } from '@/api/common.types'
+import { ActionKey } from '@/api/enum'
+import { deleteTimeEngine, listTimeEngine } from '@/api/timeEngine'
+import { ListTimeEngineRequest, TimeEngineItem } from '@/api/timeEngine/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -77,7 +77,7 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
     }
   })
 
-  const onReset = () => {}
+  const onReset = () => { }
 
   const handleEditModal = (detail?: TimeEngineItem) => {
     setShowModal(true)

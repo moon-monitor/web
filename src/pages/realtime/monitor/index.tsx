@@ -1,5 +1,5 @@
-import type { DashboardItem } from '@/api/model-types'
 import { getDashboard, listMyDashboard } from '@/api/realtime/dashboard'
+import type { DashboardItem } from '@/api/request/types/model-types'
 import { PreviewCard } from '@/pages/team/dashboard/chart/modal-preview'
 import { useRequest } from 'ahooks'
 import { Badge, Button, Row, Space, Tabs, theme } from 'antd'

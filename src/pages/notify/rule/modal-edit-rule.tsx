@@ -1,6 +1,5 @@
 import { Status, TimeEngineRuleType } from '@/api/enum'
 import { TimeEngineRuleTypeData } from '@/api/global'
-import { TimeEngineRuleItem } from '@/api/model-types'
 import {
   createTimeEngineRule,
   CreateTimeEngineRuleRequest,
@@ -8,6 +7,7 @@ import {
   updateTimeEngineRule
 } from '@/api/notify/rule'
 import { ErrorResponse } from '@/api/request'
+import { TimeEngineRuleItem } from '@/api/request/types/model-types'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
 import { Avatar, Col, Form, Input, Modal, Row, Select, Space } from 'antd'

@@ -1,7 +1,7 @@
-import { NoticeHookItem } from '@/api2/common.types'
-import { ActionKey, GlobalStatus } from '@/api2/enum'
-import { deleteTeamNoticeHook, listTeamNoticeHook, updateTeamNoticeHookStatus } from '@/api2/team/team-notice'
-import { ListTeamNoticeHookRequest } from '@/api2/team/team-notice.types'
+import { NoticeHookItem } from '@/api/common.types'
+import { ActionKey, GlobalStatus } from '@/api/enum'
+import { deleteTeamNoticeHook, listTeamNoticeHook, updateTeamNoticeHookStatus } from '@/api/team/team-notice'
+import { ListTeamNoticeHookRequest } from '@/api/team/team-notice.types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -14,7 +14,7 @@ import { HookDetailModal } from './modal-detail'
 import { EditHookModal } from './modal-edit'
 import { formList, getColumnList } from './options'
 
-export interface HookProps {}
+export interface HookProps { }
 
 const { useToken } = theme
 const { confirm } = Modal
@@ -84,7 +84,7 @@ const Hook: React.FC<HookProps> = () => {
     }
   })
 
-  const onReset = () => {}
+  const onReset = () => { }
 
   const handleEditModal = (detail?: NoticeHookItem) => {
     setShowModal(true)

@@ -1,13 +1,13 @@
-import { TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
-import { DatasourceDriverMetricData, defaultPaginationReq, StrategyTypeData } from '@/api2/global'
-import { baseURL } from '@/api2/request'
+import { TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api/common.types'
+import { ActionKey } from '@/api/enum'
+import { DatasourceDriverMetricData, defaultPaginationReq, StrategyTypeData } from '@/api/global'
+import { baseURL } from '@/api/request'
 import {
   deleteTeamMetricStrategyLevel,
   getTeamMetricStrategy,
   listTeamMetricStrategyLevels
-} from '@/api2/team/team-strategy'
-import { GetTeamMetricStrategyReply } from '@/api2/team/team-strategy.types'
+} from '@/api/team/team-strategy'
+import { GetTeamMetricStrategyReply } from '@/api/team/team-strategy.types'
 import PromQLInput, { PromQLInputProps } from '@/components/data/child/prom-ql'
 import AutoTable from '@/components/table'
 import { getColorByString } from '@/utils/color'

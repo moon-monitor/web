@@ -1,5 +1,5 @@
-import type { ChartItem, DashboardItem } from '@/api/model-types'
 import { getDashboard } from '@/api/realtime/dashboard'
+import type { ChartItem, DashboardItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Card, Col, Modal, type ModalProps, Row, theme } from 'antd'
 import { useEffect, useState } from 'react'

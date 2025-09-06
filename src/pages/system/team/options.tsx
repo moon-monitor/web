@@ -1,6 +1,6 @@
-import { TeamItem, TeamMemberItem, UserItem } from '@/api2/common.types'
-import { ActionKey, TeamStatus } from '@/api2/enum'
-import { GlobalStatusData, TeamStatusData } from '@/api2/global'
+import { TeamItem, TeamMemberItem, UserItem } from '@/api/common.types'
+import { ActionKey, TeamStatus } from '@/api/enum'
+import { GlobalStatusData, TeamStatusData } from '@/api/global'
 // import type { TeamItem, TeamMemberItem, UserItem } from '@/api/model-types'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -50,21 +50,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamItem> =>
   const tableOperationItems = (record: TeamItem): MoreMenuProps['items'] => [
     record.status === TeamStatus.TEAM_STATUS_DELETED
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.SYNC,
       label: (

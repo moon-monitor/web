@@ -1,5 +1,5 @@
-import { TeamStrategyItem } from '@/api2/common.types'
-import { saveTeamStrategy } from '@/api2/team/team-strategy'
+import { TeamStrategyItem } from '@/api/common.types'
+import { saveTeamStrategy } from '@/api/team/team-strategy'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Form, message, Modal, ModalProps } from 'antd'

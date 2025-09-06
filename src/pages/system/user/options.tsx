@@ -1,6 +1,6 @@
-import { UserItem } from '@/api2/common.types'
-import { ActionKey, UserPosition, UserStatus } from '@/api2/enum'
-import { UserPositionData, UserStatusData } from '@/api2/global'
+import { UserItem } from '@/api/common.types'
+import { ActionKey, UserPosition, UserStatus } from '@/api/enum'
+import { UserPositionData, UserStatusData } from '@/api/global'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
@@ -70,21 +70,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
   const tableOperationItems = (record: UserItem): MoreMenuProps['items'] => [
     record.status === UserStatus.USER_STATUS_FORBIDDEN
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.UPDATE_ROLE,
       label: (

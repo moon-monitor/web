@@ -2,7 +2,7 @@
 import { listDatasource } from '@/api/datasource'
 import { DatasourceType } from '@/api/enum'
 import { defaultPaginationReq } from '@/api/global'
-import { DatasourceItem } from '@/api/model-types'
+import { DatasourceItem } from '@/api/request/types/model-types'
 import useStorage from '@/hooks/storage'
 import { useRequest } from 'ahooks'
 import { Button, Empty, Input, Menu, Tabs, TabsProps, theme } from 'antd'

@@ -1,7 +1,7 @@
-import { NoticeGroupItem, NoticeHookItem } from '@/api2/common.types'
-import { ActionKey, GlobalStatus } from '@/api2/enum'
-import { defaultPaginationReq, GlobalStatusData, HookAppData } from '@/api2/global'
-import { listTeamNoticeHook } from '@/api2/team/team-notice'
+import { NoticeGroupItem, NoticeHookItem } from '@/api/common.types'
+import { ActionKey, GlobalStatus } from '@/api/enum'
+import { defaultPaginationReq, GlobalStatusData, HookAppData } from '@/api/global'
+import { listTeamNoticeHook } from '@/api/team/team-notice'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -53,21 +53,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<NoticeGroupI
   const tableOperationItems = (record: NoticeGroupItem): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (
@@ -162,7 +162,7 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<NoticeGroupI
   ]
 }
 
-export interface HookAvatarProps extends NoticeHookItem {}
+export interface HookAvatarProps extends NoticeHookItem { }
 
 export const HookAvatar: React.FC<HookAvatarProps> = (props) => {
   const { name, app } = props

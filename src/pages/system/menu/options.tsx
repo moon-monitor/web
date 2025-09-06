@@ -1,6 +1,6 @@
-import { GlobalStatus, MenuCategory, MenuProcessType, MenuType } from '@/api2/enum'
-import { GlobalStatusData, MenuCategoryData, MenuProcessTypeData, MenuTypeData } from '@/api2/global'
-import { MenuTreeItem } from '@/api2/menu/types'
+import { GlobalStatus, MenuCategory, MenuProcessType, MenuType } from '@/api/enum'
+import { GlobalStatusData, MenuCategoryData, MenuProcessTypeData, MenuTypeData } from '@/api/global'
+import { MenuTreeItem } from '@/api/menu/types'
 import { DataFromItem } from '@/components/data/form'
 import { numberToBinary } from '@/utils'
 import { Badge, DescriptionsProps, Tag } from 'antd'
@@ -80,23 +80,23 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
       },
       menuCategory === MenuCategory.MENU_CATEGORY_BUTTON
         ? {
-            span: 16,
-            name: 'apiPath',
-            label: '后端接口',
-            type: 'input',
-            props: {
-              placeholder: '请输入后端接口'
-            }
+          span: 16,
+          name: 'apiPath',
+          label: '后端接口',
+          type: 'input',
+          props: {
+            placeholder: '请输入后端接口'
           }
+        }
         : {
-            span: 16,
-            name: 'menuPath',
-            label: '前端路由',
-            type: 'input',
-            props: {
-              placeholder: '请输入前端路由'
-            }
+          span: 16,
+          name: 'menuPath',
+          label: '前端路由',
+          type: 'input',
+          props: {
+            placeholder: '请输入前端路由'
           }
+        }
     ],
     [
       {
@@ -197,15 +197,15 @@ export const descriptionItems = (detail: {
     },
     menuDetail?.menuCategory === MenuCategory.MENU_CATEGORY_BUTTON
       ? {
-          key: 'apiPath',
-          label: '后端接口',
-          children: menuDetail?.apiPath
-        }
+        key: 'apiPath',
+        label: '后端接口',
+        children: menuDetail?.apiPath
+      }
       : {
-          key: 'menuPath',
-          label: '前端路由',
-          children: menuDetail?.menuPath
-        },
+        key: 'menuPath',
+        label: '前端路由',
+        children: menuDetail?.menuPath
+      },
     {
       key: 'status',
       label: '启用状态',

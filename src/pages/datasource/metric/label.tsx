@@ -1,5 +1,5 @@
-import { MetadataItemLabel, TeamMetricDatasourceMetadataItem } from '@/api2/common.types'
-import { MetricType, MetricTypeData } from '@/api2/team/team-datasource.types'
+import { MetadataItemLabel, TeamMetricDatasourceMetadataItem } from '@/api/common.types'
+import { MetricType, MetricTypeData } from '@/api/team/team-datasource.types'
 import { GlobalContext } from '@/utils/context'
 import { message, Modal, ModalProps, Space, Table, Tag } from 'antd'
 import { ColumnsType } from 'antd/es/table'

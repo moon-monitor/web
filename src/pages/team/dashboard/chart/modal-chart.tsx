@@ -1,4 +1,4 @@
-import type { ChartItem } from '@/api/model-types'
+import type { ChartItem } from '@/api/request/types/model-types'
 import { Modal, type ModalProps } from 'antd'
 
 export interface ModalChartProps extends ModalProps {

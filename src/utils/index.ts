@@ -1,5 +1,5 @@
+import { MenuTreeItem } from '@/api/menu/types'
 import { ErrorResponse } from '@/api/request'
-import { MenuTreeItem } from '@/api2/menu/types'
 import { renderIcon } from '@/components/icon'
 import { FormInstance } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'

@@ -1,6 +1,6 @@
 import { NotifyType, StrategyType } from '@/api/enum'
 import { ActionKey, defaultPaginationReq } from '@/api/global'
-import { StrategyItem, StrategySubscribeItem } from '@/api/model-types'
+import { StrategyItem, StrategySubscribeItem } from '@/api/request/types/model-types'
 import { unSubscriber, userSubscriberList, UserSubscriberListRequest } from '@/api/subscriber'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'

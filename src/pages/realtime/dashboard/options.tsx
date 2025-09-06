@@ -1,5 +1,5 @@
-import { UserItem } from '@/api/model-types'
 import { InterventionEventItem } from '@/api/realtime/statistics'
+import { UserItem } from '@/api/request/types/model-types'
 import { Avatar } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import dayjs from 'dayjs'

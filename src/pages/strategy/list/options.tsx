@@ -1,6 +1,6 @@
-import { TeamDictItem, TeamStrategyGroupItem, TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api2/common.types'
-import { ActionKey, ConditionMetric, GlobalStatus, SampleMode, StrategyType } from '@/api2/enum'
-import { ConditionMetricData, GlobalStatusData, SampleModeData, StrategyTypeData } from '@/api2/global'
+import { TeamDictItem, TeamStrategyGroupItem, TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api/common.types'
+import { ActionKey, ConditionMetric, GlobalStatus, SampleMode, StrategyType } from '@/api/enum'
+import { ConditionMetricData, GlobalStatusData, SampleModeData, StrategyTypeData } from '@/api/global'
 import { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -94,21 +94,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
   const tableOperationItems = (record: TeamStrategyItem): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
 
     {
       key: ActionKey.EDIT,
@@ -129,13 +129,13 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamStrategy
 
     record.strategyType === StrategyType.STRATEGY_TYPE_METRIC || !record.strategyType
       ? {
-          key: ActionKey.CHART,
-          label: (
-            <Button size='small' type='link'>
-              策略图表
-            </Button>
-          )
-        }
+        key: ActionKey.CHART,
+        label: (
+          <Button size='small' type='link'>
+            策略图表
+          </Button>
+        )
+      }
       : null,
     {
       type: 'divider'

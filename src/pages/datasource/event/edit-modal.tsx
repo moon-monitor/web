@@ -1,7 +1,7 @@
 import { createDatasource, getDatasource, updateDatasource } from '@/api/datasource'
 import { DatasourceType, StorageType } from '@/api/enum'
 import { DataSourceTypeData, StatusData, StorageTypeData } from '@/api/global'
-import type { DatasourceItem } from '@/api/model-types'
+import type { DatasourceItem } from '@/api/request/types/model-types'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { GlobalContext } from '@/utils/context'
 import { useRequest } from 'ahooks'

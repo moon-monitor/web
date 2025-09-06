@@ -1,10 +1,10 @@
 // import { Status, TimeEngineRuleType } from '@/api/enum'
 // import { ActionKey, PaginationRequest, StatusData, TimeEngineRuleTypeData } from '@/api/global'
 // import { TimeEngineItem, TimeEngineItemRule } from '@/api/model-types'
-import { PaginationRequest } from '@/api2/common.types'
-import { ActionKey, GlobalStatus, TimeEngineRuleType } from '@/api2/enum'
-import { GlobalStatusData } from '@/api2/global'
-import { TimeEngineItem, TimeEngineItemRule } from '@/api2/timeEngine/types'
+import { PaginationRequest } from '@/api/common.types'
+import { ActionKey, GlobalStatus, TimeEngineRuleType } from '@/api/enum'
+import { GlobalStatusData } from '@/api/global'
+import { TimeEngineItem, TimeEngineItemRule } from '@/api/timeEngine/types'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
 import { Badge, Button, Space } from 'antd'
@@ -115,21 +115,21 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
   const tableOperationItems = (record: TimeEngineItemRule): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (
@@ -254,21 +254,21 @@ export const getEngineColumnList = (props: NotifyEngineColumnProps): ColumnsType
   const tableOperationItems = (record: TimeEngineItem): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (

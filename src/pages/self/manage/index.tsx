@@ -1,3 +1,5 @@
+import { EmptyReply, UserItem } from '@/api/common.types'
+import { selfInfo, updateSelfInfo, updateSelfPassword } from '@/api/request/user'
 import {
   type ResetUserPasswordBySelfRequest,
   type UpdateUserAvatarRequest,
@@ -6,8 +8,6 @@ import {
   updateUserEmail,
   updateUserPhone
 } from '@/api/user'
-import { EmptyReply, UserItem } from '@/api2/common.types'
-import { selfInfo, updateSelfInfo, updateSelfPassword } from '@/api2/user'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { GlobalContext } from '@/utils/context'
 import { hashMd5 } from '@/utils/hash'

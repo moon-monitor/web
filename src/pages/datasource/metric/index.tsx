@@ -1,9 +1,9 @@
-import { TeamMetricDatasourceItem } from '@/api2/common.types'
-import { listTeamMetricDatasource } from '@/api2/team/team-datasource'
+import { TeamMetricDatasourceItem } from '@/api/common.types'
+import { listTeamMetricDatasource } from '@/api/team/team-datasource'
 import {
   defaultSearchTeamMetricDatasourceParams,
   type ListTeamMetricDatasourceRequest
-} from '@/api2/team/team-datasource.types'
+} from '@/api/team/team-datasource.types'
 import useStorage from '@/hooks/storage'
 import { useRequest } from 'ahooks'
 import { Button, Empty, Input, Menu, Tabs, type TabsProps, theme } from 'antd'

@@ -1,4 +1,5 @@
 // user 模块API函数
+import { request } from '../index.ts'
 import {
   CreateTeamRequest,
   EmptyReply,
@@ -13,7 +14,21 @@ import {
   UpdateSelfPasswordRequest,
   UserItem
 } from '../types/index.ts'
-import { request } from '../index.ts'
+
+// Re-export message-related functions and types
+export {
+  cancelMessage,
+  confirmMessage,
+  deleteMessage,
+  getBizName,
+  listMessage, type MessageCategory,
+  type NoticeUserMessageItem
+} from './message'
+
+// Re-export invite-related functions and types
+export {
+  getInvite, type GetInviteReply, type GetInviteRequest, type InviteItem
+} from './invite'
 
 /**
  * SelfTeamList User

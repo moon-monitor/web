@@ -1,10 +1,10 @@
-import { NoticeGroupItem, TeamStrategyMetricLevelItem } from '@/api2/common.types'
-import { ConditionMetric, DictType, GlobalStatus, SampleMode } from '@/api2/enum'
-import { ConditionMetricData, defaultPaginationReq, SampleModeData } from '@/api2/global'
-import { selectTeamDict } from '@/api2/team/team-dict'
-import { SelectItem } from '@/api2/team/team-dict.types'
-import { listTeamNoticeGroup } from '@/api2/team/team-notice'
-import { saveTeamMetricStrategyLevel, teamMetricStrategyLevelDetail } from '@/api2/team/team-strategy'
+import { NoticeGroupItem, TeamStrategyMetricLevelItem } from '@/api/common.types'
+import { ConditionMetric, DictType, GlobalStatus, SampleMode } from '@/api/enum'
+import { ConditionMetricData, defaultPaginationReq, SampleModeData } from '@/api/global'
+import { selectTeamDict } from '@/api/team/team-dict'
+import { SelectItem } from '@/api/team/team-dict.types'
+import { listTeamNoticeGroup } from '@/api/team/team-notice'
+import { saveTeamMetricStrategyLevel, teamMetricStrategyLevelDetail } from '@/api/team/team-strategy'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Button, Col, Form, Input, InputNumber, message, Modal, ModalProps, Row, Select, Tag, theme } from 'antd'
@@ -45,12 +45,12 @@ export default function MetricLevelModal(props: MetricLevelModalProps) {
         data?.items && data?.items?.length > 0
           ? data.items
           : [
-              {
-                noticeGroupId: 0,
-                name: '默认告警组',
-                status: GlobalStatus.GLOBAL_STATUS_ENABLE
-              }
-            ]
+            {
+              noticeGroupId: 0,
+              name: '默认告警组',
+              status: GlobalStatus.GLOBAL_STATUS_ENABLE
+            }
+          ]
       )
     }
   })
@@ -198,7 +198,7 @@ export default function MetricLevelModal(props: MetricLevelModalProps) {
               ]}
             >
               {conditionWatch === ConditionMetric.CONDITION_METRIC_IN ||
-              conditionWatch === ConditionMetric.CONDITION_METRIC_NOT_IN ? (
+                conditionWatch === ConditionMetric.CONDITION_METRIC_NOT_IN ? (
                 <Row gutter={12}>
                   <Col span={12}>
                     <InputNumber

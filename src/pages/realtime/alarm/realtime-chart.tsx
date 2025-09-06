@@ -1,5 +1,5 @@
-import type { RealtimeAlarmItem } from '@/api/model-types'
 import { getAlarm } from '@/api/realtime/alarm'
+import type { RealtimeAlarmItem } from '@/api/request/types/model-types'
 import { MetricsChart } from '@/components/chart/metrics-charts'
 import { metricQueryRange } from '@/components/chart/query-range'
 import type { MetricsResponse } from '@/types/metrics'

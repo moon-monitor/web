@@ -1,7 +1,7 @@
 import { MenuType } from '@/api/enum'
 import { ActionKey } from '@/api/global'
 import { createMenu, updateMenu } from '@/api/menu'
-import { MenuItem } from '@/api/model-types'
+import { MenuItem } from '@/api/request/types/model-types'
 import { DataFrom, DataFromItem } from '@/components/data/form'
 import { getMenu } from '@/mocks'
 import { useRequest } from 'ahooks'

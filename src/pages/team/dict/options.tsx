@@ -1,6 +1,6 @@
-import { TeamDictItem } from '@/api2/common.types'
-import { ActionKey, DictType, GlobalStatus } from '@/api2/enum'
-import { DictTypeData, GlobalStatusData } from '@/api2/global'
+import { TeamDictItem } from '@/api/common.types'
+import { ActionKey, DictType, GlobalStatus } from '@/api/enum'
+import { DictTypeData, GlobalStatusData } from '@/api/global'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -69,21 +69,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem
   const tableOperationItems = (record: TeamDictItem): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (

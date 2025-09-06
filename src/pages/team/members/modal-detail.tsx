@@ -1,5 +1,5 @@
 import { RoleData, StatusData } from '@/api/global'
-import type { TeamMemberItem } from '@/api/model-types'
+import type { TeamMemberItem } from '@/api/request/types/model-types'
 import { getTeamMemberDetail } from '@/api/team'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, type DescriptionsProps, Modal } from 'antd'

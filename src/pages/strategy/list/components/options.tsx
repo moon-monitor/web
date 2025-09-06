@@ -1,7 +1,7 @@
-import { StrategyType } from '@/api2/enum'
-import { defaultPaginationReq, StrategyTypeData } from '@/api2/global'
-import { listTeamNoticeGroup } from '@/api2/team/team-notice'
-import { listTeamStrategyGroup } from '@/api2/team/team-strategy'
+import { StrategyType } from '@/api/enum'
+import { defaultPaginationReq, StrategyTypeData } from '@/api/global'
+import { listTeamNoticeGroup } from '@/api/team/team-notice'
+import { listTeamStrategyGroup } from '@/api/team/team-strategy'
 import { DataFromItem } from '@/components/data/form'
 import { Tag } from 'antd'
 

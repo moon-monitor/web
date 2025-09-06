@@ -1,6 +1,6 @@
 import { type DomainType, Status } from '@/api/enum'
 import { DomainTypeData, ModuleTypeData } from '@/api/global'
-import type { ResourceItem } from '@/api/model-types'
+import type { ResourceItem } from '@/api/request/types/model-types'
 import { Space, Tag, Tree, type TreeDataNode, type TreeProps } from 'antd'
 import type React from 'react'
 import { useEffect, useState } from 'react'
@@ -77,9 +77,9 @@ const PermissionTree: React.FC<PermissionTreeProps> = (props) => {
   const onCheck: TreeProps['onCheck'] = (
     checkedKeysValue:
       | {
-          checked: React.Key[]
-          halfChecked: React.Key[]
-        }
+        checked: React.Key[]
+        halfChecked: React.Key[]
+      }
       | React.Key[]
   ) => {
     if (Array.isArray(checkedKeysValue)) {

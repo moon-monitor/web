@@ -1,7 +1,7 @@
 import { AlarmSendType } from '@/api/enum'
 import { AlarmSendTypeData, StatusData } from '@/api/global'
-import type { SendTemplateItem } from '@/api/model-types'
 import { getTemplate } from '@/api/notify/template'
+import type { SendTemplateItem } from '@/api/request/types/model-types'
 import { GlobalContext } from '@/utils/context'
 import { CopyOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'

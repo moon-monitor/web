@@ -1,5 +1,5 @@
-import type { ChartItem } from '@/api/model-types'
 import { createChart, getChart, updateChart } from '@/api/realtime/dashboard'
+import type { ChartItem } from '@/api/request/types/model-types'
 import { DataFrom } from '@/components/data/form'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'

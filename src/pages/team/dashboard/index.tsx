@@ -1,12 +1,12 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { DashboardItem } from '@/api/model-types'
 import {
   type ListDashboardRequest,
   batchUpdateDashboardStatus,
   deleteDashboard,
   listDashboard
 } from '@/api/realtime/dashboard'
+import type { DashboardItem } from '@/api/request/types/model-types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'

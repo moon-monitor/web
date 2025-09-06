@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { searchItems } from './options'
 
 import { Status } from '@/api/enum'
-import { StrategyTemplateItem, UserItem } from '@/api/model-types'
+import { StrategyTemplateItem, UserItem } from '@/api/request/types/model-types'
 import {
   createTemplateStrategy,
   CreateTemplateStrategyRequest,
@@ -18,7 +18,7 @@ import {
 import './index.scss'
 import { TemplateEditModal, TemplateEditModalData } from './template-edit-modal'
 
-export interface StrategyTemplateProps {}
+export interface StrategyTemplateProps { }
 
 const { useToken } = theme
 

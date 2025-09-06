@@ -1,4 +1,4 @@
-import { StrategyType } from '@/api2/enum'
+import { StrategyType } from '@/api/enum'
 import { Modal, type ModalProps, message, theme } from 'antd'
 import { Activity, FileText, Gauge, Globe, Network, Radio, ScrollText, Stethoscope, Zap } from 'lucide-react'
 import { useEffect, useState } from 'react'

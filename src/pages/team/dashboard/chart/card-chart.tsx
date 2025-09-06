@@ -1,7 +1,7 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { ChartItem } from '@/api/model-types'
 import { batchUpdateChartStatus, deleteChart } from '@/api/realtime/dashboard'
+import type { ChartItem } from '@/api/request/types/model-types'
 import MoreMenu, { type MoreMenuProps } from '@/components/moreMenu'
 import { useRequest } from 'ahooks'
 import { Badge, Button, Card, type CardProps, Space, message } from 'antd'
@@ -27,21 +27,21 @@ export interface ChartCardProps extends CardProps {
 const tableOperationItems = (record: ChartItem): MoreMenuProps['items'] => [
   record.status === Status.StatusDisable
     ? {
-        key: ActionKey.ENABLE,
-        label: (
-          <Button type='link' size='small'>
-            启用
-          </Button>
-        )
-      }
+      key: ActionKey.ENABLE,
+      label: (
+        <Button type='link' size='small'>
+          启用
+        </Button>
+      )
+    }
     : {
-        key: ActionKey.DISABLE,
-        label: (
-          <Button type='link' size='small' danger>
-            禁用
-          </Button>
-        )
-      },
+      key: ActionKey.DISABLE,
+      label: (
+        <Button type='link' size='small' danger>
+          禁用
+        </Button>
+      )
+    },
   {
     key: ActionKey.EDIT,
     label: (

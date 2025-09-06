@@ -1,5 +1,5 @@
 import { NotifyType } from '@/api/enum'
-import { StrategySubscriberItem, UserItem } from '@/api/model-types'
+import { StrategySubscriberItem, UserItem } from '@/api/request/types/model-types'
 import { getStrategySubscriber, StrategySubscriberRequest } from '@/api/subscriber'
 import AutoTable from '@/components/table'
 import { useRequest } from 'ahooks'

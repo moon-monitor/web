@@ -3,7 +3,7 @@ import type {
   EmailConfigItem,
   SymmetricEncryptionConfigItem,
   TeamConfigItem
-} from '@/api/model-types'
+} from '@/api/request/types/model-types'
 import { getTeamConfig, updateTeamConfig } from '@/api/team'
 import { GlobalContext } from '@/utils/context'
 import { SaveOutlined } from '@ant-design/icons'

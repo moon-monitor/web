@@ -1,6 +1,6 @@
 import { getTopics, GetTopicsRequest } from '@/api/datasource/mq'
 import { defaultPaginationReq } from '@/api/global'
-import { TopicItem } from '@/api/model-types'
+import { TopicItem } from '@/api/request/types/model-types'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'
 import { useRequest } from 'ahooks'
