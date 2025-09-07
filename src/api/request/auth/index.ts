@@ -170,17 +170,17 @@ export function replaceUserRole(params: ReplaceUserRoleRequest): Promise<EmptyRe
 /**
  * VerifyEmail Auth
  * @param { VerifyEmailRequest } params
- * @returns {Promise<EmptyReply>}
+ * @returns {Promise<VerifyEmailReply>}
  */
-export function verifyEmail(params: VerifyEmailRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/portal/auth/verify-email', params)
+export function verifyEmail(params: VerifyEmailRequest): Promise<VerifyEmailReply> {
+  return request.POST<VerifyEmailReply>('/api/auth/verify/email', params)
 }
 
 /**
  * VerifyEmail Auth
  * @param { VerifyEmailRequest } params
- * @returns {Promise<VerifyEmailReply>}
+ * @returns {Promise<EmptyReply>}
  */
-export function verifyEmail2(params: VerifyEmailRequest): Promise<VerifyEmailReply> {
-  return request.POST<VerifyEmailReply>('/api/auth/verify/email', params)
+export function verifyEmail2(params: VerifyEmailRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/portal/auth/verify-email', params)
 }
