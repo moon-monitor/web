@@ -10,12 +10,12 @@ import {
 import { request } from '../index.ts'
 
 /**
- * RetrySendMessage TeamLog
- * @param { OperateOneTeamSendMessageRequest } params
- * @returns {Promise<EmptyReply>}
+ * GetSendMessageLog TeamLog
+ * @param { EmptyRequest } params
+ * @returns {Promise<SendMessageLogItem>}
  */
-export function retrySendMessage(params: OperateOneTeamSendMessageRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/log/send/message/retry', params)
+export function getSendMessageLog(params: EmptyRequest): Promise<SendMessageLogItem> {
+  return request.GET<SendMessageLogItem>('/api/team/log/send/message', params)
 }
 
 /**
@@ -28,10 +28,10 @@ export function getSendMessageLogs(params: GetTeamSendMessageLogsRequest): Promi
 }
 
 /**
- * GetSendMessageLog TeamLog
- * @param { EmptyRequest } params
- * @returns {Promise<SendMessageLogItem>}
+ * RetrySendMessage TeamLog
+ * @param { OperateOneTeamSendMessageRequest } params
+ * @returns {Promise<EmptyReply>}
  */
-export function getSendMessageLog(params: EmptyRequest): Promise<SendMessageLogItem> {
-  return request.GET<SendMessageLogItem>('/api/team/log/send/message', params)
+export function retrySendMessage(params: OperateOneTeamSendMessageRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/log/send/message/retry', params)
 }

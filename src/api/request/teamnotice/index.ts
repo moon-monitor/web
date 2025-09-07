@@ -20,57 +20,12 @@ import {
 import { request } from '../index.ts'
 
 /**
- * SaveTeamNoticeGroup TeamNotice
- * @param { SaveTeamNoticeGroupRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function saveTeamNoticeGroup(params: SaveTeamNoticeGroupRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/notice/group', params)
-}
-
-/**
- * GetTeamNoticeGroup TeamNotice
- * @param { EmptyRequest } params
- * @returns {Promise<NoticeGroupItem>}
- */
-export function getTeamNoticeGroup(params: EmptyRequest): Promise<NoticeGroupItem> {
-  return request.GET<NoticeGroupItem>('/api/team/notice/group', params)
-}
-
-/**
  * DeleteTeamNoticeGroup TeamNotice
  * @param { EmptyRequest } params
  * @returns {Promise<EmptyReply>}
  */
 export function deleteTeamNoticeGroup(params: EmptyRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/notice/group', params)
-}
-
-/**
- * TeamNoticeHookSelect TeamNotice
- * @param { TeamNoticeHookSelectRequest } params
- * @returns {Promise<TeamNoticeHookSelectReply>}
- */
-export function teamNoticeHookSelect(params: TeamNoticeHookSelectRequest): Promise<TeamNoticeHookSelectReply> {
-  return request.POST<TeamNoticeHookSelectReply>('/api/team/notice/hook/select', params)
-}
-
-/**
- * SaveTeamNoticeHook TeamNotice
- * @param { SaveTeamNoticeHookRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function saveTeamNoticeHook(params: SaveTeamNoticeHookRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/notice/hook', params)
-}
-
-/**
- * GetTeamNoticeHook TeamNotice
- * @param { EmptyRequest } params
- * @returns {Promise<NoticeHookItem>}
- */
-export function getTeamNoticeHook(params: EmptyRequest): Promise<NoticeHookItem> {
-  return request.GET<NoticeHookItem>('/api/team/notice/hook', params)
 }
 
 /**
@@ -83,12 +38,21 @@ export function deleteTeamNoticeHook(params: EmptyRequest): Promise<EmptyReply> 
 }
 
 /**
- * UpdateTeamNoticeGroupStatus TeamNotice
- * @param { UpdateTeamNoticeGroupStatusRequest } params
- * @returns {Promise<EmptyReply>}
+ * GetTeamNoticeGroup TeamNotice
+ * @param { EmptyRequest } params
+ * @returns {Promise<NoticeGroupItem>}
  */
-export function updateTeamNoticeGroupStatus(params: UpdateTeamNoticeGroupStatusRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/team/notice/group/status', params)
+export function getTeamNoticeGroup(params: EmptyRequest): Promise<NoticeGroupItem> {
+  return request.GET<NoticeGroupItem>('/api/team/notice/group', params)
+}
+
+/**
+ * GetTeamNoticeHook TeamNotice
+ * @param { EmptyRequest } params
+ * @returns {Promise<NoticeHookItem>}
+ */
+export function getTeamNoticeHook(params: EmptyRequest): Promise<NoticeHookItem> {
+  return request.GET<NoticeHookItem>('/api/team/notice/hook', params)
 }
 
 /**
@@ -110,12 +74,48 @@ export function listTeamNoticeHook(params: ListTeamNoticeHookRequest): Promise<L
 }
 
 /**
+ * SaveTeamNoticeGroup TeamNotice
+ * @param { SaveTeamNoticeGroupRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveTeamNoticeGroup(params: SaveTeamNoticeGroupRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/notice/group', params)
+}
+
+/**
+ * SaveTeamNoticeHook TeamNotice
+ * @param { SaveTeamNoticeHookRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveTeamNoticeHook(params: SaveTeamNoticeHookRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/notice/hook', params)
+}
+
+/**
  * TeamNoticeGroupSelect TeamNotice
  * @param { TeamNoticeGroupSelectRequest } params
  * @returns {Promise<TeamNoticeGroupSelectReply>}
  */
 export function teamNoticeGroupSelect(params: TeamNoticeGroupSelectRequest): Promise<TeamNoticeGroupSelectReply> {
   return request.POST<TeamNoticeGroupSelectReply>('/api/team/notice/group/select', params)
+}
+
+/**
+ * TeamNoticeHookSelect TeamNotice
+ * @param { TeamNoticeHookSelectRequest } params
+ * @returns {Promise<TeamNoticeHookSelectReply>}
+ */
+export function teamNoticeHookSelect(params: TeamNoticeHookSelectRequest): Promise<TeamNoticeHookSelectReply> {
+  return request.POST<TeamNoticeHookSelectReply>('/api/team/notice/hook/select', params)
+}
+
+/**
+ * UpdateTeamNoticeGroupStatus TeamNotice
+ * @param { UpdateTeamNoticeGroupStatusRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeamNoticeGroupStatus(params: UpdateTeamNoticeGroupStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/notice/group/status', params)
 }
 
 /**

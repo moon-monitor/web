@@ -29,25 +29,16 @@ import { request } from '../index.ts'
  * @returns {Promise<GetCaptchaReply>}
  */
 export function getCaptcha(params: EmptyRequest): Promise<GetCaptchaReply> {
-  return request.GET<GetCaptchaReply>('/api/auth/captcha', params)
+  return request.GET<GetCaptchaReply>('/api/portal/auth/captcha', params)
 }
 
 /**
- * LoginByPassword Auth
- * @param { LoginByPasswordRequest } params
- * @returns {Promise<LoginReply>}
- */
-export function loginByPassword(params: LoginByPasswordRequest): Promise<LoginReply> {
-  return request.POST<LoginReply>('/api/auth/login', params)
-}
-
-/**
- * RefreshToken Auth
+ * GetCaptcha Auth
  * @param { EmptyRequest } params
- * @returns {Promise<LoginReply>}
+ * @returns {Promise<GetCaptchaReply>}
  */
-export function refreshToken(params: EmptyRequest): Promise<LoginReply> {
-  return request.POST<LoginReply>('/api/auth/refresh', params)
+export function getCaptcha2(params: EmptyRequest): Promise<GetCaptchaReply> {
+  return request.GET<GetCaptchaReply>('/api/auth/captcha', params)
 }
 
 /**
@@ -60,15 +51,6 @@ export function getFilingInformation(params: EmptyRequest): Promise<GetFilingInf
 }
 
 /**
- * GetUserInfo Auth
- * @param { EmptyRequest } params
- * @returns {Promise<UserBaseItem>}
- */
-export function getUserInfo(params: EmptyRequest): Promise<UserBaseItem> {
-  return request.GET<UserBaseItem>('/api/portal/auth/user-info', params)
-}
-
-/**
  * GetSelfMenuTree Auth
  * @param { EmptyRequest } params
  * @returns {Promise<GetSelfMenuTreeReply>}
@@ -78,12 +60,21 @@ export function getSelfMenuTree(params: EmptyRequest): Promise<GetSelfMenuTreeRe
 }
 
 /**
- * ReplaceUserRole Auth
- * @param { ReplaceUserRoleRequest } params
- * @returns {Promise<EmptyReply>}
+ * GetUserInfo Auth
+ * @param { EmptyRequest } params
+ * @returns {Promise<UserBaseItem>}
  */
-export function replaceUserRole(params: ReplaceUserRoleRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/auth/user/role', params)
+export function getUserInfo(params: EmptyRequest): Promise<UserBaseItem> {
+  return request.GET<UserBaseItem>('/api/portal/auth/user-info', params)
+}
+
+/**
+ * Login Auth
+ * @param { LoginRequest } params
+ * @returns {Promise<LoginInfo>}
+ */
+export function login(params: LoginRequest): Promise<LoginInfo> {
+  return request.POST<LoginInfo>('/api/portal/auth/login', params)
 }
 
 /**
@@ -96,12 +87,30 @@ export function loginByEmail(params: LoginByEmailRequest): Promise<LoginReply> {
 }
 
 /**
- * VerifyEmail Auth
- * @param { VerifyEmailRequest } params
- * @returns {Promise<VerifyEmailReply>}
+ * LoginByPassword Auth
+ * @param { LoginByPasswordRequest } params
+ * @returns {Promise<LoginReply>}
  */
-export function verifyEmail(params: VerifyEmailRequest): Promise<VerifyEmailReply> {
-  return request.POST<VerifyEmailReply>('/api/auth/verify/email', params)
+export function loginByPassword(params: LoginByPasswordRequest): Promise<LoginReply> {
+  return request.POST<LoginReply>('/api/auth/login', params)
+}
+
+/**
+ * Logout Auth
+ * @param { EmptyRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function logout(params: EmptyRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/portal/auth/logout', params)
+}
+
+/**
+ * Logout Auth
+ * @param { LogoutRequest } params
+ * @returns {Promise<LogoutReply>}
+ */
+export function logout2(params: LogoutRequest): Promise<LogoutReply> {
+  return request.POST<LogoutReply>('/api/auth/logout', params)
 }
 
 /**
@@ -123,21 +132,12 @@ export function oAuthLoginByEmail(params: OAuthLoginByEmailRequest): Promise<Log
 }
 
 /**
- * ReplaceMemberRole Auth
- * @param { ReplaceMemberRoleRequest } params
- * @returns {Promise<EmptyReply>}
+ * RefreshToken Auth
+ * @param { EmptyRequest } params
+ * @returns {Promise<LoginReply>}
  */
-export function replaceMemberRole(params: ReplaceMemberRoleRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/auth/member/role', params)
-}
-
-/**
- * Logout Auth
- * @param { LogoutRequest } params
- * @returns {Promise<LogoutReply>}
- */
-export function logout(params: LogoutRequest): Promise<LogoutReply> {
-  return request.POST<LogoutReply>('/api/auth/logout', params)
+export function refreshToken(params: EmptyRequest): Promise<LoginReply> {
+  return request.POST<LoginReply>('/api/auth/refresh', params)
 }
 
 /**
@@ -150,37 +150,37 @@ export function register(params: RegisterRequest): Promise<LoginInfo> {
 }
 
 /**
+ * ReplaceMemberRole Auth
+ * @param { ReplaceMemberRoleRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function replaceMemberRole(params: ReplaceMemberRoleRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/auth/member/role', params)
+}
+
+/**
+ * ReplaceUserRole Auth
+ * @param { ReplaceUserRoleRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function replaceUserRole(params: ReplaceUserRoleRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/auth/user/role', params)
+}
+
+/**
  * VerifyEmail Auth
  * @param { VerifyEmailRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function verifyEmail2(params: VerifyEmailRequest): Promise<EmptyReply> {
+export function verifyEmail(params: VerifyEmailRequest): Promise<EmptyReply> {
   return request.POST<EmptyReply>('/api/portal/auth/verify-email', params)
 }
 
 /**
- * Login Auth
- * @param { LoginRequest } params
- * @returns {Promise<LoginInfo>}
+ * VerifyEmail Auth
+ * @param { VerifyEmailRequest } params
+ * @returns {Promise<VerifyEmailReply>}
  */
-export function login(params: LoginRequest): Promise<LoginInfo> {
-  return request.POST<LoginInfo>('/api/portal/auth/login', params)
-}
-
-/**
- * Logout Auth
- * @param { EmptyRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function logout2(params: EmptyRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/portal/auth/logout', params)
-}
-
-/**
- * GetCaptcha Auth
- * @param { EmptyRequest } params
- * @returns {Promise<GetCaptchaReply>}
- */
-export function getCaptcha2(params: EmptyRequest): Promise<GetCaptchaReply> {
-  return request.GET<GetCaptchaReply>('/api/portal/auth/captcha', params)
+export function verifyEmail2(params: VerifyEmailRequest): Promise<VerifyEmailReply> {
+  return request.POST<VerifyEmailReply>('/api/auth/verify/email', params)
 }

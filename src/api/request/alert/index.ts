@@ -10,12 +10,12 @@ import {
 import { request } from '../index.ts'
 
 /**
- * PushAlert Alert
- * @param { AlertItem } params
- * @returns {Promise<EmptyReply>}
+ * AlertDetail Alert
+ * @param { AlertDetailParams } params
+ * @returns {Promise<AlertDetailReply>}
  */
-export function pushAlert(params: AlertItem): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/alert/push', params)
+export function alertDetail(params: AlertDetailParams): Promise<AlertDetailReply> {
+  return request.POST<AlertDetailReply>('/api/alert/detail', params)
 }
 
 /**
@@ -28,10 +28,10 @@ export function listAlerts(params: ListAlertParams): Promise<ListAlertReply> {
 }
 
 /**
- * AlertDetail Alert
- * @param { AlertDetailParams } params
- * @returns {Promise<AlertDetailReply>}
+ * PushAlert Alert
+ * @param { AlertItem } params
+ * @returns {Promise<EmptyReply>}
  */
-export function alertDetail(params: AlertDetailParams): Promise<AlertDetailReply> {
-  return request.POST<AlertDetailReply>('/api/alert/detail', params)
+export function pushAlert(params: AlertItem): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/alert/push', params)
 }

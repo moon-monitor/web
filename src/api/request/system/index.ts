@@ -27,48 +27,12 @@ import {
 import { request } from '../index.ts'
 
 /**
- * UpdateRoleStatus System
- * @param { UpdateRoleStatusRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateRoleStatus(params: UpdateRoleStatusRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/system/role/status', params)
-}
-
-/**
- * UpdateRoleUsers System
- * @param { UpdateRoleUsersRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateRoleUsers(params: UpdateRoleUsersRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/system/role/users', params)
-}
-
-/**
- * UpdateUserPosition System
- * @param { UpdateUserPositionRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateUserPosition(params: UpdateUserPositionRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/system/user/position', params)
-}
-
-/**
- * GetUser System
+ * GetSystemRole System
  * @param { EmptyRequest } params
- * @returns {Promise<UserItem>}
+ * @returns {Promise<SystemRoleItem>}
  */
-export function getUser(params: EmptyRequest): Promise<UserItem> {
-  return request.GET<UserItem>('/api/system/user/detail', params)
-}
-
-/**
- * GetTeamList System
- * @param { GetTeamListRequest } params
- * @returns {Promise<GetTeamListReply>}
- */
-export function getTeamList(params: GetTeamListRequest): Promise<GetTeamListReply> {
-  return request.POST<GetTeamListReply>('/api/system/team/list', params)
+export function getSystemRole(params: EmptyRequest): Promise<SystemRoleItem> {
+  return request.GET<SystemRoleItem>('/api/system/role', params)
 }
 
 /**
@@ -81,24 +45,6 @@ export function getSystemRoles(params: GetSystemRolesRequest): Promise<GetSystem
 }
 
 /**
- * GetTeamAuditList System
- * @param { GetTeamAuditListRequest } params
- * @returns {Promise<GetTeamAuditListReply>}
- */
-export function getTeamAuditList(params: GetTeamAuditListRequest): Promise<GetTeamAuditListReply> {
-  return request.POST<GetTeamAuditListReply>('/api/system/team/audit/list', params)
-}
-
-/**
- * UpdateUserStatus System
- * @param { UpdateUserStatusRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateUserStatus(params: UpdateUserStatusRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/system/user/status', params)
-}
-
-/**
  * GetTeam System
  * @param { EmptyRequest } params
  * @returns {Promise<TeamItem>}
@@ -108,30 +54,39 @@ export function getTeam(params: EmptyRequest): Promise<TeamItem> {
 }
 
 /**
- * UpdateTeamAuditStatus System
- * @param { UpdateTeamAuditStatusRequest } params
- * @returns {Promise<EmptyReply>}
+ * GetTeamAuditList System
+ * @param { GetTeamAuditListRequest } params
+ * @returns {Promise<GetTeamAuditListReply>}
  */
-export function updateTeamAuditStatus(params: UpdateTeamAuditStatusRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/system/team/audit/status', params)
+export function getTeamAuditList(params: GetTeamAuditListRequest): Promise<GetTeamAuditListReply> {
+  return request.POST<GetTeamAuditListReply>('/api/system/team/audit/list', params)
 }
 
 /**
- * SaveRole System
- * @param { SaveRoleRequest } params
- * @returns {Promise<EmptyReply>}
+ * GetTeamList System
+ * @param { GetTeamListRequest } params
+ * @returns {Promise<GetTeamListReply>}
  */
-export function saveRole(params: SaveRoleRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/system/role', params)
+export function getTeamList(params: GetTeamListRequest): Promise<GetTeamListReply> {
+  return request.POST<GetTeamListReply>('/api/system/team/list', params)
 }
 
 /**
- * GetSystemRole System
+ * GetUser System
  * @param { EmptyRequest } params
- * @returns {Promise<SystemRoleItem>}
+ * @returns {Promise<UserItem>}
  */
-export function getSystemRole(params: EmptyRequest): Promise<SystemRoleItem> {
-  return request.GET<SystemRoleItem>('/api/system/role', params)
+export function getUser(params: EmptyRequest): Promise<UserItem> {
+  return request.GET<UserItem>('/api/system/user/detail', params)
+}
+
+/**
+ * GetUserList System
+ * @param { GetUserListRequest } params
+ * @returns {Promise<GetUserListReply>}
+ */
+export function getUserList(params: GetUserListRequest): Promise<GetUserListReply> {
+  return request.POST<GetUserListReply>('/api/system/user/list', params)
 }
 
 /**
@@ -153,12 +108,48 @@ export function resetUserPassword(params: ResetUserPasswordRequest): Promise<Emp
 }
 
 /**
- * GetUserList System
- * @param { GetUserListRequest } params
- * @returns {Promise<GetUserListReply>}
+ * SaveRole System
+ * @param { SaveRoleRequest } params
+ * @returns {Promise<EmptyReply>}
  */
-export function getUserList(params: GetUserListRequest): Promise<GetUserListReply> {
-  return request.POST<GetUserListReply>('/api/system/user/list', params)
+export function saveRole(params: SaveRoleRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/system/role', params)
+}
+
+/**
+ * UpdateRoleStatus System
+ * @param { UpdateRoleStatusRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateRoleStatus(params: UpdateRoleStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/system/role/status', params)
+}
+
+/**
+ * UpdateRoleUsers System
+ * @param { UpdateRoleUsersRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateRoleUsers(params: UpdateRoleUsersRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/system/role/users', params)
+}
+
+/**
+ * UpdateTeamAuditStatus System
+ * @param { UpdateTeamAuditStatusRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeamAuditStatus(params: UpdateTeamAuditStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/system/team/audit/status', params)
+}
+
+/**
+ * UpdateUserPosition System
+ * @param { UpdateUserPositionRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateUserPosition(params: UpdateUserPositionRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/system/user/position', params)
 }
 
 /**
@@ -168,4 +159,13 @@ export function getUserList(params: GetUserListRequest): Promise<GetUserListRepl
  */
 export function updateUserRoles(params: UpdateUserRolesRequest): Promise<EmptyReply> {
   return request.PUT<EmptyReply>('/api/system/user/roles', params)
+}
+
+/**
+ * UpdateUserStatus System
+ * @param { UpdateUserStatusRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateUserStatus(params: UpdateUserStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/system/user/status', params)
 }

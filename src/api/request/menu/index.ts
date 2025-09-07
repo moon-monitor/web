@@ -9,12 +9,12 @@ import {
 import { request } from '../index.ts'
 
 /**
- * GetTeamMenuTree Menu
+ * DeleteMenu Menu
  * @param { EmptyRequest } params
- * @returns {Promise<GetMenuTreeReply>}
+ * @returns {Promise<EmptyReply>}
  */
-export function getTeamMenuTree(params: EmptyRequest): Promise<GetMenuTreeReply> {
-  return request.GET<GetMenuTreeReply>('/api/team/menu/tree', params)
+export function deleteMenu(params: EmptyRequest): Promise<EmptyReply> {
+  return request.DELETE<EmptyReply>('/api/menu/delete', params)
 }
 
 /**
@@ -27,28 +27,28 @@ export function getMenu(params: EmptyRequest): Promise<MenuTreeItem> {
 }
 
 /**
- * SaveMenu Menu
- * @param { SaveMenuRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function saveMenu(params: SaveMenuRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/menu/save', params)
-}
-
-/**
- * DeleteMenu Menu
- * @param { EmptyRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function deleteMenu(params: EmptyRequest): Promise<EmptyReply> {
-  return request.DELETE<EmptyReply>('/api/menu/delete', params)
-}
-
-/**
  * GetMenuTree Menu
  * @param { EmptyRequest } params
  * @returns {Promise<GetMenuTreeReply>}
  */
 export function getMenuTree(params: EmptyRequest): Promise<GetMenuTreeReply> {
   return request.GET<GetMenuTreeReply>('/api/menu/tree', params)
+}
+
+/**
+ * GetTeamMenuTree Menu
+ * @param { EmptyRequest } params
+ * @returns {Promise<GetMenuTreeReply>}
+ */
+export function getTeamMenuTree(params: EmptyRequest): Promise<GetMenuTreeReply> {
+  return request.GET<GetMenuTreeReply>('/api/team/menu/tree', params)
+}
+
+/**
+ * SaveMenu Menu
+ * @param { SaveMenuRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveMenu(params: SaveMenuRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/menu/save', params)
 }

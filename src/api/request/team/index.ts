@@ -33,84 +33,12 @@ import {
 import { request } from '../index.ts'
 
 /**
- * InviteMember Team
- * @param { InviteMemberRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function inviteMember(params: InviteMemberRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/invite/member', params)
-}
-
-/**
- * UpdateTeamRoleStatus Team
- * @param { UpdateTeamRoleStatusRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateTeamRoleStatus(params: UpdateTeamRoleStatusRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/team/role/status', params)
-}
-
-/**
- * SelectTeamMembers Team
- * @param { SelectTeamMembersRequest } params
- * @returns {Promise<SelectTeamMembersReply>}
- */
-export function selectTeamMembers(params: SelectTeamMembersRequest): Promise<SelectTeamMembersReply> {
-  return request.POST<SelectTeamMembersReply>('/api/team/members/select', params)
-}
-
-/**
- * GetSMSConfig Team
+ * DeleteTeamRole Team
  * @param { EmptyRequest } params
- * @returns {Promise<SMSConfigItem>}
- */
-export function getSMSConfig(params: EmptyRequest): Promise<SMSConfigItem> {
-  return request.GET<SMSConfigItem>('/api/team/sms/config', params)
-}
-
-/**
- * SaveSMSConfig Team
- * @param { SaveSMSConfigRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function saveSMSConfig(params: SaveSMSConfigRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/team/sms/config', params)
-}
-
-/**
- * UpdateMemberRoles Team
- * @param { UpdateMemberRolesRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateMemberRoles(params: UpdateMemberRolesRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/update/member/roles', params)
-}
-
-/**
- * OperateLogList Team
- * @param { OperateLogListRequest } params
- * @returns {Promise<OperateLogListReply>}
- */
-export function operateLogList(params: OperateLogListRequest): Promise<OperateLogListReply> {
-  return request.POST<OperateLogListReply>('/api/team/operate/log/list', params)
-}
-
-/**
- * GetTeamMembers Team
- * @param { GetTeamMembersRequest } params
- * @returns {Promise<GetTeamMembersReply>}
- */
-export function getTeamMembers(params: GetTeamMembersRequest): Promise<GetTeamMembersReply> {
-  return request.POST<GetTeamMembersReply>('/api/team/members', params)
-}
-
-/**
- * GetEmailConfigs Team
- * @param { GetEmailConfigsRequest } params
- * @returns {Promise<GetEmailConfigsReply>}
- */
-export function getEmailConfigs(params: GetEmailConfigsRequest): Promise<GetEmailConfigsReply> {
-  return request.POST<GetEmailConfigsReply>('/api/team/email/configs', params)
+export function deleteTeamRole(params: EmptyRequest): Promise<EmptyReply> {
+  return request.DELETE<EmptyReply>('/api/team/roles', params)
 }
 
 /**
@@ -123,30 +51,21 @@ export function getEmailConfig(params: EmptyRequest): Promise<EmailConfigItem> {
 }
 
 /**
- * SaveEmailConfig Team
- * @param { SaveEmailConfigRequest } params
- * @returns {Promise<EmptyReply>}
+ * GetEmailConfigs Team
+ * @param { GetEmailConfigsRequest } params
+ * @returns {Promise<GetEmailConfigsReply>}
  */
-export function saveEmailConfig(params: SaveEmailConfigRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/team/email/config', params)
+export function getEmailConfigs(params: GetEmailConfigsRequest): Promise<GetEmailConfigsReply> {
+  return request.POST<GetEmailConfigsReply>('/api/team/email/configs', params)
 }
 
 /**
- * UpdateMemberPosition Team
- * @param { UpdateMemberPositionRequest } params
- * @returns {Promise<EmptyReply>}
+ * GetSMSConfig Team
+ * @param { EmptyRequest } params
+ * @returns {Promise<SMSConfigItem>}
  */
-export function updateMemberPosition(params: UpdateMemberPositionRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/update/member/position', params)
-}
-
-/**
- * SaveTeam Team
- * @param { SaveTeamRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function saveTeam(params: SaveTeamRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/team/save', params)
+export function getSMSConfig(params: EmptyRequest): Promise<SMSConfigItem> {
+  return request.GET<SMSConfigItem>('/api/team/sms/config', params)
 }
 
 /**
@@ -159,39 +78,30 @@ export function getSMSConfigs(params: GetSMSConfigsRequest): Promise<GetSMSConfi
 }
 
 /**
- * GetTeamRole Team
- * @param { EmptyRequest } params
- * @returns {Promise<TeamRoleItem>}
- */
-export function getTeamRole(params: EmptyRequest): Promise<TeamRoleItem> {
-  return request.GET<TeamRoleItem>('/api/team/role', params)
-}
-
-/**
- * RemoveMember Team
- * @param { RemoveMemberRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function removeMember(params: RemoveMemberRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/remove/member', params)
-}
-
-/**
- * TransferTeam Team
- * @param { TransferTeamRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function transferTeam(params: TransferTeamRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/transfer', params)
-}
-
-/**
  * GetTeam Team
  * @param { EmptyRequest } params
  * @returns {Promise<TeamItem>}
  */
 export function getTeam(params: EmptyRequest): Promise<TeamItem> {
   return request.GET<TeamItem>('/api/team/detail', params)
+}
+
+/**
+ * GetTeamMembers Team
+ * @param { GetTeamMembersRequest } params
+ * @returns {Promise<GetTeamMembersReply>}
+ */
+export function getTeamMembers(params: GetTeamMembersRequest): Promise<GetTeamMembersReply> {
+  return request.POST<GetTeamMembersReply>('/api/team/members', params)
+}
+
+/**
+ * GetTeamRole Team
+ * @param { EmptyRequest } params
+ * @returns {Promise<TeamRoleItem>}
+ */
+export function getTeamRole(params: EmptyRequest): Promise<TeamRoleItem> {
+  return request.GET<TeamRoleItem>('/api/team/role', params)
 }
 
 /**
@@ -204,6 +114,60 @@ export function getTeamRoles(params: GetTeamRolesRequest): Promise<GetTeamRolesR
 }
 
 /**
+ * InviteMember Team
+ * @param { InviteMemberRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function inviteMember(params: InviteMemberRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/invite/member', params)
+}
+
+/**
+ * OperateLogList Team
+ * @param { OperateLogListRequest } params
+ * @returns {Promise<OperateLogListReply>}
+ */
+export function operateLogList(params: OperateLogListRequest): Promise<OperateLogListReply> {
+  return request.POST<OperateLogListReply>('/api/team/operate/log/list', params)
+}
+
+/**
+ * RemoveMember Team
+ * @param { RemoveMemberRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function removeMember(params: RemoveMemberRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/remove/member', params)
+}
+
+/**
+ * SaveEmailConfig Team
+ * @param { SaveEmailConfigRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveEmailConfig(params: SaveEmailConfigRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/email/config', params)
+}
+
+/**
+ * SaveSMSConfig Team
+ * @param { SaveSMSConfigRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveSMSConfig(params: SaveSMSConfigRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/sms/config', params)
+}
+
+/**
+ * SaveTeam Team
+ * @param { SaveTeamRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function saveTeam(params: SaveTeamRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/save', params)
+}
+
+/**
  * SaveTeamRole Team
  * @param { SaveTeamRoleRequest } params
  * @returns {Promise<EmptyReply>}
@@ -213,12 +177,39 @@ export function saveTeamRole(params: SaveTeamRoleRequest): Promise<EmptyReply> {
 }
 
 /**
- * DeleteTeamRole Team
- * @param { EmptyRequest } params
+ * SelectTeamMembers Team
+ * @param { SelectTeamMembersRequest } params
+ * @returns {Promise<SelectTeamMembersReply>}
+ */
+export function selectTeamMembers(params: SelectTeamMembersRequest): Promise<SelectTeamMembersReply> {
+  return request.POST<SelectTeamMembersReply>('/api/team/members/select', params)
+}
+
+/**
+ * TransferTeam Team
+ * @param { TransferTeamRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamRole(params: EmptyRequest): Promise<EmptyReply> {
-  return request.DELETE<EmptyReply>('/api/team/roles', params)
+export function transferTeam(params: TransferTeamRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/transfer', params)
+}
+
+/**
+ * UpdateMemberPosition Team
+ * @param { UpdateMemberPositionRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateMemberPosition(params: UpdateMemberPositionRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/update/member/position', params)
+}
+
+/**
+ * UpdateMemberRoles Team
+ * @param { UpdateMemberRolesRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateMemberRoles(params: UpdateMemberRolesRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/update/member/roles', params)
 }
 
 /**
@@ -228,4 +219,13 @@ export function deleteTeamRole(params: EmptyRequest): Promise<EmptyReply> {
  */
 export function updateMemberStatus(params: UpdateMemberStatusRequest): Promise<EmptyReply> {
   return request.POST<EmptyReply>('/api/team/update/member/status', params)
+}
+
+/**
+ * UpdateTeamRoleStatus Team
+ * @param { UpdateTeamRoleStatusRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeamRoleStatus(params: UpdateTeamRoleStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/role/status', params)
 }
