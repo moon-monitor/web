@@ -1,4 +1,4 @@
-import { getToken, isLogin, removeToken, setToken } from '@/api/request'
+import { getToken, isLogin, isValidLoginToken, removeToken, setToken } from '@/api/request'
 import { getSelfMenuTree, refreshToken } from '@/api/request/auth'
 import { MenuTreeItem, TeamItem, UserItem } from '@/api/request/types'
 import '@/assets/styles/index.scss'
@@ -51,15 +51,20 @@ function App() {
   const { run: refreshAuthToken } = useRequest(refreshToken, {
     manual: true,
     onSuccess: (res) => {
-      setAuthToken(res.token)
-      setToken(res.token)
+      setAuthToken(res.token || '')
+      setToken(res.token || '')
     }
   })
 
   const storageMenus = useCallback(() => {
-    getSelfMenuTree()
+    // 只有在有效登录 token 时才调用菜单 API
+    if (!isValidLoginToken()) {
+      return
+    }
+
+    getSelfMenuTree({})
       .then((res) => {
-        setMenuItems?.(res.items)
+        setMenuItems?.(res.items || [])
       })
       .finally(() => {
         if (isLogin() && !window.location.href.includes('home')) {
@@ -69,19 +74,35 @@ function App() {
   }, [setMenuItems])
 
   useEffect(() => {
-    const token = new URLSearchParams(window.location.search).get('token') || getToken()
+    const urlToken = new URLSearchParams(window.location.search).get('token')
+    const storedToken = getToken()
+
+    // 检查是否是 OAuth2 注册页面的临时 token
+    const isOAuthRegisterPage = window.location.hash.includes('/oauth/register/email')
+
+    if (urlToken && isOAuthRegisterPage) {
+      // 如果是 OAuth2 注册页面，只设置临时 token 但不调用需要认证的 API
+      setAuthToken(urlToken)
+      setToken(urlToken)
+      // 不调用 storageMenus()，因为这是临时 token
+      return
+    }
+
+    // 对于正常的登录 token 或存储的 token
+    const token = urlToken || storedToken
     if (token) {
       setAuthToken(token)
       setToken(token)
       // 每10分钟刷新一次token
       setInterval(
         () => {
-          refreshAuthToken()
+          refreshAuthToken({})
         },
         1000 * 60 * 10
       )
+      // 只有真正的登录 token 才调用菜单 API
+      storageMenus()
     }
-    storageMenus()
   }, [])
 
   const handleRouter = () => {
