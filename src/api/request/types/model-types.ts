@@ -1021,3 +1021,16 @@ export enum LogActionType {
   /* 修改状态 */
   MODIFY_STATUS = 3
 }
+
+
+export interface ServerItem {
+  version: string
+  server: {
+    name: string
+    httpEndpoint: string
+    grpcEndpoint: string
+    network: string
+    startTime: string
+    upTime: string
+  }
+}

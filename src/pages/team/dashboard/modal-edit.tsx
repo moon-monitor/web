@@ -1,5 +1,5 @@
 import { Status } from '@/api/enum'
-import { createDashboard, getDashboard, updateDashboard } from '@/api/realtime/dashboard'
+import { createDashboard, getDashboard, updateDashboard } from '@/api/request/teamdashboard'
 import type { DashboardItem } from '@/api/request/types/model-types'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'

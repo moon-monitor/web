@@ -1,5 +1,5 @@
 import { Status } from '@/api/enum'
-import { type ListChartRequest, batchUpdateChartSort, listChart } from '@/api/realtime/dashboard'
+import { type ListChartRequest, batchUpdateChartSort, listChart } from '@/api/request/teamdashboard'
 import type { ChartItem, DashboardItem } from '@/api/request/types/model-types'
 import SearchBox from '@/components/data/search-box'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'

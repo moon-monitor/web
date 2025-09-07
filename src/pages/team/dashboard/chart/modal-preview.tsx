@@ -1,4 +1,4 @@
-import { getDashboard } from '@/api/realtime/dashboard'
+import { getDashboard } from '@/api/request/teamdashboard'
 import type { ChartItem, DashboardItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Card, Col, Modal, type ModalProps, Row, theme } from 'antd'

@@ -1,4 +1,4 @@
-import { getRabbitServer } from '@/api/realtime/moon-server'
+import { getRabbitServer } from '@/api/request/server'
 import type { ServerItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Button, Card, Col, Empty, Row, Spin } from 'antd'

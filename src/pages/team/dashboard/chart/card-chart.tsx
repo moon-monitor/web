@@ -1,6 +1,6 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import { batchUpdateChartStatus, deleteChart } from '@/api/realtime/dashboard'
+import { batchUpdateChartStatus, deleteChart } from '@/api/request/teamdashboard'
 import type { ChartItem } from '@/api/request/types/model-types'
 import MoreMenu, { type MoreMenuProps } from '@/components/moreMenu'
 import { useRequest } from 'ahooks'

@@ -5,7 +5,7 @@ import {
   batchUpdateDashboardStatus,
   deleteDashboard,
   listDashboard
-} from '@/api/realtime/dashboard'
+} from '@/api/request/teamdashboard'
 import type { DashboardItem } from '@/api/request/types/model-types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'

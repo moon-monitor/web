@@ -16,7 +16,7 @@ import { Chart } from '@antv/g2'
 import { useRequest } from 'ahooks'
 import { theme as antTheme, Card, Col, List, Row, Table } from 'antd'
 import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn' // 导入中文语言包
+import 'dayjs/locale/zh-cn'; // 导入中文语言包
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type React from 'react'
 import { useContext, useEffect, useRef, useState } from 'react'

@@ -178,6 +178,10 @@ function App() {
     setAuthToken: (auth: string) => {
       setAuthToken(auth)
       setToken(auth)
+      // 登录成功后立即调用菜单 API
+      if (auth && !window.location.hash.includes('/oauth/register/email')) {
+        storageMenus()
+      }
     },
     removeAuthToken: removeToken
   }

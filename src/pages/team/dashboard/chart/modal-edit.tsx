@@ -1,4 +1,4 @@
-import { createChart, getChart, updateChart } from '@/api/realtime/dashboard'
+import { createChart, getChart, updateChart } from '@/api/request/teamdashboard'
 import type { ChartItem } from '@/api/request/types/model-types'
 import { DataFrom } from '@/components/data/form'
 import { handleFormError } from '@/utils'

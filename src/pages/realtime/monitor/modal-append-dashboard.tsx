@@ -1,4 +1,4 @@
-import { listDashboardSelect, listMyDashboard, updateMyDashboard } from '@/api/realtime/dashboard'
+import { listDashboardSelect, listMyDashboard, updateMyDashboard } from '@/api/request/teamdashboard'
 import type { DashboardItem, SelectItem } from '@/api/request/types/model-types'
 import { DataFrom } from '@/components/data/form'
 import { handleFormError } from '@/utils'

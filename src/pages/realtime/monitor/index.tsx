@@ -1,4 +1,4 @@
-import { getDashboard, listMyDashboard } from '@/api/realtime/dashboard'
+import { getDashboard, listMyDashboard } from '@/api/request/teamdashboard'
 import type { DashboardItem } from '@/api/request/types/model-types'
 import { PreviewCard } from '@/pages/team/dashboard/chart/modal-preview'
 import { useRequest } from 'ahooks'
