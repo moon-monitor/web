@@ -404,7 +404,7 @@ export enum SendMessageStatus {
 /**
  * ServerRegisterRequest_ServerType
  */
-export enum ServerType {
+export enum ServerRegisterRequest_ServerType {
   HOUYI,
   LAUREL,
   PALACE,

@@ -23,7 +23,7 @@ import {
   SMSProviderType,
   SampleMode,
   SendMessageStatus,
-  ServerType,
+  ServerRegisterRequest_ServerType,
   StrategyType,
   TeamAuditAction,
   TeamAuditStatus,
@@ -136,7 +136,7 @@ export interface ServerRegisterRequest {
   discovery?: Discovery
   isOnline?: boolean
   server?: MicroServer
-  serverType?: ServerType
+  serverType?: ServerRegisterRequest_ServerType
   teamIds?: number[]
   uuid?: string
 }
