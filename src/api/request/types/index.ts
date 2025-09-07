@@ -104,7 +104,7 @@ export interface MetricItem {
  */
 export interface MetricItem_Label {
   key?: string
-  values?: []
+  values?: string[]
 }
 
 /**
@@ -137,7 +137,7 @@ export interface ServerRegisterRequest {
   isOnline?: boolean
   server?: MicroServer
   serverType?: ServerType
-  teamIds?: []
+  teamIds?: number[]
   uuid?: string
 }
 
@@ -343,7 +343,7 @@ export interface GetSendMessageLogsRequest {
   pagination?: PaginationRequest
   requestId?: string
   status?: SendMessageStatus
-  timeRange?: []
+  timeRange?: string[]
 }
 
 /**
@@ -519,7 +519,7 @@ export interface GetTeamSendMessageLogsRequest {
   pagination?: PaginationRequest
   requestId?: string
   status?: SendMessageStatus
-  timeRange?: []
+  timeRange?: string[]
 }
 
 /**
@@ -569,7 +569,7 @@ export interface InviteMemberRequest {
   /**
    * List of role Ids to assign to the new member
    */
-  roleIds?: []
+  roleIds?: number[]
   /**
    * Email of the user to invite
    */
@@ -612,7 +612,7 @@ export interface ListAlertParams {
   keyword?: string
   pagination?: PaginationRequest
   status?: AlertStatus
-  timeRange?: []
+  timeRange?: string[]
 }
 
 /**
@@ -690,7 +690,7 @@ export interface ListTeamDictReply {
 export interface ListTeamDictRequest {
   dictTypes?: DictType[]
   keyword?: string
-  langs?: []
+  langs?: string[]
   pagination?: PaginationRequest
   status?: GlobalStatus
 }
@@ -725,9 +725,9 @@ export interface ListTeamNoticeGroupReply {
  * api.palace.ListTeamNoticeGroupRequest
  */
 export interface ListTeamNoticeGroupRequest {
-  hookIds?: []
+  hookIds?: number[]
   keyword?: string
-  memberIds?: []
+  memberIds?: number[]
   pagination?: PaginationRequest
   status?: GlobalStatus
 }
@@ -804,7 +804,7 @@ export interface ListTeamStrategyRequest {
   /**
    * Group id
    */
-  groupIds?: []
+  groupIds?: number[]
   /**
    * Keyword to search strategies by
    */
@@ -1062,14 +1062,14 @@ export interface RemoveMemberRequest {
  */
 export interface ReplaceMemberRoleRequest {
   memberId?: number
-  roleIds?: []
+  roleIds?: number[]
 }
 
 /**
  * api.palace.ReplaceUserRoleRequest
  */
 export interface ReplaceUserRoleRequest {
-  roleIds?: []
+  roleIds?: number[]
   userId?: number
 }
 
@@ -1179,7 +1179,7 @@ export interface SaveRoleRequest {
   /**
    * List of resource Ids associated with the role
    */
-  menuIds?: []
+  menuIds?: number[]
   /**
    * Role name
    */
@@ -1296,7 +1296,7 @@ export interface SaveTeamMetricStrategyLevelRequest {
   /**
    * alarm pages of dict item
    */
-  alarmPages?: []
+  alarmPages?: number[]
   /**
    * Condition
    */
@@ -1316,7 +1316,7 @@ export interface SaveTeamMetricStrategyLevelRequest {
   /**
    * Receiver routes
    */
-  receiverRoutes?: []
+  receiverRoutes?: number[]
   /**
    * Sample mode
    */
@@ -1336,7 +1336,7 @@ export interface SaveTeamMetricStrategyLevelRequest {
   /**
    * Values
    */
-  values?: []
+  values?: number[]
 }
 
 /**
@@ -1350,7 +1350,7 @@ export interface SaveTeamMetricStrategyRequest {
   /**
    * Datasource
    */
-  datasource?: []
+  datasource?: number[]
   /**
    * Expression
    */
@@ -1371,7 +1371,7 @@ export interface SaveTeamMetricStrategyRequest {
 export interface SaveTeamNoticeGroupRequest {
   emailConfigId?: number
   groupId?: number
-  hookIds?: []
+  hookIds?: number[]
   members?: SaveTeamNoticeGroupRequest_Member[]
   name?: string
   remark?: string
@@ -1382,7 +1382,7 @@ export interface SaveTeamNoticeGroupRequest {
  * api.palace.SaveTeamNoticeGroupRequest_Member
  */
 export interface SaveTeamNoticeGroupRequest_Member {
-  dutyCycleIds?: []
+  dutyCycleIds?: number[]
   memberId?: number
   noticeType?: NoticeType
 }
@@ -1427,7 +1427,7 @@ export interface SaveTeamRoleRequest {
   /**
    * List of resource Ids associated with the role
    */
-  menuIds?: []
+  menuIds?: number[]
   /**
    * Role name
    */
@@ -1472,7 +1472,7 @@ export interface SaveTeamStrategyRequest {
   /**
    * Receiver routes
    */
-  receiverRoutes?: []
+  receiverRoutes?: number[]
   /**
    * Strategy item remark or description
    */
@@ -1493,7 +1493,7 @@ export interface SaveTeamStrategyRequest {
 export interface SaveTimeEngineRequest {
   name?: string
   remark?: string
-  ruleIds?: []
+  ruleIds?: number[]
   timeEngineId?: number
 }
 
@@ -1503,7 +1503,7 @@ export interface SaveTimeEngineRequest {
 export interface SaveTimeEngineRuleRequest {
   name?: string
   remark?: string
-  ruleIds?: []
+  ruleIds?: number[]
   timeEngineRuleId?: number
   type?: TimeEngineRuleType
 }
@@ -1557,7 +1557,7 @@ export interface SelectTeamDictReply {
 export interface SelectTeamDictRequest {
   dictTypes?: DictType[]
   keyword?: string
-  langs?: []
+  langs?: string[]
   pagination?: PaginationRequest
   status?: GlobalStatus
 }
@@ -1739,7 +1739,7 @@ export interface SubscribeTeamStrategiesRequest {
   /**
    * subscribers
    */
-  subscribers?: []
+  subscribers?: number[]
 }
 
 /**
@@ -1896,7 +1896,7 @@ export interface UpdateMemberRolesRequest {
   /**
    * List of role Ids to assign to the members
    */
-  roleIds?: []
+  roleIds?: number[]
 }
 
 /**
@@ -1906,7 +1906,7 @@ export interface UpdateMemberStatusRequest {
   /**
    * List of member Ids to update
    */
-  memberIds?: []
+  memberIds?: number[]
   /**
    * New status for the members
    */
@@ -1949,7 +1949,7 @@ export interface UpdateRoleUsersRequest {
   /**
    * List of user Ids to assign to the role
    */
-  userIds?: []
+  userIds?: number[]
 }
 
 /**
@@ -2016,7 +2016,7 @@ export interface UpdateTeamAuditStatusRequest {
  * api.palace.UpdateTeamDashboardChartStatusRequest
  */
 export interface UpdateTeamDashboardChartStatusRequest {
-  chartIds?: []
+  chartIds?: number[]
   dashboardId?: number
   status?: GlobalStatus
 }
@@ -2025,7 +2025,7 @@ export interface UpdateTeamDashboardChartStatusRequest {
  * api.palace.UpdateTeamDashboardStatusRequest
  */
 export interface UpdateTeamDashboardStatusRequest {
-  dashboardIds?: []
+  dashboardIds?: number[]
   status?: GlobalStatus
 }
 
@@ -2033,7 +2033,7 @@ export interface UpdateTeamDashboardStatusRequest {
  * api.palace.UpdateTeamDictStatusRequest
  */
 export interface UpdateTeamDictStatusRequest {
-  dictIds?: []
+  dictIds?: number[]
   status?: GlobalStatus
 }
 
@@ -2056,7 +2056,7 @@ export interface UpdateTeamMetricStrategyLevelStatusRequest {
   /**
    * Strategy metric level id
    */
-  strategyMetricLevelIds?: []
+  strategyMetricLevelIds?: number[]
 }
 
 /**
@@ -2100,7 +2100,7 @@ export interface UpdateTeamStrategiesStatusRequest {
   /**
    * Strategy ids
    */
-  strategyIds?: []
+  strategyIds?: number[]
 }
 
 /**
@@ -2122,7 +2122,7 @@ export interface UpdateTeamStrategyGroupStatusRequest {
  */
 export interface UpdateTimeEngineRuleStatusRequest {
   status?: GlobalStatus
-  timeEngineRuleIds?: []
+  timeEngineRuleIds?: number[]
 }
 
 /**
@@ -2130,7 +2130,7 @@ export interface UpdateTimeEngineRuleStatusRequest {
  */
 export interface UpdateTimeEngineStatusRequest {
   status?: GlobalStatus
-  timeEngineIds?: []
+  timeEngineIds?: number[]
 }
 
 /**
@@ -2154,7 +2154,7 @@ export interface UpdateUserRolesRequest {
   /**
    * List of role Ids to assign to the user
    */
-  roleIds?: []
+  roleIds?: number[]
   /**
    * User Id
    */
@@ -2172,7 +2172,7 @@ export interface UpdateUserStatusRequest {
   /**
    * List of user Ids to update
    */
-  userIds?: []
+  userIds?: number[]
 }
 
 /**
@@ -2280,7 +2280,7 @@ export interface KeyValueItem {
  */
 export interface LabelNotices {
   key?: string
-  receiverRoutes?: []
+  receiverRoutes?: number[]
   value?: string
 }
 
@@ -2445,7 +2445,7 @@ export interface OperateLogListRequest {
   /**
    * Time range to filter operation logs by
    */
-  timeRange?: []
+  timeRange?: string[]
   /**
    * User Id, optional for filtering logs by user
    */
@@ -2885,7 +2885,7 @@ export interface TeamMetricDatasourceMetadataItem {
  */
 export interface TeamMetricDatasourceMetadataItem_Label {
   key?: string
-  values?: []
+  values?: string[]
 }
 
 /**
@@ -3043,7 +3043,7 @@ export interface TeamStrategyMetricLevelItem {
   strategyMetricId?: number
   strategyMetricLevelId?: number
   total?: string
-  values?: []
+  values?: number[]
 }
 
 /**
@@ -3069,7 +3069,7 @@ export interface TimeEngineItemRule {
   engines?: TimeEngineItem[]
   name?: string
   remark?: string
-  rules?: []
+  rules?: string[]
   status?: GlobalStatus
   timeEngineRuleId?: number
   type?: TimeEngineRuleType
@@ -3408,7 +3408,7 @@ export interface Etcd {
   backoffWaitBetween?: string
   dialKeepAliveTime?: string
   dialKeepAliveTimeout?: string
-  endpoints?: []
+  endpoints?: string[]
   maxCallRecvMsgSize?: string
   maxCallSendMsgSize?: string
   maxUnaryRetries?: string
