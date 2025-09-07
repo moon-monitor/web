@@ -29,7 +29,7 @@ import { request } from '../index.ts'
  * @returns {Promise<GetCaptchaReply>}
  */
 export function getCaptcha(params: EmptyRequest): Promise<GetCaptchaReply> {
-  return request.GET<GetCaptchaReply>('/api/portal/auth/captcha', params)
+  return request.GET<GetCaptchaReply>('/api/auth/captcha', params)
 }
 
 /**
@@ -38,7 +38,7 @@ export function getCaptcha(params: EmptyRequest): Promise<GetCaptchaReply> {
  * @returns {Promise<GetCaptchaReply>}
  */
 export function getCaptcha2(params: EmptyRequest): Promise<GetCaptchaReply> {
-  return request.GET<GetCaptchaReply>('/api/auth/captcha', params)
+  return request.GET<GetCaptchaReply>('/api/portal/auth/captcha', params)
 }
 
 /**
@@ -97,20 +97,20 @@ export function loginByPassword(params: LoginByPasswordRequest): Promise<LoginRe
 
 /**
  * Logout Auth
- * @param { EmptyRequest } params
- * @returns {Promise<EmptyReply>}
+ * @param { LogoutRequest } params
+ * @returns {Promise<LogoutReply>}
  */
-export function logout(params: EmptyRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/portal/auth/logout', params)
+export function logout(params: LogoutRequest): Promise<LogoutReply> {
+  return request.POST<LogoutReply>('/api/auth/logout', params)
 }
 
 /**
  * Logout Auth
- * @param { LogoutRequest } params
- * @returns {Promise<LogoutReply>}
+ * @param { EmptyRequest } params
+ * @returns {Promise<EmptyReply>}
  */
-export function logout2(params: LogoutRequest): Promise<LogoutReply> {
-  return request.POST<LogoutReply>('/api/auth/logout', params)
+export function logout2(params: EmptyRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/portal/auth/logout', params)
 }
 
 /**
