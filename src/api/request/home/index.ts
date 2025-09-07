@@ -3,21 +3,21 @@ import { EmptyRequest, FeaturesReply, FooterReply, PartnersReply } from '../type
 import { request } from '../index.ts'
 
 /**
- * Footer Home
- * @param { EmptyRequest } params
- * @returns {Promise<FooterReply>}
- */
-export function footer(params: EmptyRequest): Promise<FooterReply> {
-  return request.GET<FooterReply>('/api/portal/home/footer', params)
-}
-
-/**
  * Features Home
  * @param { EmptyRequest } params
  * @returns {Promise<FeaturesReply>}
  */
 export function features(params: EmptyRequest): Promise<FeaturesReply> {
   return request.GET<FeaturesReply>('/api/portal/home/features', params)
+}
+
+/**
+ * Footer Home
+ * @param { EmptyRequest } params
+ * @returns {Promise<FooterReply>}
+ */
+export function footer(params: EmptyRequest): Promise<FooterReply> {
+  return request.GET<FooterReply>('/api/portal/home/footer', params)
 }
 
 /**

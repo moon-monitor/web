@@ -13,28 +13,6 @@ import {
 import { request } from '../index.ts'
 
 /**
- * UpdateTeamMetricStrategyLevelStatus TeamStrategyMetric
- * @param { UpdateTeamMetricStrategyLevelStatusRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateTeamMetricStrategyLevelStatus(
-  params: UpdateTeamMetricStrategyLevelStatusRequest
-): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/strategy/metric/level/status', params)
-}
-
-/**
- * TeamMetricStrategyLevelList TeamStrategyMetric
- * @param { TeamMetricStrategyLevelListRequest } params
- * @returns {Promise<TeamMetricStrategyLevelListReply>}
- */
-export function teamMetricStrategyLevelList(
-  params: TeamMetricStrategyLevelListRequest
-): Promise<TeamMetricStrategyLevelListReply> {
-  return request.POST<TeamMetricStrategyLevelListReply>('/api/team/strategy/metric/level/list', params)
-}
-
-/**
  * SaveTeamMetricStrategyLevel TeamStrategyMetric
  * @param { SaveTeamMetricStrategyLevelRequest } params
  * @returns {Promise<EmptyReply>}
@@ -59,6 +37,28 @@ export function teamMetricStrategyLevelDetail(params: EmptyRequest): Promise<Tea
  */
 export function deleteTeamMetricStrategyLevel(params: EmptyRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/strategy/metric/level', params)
+}
+
+/**
+ * UpdateTeamMetricStrategyLevelStatus TeamStrategyMetric
+ * @param { UpdateTeamMetricStrategyLevelStatusRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeamMetricStrategyLevelStatus(
+  params: UpdateTeamMetricStrategyLevelStatusRequest
+): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/strategy/metric/level/status', params)
+}
+
+/**
+ * TeamMetricStrategyLevelList TeamStrategyMetric
+ * @param { TeamMetricStrategyLevelListRequest } params
+ * @returns {Promise<TeamMetricStrategyLevelListReply>}
+ */
+export function teamMetricStrategyLevelList(
+  params: TeamMetricStrategyLevelListRequest
+): Promise<TeamMetricStrategyLevelListReply> {
+  return request.POST<TeamMetricStrategyLevelListReply>('/api/team/strategy/metric/level/list', params)
 }
 
 /**

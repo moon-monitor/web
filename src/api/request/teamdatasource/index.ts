@@ -1,5 +1,4 @@
 // teamdatasource 模块API函数
-import { request } from '../index.ts'
 import {
   DatasourceSelectReply,
   DatasourceSelectRequest,
@@ -9,6 +8,7 @@ import {
   ListMetricDatasourceMetadataRequest,
   ListTeamMetricDatasourceReply,
   ListTeamMetricDatasourceRequest,
+  MetricDatasourceProxyRequest,
   MetricDatasourceQueryReply,
   MetricDatasourceQueryRequest,
   SaveTeamMetricDatasourceRequest,
@@ -18,35 +18,7 @@ import {
   UpdateMetricDatasourceMetadataRequest,
   UpdateTeamMetricDatasourceStatusRequest
 } from '../types/index.ts'
-
-/**
- * ListMetricDatasourceMetadata TeamDatasource
- * @param { ListMetricDatasourceMetadataRequest } params
- * @returns {Promise<ListMetricDatasourceMetadataReply>}
- */
-export function listMetricDatasourceMetadata(
-  params: ListMetricDatasourceMetadataRequest
-): Promise<ListMetricDatasourceMetadataReply> {
-  return request.POST<ListMetricDatasourceMetadataReply>('/api/team/metric/datasource/metadata/list', params)
-}
-
-/**
- * UpdateTeamMetricDatasourceStatus TeamDatasource
- * @param { UpdateTeamMetricDatasourceStatusRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateTeamMetricDatasourceStatus(params: UpdateTeamMetricDatasourceStatusRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/team/metric/datasource/status', params)
-}
-
-/**
- * SyncMetricMetadata TeamDatasource
- * @param { SyncMetricMetadataRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function syncMetricMetadata(params: SyncMetricMetadataRequest): Promise<EmptyReply> {
-  return request.POST<EmptyReply>('/api/team/metric/datasource/sync/metadata', params)
-}
+import { request } from '../index.ts'
 
 /**
  * MetricDatasourceQuery TeamDatasource
@@ -55,6 +27,53 @@ export function syncMetricMetadata(params: SyncMetricMetadataRequest): Promise<E
  */
 export function metricDatasourceQuery(params: MetricDatasourceQueryRequest): Promise<MetricDatasourceQueryReply> {
   return request.POST<MetricDatasourceQueryReply>('/api/team/metric/datasource/query', params)
+}
+
+/**
+ * ListTeamMetricDatasource TeamDatasource
+ * @param { ListTeamMetricDatasourceRequest } params
+ * @returns {Promise<ListTeamMetricDatasourceReply>}
+ */
+export function listTeamMetricDatasource(
+  params: ListTeamMetricDatasourceRequest
+): Promise<ListTeamMetricDatasourceReply> {
+  return request.POST<ListTeamMetricDatasourceReply>('/api/team/metric/datasource/list', params)
+}
+
+/**
+ * MetricDatasourceProxy TeamDatasource
+ * @param { MetricDatasourceProxyRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function metricDatasourceProxy(params: MetricDatasourceProxyRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/datasource/metric/{datasourceId}/{target}', params)
+}
+
+/**
+ * MetricDatasourceProxy TeamDatasource
+ * @param { EmptyRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function metricDatasourceProxy2(params: EmptyRequest): Promise<EmptyReply> {
+  return request.GET<EmptyReply>('/api/team/datasource/metric/{datasourceId}/{target}', params)
+}
+
+/**
+ * MetricDatasourceProxy TeamDatasource
+ * @param { MetricDatasourceProxyRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function metricDatasourceProxy3(params: MetricDatasourceProxyRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/datasource/metric/{datasourceId}/{target}', params)
+}
+
+/**
+ * MetricDatasourceProxy TeamDatasource
+ * @param { EmptyRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function metricDatasourceProxy4(params: EmptyRequest): Promise<EmptyReply> {
+  return request.DELETE<EmptyReply>('/api/team/datasource/metric/{datasourceId}/{target}', params)
 }
 
 /**
@@ -94,17 +113,6 @@ export function datasourceSelect(params: DatasourceSelectRequest): Promise<Datas
 }
 
 /**
- * ListTeamMetricDatasource TeamDatasource
- * @param { ListTeamMetricDatasourceRequest } params
- * @returns {Promise<ListTeamMetricDatasourceReply>}
- */
-export function listTeamMetricDatasource(
-  params: ListTeamMetricDatasourceRequest
-): Promise<ListTeamMetricDatasourceReply> {
-  return request.POST<ListTeamMetricDatasourceReply>('/api/team/metric/datasource/list', params)
-}
-
-/**
  * GetMetricDatasourceMetadata TeamDatasource
  * @param { EmptyRequest } params
  * @returns {Promise<TeamMetricDatasourceMetadataItem>}
@@ -120,4 +128,33 @@ export function getMetricDatasourceMetadata(params: EmptyRequest): Promise<TeamM
  */
 export function updateMetricDatasourceMetadata(params: UpdateMetricDatasourceMetadataRequest): Promise<EmptyReply> {
   return request.PUT<EmptyReply>('/api/team/metric/datasource/metadata', params)
+}
+
+/**
+ * UpdateTeamMetricDatasourceStatus TeamDatasource
+ * @param { UpdateTeamMetricDatasourceStatusRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeamMetricDatasourceStatus(params: UpdateTeamMetricDatasourceStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/metric/datasource/status', params)
+}
+
+/**
+ * ListMetricDatasourceMetadata TeamDatasource
+ * @param { ListMetricDatasourceMetadataRequest } params
+ * @returns {Promise<ListMetricDatasourceMetadataReply>}
+ */
+export function listMetricDatasourceMetadata(
+  params: ListMetricDatasourceMetadataRequest
+): Promise<ListMetricDatasourceMetadataReply> {
+  return request.POST<ListMetricDatasourceMetadataReply>('/api/team/metric/datasource/metadata/list', params)
+}
+
+/**
+ * SyncMetricMetadata TeamDatasource
+ * @param { SyncMetricMetadataRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function syncMetricMetadata(params: SyncMetricMetadataRequest): Promise<EmptyReply> {
+  return request.POST<EmptyReply>('/api/team/metric/datasource/sync/metadata', params)
 }

@@ -13,12 +13,12 @@ import {
 import { request } from '../index.ts'
 
 /**
- * SelectTeamDict TeamDict
- * @param { SelectTeamDictRequest } params
- * @returns {Promise<SelectTeamDictReply>}
+ * UpdateTeamDictStatus TeamDict
+ * @param { UpdateTeamDictStatusRequest } params
+ * @returns {Promise<EmptyReply>}
  */
-export function selectTeamDict(params: SelectTeamDictRequest): Promise<SelectTeamDictReply> {
-  return request.POST<SelectTeamDictReply>('/api/team/dict/select', params)
+export function updateTeamDictStatus(params: UpdateTeamDictStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/dict/status', params)
 }
 
 /**
@@ -49,19 +49,19 @@ export function deleteTeamDict(params: EmptyRequest): Promise<EmptyReply> {
 }
 
 /**
+ * SelectTeamDict TeamDict
+ * @param { SelectTeamDictRequest } params
+ * @returns {Promise<SelectTeamDictReply>}
+ */
+export function selectTeamDict(params: SelectTeamDictRequest): Promise<SelectTeamDictReply> {
+  return request.POST<SelectTeamDictReply>('/api/team/dict/select', params)
+}
+
+/**
  * ListTeamDict TeamDict
  * @param { ListTeamDictRequest } params
  * @returns {Promise<ListTeamDictReply>}
  */
 export function listTeamDict(params: ListTeamDictRequest): Promise<ListTeamDictReply> {
   return request.POST<ListTeamDictReply>('/api/team/dict/list', params)
-}
-
-/**
- * UpdateTeamDictStatus TeamDict
- * @param { UpdateTeamDictStatusRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateTeamDictStatus(params: UpdateTeamDictStatusRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/team/dict/status', params)
 }
