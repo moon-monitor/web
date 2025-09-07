@@ -1,5 +1,5 @@
+import { GetMenuReply, TreeMenuRequest } from '@/api//request/menu'
 import { LogItem } from '@/api/log'
-import { GetMenuReply, TreeMenuRequest } from '@/api/menu'
 import Mock from 'mockjs'
 import { generateMockLogs } from './logAudit'
 import { mockTreeMenuReply } from './menu'

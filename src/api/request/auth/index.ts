@@ -1,4 +1,5 @@
 // auth 模块API函数
+import { request } from '../index.ts'
 import {
   EmptyReply,
   EmptyRequest,
@@ -18,7 +19,6 @@ import {
   UserBaseItem,
   VerifyEmailRequest
 } from '../types/index.ts'
-import { request } from '../index.ts'
 
 /**
  * Login Auth
@@ -125,7 +125,7 @@ export function getFilingInformation(params: EmptyRequest): Promise<GetFilingInf
  * @returns {Promise<GetCaptchaReply>}
  */
 export function getCaptcha(params: EmptyRequest): Promise<GetCaptchaReply> {
-  return request.GET<GetCaptchaReply>('/api/portal/auth/captcha', params)
+  return request.GET<GetCaptchaReply>('/api/auth/captcha', params)
 }
 
 /**

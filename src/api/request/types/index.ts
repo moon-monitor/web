@@ -24,6 +24,7 @@ import {
   SampleMode,
   SendMessageStatus,
   ServerType,
+  Status,
   StrategyType,
   TeamAuditAction,
   TeamAuditStatus,
@@ -127,7 +128,7 @@ export interface MetricQueryResultValue {
 /**
  * api.common.ServerRegisterReply
  */
-export interface ServerRegisterReply {}
+export interface ServerRegisterReply { }
 
 /**
  * api.common.ServerRegisterRequest
@@ -2260,12 +2261,12 @@ export interface EmailConfigItem {
 /**
  * api.palace.common.EmptyReply
  */
-export interface EmptyReply {}
+export interface EmptyReply { }
 
 /**
  * api.palace.common.EmptyRequest
  */
-export interface EmptyRequest {}
+export interface EmptyRequest { }
 
 /**
  * api.palace.common.KeyValueItem
@@ -3451,4 +3452,53 @@ export interface MicroServer {
    * node version
    */
   version?: string
+}
+
+export interface TreeMenuRequest { }
+
+export interface TreeMenuReply {
+  menuTree: MenuTree[]
+}
+
+export interface MenuTree extends MenuItem {
+  children?: MenuTree[]
+}
+
+
+/** 系统菜单模块 */
+export interface MenuItem {
+  /** 菜单ID */
+  id: number
+  /** 菜单名称 */
+  label: string
+  /** 菜单路径 */
+  key: string
+  /** 菜单图标 */
+  icon: string
+  /** 菜单状态 */
+  status: Status
+  /** 父级菜单 */
+  parentId: number
+  /** 创建时间 */
+  createdAt: string
+  /** 更新时间 */
+  updatedAt: string
+  /** 菜单层级 */
+  level: number
+  /** 菜单类型 */
+  menuType: MenuType
+  /** 组件路径 */
+  component: string
+  /** 权限 */
+  permission: string
+  /** 排序 */
+  sort: number
+  /** 英文名称 */
+  enName: string
+}
+
+/** 系统菜单树 */
+export interface MenuTree extends MenuItem {
+  /** 菜单子级数据 */
+  children?: MenuTree[]
 }

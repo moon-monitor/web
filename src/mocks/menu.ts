@@ -1,5 +1,6 @@
-import { MenuType, Status } from '@/api/enum'
-import { TreeMenuReply } from '@/api/menu'
+import { TreeMenuReply } from '@/api/request/types'
+import { MenuType, Status } from '@/api/request/types/enum'
+
 
 export const mockTreeMenuReply: TreeMenuReply = {
   menuTree: [
