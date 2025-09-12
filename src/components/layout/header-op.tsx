@@ -1,6 +1,6 @@
-import { logout } from '@/api/authorization'
 import { removeToken } from '@/api/request'
-import { selfInfo } from '@/api2/user'
+import { logout } from '@/api/request/auth'
+import { selfInfo } from '@/api/request/user'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
 import { GithubOutlined, MoonOutlined, SunOutlined } from '@ant-design/icons'
@@ -51,19 +51,19 @@ export const HeaderOp: React.FC = () => {
           key: 'profile',
           label: '个人中心',
           disabled: true,
-          onClick: () => {}
+          onClick: () => { }
         },
         {
           key: 'my-team',
           label: '团队管理',
           disabled: true,
-          onClick: () => {}
+          onClick: () => { }
         },
         {
           key: 'change-password',
           label: '修改密码',
           disabled: true,
-          onClick: () => {}
+          onClick: () => { }
         },
         {
           key: 'new-team',

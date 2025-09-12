@@ -1,10 +1,9 @@
-import { TeamMetricDatasourceItem, TeamMetricDatasourceMetadataItem } from '@/api2/common.types'
-import { listMetricDatasourceMetadata, syncMetricDatasourceMetadata } from '@/api2/team/team-datasource'
+import { TeamMetricDatasourceItem, TeamMetricDatasourceMetadataItem } from '@/api/common.types'
+import { MetricTypeData } from '@/api/global'
+import { listMetricDatasourceMetadata, syncMetricMetadata } from '@/api/request/teamdatasource'
 import {
-  defaultSearchMetricDatasourceMetadataParams,
   ListMetricDatasourceMetadataRequest,
-  MetricTypeData
-} from '@/api2/team/team-datasource.types'
+} from '@/api/request/types/index'
 import { DataInput } from '@/components/data/child/data-input'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'
@@ -20,6 +19,14 @@ export interface MetadataProps {
 }
 
 const { Text } = Typography
+
+export const defaultSearchMetricDatasourceMetadataParams: ListMetricDatasourceMetadataRequest = {
+  pagination: {
+    page: 1,
+    pageSize: 100
+  }
+}
+
 
 export const Metadata: React.FC<MetadataProps> = (props) => {
   const { datasource, toTimelyQuery } = props
@@ -138,7 +145,7 @@ export const Metadata: React.FC<MetadataProps> = (props) => {
 
   const fetchSyncMetric = () => {
     if (!datasource?.datasourceId) return
-    syncMetricDatasourceMetadata({
+    syncMetricMetadata({
       datasourceId: datasource?.datasourceId
     }).then(() => getMetricList(searchMetricParams))
   }

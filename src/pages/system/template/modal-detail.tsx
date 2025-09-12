@@ -1,7 +1,7 @@
 import { AlarmSendType } from '@/api/enum'
 import { AlarmSendTypeData, StatusData } from '@/api/global'
-import type { SendTemplateItem } from '@/api/model-types'
-import { getTemplate } from '@/api/notify/template'
+// import { getTemplate } from '@/api/notify/template' // TODO: 实现 getTemplate API
+import type { SendTemplateItem } from '@/api/request/types/model-types'
 import { GlobalContext } from '@/utils/context'
 import { CopyOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
@@ -20,6 +20,30 @@ import { useCallback, useContext, useEffect, useState } from 'react'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import atomOneDark from 'react-syntax-highlighter/dist/esm/styles/hljs/atom-one-dark'
 import atomOneLight from 'react-syntax-highlighter/dist/esm/styles/hljs/atom-one-light'
+
+// 占位符函数，待实现
+const getTemplate = async (id: number): Promise<{ detail: SendTemplateItem }> => {
+  console.warn('getTemplate API not implemented yet')
+  return Promise.resolve({
+    detail: {
+      id: 0,
+      name: '示例模板',
+      content: '模板内容',
+      sendType: 0,
+      status: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      creator: {
+        id: 0,
+        name: '系统',
+        avatar: '',
+        email: '',
+        nickname: '系统'
+      },
+      remark: '这是一个示例模板'
+    }
+  })
+}
 
 export interface SendTemplateDetailModalProps extends ModalProps {
   sendTemplateId: number
@@ -65,8 +89,8 @@ export function SendTemplateDetailModal(props: SendTemplateDetailModalProps) {
       label: '通知类型',
       children: (
         <Space direction='horizontal'>
-          <Avatar size='small' shape='square' icon={AlarmSendTypeData[detail.sendType].icon} />
-          {AlarmSendTypeData[detail.sendType].label}
+          <Avatar size='small' shape='square' icon={AlarmSendTypeData[detail.sendType]?.icon} />
+          {AlarmSendTypeData[detail.sendType]?.label}
         </Space>
       ),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
@@ -74,7 +98,7 @@ export function SendTemplateDetailModal(props: SendTemplateDetailModalProps) {
     {
       label: '状态',
       children: detail ? (
-        <Badge color={StatusData[detail?.status].color} text={StatusData[detail?.status].text} />
+        <Badge color={StatusData[detail?.status]?.color} text={StatusData[detail?.status]?.text} />
       ) : (
         '-'
       ),

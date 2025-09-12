@@ -1,13 +1,13 @@
-import { TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
-import { DatasourceDriverMetricData, defaultPaginationReq, StrategyTypeData } from '@/api2/global'
-import { baseURL } from '@/api2/request'
+import { TeamStrategyItem, TeamStrategyMetricLevelItem } from '@/api/common.types'
+import { ActionKey } from '@/api/enum'
+import { DatasourceDriverMetricData, defaultPaginationReq, StrategyTypeData } from '@/api/global'
+import { baseURL } from '@/api/request'
 import {
   deleteTeamMetricStrategyLevel,
   getTeamMetricStrategy,
   listTeamMetricStrategyLevels
-} from '@/api2/team/team-strategy'
-import { GetTeamMetricStrategyReply } from '@/api2/team/team-strategy.types'
+} from '@/api/request/teamstrategy'
+import { GetTeamMetricStrategyReply } from '@/api/request/types'
 import PromQLInput, { PromQLInputProps } from '@/components/data/child/prom-ql'
 import AutoTable from '@/components/table'
 import { getColorByString } from '@/utils/color'
@@ -183,7 +183,7 @@ export default function AssociatedData() {
                 className='pl-1 pr-1 font-bold'
                 style={{ backgroundColor: getColorByString(DatasourceDriverMetricData[item.driver]) }}
               >
-                {DatasourceDriverMetricData[item.driver]}
+                {DatasourceDriverMetricData[item.driver]?.label}
               </div>
               <div className='pl-1 pr-1 ' style={{ backgroundColor: getColorByString(item.name) }}>
                 {item.name}
@@ -301,8 +301,8 @@ export default function AssociatedData() {
       />
       <div className='bg-white p-4 rounded-lg'>
         <Badge.Ribbon
-          text={StrategyTypeData[detail?.strategyType].label}
-          color={StrategyTypeData[detail?.strategyType].color}
+          text={StrategyTypeData[detail?.strategyType]?.label}
+          color={StrategyTypeData[detail?.strategyType]?.color}
         >
           <Card
             title={

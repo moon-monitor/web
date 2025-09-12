@@ -1,7 +1,7 @@
-import { MenuCategory, MenuProcessType } from '@/api2/enum'
-import { MenuProcessTypeData } from '@/api2/global'
-import { deleteMenu, getMenu, getMenuTree, getTeamMenuTree, saveMenu } from '@/api2/menu'
-import { MenuTreeItem } from '@/api2/menu/types'
+import { MenuCategory, MenuProcessType } from '@/api/enum'
+import { MenuProcessTypeData } from '@/api/global'
+import { deleteMenu, getMenu, getMenuTree, getTeamMenuTree, saveMenu } from '@/api/request/menu'
+import { MenuTreeItem } from '@/api/request/types'
 import { DataFrom, DataFromItem } from '@/components/data/form'
 import { numberToBinary, routeJoin } from '@/utils'
 import { EditOutlined, MinusCircleOutlined, PlusCircleOutlined } from '@ant-design/icons'
@@ -32,7 +32,7 @@ const processTypeOptions = Object.entries(MenuProcessTypeData)
   .filter(([key]) => +key !== MenuProcessType.MENU_PROCESS_TYPE_UNKNOWN)
   .map(([key, value]) => {
     return {
-      label: value,
+      label: value.label,
       value: key
     }
   })
@@ -260,18 +260,18 @@ const Menu: React.FC = () => {
     setMenuId(menuItem.menuId || 0)
     menuItem.parentId
       ? getMenu({ menuId: menuItem.parentId }).then((data) => {
-          setDetail({
-            menuDetail: menuItem,
-            parentDetail: data
-          })
-          console.log('detail', detail)
-        })
-      : setDetail({
+        setDetail({
           menuDetail: menuItem,
-          parentDetail: {
-            name: '根节点'
-          }
+          parentDetail: data
         })
+        console.log('detail', detail)
+      })
+      : setDetail({
+        menuDetail: menuItem,
+        parentDetail: {
+          name: '根节点'
+        }
+      })
     setAddItem(undefined)
     setTitle('菜单详情')
   }

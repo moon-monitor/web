@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Status } from '@/api/enum'
 import { DataSourceTypeData, StorageTypeData } from '@/api/global'
-import type { DatasourceItem } from '@/api/model-types'
+import type { DatasourceItem } from '@/api/request/types/model-types'
 import { GlobalContext } from '@/utils/context'
 import { RedoOutlined } from '@ant-design/icons'
 import { theme as AntdTheme, Badge, Button, Descriptions, type DescriptionsProps, Space, Tag, Typography } from 'antd'

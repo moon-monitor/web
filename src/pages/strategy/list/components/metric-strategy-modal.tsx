@@ -1,10 +1,10 @@
-import { TeamMetricDatasourceItem } from '@/api2/common.types'
-import { GlobalStatus } from '@/api2/enum'
-import { defaultPaginationReq } from '@/api2/global'
-import { baseURL } from '@/api2/request'
-import { listTeamMetricDatasource } from '@/api2/team/team-datasource'
-import { saveTeamMetricStrategy } from '@/api2/team/team-strategy'
-import { GetTeamMetricStrategyReply } from '@/api2/team/team-strategy.types'
+import { TeamMetricDatasourceItem } from '@/api/common.types'
+import { GlobalStatus } from '@/api/enum'
+import { defaultPaginationReq } from '@/api/global'
+import { baseURL } from '@/api/request'
+import { listTeamMetricDatasource } from '@/api/request/teamdatasource'
+import { saveTeamStrategy } from '@/api/request/teamstrategy'
+import { TeamStrategyMetricItem } from '@/api/request/types/index'
 import { AnnotationsEditor } from '@/components/data/child/annotation-editor'
 import PromQLInput from '@/components/data/child/prom-ql'
 import { MinusCircleOutlined, PlusOutlined, QuestionCircleOutlined } from '@ant-design/icons'
@@ -27,7 +27,7 @@ import {
 import { useEffect, useState } from 'react'
 
 export interface MetricStrategyModalProps extends ModalProps {
-  strategyDetail?: GetTeamMetricStrategyReply
+  strategyDetail?: TeamStrategyMetricItem
 }
 
 export default function MetricStrategyModal(props: MetricStrategyModalProps) {
@@ -49,7 +49,7 @@ export default function MetricStrategyModal(props: MetricStrategyModalProps) {
   }>({
     info: ''
   })
-  const { run: saveMetricStrategy, loading: saveMetricStrategyLoading } = useRequest(saveTeamMetricStrategy, {
+  const { run: saveMetricStrategy, loading: saveMetricStrategyLoading } = useRequest(saveTeamStrategy, {
     manual: true,
     onSuccess: () => {
       message.success('保存成功')

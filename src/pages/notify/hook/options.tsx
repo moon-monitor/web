@@ -1,6 +1,6 @@
-import { NoticeHookItem } from '@/api2/common.types'
-import { ActionKey, GlobalStatus, HookAPP, HTTPMethod } from '@/api2/enum'
-import { GlobalStatusData, HookAppData, HTTPMethodData } from '@/api2/global'
+import { NoticeHookItem } from '@/api/common.types'
+import { ActionKey, GlobalStatus, HookAPP, HTTPMethod } from '@/api/enum'
+import { GlobalStatusData, HookAppData, HTTPMethodData } from '@/api/global'
 import { DataFromItem } from '@/components/data/form'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
@@ -83,21 +83,21 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeH
   const tableOperationItems = (record: NoticeHookItem): MoreMenuProps['items'] => [
     record.status !== GlobalStatus.GLOBAL_STATUS_ENABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (

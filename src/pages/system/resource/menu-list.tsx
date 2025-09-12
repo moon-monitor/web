@@ -1,6 +1,6 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { MenuItem } from '@/api/model-types'
+import type { MenuItem } from '@/api/request/types/model-types'
 import { type ListResourceRequest, batchUpdateResourceStatus } from '@/api/resource'
 import AuthButton from '@/components/authButton'
 import SearchBox from '@/components/data/search-box'

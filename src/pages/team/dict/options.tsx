@@ -1,6 +1,6 @@
-import { TeamDictItem } from '@/api2/common.types'
-import { ActionKey, DictType, GlobalStatus } from '@/api2/enum'
-import { DictTypeData, GlobalStatusData } from '@/api2/global'
+import { TeamDictItem } from '@/api/common.types'
+import { ActionKey, DictType, GlobalStatus } from '@/api/enum'
+import { DictTypeData, GlobalStatusData } from '@/api/global'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -69,21 +69,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem
   const tableOperationItems = (record: TeamDictItem): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (
@@ -153,7 +153,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem
       key: 'dictType',
       width: 160,
       render: (dictType: DictType) => {
-        return <>{DictTypeData[dictType]}</>
+        const data = DictTypeData[dictType]
+        return <Tag color={data?.color}>{data?.label}</Tag>
       }
     },
     {
@@ -163,7 +164,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamDictItem
       align: 'center',
       width: 160,
       render: (status: GlobalStatus) => {
-        return <Badge {...GlobalStatusData[status]} />
+        const data = GlobalStatusData[status]
+        return <Badge color={data?.color} text={data?.label} />
       }
     },
 

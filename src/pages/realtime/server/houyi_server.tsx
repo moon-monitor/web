@@ -1,5 +1,5 @@
-import type { ServerItem } from '@/api/model-types'
-import { getHouyiServer } from '@/api/realtime/moon-server'
+import { getServerList } from '@/api/request/server'
+import type { ServerItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Button, Card, Col, Empty, Row, Spin } from 'antd'
 import React, { useCallback, useEffect } from 'react'
@@ -7,7 +7,7 @@ import React, { useCallback, useEffect } from 'react'
 const HouyiServer: React.FC = () => {
   const [serverList, setServerList] = React.useState<ServerItem[]>([])
 
-  const { run: initHouyiServerList, loading: initHouyiServerListLoading } = useRequest(getHouyiServer, {
+  const { run: initHouyiServerList, loading: initHouyiServerListLoading } = useRequest(getServerList, {
     manual: true,
     onSuccess: (res) => {
       setServerList(res.list)

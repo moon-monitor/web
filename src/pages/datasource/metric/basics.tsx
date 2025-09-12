@@ -1,7 +1,7 @@
-import type { TeamMetricDatasourceItem } from '@/api2/common.types'
-import { GlobalStatus } from '@/api2/enum'
-import { DatasourceDriverMetricData, HTTPMethodData } from '@/api2/global'
-import { updateTeamMetricDatasourceStatus } from '@/api2/team/team-datasource'
+import type { TeamMetricDatasourceItem } from '@/api/common.types'
+import { DatasourceDriverMetric, GlobalStatus, HTTPMethod } from '@/api/enum'
+import { DatasourceDriverMetricData, HTTPMethodData } from '@/api/global'
+import { updateTeamMetricDatasourceStatus } from '@/api/request/teamdatasource'
 import { RedoOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Button, Descriptions, type DescriptionsProps, Space, Switch, Tag, Typography, theme as antdTheme } from 'antd'
@@ -55,7 +55,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
       label: '数据源类型',
       children: (
         <div className='flex flex-row items-center gap-2'>
-          <Tag color='blue'>{DatasourceDriverMetricData[datasource.driver]}</Tag>
+          <Tag color={DatasourceDriverMetricData[datasource.driver as DatasourceDriverMetric]?.color || 'blue'}>{DatasourceDriverMetricData[datasource.driver as DatasourceDriverMetric]?.label || 'Unknown'}</Tag>
         </div>
       )
     },
@@ -83,7 +83,7 @@ export const Basics: React.FC<BasicsProps> = (props) => {
     {
       label: '请求方式',
       children: (
-        <Tag color={HTTPMethodData[datasource.queryMethod].color}>{HTTPMethodData[datasource.queryMethod].text}</Tag>
+        <Tag color={HTTPMethodData[datasource.queryMethod as HTTPMethod]?.color}>{HTTPMethodData[datasource.queryMethod as HTTPMethod]?.text}</Tag>
       )
     },
     {

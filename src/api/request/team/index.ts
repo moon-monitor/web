@@ -1,4 +1,5 @@
 // team 模块API函数
+import { request } from '../index.ts'
 import {
   EmailConfigItem,
   EmptyReply,
@@ -30,7 +31,6 @@ import {
   UpdateMemberStatusRequest,
   UpdateTeamRoleStatusRequest
 } from '../types/index.ts'
-import { request } from '../index.ts'
 
 /**
  * DeleteTeamRole Team
@@ -71,8 +71,7 @@ export function getSMSConfig(params: EmptyRequest): Promise<SMSConfigItem> {
 /**
  * GetSMSConfigs Team
  * @param { GetSMSConfigsRequest } params
- * @returns {Promise<GetSMSConfigsReply>}
- */
+ * @returns {Promise<GetSMSConfigsReply>} */
 export function getSMSConfigs(params: GetSMSConfigsRequest): Promise<GetSMSConfigsReply> {
   return request.POST<GetSMSConfigsReply>('/api/team/sms/configs', params)
 }
@@ -219,6 +218,15 @@ export function updateMemberRoles(params: UpdateMemberRolesRequest): Promise<Emp
  */
 export function updateMemberStatus(params: UpdateMemberStatusRequest): Promise<EmptyReply> {
   return request.POST<EmptyReply>('/api/team/update/member/status', params)
+}
+
+/**
+ * UpdateTeam Team
+ * @param { SaveTeamRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeam(params: SaveTeamRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/update', params)
 }
 
 /**

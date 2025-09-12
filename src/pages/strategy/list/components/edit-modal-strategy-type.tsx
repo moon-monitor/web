@@ -1,4 +1,4 @@
-import { StrategyType } from '@/api2/enum'
+import { StrategyType } from '@/api/enum'
 import { Modal, type ModalProps, message, theme } from 'antd'
 import { Activity, FileText, Gauge, Globe, Network, Radio, ScrollText, Stethoscope, Zap } from 'lucide-react'
 import { useEffect, useState } from 'react'
@@ -64,10 +64,10 @@ const strategyGroups: StrategyTypeGroup[] = [
 
 export default function StrategyTypeModal(props: StrategyTypeModalProps) {
   const { onSubmit, open, ...restProps } = props
-  const [selectedType, setSelectedType] = useState<StrategyType>(StrategyType.STRATEGY_TYPE_UNKNOWN)
+  const [selectedType, setSelectedType] = useState<StrategyType>(StrategyType.StrategyTypeUnknown)
   const { token } = theme.useToken()
   const handleSubmit = () => {
-    if (selectedType === StrategyType.STRATEGY_TYPE_UNKNOWN) {
+    if (selectedType === StrategyType.StrategyTypeUnknown) {
       message.error('请选择策略类型')
       return
     }
@@ -76,7 +76,7 @@ export default function StrategyTypeModal(props: StrategyTypeModalProps) {
 
   useEffect(() => {
     if (open) {
-      setSelectedType(StrategyType.STRATEGY_TYPE_UNKNOWN)
+      setSelectedType(StrategyType.StrategyTypeUnknown)
     }
   }, [open])
 

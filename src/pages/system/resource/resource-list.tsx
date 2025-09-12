@@ -1,6 +1,6 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { ResourceItem } from '@/api/model-types'
+import type { ResourceItem } from '@/api/request/types/model-types'
 import { type ListResourceRequest, batchUpdateResourceStatus, listResource } from '@/api/resource'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'

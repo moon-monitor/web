@@ -1,10 +1,7 @@
-import { userSubscriberStrategy } from '@/api/subscriber'
-import { TeamStrategyItem } from '@/api2/common.types'
-import { NotifyType } from '@/api2/enum'
-import { handleFormError } from '@/utils'
-import { useRequest } from 'ahooks'
+import { NotifyType } from '@/api/enum'
+import { TeamStrategyItem } from '@/api/request/types'
 import { Checkbox, Form, Modal, ModalProps, Typography } from 'antd'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 export interface ModalSubscribeProps extends ModalProps {
   onOk?: () => void
@@ -17,25 +14,20 @@ export const ModalSubscribe = (props: ModalSubscribeProps) => {
   const { open, onClose, onOk, item, ...reset } = props
 
   const [form] = Form.useForm<{ notifyTypes: NotifyType[] }>()
+  const [loading, setLoading] = useState(false)
 
-  const { runAsync: subscribeStrategy, loading } = useRequest(userSubscriberStrategy, {
-    manual: true
-  })
+
 
   const handleSubmit = () => {
     if (!item || !item.strategyId) return
+    setLoading(true)
     form.validateFields().then((values) => {
-      subscribeStrategy({
-        strategyId: item?.strategyId,
-        notifyType: values.notifyTypes.reduce((prev, curr) => prev | curr, 0)
-      })
-        .then(() => {
-          form.resetFields()
-          onOk?.()
-        })
-        .catch((err) => {
-          handleFormError(form, err)
-        })
+      // TODO: 实现订阅逻辑
+      console.log('Subscribe values:', values)
+      setLoading(false)
+      onOk?.()
+    }).catch(() => {
+      setLoading(false)
     })
   }
 

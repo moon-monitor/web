@@ -1,12 +1,12 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { DashboardItem } from '@/api/model-types'
 import {
-  type ListDashboardRequest,
-  batchUpdateDashboardStatus,
-  deleteDashboard,
-  listDashboard
-} from '@/api/realtime/dashboard'
+  deleteTeamDashboard,
+  listTeamDashboard,
+  updateTeamDashboardStatus
+} from '@/api/request/teamdashboard'
+import { ListTeamDashboardRequest } from '@/api/request/types'
+import type { DashboardItem } from '@/api/request/types/model-types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -22,7 +22,7 @@ import { formList, getColumnList } from './options'
 const { confirm } = Modal
 const { useToken } = theme
 
-const defaultSearchParams: ListDashboardRequest = {
+const defaultSearchParams: ListTeamDashboardRequest = {
   pagination: {
     pageNum: 1,
     pageSize: 50
@@ -33,7 +33,7 @@ const Group: React.FC = () => {
   const navigate = useNavigate()
   const { token } = useToken()
   const [datasource, setDatasource] = useState<DashboardItem[]>([])
-  const [searchParams, setSearchParams] = useState<ListDashboardRequest>(defaultSearchParams)
+  const [searchParams, setSearchParams] = useState<ListTeamDashboardRequest>(defaultSearchParams)
   const [total, setTotal] = useState(0)
   const [openGroupEditModal, setOpenGroupEditModal] = useState(false)
   const [editGroupId, setEditGroupId] = useState<number>()
@@ -60,10 +60,10 @@ const Group: React.FC = () => {
     setDisabledEditGroupModal(true)
   }
 
-  const { run: fetchData, loading } = useRequest(listDashboard, {
+  const { run: fetchData, loading } = useRequest(listTeamDashboard, {
     manual: true,
     onSuccess: (data) => {
-      setDatasource(data.list || [])
+      setDatasource(data.items || [])
       setTotal(data.pagination?.total || 0)
     }
   })
@@ -76,7 +76,7 @@ const Group: React.FC = () => {
     fetchData(searchParams)
   }, [searchParams, fetchData])
 
-  const onSearch = (formData: ListDashboardRequest) => {
+  const onSearch = (formData: ListTeamDashboardRequest) => {
     setSearchParams({
       ...searchParams,
       ...formData,
@@ -106,8 +106,8 @@ const Group: React.FC = () => {
   const onHandleMenuOnClick = (item: DashboardItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
-        batchUpdateDashboardStatus({
-          ids: [item.id],
+        updateTeamDashboardStatus({
+          dashboardIds: [item.id],
           status: Status.StatusEnable
         }).then(() => {
           message.success('更改状态成功')
@@ -115,8 +115,8 @@ const Group: React.FC = () => {
         })
         break
       case ActionKey.DISABLE:
-        batchUpdateDashboardStatus({
-          ids: [item.id],
+        updateTeamDashboardStatus({
+          dashboardIds: [item.id],
           status: Status.StatusDisable
         }).then(() => {
           message.success('更改状态成功')
@@ -141,7 +141,7 @@ const Group: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteDashboard({ id: item.id }).then(() => {
+            deleteTeamDashboard({ id: item.id }).then(() => {
               message.success('删除成功')
               onRefresh()
             })

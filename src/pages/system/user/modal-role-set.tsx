@@ -1,7 +1,6 @@
-import { UserItem } from '@/api2/common.types'
-import { UserPosition } from '@/api2/enum'
-import { updateUserPosition } from '@/api2/system'
-import { UpdateUserPositionRequest } from '@/api2/system/types'
+import { UserPosition } from '@/api/enum'
+import { updateUserPosition } from '@/api/request/system'
+import { UpdateUserPositionRequest, UserItem } from '@/api/request/types'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
 import { Alert, Form, Modal, Select, type ModalProps } from 'antd'
@@ -11,7 +10,7 @@ interface ModalRoleSetProps extends ModalProps {
 }
 
 export const ModalRoleSet: React.FC<ModalRoleSetProps> = (props) => {
-  const { detail = { position: 'USER_POSITION_UNKNOWN', username: '', userId: 0 }, onOk, ...rest } = props
+  const { detail = { position: UserPosition.USER_POSITION_UNKNOWN, username: '', userId: 0 }, onOk, ...rest } = props
   const [form] = Form.useForm<UpdateUserPositionRequest>()
 
   const { runAsync: setUserRole, loading: setUserRoleLoading } = useRequest(updateUserPosition, {
@@ -33,8 +32,8 @@ export const ModalRoleSet: React.FC<ModalRoleSetProps> = (props) => {
   return (
     <Modal {...rest} onOk={onSubmit} confirmLoading={setUserRoleLoading}>
       <div className='flex flex-col gap-3'>
-        <Alert message={`${detail.username} 当前角色为 ${UserPosition[detail.position]}`} type='info' showIcon />
-        <Form form={form} layout='vertical' initialValues={{ role: detail.position }}>
+        <Alert message={`${detail.username} 当前角色为 ${UserPosition[detail.position || UserPosition.USER_POSITION_UNKNOWN]}`} type='info' showIcon />
+        <Form form={form} layout='vertical' initialValues={{ position: detail.position }}>
           <Form.Item label='角色' name='position' rules={[{ required: true, message: '请选择角色' }]}>
             <Select
               options={Object.entries(UserPosition)

@@ -1,5 +1,5 @@
 import { ErrorResponse } from '@/api/request'
-import { MenuTreeItem } from '@/api2/menu/types'
+import { MenuTreeItem } from '@/api/request/types'
 import { renderIcon } from '@/components/icon'
 import { FormInstance } from 'antd'
 import { ItemType } from 'antd/es/menu/interface'
@@ -27,7 +27,7 @@ export const transformRoutersTree = (menuTree: MenuTreeItem[]): RouteObject[] =>
     const routersItem: RouteObject = {
       path: routeJoin('/home', item.menuPath || '/403'),
       ...(!item.children?.length && {
-        Component: lazy(() => import(routeJoin('../pages', item.menuPath || '403')))
+        Component: lazy(() => import(/* @vite-ignore */ routeJoin('../pages', item.menuPath || '403')))
       }),
       loader: () => ({ title: item.name }),
       children: item.children?.length ? transformRoutersTree(item.children) : undefined

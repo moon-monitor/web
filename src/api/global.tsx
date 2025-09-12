@@ -1,26 +1,32 @@
 import { IconFont } from '@/components/icon'
 import { CSSProperties } from 'react'
-import { PaginationRequest } from './request/types'
 import {
+  AlarmSendType,
+  AlertStatus,
   ConditionMetric,
   DatasourceDriverMetric,
+  DatasourceType,
   DictType,
+  DomainType,
   Gender,
-  GlobalStatus,
   HookAPP,
   HTTPMethod,
-  MemberStatus,
   MenuCategory,
   MenuProcessType,
   MenuType,
+  MetricType,
+  ModuleType,
+  Role,
   SampleMode,
+  StorageType,
   StrategyType,
   TeamAuditAction,
   TeamAuditStatus,
   TeamStatus,
   UserPosition,
   UserStatus
-} from './request/types/enum'
+} from './enum'
+import { PaginationRequest } from './request/types'
 
 export const defaultPaginationReq: PaginationRequest = {
   page: 1,
@@ -30,6 +36,7 @@ export const defaultPaginationReq: PaginationRequest = {
 export type EnumData = {
   color?: CSSProperties['color']
   label: React.ReactNode | string
+  text?: string
   icon?: React.ReactNode
 }
 
@@ -99,37 +106,45 @@ export const GlobalStatusData: Record<GlobalStatus, EnumData> = {
 }
 
 export const StrategyTypeData: Record<StrategyType, EnumData> = {
-  [StrategyType.STRATEGY_TYPE_UNKNOWN]: {
+  [StrategyType.StrategyTypeUnknown]: {
     color: 'blue',
-    label: '未知'
+    label: '未知',
+    text: '未知'
   },
-  [StrategyType.STRATEGY_TYPE_METRIC]: {
+  [StrategyType.StrategyTypeMetric]: {
     color: 'green',
-    label: 'Metric'
+    label: 'Metric',
+    text: 'Metric'
   },
-  [StrategyType.STRATEGY_TYPE_EVENT]: {
+  [StrategyType.StrategyTypeEvent]: {
     color: 'blue',
-    label: '事件'
+    label: '事件',
+    text: '事件'
   },
-  [StrategyType.STRATEGY_TYPE_LOGS]: {
+  [StrategyType.StrategyTypeLog]: {
     color: 'orange',
-    label: '日志'
+    label: '日志',
+    text: '日志'
   },
-  [StrategyType.STRATEGY_TYPE_PORT]: {
+  [StrategyType.StrategyTypeDomainPort]: {
     color: 'red',
-    label: '端口'
+    label: '端口',
+    text: '端口'
   },
-  [StrategyType.STRATEGY_TYPE_HTTP]: {
+  [StrategyType.StrategyTypeHTTP]: {
     color: 'purple',
-    label: 'HTTP'
+    label: 'HTTP',
+    text: 'HTTP'
   },
-  [StrategyType.STRATEGY_TYPE_PING]: {
+  [StrategyType.StrategyTypePing]: {
     color: 'cyan',
-    label: 'Ping'
+    label: 'Ping',
+    text: 'Ping'
   },
-  [StrategyType.STRATEGY_TYPE_CERT]: {
+  [StrategyType.StrategyTypeDomainCertificate]: {
     color: 'magenta',
-    label: '证书'
+    label: '证书',
+    text: '证书'
   }
 }
 
@@ -176,21 +191,20 @@ export const UserPositionData: Record<UserPosition, EnumData> = {
 }
 
 export const GenderData: Record<Gender, EnumData> = {
-  [Gender.GENDER_UNSPECIFIED]: {
-    color: 'blue',
-    label: '未知'
+  [Gender.GenderAll]: {
+    color: 'default',
+    label: '全部',
+    text: '全部'
   },
-  [Gender.GENDER_MALE]: {
+  [Gender.GenderMale]: {
     color: 'blue',
-    label: '男'
+    label: '男',
+    text: '男'
   },
-  [Gender.GENDER_FEMALE]: {
-    color: 'blue',
-    label: '女'
-  },
-  [Gender.GENDER_OTHER]: {
-    color: 'gray',
-    label: '其他'
+  [Gender.GenderFemale]: {
+    color: 'pink',
+    label: '女',
+    text: '女'
   }
 }
 
@@ -222,37 +236,45 @@ export const TeamStatusData: Record<TeamStatus, EnumData> = {
 }
 
 export const HTTPMethodData: Record<HTTPMethod, EnumData> = {
-  [HTTPMethod.HTTP_METHOD_UNKNOWN]: {
+  [HTTPMethod.HTTPMethodUnknown]: {
     color: 'gray',
-    label: 'unknown'
+    label: 'unknown',
+    text: 'unknown'
   },
-  [HTTPMethod.HTTP_METHOD_GET]: {
+  [HTTPMethod.HTTPMethodGET]: {
     color: 'green',
-    label: 'GET'
+    label: 'GET',
+    text: 'GET'
   },
-  [HTTPMethod.HTTP_METHOD_POST]: {
+  [HTTPMethod.HTTPMethodPOST]: {
     color: 'orange',
-    label: 'POST'
+    label: 'POST',
+    text: 'POST'
   },
-  [HTTPMethod.HTTP_METHOD_PUT]: {
+  [HTTPMethod.HTTPMethodPUT]: {
     color: 'cyan',
-    label: 'PUT'
+    label: 'PUT',
+    text: 'PUT'
   },
-  [HTTPMethod.HTTP_METHOD_DELETE]: {
+  [HTTPMethod.HTTPMethodDELETE]: {
     color: 'red',
-    label: 'DELETE'
+    label: 'DELETE',
+    text: 'DELETE'
   },
-  [HTTPMethod.HTTP_METHOD_HEAD]: {
+  [HTTPMethod.HTTPMethodHEAD]: {
     color: 'purple',
-    label: 'PATCH'
+    label: 'HEAD',
+    text: 'HEAD'
   },
-  [HTTPMethod.HTTP_METHOD_OPTIONS]: {
-    color: 'gray',
-    label: 'OPTIONS'
+  [HTTPMethod.HTTPMethodOPTIONS]: {
+    color: 'blue',
+    label: 'OPTIONS',
+    text: 'OPTIONS'
   },
-  [HTTPMethod.HTTP_METHOD_PATCH]: {
-    color: 'gray',
-    label: 'PATCH'
+  [HTTPMethod.HTTPMethodPATCH]: {
+    color: 'magenta',
+    label: 'PATCH',
+    text: 'PATCH'
   }
 }
 
@@ -330,17 +352,30 @@ export const SampleModeData: Record<SampleMode, EnumData> = {
 }
 
 export const DictTypeData: Record<DictType, EnumData> = {
-  [DictType.DICT_TYPE_UNKNOWN]: {
+  [DictType.DictTypeUnknown]: {
     color: 'gray',
-    label: '全部'
+    label: '全部',
+    text: '全部'
   },
-  [DictType.DICT_TYPE_ALARM_LEVEL]: {
-    color: 'red',
-    label: '告警级别'
+  [DictType.DictTypeStrategyCategory]: {
+    color: 'blue',
+    label: '策略类目',
+    text: '策略类目'
   },
-  [DictType.DICT_TYPE_ALARM_PAGE]: {
+  [DictType.DictTypeStrategyGroupCategory]: {
+    color: 'green',
+    label: '策略组类目',
+    text: '策略组类目'
+  },
+  [DictType.DictTypeAlarmLevel]: {
     color: 'red',
-    label: '告警页面'
+    label: '告警级别',
+    text: '告警级别'
+  },
+  [DictType.DictTypeAlarmPage]: {
+    color: 'orange',
+    label: '告警页面',
+    text: '告警页面'
   }
 }
 
@@ -443,6 +478,122 @@ export const TeamAuditActionData: Record<TeamAuditAction, EnumData> = {
   }
 }
 
+// 状态数据
+export const StatusData: Record<GlobalStatus, EnumData> = {
+  [GlobalStatus.GLOBAL_STATUS_UNKNOWN]: {
+    color: 'blue',
+    label: '未知',
+    text: '未知'
+  },
+  [GlobalStatus.GLOBAL_STATUS_ENABLE]: {
+    color: 'green',
+    label: '启用',
+    text: '启用'
+  },
+  [GlobalStatus.GLOBAL_STATUS_DISABLE]: {
+    color: 'red',
+    label: '禁用',
+    text: '禁用'
+  }
+}
+
+// 角色数据
+export const RoleData: Record<Role, EnumData> = {
+  [Role.RoleAll]: {
+    color: 'gray',
+    label: '全部'
+  },
+  [Role.RoleSupperAdmin]: {
+    color: 'red',
+    label: '超级管理员'
+  },
+  [Role.RoleAdmin]: {
+    color: 'blue',
+    label: '管理员'
+  },
+  [Role.RoleUser]: {
+    color: 'green',
+    label: '普通用户'
+  }
+}
+
+// 领域类型数据
+export const DomainTypeData: Record<DomainType, EnumData> = {
+  [DomainType.DomainTypeUnknown]: {
+    color: 'gray',
+    label: '未知'
+  },
+  [DomainType.DomainTypeSystem]: {
+    color: 'blue',
+    label: '系统'
+  },
+  [DomainType.DomainTypeMonitor]: {
+    color: 'green',
+    label: '监控'
+  }
+}
+
+// 模块类型数据
+export const ModuleTypeData: Record<ModuleType, EnumData> = {
+  [ModuleType.ModelTypeUnknown]: {
+    color: 'gray',
+    label: '未知'
+  },
+  [ModuleType.ModelTypeApi]: {
+    color: 'blue',
+    label: '接口'
+  },
+  [ModuleType.ModelTypeMenu]: {
+    color: 'green',
+    label: '菜单'
+  },
+  [ModuleType.ModelTypeRole]: {
+    color: 'orange',
+    label: '角色'
+  },
+  [ModuleType.ModelTypeUser]: {
+    color: 'purple',
+    label: '用户'
+  },
+  [ModuleType.ModelTypeDict]: {
+    color: 'cyan',
+    label: '字典'
+  },
+  [ModuleType.ModelTypeConfig]: {
+    color: 'magenta',
+    label: '配置'
+  },
+  [ModuleType.ModelTypeLog]: {
+    color: 'red',
+    label: '日志'
+  },
+  [ModuleType.ModelTypeJob]: {
+    color: 'yellow',
+    label: '任务'
+  }
+}
+
+// 日志模块类型数据
+export const LogModuleTypeData: Record<ModuleType, EnumData> = ModuleTypeData
+
+// 全局状态枚举
+export enum GlobalStatus {
+  GLOBAL_STATUS_UNKNOWN = 0,
+  GLOBAL_STATUS_ENABLE = 1,
+  GLOBAL_STATUS_DISABLE = 2
+}
+
+// 成员状态枚举
+export enum MemberStatus {
+  MEMBER_STATUS_UNKNOWN = 0,
+  MEMBER_STATUS_NORMAL = 1,
+  MEMBER_STATUS_FORBIDDEN = 2,
+  MEMBER_STATUS_DELETED = 3,
+  MEMBER_STATUS_PENDING_CONFIRM = 4,
+  MEMBER_STATUS_DEPARTED = 5
+}
+
+// 操作键枚举
 export enum ActionKey {
   /** 新增 */
   ADD = '__add__',
@@ -495,3 +646,122 @@ export enum ActionKey {
   /** 关联数据 */
   ASSOCIATED_DATA = '__associated_data__'
 }
+
+export type TagItemType = {
+  text: string
+  color: string
+}
+
+export const MetricTypeData: Record<MetricType, TagItemType> = {
+  [MetricType.MetricTypeUnknown]: {
+    text: '全部',
+    color: ''
+  },
+  [MetricType.MetricTypeCounter]: {
+    text: 'Counter',
+    color: 'green'
+  },
+  [MetricType.MetricTypeGauge]: {
+    text: 'Gauge',
+    color: 'blue'
+  },
+  [MetricType.MetricTypeHistogram]: {
+    text: 'Histogram',
+    color: 'purple'
+  },
+  [MetricType.MetricTypeSummary]: {
+    text: 'Summary',
+    color: 'orange'
+  }
+}
+
+
+
+export const DataSourceTypeData: Record<DatasourceType, string> = {
+  [DatasourceType.DatasourceTypeUnknown]: '全部',
+  [DatasourceType.DatasourceTypeMetric]: 'Metric',
+  [DatasourceType.DatasourceTypeLog]: 'Log',
+  [DatasourceType.DatasourceTypeTrace]: 'Trace',
+  [DatasourceType.DatasourceTypeEvent]: 'Event'
+}
+
+
+
+export const StorageTypeData: Record<StorageType, string> = {
+  [StorageType.StorageTypeUnknown]: '全部',
+  [StorageType.StorageTypePrometheus]: 'Prometheus',
+  [StorageType.StorageTypeVictoriaMetrics]: 'VictoriaMetrics',
+  [StorageType.StorageTypeKafka]: 'Kafka',
+  [StorageType.StorageTypeRocketmq]: 'Rocketmq',
+  [StorageType.StorageTypeRabbitmq]: 'Rabbitmq',
+  [StorageType.StorageTypeMQTT]: 'MQTT',
+  [StorageType.StorageTypeElasticsearch]: 'Elasticsearch',
+  [StorageType.StorageTypeLoki]: 'Loki',
+  [StorageType.StorageAliYunSLS]: 'AliYunSLS'
+}
+
+export const AlarmSendTypeData: Record<AlarmSendType, EnumData> = {
+  [AlarmSendType.StrategyTypeUnknown]: {
+    color: 'default',
+    label: '未知',
+    text: '未知',
+    icon: <IconFont type='icon-unknown' />
+  },
+  [AlarmSendType.AlarmSendTypeEmail]: {
+    color: 'blue',
+    label: '邮件',
+    text: '邮件',
+    icon: <IconFont type='icon-email' />
+  },
+  [AlarmSendType.AlarmSendTypeSMS]: {
+    color: 'green',
+    label: '短信',
+    text: '短信',
+    icon: <IconFont type='icon-sms' />
+  },
+  [AlarmSendType.AlarmSendTypeDingTalk]: {
+    color: 'orange',
+    label: '钉钉',
+    text: '钉钉',
+    icon: <IconFont type='icon-dingtalk' />
+  },
+  [AlarmSendType.AlarmSendTypeFeiShu]: {
+    color: 'purple',
+    label: '飞书',
+    text: '飞书',
+    icon: <IconFont type='icon-feishu' />
+  },
+  [AlarmSendType.AlarmSendTypeWeChat]: {
+    color: 'cyan',
+    label: '企业微信',
+    text: '企业微信',
+    icon: <IconFont type='icon-wechat' />
+  },
+  [AlarmSendType.AlarmSendTypeCustom]: {
+    color: 'magenta',
+    label: '自定义',
+    text: '自定义',
+    icon: <IconFont type='icon-custom' />
+  }
+}
+
+// 告警状态数据
+export const AlertStatusData: Record<AlertStatus, EnumData> = {
+  [AlertStatus.ALERT_STATUS_UNKNOWN]: {
+    color: 'gray',
+    label: '未知'
+  },
+  [AlertStatus.ALERT_STATUS_FIRING]: {
+    color: 'red',
+    label: '告警中'
+  },
+  [AlertStatus.ALERT_STATUS_RESOLVED]: {
+    color: 'green',
+    label: '已恢复'
+  },
+  [AlertStatus.ALERT_STATUS_Silenced]: {
+    color: 'orange',
+    label: '已静音'
+  }
+}
+

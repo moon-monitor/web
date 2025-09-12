@@ -1,6 +1,6 @@
 import { NotifyType, StrategyType } from '@/api/enum'
 import { ActionKey, StatusData, StrategyTypeDataTag } from '@/api/global'
-import { StrategySubscribeItem } from '@/api/model-types'
+import { StrategySubscribeItem } from '@/api/request/types/model-types'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
 import { Badge, Button, Space, Tooltip } from 'antd'

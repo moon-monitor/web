@@ -1,6 +1,6 @@
-import { UserItem } from '@/api2/common.types'
-import { ActionKey, UserPosition, UserStatus } from '@/api2/enum'
-import { UserPositionData, UserStatusData } from '@/api2/global'
+import { ActionKey, UserPosition, UserStatus } from '@/api/enum'
+import { UserPositionData, UserStatusData } from '@/api/global'
+import { UserItem } from '@/api/request/types'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
@@ -70,21 +70,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
   const tableOperationItems = (record: UserItem): MoreMenuProps['items'] => [
     record.status === UserStatus.USER_STATUS_FORBIDDEN
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.UPDATE_ROLE,
       label: (
@@ -136,7 +136,16 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
       key: 'position',
       width: 120,
       render: (position: UserPosition) => {
-        const { color, label } = UserPositionData[position]
+        // Handle case where position might be undefined or not a valid enum value
+        if (position === undefined || position === null) {
+          return <Tag color="default">未知</Tag>
+        }
+        const data = UserPositionData[position]
+        if (!data) {
+          console.warn('Unknown position value:', position)
+          return <Tag color="default">未知</Tag>
+        }
+        const { color, label } = data
         return <Tag color={color}>{label}</Tag>
       }
     },
@@ -163,7 +172,16 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<UserItem> =>
       align: 'center',
       width: 120,
       render: (status: UserStatus) => {
-        const { color, label } = UserStatusData[status]
+        // Handle case where status might be undefined or not a valid enum value
+        if (status === undefined || status === null) {
+          return <Badge color="default" text="未知" />
+        }
+        const data = UserStatusData[status]
+        if (!data) {
+          console.warn('Unknown status value:', status)
+          return <Badge color="default" text="未知" />
+        }
+        const { color, label } = data
         return <Badge color={color} text={label} />
       }
     },

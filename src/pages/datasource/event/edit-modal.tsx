@@ -1,7 +1,7 @@
-import { createDatasource, getDatasource, updateDatasource } from '@/api/datasource'
 import { DatasourceType, StorageType } from '@/api/enum'
 import { DataSourceTypeData, StatusData, StorageTypeData } from '@/api/global'
-import type { DatasourceItem } from '@/api/model-types'
+import { getTeamMetricDatasource } from '@/api/request/teamdatasource'
+import type { DatasourceItem } from '@/api/request/types/model-types'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { GlobalContext } from '@/utils/context'
 import { useRequest } from 'ahooks'
@@ -68,7 +68,7 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
   const [datasourceType, setDatasourceType] = useState<StorageType>(StorageType.StorageTypeUnknown)
   const [datasourceDetail, setDatasourceDetail] = useState<DatasourceItem>()
 
-  const { run: fetchDatasourceDetail, loading } = useRequest(getDatasource, {
+  const { run: fetchDatasourceDetail, loading } = useRequest(getTeamMetricDatasource, {
     manual: true,
     onSuccess: (res) => {
       setDatasourceDetail(res.detail)

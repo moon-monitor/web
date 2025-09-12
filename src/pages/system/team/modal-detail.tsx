@@ -1,6 +1,6 @@
-import { TeamItem } from '@/api2/common.types'
-import { TeamStatus } from '@/api2/enum'
-import { getTeam } from '@/api2/system'
+import { TeamItem } from '@/api/common.types'
+import { TeamStatus } from '@/api/enum'
+import { getTeam } from '@/api/request/system'
 
 import { useRequest } from 'ahooks'
 import { Avatar, Descriptions, type DescriptionsProps, Modal, type ModalProps, Tag } from 'antd'

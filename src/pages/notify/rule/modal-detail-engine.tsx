@@ -1,10 +1,8 @@
-// import { StatusData } from '@/api/global'
-// import { TimeEngineItem } from '@/api/model-types'
-// import { getTimeEngine } from '@/api/notify/time-engine'
-import { GlobalStatus } from '@/api2/enum'
-import { GlobalStatusData } from '@/api2/global'
-import { getTimeEngine } from '@/api2/timeEngine'
-import { TimeEngineItem } from '@/api2/timeEngine/types'
+
+// import { GlobalStatus } from '@/api/enum'
+import { GlobalStatusData } from '@/api/global'
+import { getTimeEngine } from '@/api/request/timeengine'
+import { TimeEngineItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Badge, Descriptions, DescriptionsProps, Modal, Space, Tag } from 'antd'
 import { useEffect, useState } from 'react'
@@ -35,11 +33,10 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
     },
     {
       label: '状态',
-      children: detail ? (
-        <Badge color={GlobalStatusData[detail?.status].color} text={GlobalStatus[detail?.status]} />
-      ) : (
-        '-'
-      ),
+      children: detail ? (() => {
+        const data = GlobalStatusData[detail?.status]
+        return <Badge color={data?.color} text={data?.label} />
+      })() : '-',
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },
     {

@@ -1,6 +1,6 @@
 import { AlarmSendType, Status } from '@/api/enum'
 import { ActionKey, AlarmSendTypeData, StatusData } from '@/api/global'
-import type { SendTemplateItem } from '@/api/model-types'
+import type { SendTemplateItem } from '@/api/request/types/model-types'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { type MoreMenuProps } from '@/components/moreMenu'
@@ -75,21 +75,21 @@ export const getColumnList = (props: NotifyTemplateColumnProps): ColumnsType<Sen
   const tableOperationItems = (record: SendTemplateItem): MoreMenuProps['items'] => [
     record.status === Status.StatusDisable
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (
@@ -138,7 +138,7 @@ export const getColumnList = (props: NotifyTemplateColumnProps): ColumnsType<Sen
       key: 'sendType',
       width: 160,
       render: (sendType: AlarmSendType) => {
-        const { label, icon } = AlarmSendTypeData[sendType]
+        const { label, icon } = AlarmSendTypeData[sendType] || {}
         return (
           <Space direction='horizontal'>
             <Avatar size='small' shape='square' icon={icon} />
@@ -154,7 +154,7 @@ export const getColumnList = (props: NotifyTemplateColumnProps): ColumnsType<Sen
       align: 'center',
       width: 100,
       render: (status: Status) => {
-        const { text, color } = StatusData[status]
+        const { text, color } = StatusData[status] || {}
         return <Badge color={color} text={text} />
       }
     },

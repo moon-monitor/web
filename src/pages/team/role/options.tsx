@@ -1,6 +1,6 @@
-import { TeamRoleItem } from '@/api2/common.types'
-import { ActionKey, GlobalStatus } from '@/api2/enum'
-import { GlobalStatusData } from '@/api2/global'
+import { TeamRoleItem } from '@/api/common.types'
+import { ActionKey, GlobalStatus } from '@/api/enum'
+import { GlobalStatusData } from '@/api/global'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -50,21 +50,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<TeamRoleItem
   const tableOperationItems = (record: TeamRoleItem): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.OPERATION_LOG,
       label: (

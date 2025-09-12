@@ -1,20 +1,18 @@
 import { baseURL, getToken } from '@/api/request'
-import { getInvite } from '@/api/user/invite'
+import { getInvite } from '@/api/request/invite'
 import {
-  type MessageCategory,
-  type NoticeUserMessageItem,
   cancelMessage,
   confirmMessage,
-  deleteMessage,
-  getBizName,
-  listMessage
-} from '@/api/user/message'
+  deleteMessages,
+  listMessage,
+} from '@/api/request/message'
+import { NoticeUserMessage } from '@/api/request/types'
 import { GlobalContext } from '@/utils/context'
 import { BellOutlined, CheckOutlined, XOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Badge, Button, Divider, Modal, Popover, Space, Tag, theme as antTheme } from 'antd'
 import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn' // 导入中文语言包
+import 'dayjs/locale/zh-cn'; // 导入中文语言包
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type React from 'react'
 import { useCallback, useContext, useEffect, useState } from 'react'
@@ -26,6 +24,9 @@ dayjs.extend(relativeTime)
 const { confirm, info } = Modal
 
 const { useToken } = antTheme
+
+export type MessageCategory = 'info' | 'success' | 'warning' | 'error'
+export type MessageBiz = 'invitation' | 'invitation_rejected' | 'invitation_accepted' | 'notice'
 export const HeaderMessage: React.FC = () => {
   const { token } = useToken()
   const { setRefreshMyTeamList } = useContext(GlobalContext)
@@ -109,12 +110,41 @@ export const HeaderMessage: React.FC = () => {
         return 'default'
     }
   }
+  function getBizName(biz: MessageBiz): { label: string; color: string } {
+    switch (biz) {
+      case 'invitation':
+        return {
+          label: '邀请',
+          color: '#409EFF'
+        }
+      case 'invitation_accepted':
+        return {
+          label: '邀请已接受',
+          color: '#67C23A'
+        }
+      case 'invitation_rejected':
+        return {
+          label: '邀请被拒绝',
+          color: '#F56C6C'
+        }
+      case 'notice':
+        return {
+          label: '通知',
+          color: '#409EFF'
+        }
+      default:
+        return {
+          label: '未知',
+          color: '#909399'
+        }
+    }
+  }
 
-  const showInvitePromiseConfirm = async (messageItem: NoticeUserMessageItem) => {
+  const showInvitePromiseConfirm = async (messageItem: NoticeUserMessage) => {
     const { detail } = await getInvite({ id: messageItem.bizID })
     confirm({
       title: '团队邀请',
-      icon: getMessageIcon(messageItem.category),
+      icon: getMessageIcon(messageItem.category as MessageCategory),
       content: (
         <div className='flex flex-col gap-2'>
           <div className='text-lg'>{messageItem.content}</div>
@@ -137,15 +167,15 @@ export const HeaderMessage: React.FC = () => {
       cancelText: '拒绝',
       okText: '接受',
       async onOk() {
-        return confirmMessage(messageItem.id).finally(handleOnOk)
+        return confirmMessage({ id: messageItem.id }).finally(handleOnOk)
       },
       async onCancel() {
-        return cancelMessage(messageItem.id).finally(getMessage)
+        return cancelMessage({ id: messageItem.id }).finally(getMessage)
       }
     })
   }
 
-  const showMessageRead = async (messageItem: NoticeUserMessageItem) => {
+  const showMessageRead = async (messageItem: NoticeUserMessage) => {
     const { color, label } = getBizName(messageItem.biz)
     info({
       title: <Tag color={color}>{label}</Tag>,
@@ -156,12 +186,12 @@ export const HeaderMessage: React.FC = () => {
         </div>
       ),
       async onOk() {
-        return deleteMessage({ ids: [messageItem.id] }).finally(getMessage)
+        return deleteMessages({ ids: [messageItem.id] }).finally(getMessage)
       }
     })
   }
 
-  const handleMessage = (messageItem: NoticeUserMessageItem) => {
+  const handleMessage = (messageItem: NoticeUserMessage) => {
     switch (messageItem.biz) {
       case 'invitation':
         showInvitePromiseConfirm(messageItem)

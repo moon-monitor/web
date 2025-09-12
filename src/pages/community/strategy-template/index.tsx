@@ -7,34 +7,20 @@ import React, { useEffect, useState } from 'react'
 import { searchItems } from './options'
 
 import { Status } from '@/api/enum'
-import { StrategyTemplateItem, UserItem } from '@/api/model-types'
-import {
-  createTemplateStrategy,
-  CreateTemplateStrategyRequest,
-  listTemplateStrategy,
-  ListTemplateStrategyRequest,
-  updateTemplateStrategy
-} from '@/api/strategy/template'
+import { StrategyTemplateItem, UserItem } from '@/api/request/types/model-types'
 import './index.scss'
 import { TemplateEditModal, TemplateEditModalData } from './template-edit-modal'
 
-export interface StrategyTemplateProps {}
+export interface StrategyTemplateProps { }
 
 const { useToken } = theme
 
-const defaultSearchParams: ListTemplateStrategyRequest = {
-  pagination: {
-    pageNum: 1,
-    pageSize: 10
-  }
-}
 
 let searchTimeout: NodeJS.Timeout | null = null
 const StrategyTemplate: React.FC<StrategyTemplateProps> = () => {
   const [form] = Form.useForm()
   const { token } = useToken()
   const [datasource, setDatasource] = useState<StrategyTemplateItem[]>([])
-  const [searchParams, setSearchParams] = useState<ListTemplateStrategyRequest>(defaultSearchParams)
   const [loading, setLoading] = useState(false)
   const [refresh, setRefresh] = useState(false)
   const [total, setTotal] = useState(0)
@@ -56,20 +42,6 @@ const StrategyTemplate: React.FC<StrategyTemplateProps> = () => {
     setRefresh(!refresh)
   }
 
-  function fetchData() {
-    if (searchTimeout) {
-      clearTimeout(searchTimeout)
-    }
-    searchTimeout = setTimeout(() => {
-      setLoading(true)
-      listTemplateStrategy(searchParams)
-        .then(({ list, pagination }) => {
-          setDatasource(list || [])
-          setTotal(pagination?.total || 0)
-        })
-        .finally(() => setLoading(false))
-    }, 500)
-  }
 
   const columns: ColumnsType<StrategyTemplateItem> = [
     {

@@ -1,8 +1,8 @@
 import { Status } from '@/api/enum'
 import { defaultPaginationReq } from '@/api/global'
-import { TimeEngineItem } from '@/api/model-types'
-import { createTimeEngine, CreateTimeEngineRequest, getTimeEngine, updateTimeEngine } from '@/api/notify/time-engine'
 import { ErrorResponse } from '@/api/request'
+import { getTimeEngine, saveTimeEngine, SaveTimeEngineRequest } from '@/api/request/timeengine'
+import { TimeEngineItem } from '@/api/request/types/model-types'
 import { useTimeEngineRuleList } from '@/hooks/select'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
@@ -12,14 +12,14 @@ import { useEffect, useState } from 'react'
 export interface EditModalProps {
   open?: boolean
   engineId?: number
-  onOk?: (engine: CreateTimeEngineRequest) => void
+  onOk?: (engine: SaveTimeEngineRequest) => void
   onCancel?: () => void
 }
 
 export function EngineEditModal(props: EditModalProps) {
   const { open, engineId: Id, onOk, onCancel } = props
 
-  const [form] = Form.useForm<CreateTimeEngineRequest>()
+  const [form] = Form.useForm<SaveTimeEngineRequest>()
 
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<TimeEngineItem>()
@@ -36,7 +36,7 @@ export function EngineEditModal(props: EditModalProps) {
     form.validateFields().then((values) => {
       setLoading(true)
       if (Id) {
-        updateTimeEngine({ id: Id, data: values })
+        saveTimeEngine({ ...values, id: Id })
           .then(() => {
             init()
             onOk?.(values)
@@ -48,7 +48,7 @@ export function EngineEditModal(props: EditModalProps) {
             setLoading(false)
           })
       } else {
-        createTimeEngine({ ...values, status: Status.StatusEnable })
+        saveTimeEngine({ ...values, status: Status.StatusEnable })
           .then(() => {
             init()
             onOk?.(values)

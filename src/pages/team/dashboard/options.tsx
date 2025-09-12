@@ -1,6 +1,6 @@
 import { Status } from '@/api/enum'
 import { ActionKey, StatusData } from '@/api/global'
-import type { ChartItem, DashboardItem } from '@/api/model-types'
+import type { ChartItem, DashboardItem } from '@/api/request/types/model-types'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -48,21 +48,21 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<DashboardIte
   const tableOperationItems = (record: DashboardItem): MoreMenuProps['items'] => [
     record.status === Status.StatusDisable
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.EDIT,
       label: (

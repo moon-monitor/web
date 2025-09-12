@@ -87,7 +87,7 @@ const LogModal: React.FC<LogModalProps> = ({ open, onCancel }) => {
           {logData.map((item, index) => (
             <Timeline.Item key={index}>
               <div className='flex items-center gap-3'>
-                <span className='text-base font-bold '>{LogActionTypeData[item.action]}</span>
+                <span className='text-base font-bold '>{LogActionTypeData[item.action]?.label}</span>
                 <span>{item.operateTime} </span>
                 <Button variant='filled' color='primary' size='small'>
                   {item.operator.name}

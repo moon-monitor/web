@@ -79,6 +79,19 @@ export const isLogin = () => {
   return !!getToken()
 }
 
+export const isValidLoginToken = () => {
+  const token = getToken()
+  if (!token) return false
+
+  // 检查当前是否在 OAuth2 注册页面
+  const isOAuthRegisterPage = window.location.hash.includes('/oauth/register/email')
+  if (isOAuthRegisterPage) {
+    return false // 在注册页面时，token 是临时的
+  }
+
+  return true
+}
+
 export type NullObject = Record<string, never>
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

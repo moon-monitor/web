@@ -1,7 +1,7 @@
 import { TimeEngineRuleType } from '@/api/enum'
-import { StatusData, TimeEngineRuleTypeData } from '@/api/global'
-import { TimeEngineRuleItem } from '@/api/model-types'
-import { getTimeEngineRule } from '@/api/notify/rule'
+import { StatusData } from '@/api/global'
+import { getTimeEngineRule } from '@/api/request/timeengine'
+import { TimeEngineRuleItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
@@ -84,7 +84,7 @@ export function RuleDetailModal(props: RuleDetailModalProps) {
             shape='square'
             icon={TimeEngineRuleTypeData[detail?.category || TimeEngineRuleType.TimeEngineRuleTypeUnknown]?.icon}
           />
-          {TimeEngineRuleTypeData[detail?.category || TimeEngineRuleType.TimeEngineRuleTypeUnknown].label}
+          {TimeEngineRuleTypeData[detail?.category || TimeEngineRuleType.TimeEngineRuleTypeUnknown]?.label}
         </Space>
       ),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
@@ -92,7 +92,7 @@ export function RuleDetailModal(props: RuleDetailModalProps) {
     {
       label: '状态',
       children: detail ? (
-        <Badge color={StatusData[detail?.status].color} text={StatusData[detail?.status].text} />
+        <Badge color={StatusData[detail?.status]?.color} text={StatusData[detail?.status]?.text} />
       ) : (
         '-'
       ),

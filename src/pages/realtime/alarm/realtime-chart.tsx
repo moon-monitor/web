@@ -1,5 +1,8 @@
-import type { RealtimeAlarmItem } from '@/api/model-types'
-import { getAlarm } from '@/api/realtime/alarm'
+// import { getAlarm } from '@/api/realtime/alarm' // TODO: 实现 realtime API
+
+// 占位符函数，待实现
+const getAlarm = async (params: any) => { throw new Error('getAlarm API not implemented yet') }
+import type { RealtimeAlarmItem } from '@/api/request/types/model-types'
 import { MetricsChart } from '@/components/chart/metrics-charts'
 import { metricQueryRange } from '@/components/chart/query-range'
 import type { MetricsResponse } from '@/types/metrics'

@@ -1,5 +1,5 @@
-import { TeamItem, UserItem } from '@/api2/common.types'
-import { MenuTreeItem } from '@/api2/menu/types'
+import { TeamItem, UserItem } from '@/api/common.types'
+import { MenuTreeItem } from '@/api/request/types'
 import type { Router } from '@remix-run/router'
 import { theme } from 'antd'
 import type { SpaceSize } from 'antd/es/space'

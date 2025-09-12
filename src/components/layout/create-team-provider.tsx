@@ -1,6 +1,6 @@
 import type { ErrorResponse } from '@/api/request'
-import { createTeam } from '@/api2/user'
-import { CreateTeamRequest } from '@/api2/user/types'
+import { createTeam } from '@/api/request/user'
+import { CreateTeamRequest } from '@/api/request/user/types'
 import { handleFormError } from '@/utils'
 import { Form, Input, Modal, message } from 'antd'
 import { createContext, useState } from 'react'

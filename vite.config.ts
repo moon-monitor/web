@@ -16,7 +16,7 @@ export default defineConfig({
         math: 'always'
       },
       scss: {
-        additionalData: '@import"./src/assets/styles/variables.scss"; @import "./src/assets/styles/mixin.scss";'
+        additionalData: '@use "./src/assets/styles/variables.scss" as *; @use "./src/assets/styles/mixin.scss" as *;'
       }
     }
   }

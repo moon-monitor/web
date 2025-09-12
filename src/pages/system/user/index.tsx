@@ -1,7 +1,6 @@
-import { UserItem } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
-import { getUserList, resetUserPassword, updateUserStatus } from '@/api2/system'
-import { GetUserListRequest } from '@/api2/system/types'
+import { ActionKey, UserStatus } from '@/api/enum'
+import { getUserList, resetUserPassword, updateUserStatus } from '@/api/request/system'
+import { GetUserListRequest, UserItem } from '@/api/request/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -101,7 +100,7 @@ const User: React.FC = () => {
       ...formData,
       pagination: {
         page: 1,
-        pageSize: searchParams.pagination.pageSize
+        pageSize: searchParams.pagination?.pageSize || 50
       }
     })
   }
@@ -112,7 +111,8 @@ const User: React.FC = () => {
       ...searchParams,
       pagination: {
         page,
-        pageSize
+        pageSize,
+        ...(searchParams.pagination || {})
       }
     })
   }
@@ -126,14 +126,14 @@ const User: React.FC = () => {
     switch (key) {
       case ActionKey.ENABLE:
         onUpdateUserStatus({
-          userIds: [item.userId],
-          status: 'USER_STATUS_NORMAL'
+          userIds: [item.userId || 0],
+          status: UserStatus.USER_STATUS_NORMAL
         })
         break
       case ActionKey.DISABLE:
         onUpdateUserStatus({
-          userIds: [item.userId],
-          status: 'USER_STATUS_FORBIDDEN'
+          userIds: [item.userId || 0],
+          status: UserStatus.USER_STATUS_FORBIDDEN
         })
         break
       case ActionKey.OPERATION_LOG:
@@ -142,18 +142,18 @@ const User: React.FC = () => {
         onOpenSetRoleModal(item)
         break
       case ActionKey.DETAIL:
-        onOpenDetail(item.userId)
+        onOpenDetail(item.userId || 0)
         break
       case ActionKey.RESET_PASSWORD:
-        onResetUserPassword({ userId: item.userId })
+        onResetUserPassword({ userId: item.userId || 0 })
         break
     }
   }
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.page,
-    pageSize: searchParams.pagination.pageSize
+    current: searchParams.pagination?.page || 1,
+    pageSize: searchParams.pagination?.pageSize || 50
   })
 
   return (
@@ -197,8 +197,8 @@ const User: React.FC = () => {
             loading={initUserListLoading}
             columns={columns}
             handleTurnPage={handleTurnPage}
-            pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.page}
+            pageSize={searchParams.pagination?.pageSize || 50}
+            pageNum={searchParams.pagination?.page || 1}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

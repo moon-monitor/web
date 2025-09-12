@@ -1,4 +1,4 @@
-import { GenderData } from '@/api2/global'
+import { GenderData } from '@/api/global'
 import type { DataFromItem } from '@/components/data/form'
 
 export const baseInfoOptions: (DataFromItem | DataFromItem[])[] = [

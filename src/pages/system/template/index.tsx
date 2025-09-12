@@ -1,23 +1,46 @@
 import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import type { SendTemplateItem } from '@/api/model-types'
-import {
-  type GetTemplateListRequest,
-  deleteTemplate,
-  getTemplateList,
-  updateTemplateStatus
-} from '@/api/notify/template'
+import type { SendTemplateItem } from '@/api/request/types/model-types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'
 import { useRequest } from 'ahooks'
-import { Button, Space, theme } from 'antd'
+import { Button, message, Space, theme } from 'antd'
 import type React from 'react'
 import { useContext, useEffect, useRef, useState } from 'react'
-import { SendTemplateDetailModal } from './modal-detail'
-import { EditSendTemplateModal } from './modal-edit'
+// import { SendTemplateDetailModal } from './modal-detail'
+// import { EditSendTemplateModal } from './modal-edit'
 import { formList, getColumnList } from './options'
+// 占位符类型和函数，待实现
+type GetTemplateListRequest = {
+  pagination: {
+    pageNum: number
+    pageSize: number
+  }
+}
+
+const deleteTemplate = async (id: number) => {
+  console.warn('deleteTemplate API not implemented yet')
+  return Promise.resolve()
+}
+
+const getTemplateList = async (params: GetTemplateListRequest) => {
+  console.warn('getTemplateList API not implemented yet')
+  return Promise.resolve({
+    list: [],
+    pagination: {
+      total: 0,
+      pageNum: params.pagination.pageNum,
+      pageSize: params.pagination.pageSize
+    }
+  })
+}
+
+const updateTemplateStatus = async (params: { ids: number[], status: Status }) => {
+  console.warn('updateTemplateStatus API not implemented yet')
+  return Promise.resolve()
+}
 
 const { useToken } = theme
 
@@ -42,8 +65,9 @@ const Template: React.FC = () => {
   const AutoTableHeight = useContainerHeightTop(ADivRef, datasource, isFullscreen)
 
   const onOpenDetailModal = (item: SendTemplateItem) => {
-    setSendTemplateDetail(item)
-    setOpenDetailModal(true)
+    message.info('详情功能暂未实现')
+    // setSendTemplateDetail(item)
+    // setOpenDetailModal(true)
   }
 
   const onCloseDetailModal = () => {
@@ -76,8 +100,9 @@ const Template: React.FC = () => {
   }
 
   const handleEditModal = (detail?: SendTemplateItem) => {
-    setShowModal(true)
-    setSendTemplateDetail(detail)
+    message.info('编辑功能暂未实现')
+    // setShowModal(true)
+    // setSendTemplateDetail(detail)
   }
 
   const onRefresh = () => {
@@ -145,7 +170,7 @@ const Template: React.FC = () => {
 
   return (
     <>
-      <EditSendTemplateModal
+      {/* <EditSendTemplateModal
         width='80%'
         open={showModal}
         sendTemplateId={SendTemplateDetail?.id}
@@ -158,7 +183,7 @@ const Template: React.FC = () => {
         open={openDetailModal}
         onCancel={onCloseDetailModal}
         onOk={onCloseDetailModal}
-      />
+      /> */}
       <div className='flex flex-col gap-3 p-3'>
         <div
           style={{

@@ -1,5 +1,5 @@
-import { TeamMetricDatasourceItem } from '@/api2/common.types'
-import { DatasourceDriverMetric } from '@/api2/enum'
+import { TeamMetricDatasourceItem } from '@/api/common.types'
+import { DatasourceDriverMetric } from '@/api/enum'
 import { Prometheus, VictoriaMetrics } from '@/components/icon'
 import { InfoCircleOutlined } from '@ant-design/icons'
 import { Alert, Typography } from 'antd'

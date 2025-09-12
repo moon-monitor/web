@@ -1,7 +1,6 @@
-import { GlobalStatusKey } from '@/api2/common.types'
-import { ActionKey } from '@/api2/enum'
-import { deleteTimeEngineRule, listTimeEngineRule } from '@/api2/timeEngine'
-import { ListTimeEngineRuleRequest, TimeEngineItemRule } from '@/api2/timeEngine/types'
+import { ActionKey, GlobalStatus } from '@/api/enum'
+import { deleteTimeEngineRule, listTimeEngineRule } from '@/api/request/timeengine'
+import { ListTimeEngineRuleRequest, TimeEngineItemRule } from '@/api/request/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -45,8 +44,8 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
   const { run: handleGetRuleList, loading: loading } = useRequest(listTimeEngineRule, {
     manual: true,
     onSuccess: (res) => {
-      setDatasource(res?.items || [])
-      setTotal(res?.pagination?.total)
+      setDatasource(res?.items as TimeEngineItemRule[])
+      setTotal(res?.pagination?.total || 0)
     }
   })
   const onOpenDetailModal = (item: TimeEngineItemRule) => {
@@ -62,11 +61,15 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
   const onSearch = (values: ListTimeEngineRuleRequest) => {
     setSearchParams({
       ...searchParams,
-      ...values
+      ...values,
+      pagination: {
+        page: values.pagination?.page || 1,
+        pageSize: values.pagination?.pageSize || 10
+      }
     })
   }
 
-  const onReset = () => {}
+  const onReset = () => { }
 
   const handleEditModal = (detail?: TimeEngineItemRule) => {
     setShowModal(true)
@@ -82,7 +85,7 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
     onSuccess: onRefresh
   })
 
-  const onChangeStatus = (hookId: number, status: GlobalStatusKey) => {
+  const onChangeStatus = (hookId: number, status: GlobalStatus) => {
     console.log('onChangeStatus', hookId, status)
     // updateTimeEngineRuleStatus({ ids: [hookId], status }).then(onRefresh)
   }
@@ -93,16 +96,16 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
         handleEditModal(item)
         break
       case ActionKey.DELETE:
-        handleDelete({ timeEngineRuleId: item.ruleId })
+        handleDelete({ timeEngineRuleId: item.id as number })
         break
       case ActionKey.DETAIL:
         onOpenDetailModal(item)
         break
       case ActionKey.DISABLE:
-        onChangeStatus(item.ruleId, 'GLOBAL_STATUS_DISABLE')
+        onChangeStatus(item.id as number, 'GLOBAL_STATUS_DISABLE')
         break
       case ActionKey.ENABLE:
-        onChangeStatus(item.ruleId, 'GLOBAL_STATUS_ENABLE')
+        onChangeStatus(item.id as number, 'GLOBAL_STATUS_ENABLE')
         break
       default:
         break
@@ -142,12 +145,12 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
     <>
       <EditRuleModal
         open={showModal}
-        ruleId={ruleDetail?.ruleId}
+        ruleId={ruleDetail?.id as number}
         onCancel={closeEditRuleModal}
         onOk={handleEditRuleModalOnOk}
       />
       <RuleDetailModal
-        ruleId={ruleDetail?.ruleId || 0}
+        ruleId={ruleDetail?.id || 0}
         open={openDetailModal}
         onCancel={onCloseDetailModal}
         onOk={onCloseDetailModal}

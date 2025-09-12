@@ -80,7 +80,8 @@ const LogAudit: React.FC = () => {
       dataIndex: 'module',
       key: 'module',
       render: (_: string, record: LogItem) => {
-        return LogModuleTypeData[record.module]
+        const data = LogModuleTypeData[record.module]
+        return <Tag color={data?.color}>{data?.label}</Tag>
       }
     },
     {

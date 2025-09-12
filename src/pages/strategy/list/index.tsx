@@ -1,9 +1,8 @@
+import { TeamStrategyGroupItem } from '@/api/common.types'
+import { GlobalStatus } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import { deleteStrategyGroup } from '@/api/strategy'
-import { TeamStrategyGroupItem } from '@/api2/common.types'
-import { GlobalStatus } from '@/api2/enum'
-import { listTeamStrategyGroup, updateTeamStrategyGroupStatus } from '@/api2/team/team-strategy'
-import { ListTeamStrategyGroupRequest } from '@/api2/team/team-strategy.types'
+import { deleteTeamStrategyGroup, listTeamStrategyGroup, updateTeamStrategyGroupStatus } from '@/api/request/teamstrategy'
+import { ListTeamStrategyGroupRequest } from '@/api/request/types'
 import { ExclamationCircleFilled, MoreOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Badge, Button, Dropdown, Input, MenuProps, Modal, Spin, message, theme } from 'antd'
@@ -138,7 +137,7 @@ const StrategyMetric: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteStrategyGroup({ id: item.groupId }).then(() => {
+            deleteTeamStrategyGroup({ id: item.groupId }).then(() => {
               message.success('删除成功')
               onRefresh()
             })
@@ -154,21 +153,21 @@ const StrategyMetric: React.FC = () => {
   const tableOperationItems = (record: TeamStrategyGroupItem): MenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
       ? {
-          key: ActionKey.ENABLE,
-          label: (
-            <Button type='link' size='small'>
-              启用
-            </Button>
-          )
-        }
+        key: ActionKey.ENABLE,
+        label: (
+          <Button type='link' size='small'>
+            启用
+          </Button>
+        )
+      }
       : {
-          key: ActionKey.DISABLE,
-          label: (
-            <Button type='link' size='small' danger>
-              禁用
-            </Button>
-          )
-        },
+        key: ActionKey.DISABLE,
+        label: (
+          <Button type='link' size='small' danger>
+            禁用
+          </Button>
+        )
+      },
     {
       key: ActionKey.DETAIL,
       label: (

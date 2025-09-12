@@ -1,6 +1,6 @@
 import { NotifyType, Status } from '@/api/enum'
-import type { NoticeItem, TeamMemberItem, UserItem } from '@/api/model-types'
-import { getTeamMembers } from '@/api2/team'
+import { getTeamMembers } from '@/api/request/team'
+import type { NoticeItem, TeamMemberItem, UserItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Avatar, Checkbox, Select, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
@@ -12,7 +12,7 @@ export interface MemberSelectProps {
   onChange?: (value: NoticeItem[]) => void
 }
 
-export interface UserAvatarProps extends UserItem {}
+export interface UserAvatarProps extends UserItem { }
 
 export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
   const { id, name, nickname, avatar } = props
