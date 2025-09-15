@@ -1,8 +1,9 @@
 import { MenuType, Status } from '@/api/enum'
-import { TreeMenuReply } from '@/api/menu'
+import { GetMenuTreeReply } from '@/api/request/types'
 
-export const mockTreeMenuReply: TreeMenuReply = {
-  menuTree: [
+
+export const mockTreeMenuReply: GetMenuTreeReply = {
+  menus: [
     {
       id: 1,
       label: '实时监控',

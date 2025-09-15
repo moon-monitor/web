@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
-import { createDatasource, getDatasource, updateDatasource } from '@/api/datasource'
 import { DatasourceType, StorageType } from '@/api/enum'
 import { DataSourceTypeData, StatusData, StorageTypeData } from '@/api/global'
-import type { DatasourceItem } from '@/api/model-types'
+import { getTeamMetricDatasource, saveTeamMetricDatasource, updateMetricDatasourceMetadata } from '@/api/request/teamdatasource'
+import type { DatasourceItem } from '@/api/request/types/model-types'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { GlobalContext } from '@/utils/context'
 import { useRequest } from 'ahooks'
@@ -72,7 +72,7 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
     datasourceForm.resetFields()
   }
 
-  const { run: fetchDatasourceDetail } = useRequest((id: number) => getDatasource({ id }), {
+  const { run: fetchDatasourceDetail } = useRequest((id: number) => getTeamMetricDatasource({ id }), {
     manual: true, // 手动触发请求
     onSuccess: ({ detail }) => {
       setDatasourceDetail(detail)
@@ -109,8 +109,8 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
 
   const onFinish = () => {
     if (datasourceId) {
-      updateDatasource({
-        id: datasourceId,
+      updateMetricDatasourceMetadata({
+        datasourceId: datasourceId,
         name: editDatasource.name,
         endpoint: editDatasource.endpoint,
         datasourceType: editDatasource.datasourceType,
@@ -123,7 +123,7 @@ export const EditModal: React.FC<EditModalProps> = (props) => {
         finish?.()
       })
     } else {
-      createDatasource({
+      saveTeamMetricDatasource({
         name: editDatasource.name,
         endpoint: editDatasource.endpoint,
         datasourceType: editDatasource.datasourceType,

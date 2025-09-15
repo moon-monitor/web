@@ -1,22 +1,17 @@
 import {
-  AlarmStatisticsResponse,
-  getAlarmStatistics,
-  getLatestAlarmEvents,
-  getLatestInterventionEvents,
-  getNotificationStatistics,
-  getStrategyAlarmTopN,
-  LatestAlarmEventsResponse,
-  LatestInterventionEventsResponse,
-  NotificationStatisticsResponse,
-  StrategyAlarmTopNResponse
-} from '@/api/realtime/statistics'
+  latestAlarmEvent,
+  latestInterventionEvent,
+  summaryAlarm,
+  topStrategyAlarm,
+} from '@/api/request/alert'
+import { LatestAlarmEventReply, LatestInterventionEventReply, SummaryAlarmReply, TopStrategyAlarmReply } from '@/api/request/types'
 import { GlobalContext } from '@/utils/context'
 import { ArrowDownOutlined, ArrowUpOutlined } from '@ant-design/icons'
 import { Chart } from '@antv/g2'
 import { useRequest } from 'ahooks'
 import { theme as antTheme, Card, Col, List, Row, Table } from 'antd'
 import dayjs from 'dayjs'
-import 'dayjs/locale/zh-cn' // 导入中文语言包
+import 'dayjs/locale/zh-cn'; // 导入中文语言包
 import relativeTime from 'dayjs/plugin/relativeTime'
 import type React from 'react'
 import { useContext, useEffect, useRef, useState } from 'react'
@@ -70,49 +65,49 @@ const Dashboard: React.FC = () => {
 
   const [nowTime, setNowTime] = useState<string>(dayjs().format('YYYY-MM-DD HH:mm:ss'))
 
-  const [alarmStatistics, setAlarmStatistics] = useState<AlarmStatisticsResponse>()
-  const [notificationStatistics, setNotificationStatistics] = useState<NotificationStatisticsResponse>()
-  const [todayStatistics, setTodayStatistics] = useState<NotificationStatisticsResponse>()
-  const [latestAlarmEvents, setLatestAlarmEvents] = useState<LatestAlarmEventsResponse>()
-  const [strategyAlarmTopN, setStrategyAlarmTopN] = useState<StrategyAlarmTopNResponse>()
-  const [latestInterventionEvents, setLatestInterventionEvents] = useState<LatestInterventionEventsResponse>()
+  const [alarmStatistics, setAlarmStatistics] = useState<SummaryAlarmReply>()
+  const [notificationStatistics, setNotificationStatistics] = useState<SummaryAlarmReply>()
+  const [todayStatistics, setTodayStatistics] = useState<SummaryAlarmReply>()
+  const [latestAlarmEvents, setLatestAlarmEvents] = useState<LatestAlarmEventReply>()
+  const [strategyAlarmTopN, setStrategyAlarmTopN] = useState<TopStrategyAlarmReply>()
+  const [latestInterventionEvents, setLatestInterventionEvents] = useState<LatestInterventionEventReply>()
 
-  const { run: fetchGetAlarmStatistics } = useRequest(getAlarmStatistics, {
+  const { run: fetchGetAlarmStatistics } = useRequest(summaryAlarm, {
     manual: true,
     onSuccess: (res) => {
       setAlarmStatistics(res)
     }
   })
 
-  const { run: fetchGetNotificationStatistics } = useRequest(getNotificationStatistics, {
+  const { run: fetchGetNotificationStatistics } = useRequest(summaryAlarm, {
     manual: true,
     onSuccess: (res) => {
       setNotificationStatistics(res)
     }
   })
 
-  const { run: fetchGetTodayStatistics } = useRequest(getNotificationStatistics, {
+  const { run: fetchGetTodayStatistics } = useRequest(summaryAlarm, {
     manual: true,
     onSuccess: (res) => {
       setTodayStatistics(res)
     }
   })
 
-  const { run: fetchGetLatestAlarmEvents } = useRequest(getLatestAlarmEvents, {
+  const { run: fetchGetLatestAlarmEvents } = useRequest(latestAlarmEvent, {
     manual: true,
     onSuccess: (res) => {
       setLatestAlarmEvents(res)
     }
   })
 
-  const { run: fetchGetStrategyAlarmTopN } = useRequest(getStrategyAlarmTopN, {
+  const { run: fetchGetStrategyAlarmTopN } = useRequest(topStrategyAlarm, {
     manual: true,
     onSuccess: (res) => {
       setStrategyAlarmTopN(res)
     }
   })
 
-  const { run: fetchGetLatestInterventionEvents } = useRequest(getLatestInterventionEvents, {
+  const { run: fetchGetLatestInterventionEvents } = useRequest(latestInterventionEvent, {
     manual: true,
     onSuccess: (res) => {
       setLatestInterventionEvents(res)
@@ -316,7 +311,7 @@ const Dashboard: React.FC = () => {
                 <Row align='middle' gutter={16}>
                   <Col span={24}>
                     <div style={{ fontSize: 28, fontWeight: 'bold' }}>{alarmStatistics?.total}</div>
-                    <ComparisonIcon value={alarmStatistics?.totalComparison} />
+                    <ComparisonIcon value={alarmStatistics?.totalComparison?.toString()} />
                   </Col>
                 </Row>
               </div>
@@ -327,7 +322,7 @@ const Dashboard: React.FC = () => {
                 <Row align='middle' gutter={16}>
                   <Col span={24}>
                     <div style={{ fontSize: 28, fontWeight: 'bold' }}>{alarmStatistics?.ongoing}</div>
-                    <ComparisonIcon value={alarmStatistics?.ongoingComparison} />
+                    <ComparisonIcon value={alarmStatistics?.ongoingComparison?.toString()} />
                   </Col>
                 </Row>
               </div>
@@ -338,7 +333,7 @@ const Dashboard: React.FC = () => {
                 <Row align='middle' gutter={16}>
                   <Col span={24}>
                     <div style={{ fontSize: 28, fontWeight: 'bold' }}>{alarmStatistics?.highestPriority}</div>
-                    <ComparisonIcon value={alarmStatistics?.highestPriorityComparison} />
+                    <ComparisonIcon value={alarmStatistics?.highestPriorityComparison?.toString()} />
                   </Col>
                 </Row>
               </div>
@@ -356,7 +351,7 @@ const Dashboard: React.FC = () => {
                 <Row align='middle' gutter={16}>
                   <Col span={24}>
                     <div style={{ fontSize: 28, fontWeight: 'bold' }}>{notificationStatistics?.total}</div>
-                    <ComparisonIcon value={notificationStatistics?.totalComparison} />
+                    <ComparisonIcon value={notificationStatistics?.totalComparison?.toString()} />
                   </Col>
                 </Row>
               </div>
@@ -366,8 +361,8 @@ const Dashboard: React.FC = () => {
                 </div>
                 <Row align='middle' gutter={16}>
                   <Col span={24}>
-                    <div style={{ fontSize: 28, fontWeight: 'bold' }}>{notificationStatistics?.failed}</div>
-                    <ComparisonIcon value={notificationStatistics?.failedComparison} />
+                    <div style={{ fontSize: 28, fontWeight: 'bold' }}>{notificationStatistics?.failed || 0}</div>
+                    <ComparisonIcon value={notificationStatistics?.failedComparison?.toString() || '0'} />
                   </Col>
                 </Row>
               </div>
@@ -386,7 +381,7 @@ const Dashboard: React.FC = () => {
                   <Col span={24} className='flex flex-col justify-between'>
                     <div>
                       <div style={{ fontSize: 28, fontWeight: 'bold' }}>{todayStatistics?.total}</div>
-                      <ComparisonIcon value={todayStatistics?.totalComparison} />
+                      <ComparisonIcon value={todayStatistics?.totalComparison?.toString()} />
                     </div>
                   </Col>
                 </Row>
@@ -398,8 +393,8 @@ const Dashboard: React.FC = () => {
                 <Row align='middle' gutter={16}>
                   <Col span={24} className='flex flex-col justify-between'>
                     <div>
-                      <div style={{ fontSize: 28, fontWeight: 'bold' }}>{todayStatistics?.failed}</div>
-                      <ComparisonIcon value={todayStatistics?.failedComparison} />
+                      <div style={{ fontSize: 28, fontWeight: 'bold' }}>{todayStatistics?.failed || 0}</div>
+                      <ComparisonIcon value={todayStatistics?.failedComparison?.toString() || '0'} />
                     </div>
                   </Col>
                 </Row>
@@ -430,15 +425,15 @@ const Dashboard: React.FC = () => {
             <List
               className='h-[400px] overflow-auto'
               dataSource={latestAlarmEvents?.events || []}
-              renderItem={(item) => (
+              renderItem={(item: any) => (
                 <List.Item className='flex justify-between'>
                   <div className='flex flex-col gap-1'>
                     <div className='text-sm font-bold text-ellipsis' style={{ color: token.colorText }}>
-                      {item.summary}
+                      {item.title || item.summary || '未知告警'}
                     </div>
-                    <div className='text-xs text-gray-500'>{dayjs(item.eventTime).fromNow()}</div>
+                    <div className='text-xs text-gray-500'>{dayjs(item.timestamp || item.eventTime).fromNow()}</div>
                   </div>
-                  <div>{item.level}</div>
+                  <div>{item.severity || item.level || '未知'}</div>
                 </List.Item>
               )}
             />

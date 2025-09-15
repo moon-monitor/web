@@ -1,6 +1,6 @@
-import { TeamItem } from '@/api2/common.types'
-import { TeamStatus } from '@/api2/enum'
-import { selfTeamList } from '@/api2/user'
+import { TeamItem } from '@/api/common.types'
+import { TeamStatus } from '@/api/enum'
+import { selfTeamList } from '@/api/request/user'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
 import { EditOutlined, PlusOutlined, UserSwitchOutlined } from '@ant-design/icons'
@@ -67,10 +67,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
   }
 
   const handleChangeStatus = (teamId: number, checked: boolean) => {
-    updateTeamStatus({
-      id: teamId,
-      status: checked ? TeamStatus.TEAM_STATUS_REJECTED : TeamStatus.TEAM_STATUS_DELETED
-    }).then(handleRefresh)
+
   }
 
   useEffect(() => {
@@ -150,10 +147,10 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                     <Avatar.Group size='small'>
                       {admins?.length
                         ? admins?.map((item) => (
-                            <Avatar key={item?.userId} src={item?.avatar}>
-                              {item?.nickname || item?.username}
-                            </Avatar>
-                          ))
+                          <Avatar key={item?.userId} src={item?.avatar}>
+                            {item?.nickname || item?.username}
+                          </Avatar>
+                        ))
                         : '-'}
                     </Avatar.Group>
                   ),

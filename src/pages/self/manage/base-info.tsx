@@ -1,5 +1,5 @@
-import { UserItem } from '@/api2/common.types'
-import { updateSelfInfo } from '@/api2/user'
+import { UserItem } from '@/api/common.types'
+import { updateSelfInfo } from '@/api/request/user'
 import { DataFrom } from '@/components/data/form'
 import { useRequest } from 'ahooks'
 import { Button, Form, Space, message } from 'antd'

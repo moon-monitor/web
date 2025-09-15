@@ -1,5 +1,5 @@
-import { TeamItem } from '@/api2/common.types'
-import { selfTeamList } from '@/api2/user'
+import { TeamItem } from '@/api/common.types'
+import { selfTeamList } from '@/api/request/user'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
 import { DownOutlined } from '@ant-design/icons'

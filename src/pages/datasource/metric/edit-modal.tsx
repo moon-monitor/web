@@ -1,5 +1,5 @@
-import { getTeamMetricDatasource, saveTeamMetricDatasource } from '@/api2/team/team-datasource'
-import { SaveTeamMetricDatasourceRequest } from '@/api2/team/team-datasource.types'
+import { getTeamMetricDatasource, saveTeamMetricDatasource } from '@/api/request/teamdatasource'
+import { SaveTeamMetricDatasourceRequest } from '@/api/request/types/index'
 import { DataFrom } from '@/components/data/form'
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons'
 import { useRequest, useSetState } from 'ahooks'

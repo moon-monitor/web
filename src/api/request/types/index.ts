@@ -1,37 +1,4 @@
 // types 模块接口定义
-// 导入枚举类型
-import {
-  AlertStatus,
-  ConditionMetric,
-  DatasourceDriverMetric,
-  DatasourceType,
-  DictType,
-  Gender,
-  GlobalStatus,
-  HTTPMethod,
-  HookAPP,
-  MemberPosition,
-  MemberStatus,
-  MenuCategory,
-  MenuProcessType,
-  MenuType,
-  MessageType,
-  Network,
-  NoticeType,
-  OperateType,
-  RegistryDriver,
-  SMSProviderType,
-  SampleMode,
-  SendMessageStatus,
-  ServerRegisterRequest_ServerType,
-  StrategyType,
-  TeamAuditAction,
-  TeamAuditStatus,
-  TeamStatus,
-  TimeEngineRuleType,
-  UserPosition,
-  UserStatus
-} from './enum.ts'
 
 /**
  * api.common.AlertItem
@@ -64,7 +31,7 @@ export interface AlertItem {
   /**
    * status of the alert
    */
-  status?: AlertStatus
+  status?: number
   /**
    * value of the alert
    */
@@ -78,6 +45,13 @@ export interface CheckReply {
   healthy?: boolean
   time?: string
   version?: string
+}
+
+/**
+ * api.common.GetServerListReply
+ */
+export interface GetServerListReply {
+  list?: MicroServer[]
 }
 
 /**
@@ -127,7 +101,7 @@ export interface MetricQueryResultValue {
 /**
  * api.common.ServerRegisterReply
  */
-export interface ServerRegisterReply {}
+export interface ServerRegisterReply { }
 
 /**
  * api.common.ServerRegisterRequest
@@ -136,7 +110,7 @@ export interface ServerRegisterRequest {
   discovery?: Discovery
   isOnline?: boolean
   server?: MicroServer
-  serverType?: ServerRegisterRequest_ServerType
+  serverType?: number
   teamIds?: number[]
   uuid?: string
 }
@@ -158,7 +132,22 @@ export interface AlertDetailReply {
   strategyGroupId?: number
   strategyId?: number
   strategyLevelId?: number
-  strategyType?: StrategyType
+  strategyType?: number
+}
+
+/**
+ * api.palace.CancelMessageReply
+ */
+export interface CancelMessageReply { }
+
+/**
+ * api.palace.CancelMessageRequest
+ */
+export interface CancelMessageRequest {
+  /**
+   * 消息ID
+   */
+  id?: number
 }
 
 /**
@@ -173,6 +162,21 @@ export interface CaptchaValidateRequest {
    * Captcha Id, used to identify the captcha image
    */
   captchaId?: string
+}
+
+/**
+ * api.palace.ConfirmMessageReply
+ */
+export interface ConfirmMessageReply { }
+
+/**
+ * api.palace.ConfirmMessageRequest
+ */
+export interface ConfirmMessageRequest {
+  /**
+   * 消息ID
+   */
+  id?: number
 }
 
 /**
@@ -208,8 +212,26 @@ export interface DatasourceSelectRequest {
   datasourceId?: number
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
-  type?: DatasourceType
+  status?: number
+  type?: number
+}
+
+/**
+ * api.palace.DeleteInviteReply
+ */
+export interface DeleteInviteReply { }
+
+/**
+ * api.palace.DeleteMessagesReply
+ */
+export interface DeleteMessagesReply { }
+
+/**
+ * api.palace.DeleteMessagesRequest
+ */
+export interface DeleteMessagesRequest {
+  all?: boolean
+  ids?: number[]
 }
 
 /**
@@ -256,7 +278,7 @@ export interface GetEmailConfigsRequest {
   /**
    * Status to filter email configurations by
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -271,6 +293,13 @@ export interface GetFilingInformationReply {
    * URL of the filing information
    */
   url?: string
+}
+
+/**
+ * api.palace.GetInviteReply
+ */
+export interface GetInviteReply {
+  item?: InviteItem
 }
 
 /**
@@ -309,11 +338,11 @@ export interface GetSMSConfigsRequest {
   /**
    * Provider to filter SMS configurations by
    */
-  provider?: SMSProviderType
+  provider?: number
   /**
    * Status to filter SMS configurations by
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -339,10 +368,10 @@ export interface GetSendMessageLogsReply {
  */
 export interface GetSendMessageLogsRequest {
   keyword?: string
-  messageType?: MessageType
+  messageType?: number
   pagination?: PaginationRequest
   requestId?: string
-  status?: SendMessageStatus
+  status?: number
   timeRange?: string[]
 }
 
@@ -375,7 +404,7 @@ export interface GetSystemRolesRequest {
   /**
    * Status to filter roles by
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -396,7 +425,7 @@ export interface GetTeamAuditListReply {
  * api.palace.GetTeamAuditListRequest
  */
 export interface GetTeamAuditListRequest {
-  actions?: TeamAuditAction[]
+  actions?: number[]
   /**
    * Keyword to search team audit records by
    */
@@ -408,7 +437,7 @@ export interface GetTeamAuditListRequest {
   /**
    * List of statuses to filter team audit records by
    */
-  status?: TeamAuditStatus[]
+  status?: number[]
   /**
    * User Id, optional for filtering audits by user
    */
@@ -446,7 +475,7 @@ export interface GetTeamListRequest {
   /**
    * List of statuses to filter teams by
    */
-  status?: TeamStatus[]
+  status?: number[]
 }
 
 /**
@@ -466,8 +495,8 @@ export interface GetTeamMembersReply {
 export interface GetTeamMembersRequest {
   keyword?: string
   pagination?: PaginationRequest
-  positions?: MemberPosition[]
-  status?: MemberStatus[]
+  positions?: number[]
+  status?: number[]
 }
 
 /**
@@ -499,7 +528,7 @@ export interface GetTeamRolesRequest {
   /**
    * Status to filter roles by
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -515,10 +544,10 @@ export interface GetTeamSendMessageLogsReply {
  */
 export interface GetTeamSendMessageLogsRequest {
   keyword?: string
-  messageType?: MessageType
+  messageType?: number
   pagination?: PaginationRequest
   requestId?: string
-  status?: SendMessageStatus
+  status?: number
   timeRange?: string[]
 }
 
@@ -551,11 +580,19 @@ export interface GetUserListRequest {
   /**
    * List of positions to filter users by
    */
-  position?: UserPosition[]
+  position?: number[]
   /**
    * List of statuses to filter users by
    */
-  status?: UserStatus[]
+  status?: number[]
+}
+
+/**
+ * api.palace.InviteItem
+ */
+export interface InviteItem {
+  id?: number
+  inviteType?: number
 }
 
 /**
@@ -565,7 +602,7 @@ export interface InviteMemberRequest {
   /**
    * Position of the new member
    */
-  position?: MemberPosition
+  position?: number
   /**
    * List of role Ids to assign to the new member
    */
@@ -574,6 +611,22 @@ export interface InviteMemberRequest {
    * Email of the user to invite
    */
   userEmail?: string
+}
+
+/**
+ * api.palace.InviteUserReply
+ */
+export interface InviteUserReply { }
+
+/**
+ * api.palace.InviteUserRequest
+ */
+export interface InviteUserRequest {
+  /**
+   * 邮箱或手机号
+   */
+  inviteCode?: string
+  roleIds?: number[]
 }
 
 /**
@@ -588,6 +641,86 @@ export interface JoinTeamRequest {
    * Team name to join
    */
   teamName?: string
+}
+
+/**
+ * api.palace.LatestAlarmEventReply
+ */
+export interface LatestAlarmEventReply {
+  /**
+   * 最新告警事件
+   */
+  events?: LatestAlarmEventReply_LatestAlarmEvent[]
+}
+
+/**
+ * api.palace.LatestAlarmEventReply_LatestAlarmEvent
+ */
+export interface LatestAlarmEventReply_LatestAlarmEvent {
+  /**
+   * 告警时间
+   */
+  eventTime?: string
+  /**
+   * 告警指纹
+   */
+  fingerprint?: string
+  /**
+   * 告警等级
+   */
+  level?: string
+  /**
+   * 告警状态
+   */
+  status?: number
+  /**
+   * 告警摘要
+   */
+  summary?: string
+}
+
+/**
+ * api.palace.LatestInterventionEventReply
+ */
+export interface LatestInterventionEventReply {
+  /**
+   * 最新介入事件
+   */
+  events?: LatestInterventionEventReply_LatestInterventionEvent[]
+}
+
+/**
+ * api.palace.LatestInterventionEventReply_LatestInterventionEvent
+ */
+export interface LatestInterventionEventReply_LatestInterventionEvent {
+  /**
+   * 告警时间
+   */
+  eventTime?: string
+  /**
+   * 告警指纹
+   */
+  fingerprint?: string
+  /**
+   * 告警处理时间
+   */
+  handledAt?: string
+  /**
+   * 告警处理人
+   */
+  handler?: UserItem
+  /**
+   * 告警等级
+   */
+  level?: string
+  /**
+   * 告警状态
+   */
+  status?: number
+  /**
+   * 告警摘要
+   */
+  summary?: string
 }
 
 /**
@@ -611,7 +744,7 @@ export interface ListAlertParams {
   fingerprint?: string
   keyword?: string
   pagination?: PaginationRequest
-  status?: AlertStatus
+  status?: number
   timeRange?: string[]
 }
 
@@ -621,6 +754,22 @@ export interface ListAlertParams {
 export interface ListAlertReply {
   items?: RealtimeAlertItem[]
   pagination?: PaginationReply
+}
+
+/**
+ * api.palace.ListMessageReply
+ */
+export interface ListMessageReply {
+  list?: NoticeUserMessage[]
+  pagination?: PaginationReply
+}
+
+/**
+ * api.palace.ListMessageRequest
+ */
+export interface ListMessageRequest {
+  keyword?: string
+  pagination?: PaginationRequest
 }
 
 /**
@@ -656,7 +805,7 @@ export interface ListTeamDashboardChartRequest {
   dashboardId?: number
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -673,7 +822,7 @@ export interface ListTeamDashboardReply {
 export interface ListTeamDashboardRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -688,11 +837,11 @@ export interface ListTeamDictReply {
  * api.palace.ListTeamDictRequest
  */
 export interface ListTeamDictRequest {
-  dictTypes?: DictType[]
+  dictTypes?: number[]
   keyword?: string
   langs?: string[]
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -707,10 +856,10 @@ export interface ListTeamMetricDatasourceReply {
  * api.palace.ListTeamMetricDatasourceRequest
  */
 export interface ListTeamMetricDatasourceRequest {
-  driver?: DatasourceDriverMetric
+  driver?: number
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -729,7 +878,7 @@ export interface ListTeamNoticeGroupRequest {
   keyword?: string
   memberIds?: number[]
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -744,10 +893,10 @@ export interface ListTeamNoticeHookReply {
  * api.palace.ListTeamNoticeHookRequest
  */
 export interface ListTeamNoticeHookRequest {
-  apps?: HookAPP[]
+  apps?: number[]
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
   url?: string
 }
 
@@ -780,7 +929,7 @@ export interface ListTeamStrategyGroupRequest {
   /**
    * List of statuses to filter strategy groups by
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -816,11 +965,11 @@ export interface ListTeamStrategyRequest {
   /**
    * List of statuses to filter strategies by
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Strategy type
    */
-  strategyTypes?: StrategyType[]
+  strategyTypes?: number[]
 }
 
 /**
@@ -837,7 +986,7 @@ export interface ListTimeEngineReply {
 export interface ListTimeEngineRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -854,8 +1003,24 @@ export interface ListTimeEngineRuleReply {
 export interface ListTimeEngineRuleRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
-  types?: TimeEngineRuleType[]
+  status?: number
+  types?: number[]
+}
+
+/**
+ * api.palace.ListUserInviteReply
+ */
+export interface ListUserInviteReply {
+  list?: InviteItem[]
+  pagination?: PaginationReply
+}
+
+/**
+ * api.palace.ListUserInviteRequest
+ */
+export interface ListUserInviteRequest {
+  pagination?: PaginationRequest
+  type?: number
 }
 
 /**
@@ -873,7 +1038,7 @@ export interface LoginByEmailRequest {
   /**
    * User gender, optional
    */
-  gender?: Gender
+  gender?: number
   /**
    * User nickname, optional
    */
@@ -965,6 +1130,24 @@ export interface MetricDatasourceQueryRequest {
 }
 
 /**
+ * api.palace.NoticeUserMessage
+ */
+export interface NoticeUserMessage {
+  /**
+   * 业务类型 'invitation' | 'notice'
+   */
+  biz?: string
+  bizID?: number
+  /**
+   * 消息类型 'info' | 'success' | 'warning' | 'error'
+   */
+  category?: string
+  content?: string
+  id?: number
+  timestamp?: string
+}
+
+/**
  * api.palace.OAuth2ListReply
  */
 export interface OAuth2ListReply {
@@ -1045,7 +1228,7 @@ export interface RealtimeAlertItem {
   generatorURL?: string
   labels?: { [key: string]: string }
   startsAt?: string
-  status?: AlertStatus
+  status?: number
   summary?: string
   value?: string
 }
@@ -1111,7 +1294,7 @@ export interface SaveEmailConfigRequest {
   /**
    * Enable email configuration
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Email user
    */
@@ -1133,7 +1316,7 @@ export interface SaveMenuRequest {
   /**
    * Category of the menu
    */
-  menuCategory?: MenuCategory
+  menuCategory?: number
   /**
    * Icon of the menu
    */
@@ -1149,7 +1332,7 @@ export interface SaveMenuRequest {
   /**
    * Type of the menu
    */
-  menuType?: MenuType
+  menuType?: number
   /**
    * Name of the menu
    */
@@ -1161,7 +1344,7 @@ export interface SaveMenuRequest {
   /**
    * Process type of the menu
    */
-  processType?: MenuProcessType
+  processType?: number
   /**
    * Sort of the menu
    */
@@ -1169,7 +1352,7 @@ export interface SaveMenuRequest {
   /**
    * Status of the menu
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -1217,7 +1400,7 @@ export interface SaveSMSConfigRequest {
   /**
    * SMS provider type
    */
-  provider?: SMSProviderType
+  provider?: number
   /**
    * Remark of the SMS configuration
    */
@@ -1233,7 +1416,7 @@ export interface SaveSMSConfigRequest {
   /**
    * Enable SMS configuration
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -1265,7 +1448,7 @@ export interface SaveTeamDashboardRequest {
 export interface SaveTeamDictRequest {
   color?: string
   dictId?: number
-  dictType?: DictType
+  dictType?: number
   key?: string
   lang?: string
   value?: string
@@ -1278,12 +1461,12 @@ export interface SaveTeamMetricDatasourceRequest {
   basicAuth?: BasicAuth
   ca?: string
   datasourceId?: number
-  driver?: DatasourceDriverMetric
+  driver?: number
   endpoint?: string
   extra?: KeyValueItem[]
   headers?: KeyValueItem[]
   name?: string
-  queryMethod?: HTTPMethod
+  queryMethod?: number
   remark?: string
   scrapeInterval?: string
   tls?: TLS
@@ -1300,7 +1483,7 @@ export interface SaveTeamMetricStrategyLevelRequest {
   /**
    * Condition
    */
-  condition?: ConditionMetric
+  condition?: number
   /**
    * Duration in seconds
    */
@@ -1320,7 +1503,7 @@ export interface SaveTeamMetricStrategyLevelRequest {
   /**
    * Sample mode
    */
-  sampleMode?: SampleMode
+  sampleMode?: number
   /**
    * strategy metric id
    */
@@ -1384,17 +1567,17 @@ export interface SaveTeamNoticeGroupRequest {
 export interface SaveTeamNoticeGroupRequest_Member {
   dutyCycleIds?: number[]
   memberId?: number
-  noticeType?: NoticeType
+  noticeType?: number
 }
 
 /**
  * api.palace.SaveTeamNoticeHookRequest
  */
 export interface SaveTeamNoticeHookRequest {
-  app?: HookAPP
+  app?: number
   headers?: KeyValueItem[]
   hookId?: number
-  method?: HTTPMethod
+  method?: number
   name?: string
   remark?: string
   secret?: string
@@ -1484,7 +1667,7 @@ export interface SaveTeamStrategyRequest {
   /**
    * Strategy item type
    */
-  strategyType?: StrategyType
+  strategyType?: number
 }
 
 /**
@@ -1505,7 +1688,7 @@ export interface SaveTimeEngineRuleRequest {
   remark?: string
   ruleIds?: number[]
   timeEngineRuleId?: number
-  type?: TimeEngineRuleType
+  type?: number
 }
 
 /**
@@ -1523,7 +1706,7 @@ export interface SelectTeamDashboardChartRequest {
   dashboardId?: number
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -1540,7 +1723,7 @@ export interface SelectTeamDashboardReply {
 export interface SelectTeamDashboardRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -1555,11 +1738,11 @@ export interface SelectTeamDictReply {
  * api.palace.SelectTeamDictRequest
  */
 export interface SelectTeamDictRequest {
-  dictTypes?: DictType[]
+  dictTypes?: number[]
   keyword?: string
   langs?: string[]
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -1579,7 +1762,7 @@ export interface SelectTeamMembersReply {
 export interface SelectTeamMembersRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: MemberStatus[]
+  status?: number[]
 }
 
 /**
@@ -1611,7 +1794,7 @@ export interface SelectTeamStrategyGroupRequest {
   /**
    * List of statuses to filter strategy groups by
    */
-  status?: GlobalStatus[]
+  status?: number[]
 }
 
 /**
@@ -1628,7 +1811,7 @@ export interface SelectTimeEngineReply {
 export interface SelectTimeEngineRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -1645,8 +1828,8 @@ export interface SelectTimeEngineRuleReply {
 export interface SelectTimeEngineRuleRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
-  types?: TimeEngineRuleType[]
+  status?: number
+  types?: number[]
 }
 
 /**
@@ -1735,7 +1918,7 @@ export interface SubscribeTeamStrategiesRequest {
   /**
    * subscribe type
    */
-  subscribeType?: NoticeType
+  subscribeType?: number
   /**
    * subscribers
    */
@@ -1753,7 +1936,49 @@ export interface SubscribeTeamStrategyRequest {
   /**
    * subscribe type
    */
-  subscribeType?: NoticeType
+  subscribeType?: number
+}
+
+/**
+ * api.palace.SummaryAlarmReply
+ */
+export interface SummaryAlarmReply {
+  /**
+   * 图表数据
+   */
+  chartData?: number[]
+  /**
+   * 最高优先级的告警
+   */
+  highestPriority?: string
+  /**
+   * 最高优先级告警环比
+   */
+  highestPriorityComparison?: string
+  /**
+   * 正在告警
+   */
+  ongoing?: string
+  /**
+   * 正在告警环比
+   */
+  ongoingComparison?: string
+  /**
+   * 已恢复
+   */
+  recovered?: string
+  /**
+   * 已恢复环比
+   */
+  recoveredComparison?: string
+  /**
+   * 告警总数
+   */
+  total?: string
+  /**
+   * 总数环比
+   */
+  totalComparison?: string
 }
 
 /**
@@ -1818,7 +2043,7 @@ export interface TeamMetricStrategyLevelListRequest {
   /**
    * Status
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Strategy metric id
    */
@@ -1839,7 +2064,7 @@ export interface TeamNoticeGroupSelectReply {
 export interface TeamNoticeGroupSelectRequest {
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -1854,11 +2079,39 @@ export interface TeamNoticeHookSelectReply {
  * api.palace.TeamNoticeHookSelectRequest
  */
 export interface TeamNoticeHookSelectRequest {
-  apps?: HookAPP[]
+  apps?: number[]
   keyword?: string
   pagination?: PaginationRequest
-  status?: GlobalStatus
+  status?: number
   url?: string
+}
+
+/**
+ * api.palace.TopStrategyAlarmReply
+ */
+export interface TopStrategyAlarmReply {
+  /**
+   * 策略告警数量TopN
+   */
+  topN?: TopStrategyAlarmReply_StrategyAlarmTopN[]
+}
+
+/**
+ * api.palace.TopStrategyAlarmReply_StrategyAlarmTopN
+ */
+export interface TopStrategyAlarmReply_StrategyAlarmTopN {
+  /**
+   * 策略ID
+   */
+  strategyId?: string
+  /**
+   * 策略名称
+   */
+  strategyName?: string
+  /**
+   * 告警数量
+   */
+  total?: string
 }
 
 /**
@@ -1872,6 +2125,19 @@ export interface TransferTeamRequest {
 }
 
 /**
+ * api.palace.UpdateInviteStatusReply
+ */
+export interface UpdateInviteStatusReply { }
+
+/**
+ * api.palace.UpdateInviteStatusRequest
+ */
+export interface UpdateInviteStatusRequest {
+  id?: number
+  type?: number
+}
+
+/**
  * api.palace.UpdateMemberPositionRequest
  */
 export interface UpdateMemberPositionRequest {
@@ -1882,7 +2148,7 @@ export interface UpdateMemberPositionRequest {
   /**
    * New position for the member
    */
-  position?: MemberPosition
+  position?: number
 }
 
 /**
@@ -1910,7 +2176,7 @@ export interface UpdateMemberStatusRequest {
   /**
    * New status for the members
    */
-  status?: MemberStatus
+  status?: number
 }
 
 /**
@@ -1935,7 +2201,7 @@ export interface UpdateRoleStatusRequest {
   /**
    * New status for the role
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -1969,7 +2235,7 @@ export interface UpdateSelfInfoRequest {
   /**
    * User gender
    */
-  gender?: Gender
+  gender?: number
   /**
    * User nickname
    */
@@ -2009,7 +2275,7 @@ export interface UpdateTeamAuditStatusRequest {
   /**
    * New status for the team audit record
    */
-  status?: TeamAuditStatus
+  status?: number
 }
 
 /**
@@ -2018,7 +2284,7 @@ export interface UpdateTeamAuditStatusRequest {
 export interface UpdateTeamDashboardChartStatusRequest {
   chartIds?: number[]
   dashboardId?: number
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2026,7 +2292,7 @@ export interface UpdateTeamDashboardChartStatusRequest {
  */
 export interface UpdateTeamDashboardStatusRequest {
   dashboardIds?: number[]
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2034,7 +2300,7 @@ export interface UpdateTeamDashboardStatusRequest {
  */
 export interface UpdateTeamDictStatusRequest {
   dictIds?: number[]
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2042,7 +2308,7 @@ export interface UpdateTeamDictStatusRequest {
  */
 export interface UpdateTeamMetricDatasourceStatusRequest {
   datasourceId?: number
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2052,7 +2318,7 @@ export interface UpdateTeamMetricStrategyLevelStatusRequest {
   /**
    * Status
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Strategy metric level id
    */
@@ -2064,7 +2330,7 @@ export interface UpdateTeamMetricStrategyLevelStatusRequest {
  */
 export interface UpdateTeamNoticeGroupStatusRequest {
   groupId?: number
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2072,7 +2338,7 @@ export interface UpdateTeamNoticeGroupStatusRequest {
  */
 export interface UpdateTeamNoticeHookStatusRequest {
   hookId?: number
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2086,7 +2352,7 @@ export interface UpdateTeamRoleStatusRequest {
   /**
    * New status for the role
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2096,7 +2362,7 @@ export interface UpdateTeamStrategiesStatusRequest {
   /**
    * Status
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Strategy ids
    */
@@ -2114,14 +2380,14 @@ export interface UpdateTeamStrategyGroupStatusRequest {
   /**
    * New status for the strategy group
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
  * api.palace.UpdateTimeEngineRuleStatusRequest
  */
 export interface UpdateTimeEngineRuleStatusRequest {
-  status?: GlobalStatus
+  status?: number
   timeEngineRuleIds?: number[]
 }
 
@@ -2129,7 +2395,7 @@ export interface UpdateTimeEngineRuleStatusRequest {
  * api.palace.UpdateTimeEngineStatusRequest
  */
 export interface UpdateTimeEngineStatusRequest {
-  status?: GlobalStatus
+  status?: number
   timeEngineIds?: number[]
 }
 
@@ -2140,7 +2406,7 @@ export interface UpdateUserPositionRequest {
   /**
    * New position for the user
    */
-  position?: UserPosition
+  position?: number
   /**
    * User Id
    */
@@ -2168,7 +2434,7 @@ export interface UpdateUserStatusRequest {
   /**
    * New status for the users
    */
-  status?: UserStatus
+  status?: number
   /**
    * List of user Ids to update
    */
@@ -2250,7 +2516,7 @@ export interface EmailConfigItem {
   /**
    * Enable email configuration
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Email user
    */
@@ -2260,12 +2526,12 @@ export interface EmailConfigItem {
 /**
  * api.palace.common.EmptyReply
  */
-export interface EmptyReply {}
+export interface EmptyReply { }
 
 /**
  * api.palace.common.EmptyRequest
  */
-export interface EmptyRequest {}
+export interface EmptyRequest { }
 
 /**
  * api.palace.common.KeyValueItem
@@ -2303,7 +2569,7 @@ export interface MenuTreeItem {
   /**
    * Category of the menu tree item
    */
-  menuCategory?: MenuCategory
+  menuCategory?: number
   /**
    * Icon of the menu tree item
    */
@@ -2319,7 +2585,7 @@ export interface MenuTreeItem {
   /**
    * Type of the menu tree item
    */
-  menuType?: MenuType
+  menuType?: number
   /**
    * Name of the menu tree item
    */
@@ -2331,7 +2597,7 @@ export interface MenuTreeItem {
   /**
    * Process type of the menu tree item
    */
-  processType?: MenuProcessType
+  processType?: number
   /**
    * Sort of the menu tree item
    */
@@ -2339,7 +2605,7 @@ export interface MenuTreeItem {
   /**
    * Status of the menu tree item
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2353,7 +2619,7 @@ export interface NoticeGroupItem {
   noticeGroupId?: number
   noticeMembers?: NoticeMemberItem[]
   remark?: string
-  status?: GlobalStatus
+  status?: number
   updatedAt?: string
 }
 
@@ -2361,17 +2627,17 @@ export interface NoticeGroupItem {
  * api.palace.common.NoticeHookItem
  */
 export interface NoticeHookItem {
-  app?: HookAPP
+  app?: number
   createdAt?: string
   creator?: UserBaseItem
   headers?: KeyValueItem[]
-  method?: HTTPMethod
+  method?: number
   name?: string
   noticeGroups?: NoticeGroupItem[]
   noticeHookId?: number
   remark?: string
   secret?: string
-  status?: GlobalStatus
+  status?: number
   updatedAt?: string
   url?: string
 }
@@ -2384,7 +2650,7 @@ export interface NoticeMemberItem {
   member?: TeamMemberBaseItem
   noticeGroup?: NoticeGroupItem
   noticeGroupId?: number
-  noticeType?: NoticeType
+  noticeType?: number
   userId?: number
 }
 
@@ -2433,7 +2699,7 @@ export interface OperateLogListRequest {
   /**
    * List of types to filter operation logs by
    */
-  operateTypes?: OperateType[]
+  operateTypes?: number[]
   /**
    * Operation
    */
@@ -2496,7 +2762,7 @@ export interface SMSConfigItem {
   /**
    * SMS provider type
    */
-  providerType?: SMSProviderType
+  providerType?: number
   /**
    * Remark of the SMS configuration
    */
@@ -2512,7 +2778,7 @@ export interface SMSConfigItem {
   /**
    * Enable SMS configuration
    */
-  status?: GlobalStatus
+  status?: number
 }
 
 /**
@@ -2541,10 +2807,10 @@ export interface SendMessageLogItem {
   createdAt?: string
   error?: string
   message?: string
-  messageType?: MessageType
+  messageType?: number
   requestId?: string
   retryCount?: number
-  status?: SendMessageStatus
+  status?: number
   updatedAt?: string
 }
 
@@ -2576,7 +2842,7 @@ export interface SubscriberItem {
   /**
    * subscribe type
    */
-  subscribeType?: NoticeType
+  subscribeType?: number
   user?: UserBaseItem
 }
 
@@ -2608,7 +2874,7 @@ export interface SystemRoleItem {
   /**
    * Status of the system role
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Last update time of the system role
    */
@@ -2633,7 +2899,7 @@ export interface TLS {
  * api.palace.common.TeamAuditItem
  */
 export interface TeamAuditItem {
-  action?: TeamAuditAction
+  action?: number
   /**
    * Creation time of the audit record
    */
@@ -2645,7 +2911,7 @@ export interface TeamAuditItem {
   /**
    * Status of the team audit
    */
-  status?: TeamAuditStatus
+  status?: number
   /**
    * Team information being audited
    */
@@ -2690,7 +2956,7 @@ export interface TeamDashboardChartItem {
   dashboardId?: number
   height?: string
   remark?: string
-  status?: GlobalStatus
+  status?: number
   teamDashboardChartId?: number
   title?: string
   updatedAt?: string
@@ -2706,7 +2972,7 @@ export interface TeamDashboardItem {
   createdAt?: string
   name?: string
   remark?: string
-  status?: GlobalStatus
+  status?: number
   teamDashboardId?: number
   updatedAt?: string
 }
@@ -2719,10 +2985,10 @@ export interface TeamDictItem {
   createdAt?: string
   creator?: UserBaseItem
   dictId?: number
-  dictType?: DictType
+  dictType?: number
   key?: string
   lang?: string
-  status?: GlobalStatus
+  status?: number
   teamId?: number
   updatedAt?: string
   value?: string
@@ -2771,7 +3037,7 @@ export interface TeamItem {
   /**
    * Status of the team.
    */
-  status?: TeamStatus
+  status?: number
   /**
    * Total number of strategies associated with the team.
    */
@@ -2796,9 +3062,9 @@ export interface TeamItem {
 export interface TeamMemberBaseItem {
   createdAt?: string
   memberName?: string
-  position?: MemberPosition
+  position?: number
   remark?: string
-  status?: MemberStatus
+  status?: number
   teamMemberId?: number
   updatedAt?: string
   user?: UserBaseItem
@@ -2819,7 +3085,7 @@ export interface TeamMemberItem {
   /**
    * Position of the member within the team.
    */
-  position?: MemberPosition
+  position?: number
   /**
    * List of roles assigned to the member.
    */
@@ -2827,7 +3093,7 @@ export interface TeamMemberItem {
   /**
    * Status of the member.
    */
-  status?: MemberStatus
+  status?: number
   /**
    * Unique identifier for the member.
    */
@@ -2851,15 +3117,15 @@ export interface TeamMetricDatasourceItem {
   createdAt?: string
   creator?: UserBaseItem
   datasourceId?: number
-  driver?: DatasourceDriverMetric
+  driver?: number
   endpoint?: string
   extra?: KeyValueItem[]
   headers?: KeyValueItem[]
   name?: string
-  queryMethod?: HTTPMethod
+  queryMethod?: number
   remark?: string
   scrapeInterval?: string
-  status?: GlobalStatus
+  status?: number
   teamId?: number
   tls?: TLS
   updatedAt?: string
@@ -2916,7 +3182,7 @@ export interface TeamRoleItem {
   /**
    * Status of the role.
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Unique identifier for the role.
    */
@@ -2958,7 +3224,7 @@ export interface TeamStrategyGroupItem {
   /**
    * Status of the strategy group.
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Total number of strategies in the group.
    */
@@ -2998,12 +3264,12 @@ export interface TeamStrategyItem {
   /**
    * Status of the strategy.
    */
-  status?: GlobalStatus
+  status?: number
   /**
    * Unique identifier for the strategy.
    */
   strategyId?: number
-  strategyType?: StrategyType
+  strategyType?: number
   /**
    * Information about the team associated with the strategy.
    */
@@ -3033,13 +3299,13 @@ export interface TeamStrategyMetricItem {
  */
 export interface TeamStrategyMetricLevelItem {
   alarmPages?: TeamDictItem[]
-  condition?: ConditionMetric
+  condition?: number
   duration?: string
   labelReceiverRoutes?: StrategyMetricLevelLabelNotice[]
   level?: TeamDictItem
   receiverRoutes?: NoticeGroupItem[]
-  sampleMode?: SampleMode
-  status?: GlobalStatus
+  sampleMode?: number
+  status?: number
   strategyMetricId?: number
   strategyMetricLevelId?: number
   total?: string
@@ -3055,7 +3321,7 @@ export interface TimeEngineItem {
   name?: string
   remark?: string
   rules?: TimeEngineItemRule[]
-  status?: GlobalStatus
+  status?: number
   timeEngineId?: number
   updatedAt?: string
 }
@@ -3070,9 +3336,9 @@ export interface TimeEngineItemRule {
   name?: string
   remark?: string
   rules?: string[]
-  status?: GlobalStatus
+  status?: number
   timeEngineRuleId?: number
-  type?: TimeEngineRuleType
+  type?: number
   updatedAt?: string
 }
 
@@ -3087,7 +3353,7 @@ export interface UserBaseItem {
   /**
    * User's gender
    */
-  gender?: Gender
+  gender?: number
   /**
    * User's nickname
    */
@@ -3121,7 +3387,7 @@ export interface UserItem {
   /**
    * User's gender
    */
-  gender?: Gender
+  gender?: number
   /**
    * User's nickname
    */
@@ -3133,7 +3399,7 @@ export interface UserItem {
   /**
    * User's position/role in the system
    */
-  position?: UserPosition
+  position?: number
   /**
    * Remarks about the user
    */
@@ -3141,7 +3407,7 @@ export interface UserItem {
   /**
    * User's status
    */
-  status?: UserStatus
+  status?: number
   /**
    * User's last update time
    */
@@ -3394,7 +3660,7 @@ export interface Consul {
  */
 export interface Discovery {
   consul?: Consul
-  driver?: RegistryDriver
+  driver?: number
   enable?: boolean
   etcd?: Etcd
 }
@@ -3438,7 +3704,7 @@ export interface MicroServer {
   /**
    * network type, http, https, grpc
    */
-  network?: Network
+  network?: number
   /**
    * secret
    */

@@ -41,9 +41,6 @@ const LoginForm: FC = () => {
   const [oauthList, setOAuthList] = useState<OAuthItem[]>([])
 
   const handleLogin = (loginParams: LoginByPasswordRequest) => {
-    setAuthToken?.(
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoyLCJpc3MiOiJtb29uLXBhbGFjZSIsImV4cCI6MTc0MzY5NDM0NX0.LGVJpMGxolSfBqp7jXZiKSO1ax_Lvz9Ma0or20oFnNg'
-    )
     loginByPassword(loginParams)
       .then((res) => {
         setAuthToken?.(res?.token || '')

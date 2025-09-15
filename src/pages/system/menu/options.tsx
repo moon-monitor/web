@@ -1,6 +1,6 @@
-import { GlobalStatus, MenuCategory, MenuProcessType, MenuType } from '@/api2/enum'
-import { GlobalStatusData, MenuCategoryData, MenuProcessTypeData, MenuTypeData } from '@/api2/global'
-import { MenuTreeItem } from '@/api2/menu/types'
+import { GlobalStatus, MenuCategory, MenuProcessType, MenuType } from '@/api/enum'
+import { GlobalStatusData, MenuCategoryData, MenuProcessTypeData, MenuTypeData } from '@/api/global'
+import { MenuTreeItem } from '@/api/request/types'
 import { DataFromItem } from '@/components/data/form'
 import { numberToBinary } from '@/utils'
 import { Badge, DescriptionsProps, Tag } from 'antd'
@@ -54,7 +54,7 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
           options: Object.entries(MenuTypeData)
             .filter(([key]) => +key !== MenuType.MENU_TYPE_UNKNOWN)
             .map(([key, value]) => ({
-              label: value,
+              label: value.label,
               value: +key
             }))
         }
@@ -73,30 +73,30 @@ export const editFormItems = ({ isMenuType, menuCategory }: EditFormItemsProps):
           options: Object.entries(MenuCategoryData)
             .filter(([key]) => +key !== MenuCategory.MENU_CATEGORY_UNKNOWN)
             .map(([key, value]) => ({
-              label: value,
+              label: value.label,
               value: +key
             }))
         }
       },
       menuCategory === MenuCategory.MENU_CATEGORY_BUTTON
         ? {
-            span: 16,
-            name: 'apiPath',
-            label: '后端接口',
-            type: 'input',
-            props: {
-              placeholder: '请输入后端接口'
-            }
+          span: 16,
+          name: 'apiPath',
+          label: '后端接口',
+          type: 'input',
+          props: {
+            placeholder: '请输入后端接口'
           }
+        }
         : {
-            span: 16,
-            name: 'menuPath',
-            label: '前端路由',
-            type: 'input',
-            props: {
-              placeholder: '请输入前端路由'
-            }
+          span: 16,
+          name: 'menuPath',
+          label: '前端路由',
+          type: 'input',
+          props: {
+            placeholder: '请输入前端路由'
           }
+        }
     ],
     [
       {
@@ -188,28 +188,31 @@ export const descriptionItems = (detail: {
     {
       key: 'menuType',
       label: '菜单类型',
-      children: MenuTypeData[menuDetail?.menuType || MenuType.MENU_TYPE_UNKNOWN]
+      children: MenuTypeData[menuDetail?.menuType || MenuType.MENU_TYPE_UNKNOWN]?.label
     },
     {
       key: 'menuCategory',
       label: '菜单类目',
-      children: MenuCategoryData[menuDetail?.menuCategory || MenuCategory.MENU_CATEGORY_UNKNOWN]
+      children: MenuCategoryData[menuDetail?.menuCategory || MenuCategory.MENU_CATEGORY_UNKNOWN]?.label
     },
     menuDetail?.menuCategory === MenuCategory.MENU_CATEGORY_BUTTON
       ? {
-          key: 'apiPath',
-          label: '后端接口',
-          children: menuDetail?.apiPath
-        }
+        key: 'apiPath',
+        label: '后端接口',
+        children: menuDetail?.apiPath
+      }
       : {
-          key: 'menuPath',
-          label: '前端路由',
-          children: menuDetail?.menuPath
-        },
+        key: 'menuPath',
+        label: '前端路由',
+        children: menuDetail?.menuPath
+      },
     {
       key: 'status',
       label: '启用状态',
-      children: <Badge {...GlobalStatusData[menuDetail?.status || GlobalStatus.GLOBAL_STATUS_UNKNOWN]}></Badge>
+      children: (() => {
+        const data = GlobalStatusData[menuDetail?.status || GlobalStatus.GLOBAL_STATUS_UNKNOWN]
+        return <Badge color={data?.color} text={data?.label} />
+      })()
     },
     {
       key: 'sort',
@@ -226,7 +229,7 @@ export const descriptionItems = (detail: {
       label: '菜单鉴权',
       children: numberToBinary(menuDetail?.processType || 0).map((item) => (
         <Tag key={item} color='blue'>
-          {MenuProcessTypeData[item as MenuProcessType]}
+          {MenuProcessTypeData[item as MenuProcessType]?.label}
         </Tag>
       ))
     }

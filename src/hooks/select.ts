@@ -1,9 +1,10 @@
-import { listDatasource, ListDatasourceRequest } from '@/api/datasource'
-import { dictSelectList, ListDictRequest } from '@/api/dict'
 import { DictType } from '@/api/enum'
-import { listAlarmGroup, ListAlarmGroupRequest } from '@/api/notify/alarm-group'
-import { listTimeEngineRule, ListTimeEngineRuleRequest } from '@/api/notify/rule'
-import { listStrategyGroup, ListStrategyGroupRequest } from '@/api/strategy'
+import { listMetricDatasourceMetadata } from '@/api/request/teamdatasource'
+import { selectTeamDict } from '@/api/request/teamdict'
+import { listTeamStrategyGroup } from '@/api/request/teamstrategy'
+import { listTimeEngineRule } from '@/api/request/timeengine'
+import { ListTimeEngineRuleRequest } from '@/api/request/types'
+import { ListMetricDatasourceMetadataRequest, ListTeamStrategyGroupRequest, SelectTeamDictRequest } from '@/api/request/types/index'
 import { useRequest } from 'ahooks'
 
 /**
@@ -11,11 +12,11 @@ import { useRequest } from 'ahooks'
  * @param params
  * @returns { datasourceList: Datasource[], error, datasourceListLoading: boolean }
  */
-export const useDatasourceList = (params: ListDatasourceRequest) => {
-  const { data, loading, error } = useRequest(listDatasource, {
+export const useDatasourceList = (params: ListMetricDatasourceMetadataRequest) => {
+  const { data, loading, error } = useRequest(listMetricDatasourceMetadata, {
     defaultParams: [params]
   })
-  return { datasourceList: data?.list || [], error, page: data?.pagination, datasourceListLoading: loading }
+  return { datasourceList: data?.items || [], error, page: data?.pagination, datasourceListLoading: loading }
 }
 
 /**
@@ -23,11 +24,11 @@ export const useDatasourceList = (params: ListDatasourceRequest) => {
  * @param params
  * @returns { strategyGroupList: StrategyGroup[], error, page: PaginationReply, strategyGroupListLoading: boolean }
  */
-export const useStrategyGroupList = (params: ListStrategyGroupRequest) => {
-  const { data, loading, error } = useRequest(listStrategyGroup, {
+export const useStrategyGroupList = (params: ListTeamStrategyGroupRequest) => {
+  const { data, loading, error } = useRequest(listTeamStrategyGroup, {
     defaultParams: [params]
   })
-  return { strategyGroupList: data?.list || [], error, page: data?.pagination, strategyGroupListLoading: loading }
+  return { strategyGroupList: data?.items || [], error, page: data?.pagination, strategyGroupListLoading: loading }
 }
 
 /**
@@ -35,11 +36,11 @@ export const useStrategyGroupList = (params: ListStrategyGroupRequest) => {
  * @param params
  * @returns { strategyCategoryList: DictItem[], error, strategyCategoryListLoading: boolean }
  */
-export const useStrategyCategoryList = (params: ListDictRequest) => {
-  const { data, loading, error } = useRequest(dictSelectList, {
-    defaultParams: [{ ...params, dictType: DictType.DictTypeStrategyCategory }]
+export const useStrategyCategoryList = (params: SelectTeamDictRequest) => {
+  const { data, loading, error } = useRequest(selectTeamDict, {
+    defaultParams: [{ ...params, dictTypes: [DictType.DictTypeStrategyCategory] }]
   })
-  return { strategyCategoryList: data?.list || [], error, strategyCategoryListLoading: loading }
+  return { strategyCategoryList: data?.items || [], error, strategyCategoryListLoading: loading }
 }
 
 /**
@@ -59,11 +60,11 @@ export const useAlarmNoticeGroupList = (params: ListAlarmGroupRequest) => {
  * @param params
  * @returns { alarmPageList: AlarmPage[], error, alarmPageListLoading: boolean }
  */
-export const useAlarmPageList = (params: ListDictRequest) => {
-  const { data, loading, error } = useRequest(dictSelectList, {
-    defaultParams: [{ ...params, dictType: DictType.DictTypeAlarmPage }]
+export const useAlarmPageList = (params: SelectTeamDictRequest) => {
+  const { data, loading, error } = useRequest(selectTeamDict, {
+    defaultParams: [{ ...params, dictTypes: [DictType.DictTypeAlarmPage] }]
   })
-  return { alarmPageList: data?.list || [], error, alarmPageListLoading: loading }
+  return { alarmPageList: data?.items || [], error, alarmPageListLoading: loading }
 }
 
 /**
@@ -71,11 +72,11 @@ export const useAlarmPageList = (params: ListDictRequest) => {
  * @param params
  * @returns { alarmLevelList: DictItem[], error, alarmLevelListLoading: boolean }
  */
-export const useAlarmLevelList = (params: ListDictRequest) => {
-  const { data, loading, error } = useRequest(dictSelectList, {
-    defaultParams: [{ ...params, dictType: DictType.DictTypeAlarmLevel }]
+export const useAlarmLevelList = (params: SelectTeamDictRequest) => {
+  const { data, loading, error } = useRequest(selectTeamDict, {
+    defaultParams: [{ ...params, dictTypes: [DictType.DictTypeAlarmLevel] }]
   })
-  return { alarmLevelList: data?.list || [], error, alarmLevelListLoading: loading }
+  return { alarmLevelList: data?.items || [], error, alarmLevelListLoading: loading }
 }
 
 /**

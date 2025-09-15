@@ -1,5 +1,5 @@
-import { DatasourceDriverMetric, HTTPMethod } from '@/api2/enum'
-import { DatasourceDriverMetricData, HTTPMethodData } from '@/api2/global'
+import { DatasourceDriverMetric, HTTPMethod } from '@/api/enum'
+import { DatasourceDriverMetricData, HTTPMethodData } from '@/api/global'
 import { DataFromItem } from '@/components/data/form'
 import { Badge } from 'antd'
 

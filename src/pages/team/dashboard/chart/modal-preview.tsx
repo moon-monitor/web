@@ -1,5 +1,5 @@
-import type { ChartItem, DashboardItem } from '@/api/model-types'
-import { getDashboard } from '@/api/realtime/dashboard'
+import { getTeamDashboard } from '@/api/request/teamdashboard'
+import type { ChartItem, DashboardItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Card, Col, Modal, type ModalProps, Row, theme } from 'antd'
 import { useEffect, useState } from 'react'
@@ -38,7 +38,7 @@ export const ModalPreview: React.FC<ModalPreviewProps> = (props) => {
   const [dashboard, setDashboard] = useState<DashboardItem>()
 
   const { run: runGetDashboard, loading } = useRequest(
-    () => getDashboard({ id: dashboardId, charts: true, myDashboard: true }),
+    () => getTeamDashboard({ id: dashboardId, charts: true, myDashboard: true }),
     {
       refreshDeps: [dashboardId],
       onSuccess: (data) => {

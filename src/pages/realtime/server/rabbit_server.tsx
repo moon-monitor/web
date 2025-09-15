@@ -1,5 +1,5 @@
-import type { ServerItem } from '@/api/model-types'
-import { getRabbitServer } from '@/api/realtime/moon-server'
+import { getServerList } from '@/api/request/server'
+import type { ServerItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'
 import { Button, Card, Col, Empty, Row, Spin } from 'antd'
 import React, { useCallback, useEffect } from 'react'
@@ -7,10 +7,10 @@ import React, { useCallback, useEffect } from 'react'
 const RabbitServer: React.FC = () => {
   const [serverList, setServerList] = React.useState<ServerItem[]>([])
 
-  const { run: initRabbitServerList, loading: initRabbitServerListLoading } = useRequest(getRabbitServer, {
+  const { run: initRabbitServerList, loading: initRabbitServerListLoading } = useRequest(getServerList, {
     manual: true,
     onSuccess: (res) => {
-      setServerList(res.list)
+      setServerList(res.servers)
     }
   })
 

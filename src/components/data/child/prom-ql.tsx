@@ -12,7 +12,7 @@ import {
   ViewUpdate
 } from '@codemirror/view'
 
-import request from '@/api2/request'
+import request from '@/api/request'
 import { GlobalContext } from '@/utils/context'
 import { ThunderboltOutlined } from '@ant-design/icons'
 import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap } from '@codemirror/autocomplete'

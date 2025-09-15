@@ -1,5 +1,4 @@
 import { AlarmSendType } from '@/api/enum'
-import { createTemplate, getTemplate, updateTemplate, type CreateTemplateRequest } from '@/api/notify/template'
 import { dingTalkTemplates } from '@/components/data/child/config/ding-talk'
 import { feishuTemplates } from '@/components/data/child/config/feishu'
 import { wechatTemplates } from '@/components/data/child/config/wechat'
@@ -15,6 +14,39 @@ import { useRequest } from 'ahooks'
 import { Form, Input, message, Modal, Select, type ModalProps } from 'antd'
 import { useEffect } from 'react'
 import { editModalFormItems } from './options'
+// import { createTemplate, getTemplate, updateTemplate, type CreateTemplateRequest } from '@/api/notify/template' // TODO: 实现 template API
+
+// 占位符类型和函数，待实现
+type CreateTemplateRequest = {
+  name: string
+  content: string
+  sendType: number
+  status: number
+  remark?: string
+}
+
+const createTemplate = async (data: CreateTemplateRequest) => {
+  console.warn('createTemplate API not implemented yet')
+  return Promise.resolve()
+}
+
+const getTemplate = async (id: number): Promise<{ detail: CreateTemplateRequest }> => {
+  console.warn('getTemplate API not implemented yet')
+  return Promise.resolve({
+    detail: {
+      name: '示例模板',
+      content: '模板内容',
+      sendType: 0,
+      status: 0,
+      remark: '这是一个示例模板'
+    }
+  })
+}
+
+const updateTemplate = async (params: { id: number, data: CreateTemplateRequest }) => {
+  console.warn('updateTemplate API not implemented yet')
+  return Promise.resolve()
+}
 
 export interface EditSendTemplateModalProps extends ModalProps {
   sendTemplateId?: number

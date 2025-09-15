@@ -1,5 +1,5 @@
-import { inviteMember } from '@/api2/team'
-import { InviteMemberRequest } from '@/api2/team/types'
+import { inviteMember } from '@/api/request/team'
+import { InviteMemberRequest } from '@/api/request/types'
 import { DataFrom } from '@/components/data/form'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'

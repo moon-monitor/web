@@ -1,9 +1,6 @@
-import { Status } from '@/api/enum'
 import { ActionKey } from '@/api/global'
-import { syncTeam, updateTeamStatus } from '@/api/team'
-import { TeamItem } from '@/api2/common.types'
-import { getTeamList } from '@/api2/system'
-import { GetTeamListRequest } from '@/api2/system/types'
+import { getTeamList } from '@/api/request/system'
+import { GetTeamListRequest, TeamItem } from '@/api/request/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -38,16 +35,10 @@ export default function Team() {
     manual: true,
     onSuccess: ({ items, pagination }) => {
       setTeamList(items || [])
-      setTotal(pagination.total)
+      setTotal(pagination?.total || 0)
     }
   })
 
-  const { run: syncTeamInfo, loading: syncTeamInfoLoading } = useRequest(syncTeam, {
-    manual: true,
-    onSuccess: () => {
-      message.success('同步中， 请稍后')
-    }
-  })
 
   const searchRef = useRef<HTMLDivElement>(null)
   const ADivRef = useRef<HTMLDivElement>(null)
@@ -59,7 +50,7 @@ export default function Team() {
       ...formData,
       pagination: {
         page: 1,
-        pageSize: searchParams.pagination.pageSize
+        pageSize: searchParams.pagination?.pageSize || 50
       }
     })
   }
@@ -75,7 +66,11 @@ export default function Team() {
   const handleTurnPage = (page: number, pageSize: number) => {
     setSearchParams({
       ...searchParams,
-      pagination: { page, pageSize }
+      pagination: {
+        page,
+        pageSize,
+        ...(searchParams.pagination || {})
+      }
     })
   }
 
@@ -92,32 +87,29 @@ export default function Team() {
   const onHandleMenuOnClick = (item: TeamItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
-        updateTeamStatus({ id: item.id, status: Status.StatusEnable }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
-        })
+        // TODO: Implement team status update functionality
+        message.info('团队状态更新功能暂未实现')
         break
       case ActionKey.DISABLE:
-        updateTeamStatus({ id: item.id, status: Status.StatusDisable }).then(() => {
-          message.success('更改状态成功')
-          onRefresh()
-        })
+        // TODO: Implement team status update functionality
+        message.info('团队状态更新功能暂未实现')
         break
       case ActionKey.OPERATION_LOG:
         break
       case ActionKey.DETAIL:
-        handleOpenDetailModal(item.id)
+        handleOpenDetailModal(item.teamId || 0)
         break
       case ActionKey.SYNC:
-        syncTeamInfo({ teamIds: [item.id] })
+        // TODO: Implement team sync functionality
+        message.info('团队同步功能暂未实现')
         break
     }
   }
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.page,
-    pageSize: searchParams.pagination.pageSize
+    current: searchParams.pagination?.page || 1,
+    pageSize: searchParams.pagination?.pageSize || 50
   })
 
   useEffect(() => {
@@ -161,11 +153,11 @@ export default function Team() {
             rowKey={(record) => record.id}
             dataSource={teamList}
             total={total}
-            loading={loading || syncTeamInfoLoading}
+            loading={loading}
             columns={columns}
             handleTurnPage={handleTurnPage}
-            pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.page}
+            pageSize={searchParams.pagination?.pageSize || 50}
+            pageNum={searchParams.pagination?.page || 1}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

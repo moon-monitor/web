@@ -1,12 +1,11 @@
-import { getTopics, GetTopicsRequest } from '@/api/datasource/mq'
 import { defaultPaginationReq } from '@/api/global'
-import { TopicItem } from '@/api/model-types'
+import { ListMetricDatasourceMetadataRequest } from '@/api/request/types'
+import { TopicItem } from '@/api/request/types/model-types'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
 import { GlobalContext } from '@/utils/context'
-import { useRequest } from 'ahooks'
 import { Button, Flex, Form, Input, message, Space, Table, Typography } from 'antd'
 import { ColumnsType } from 'antd/es/table'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 import ReactJson from 'react-json-view'
 
 export interface TopicsProps {
@@ -23,8 +22,8 @@ export default function Topics(props: TopicsProps) {
   const [topics, setTopics] = useState<TopicItem[]>([])
   const [total, setTotal] = useState(0)
   const [refresh, setRefresh] = useState(false)
-  const [searchParams, setSearchParams] = useState<GetTopicsRequest>({
-    datasourceID,
+  const [searchParams, setSearchParams] = useState<ListMetricDatasourceMetadataRequest>({
+    datasourceId: datasourceID,
     pagination: defaultPaginationReq
   })
 
@@ -97,19 +96,7 @@ export default function Topics(props: TopicsProps) {
     }
   ]
 
-  const { run: fetchTopics, loading } = useRequest((params: GetTopicsRequest) => getTopics(params), {
-    manual: true, // 手动触发请求
-    onSuccess: (res) => {
-      setTopics(res.list)
-      setTotal(res?.pagination?.total || 0)
-    }
-  })
 
-  useEffect(() => {
-    if (datasourceID) {
-      fetchTopics(searchParams)
-    }
-  }, [datasourceID, refresh, searchParams, fetchTopics])
 
   return (
     <div className='flex flex-col gap-3'>

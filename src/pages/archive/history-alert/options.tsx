@@ -4,7 +4,7 @@ import { AlarmHistoryItem } from '@/api/realtime/history'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
-import { Button, Space } from 'antd'
+import { Button, Space, Tag } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 
 export const formList: SearchFormItem[] = [
@@ -76,7 +76,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<AlarmHistory
       key: 'alertStatus',
       width: 160,
       render: (status: AlertStatus) => {
-        return AlertStatusData[status]
+        const data = AlertStatusData[status]
+        return <Tag color={data?.color}>{data?.label}</Tag>
       }
     },
     {

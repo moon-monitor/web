@@ -1,5 +1,5 @@
-import type { DashboardItem } from '@/api/model-types'
-import { getDashboard, listMyDashboard } from '@/api/realtime/dashboard'
+import { getTeamDashboard, listTeamDashboard } from '@/api/request/teamdashboard'
+import type { DashboardItem } from '@/api/request/types/model-types'
 import { PreviewCard } from '@/pages/team/dashboard/chart/modal-preview'
 import { useRequest } from 'ahooks'
 import { Badge, Button, Row, Space, Tabs, theme } from 'antd'
@@ -10,22 +10,22 @@ const { useToken } = theme
 
 export default function Monitor() {
   const { token } = useToken()
-  const [monitorDashboard, setMonitorDashboard] = useState<DashboardItem[]>([])
+  const [monitorDashboard, setMonitorDashboard] = useState<TeamDashboardItem[]>([])
   const [dashboard, setDashboard] = useState<DashboardItem>()
   const [appendDashboardModal, setAppendDashboardModal] = useState<boolean>(false)
   const ADivRef = useRef<HTMLDivElement>(null)
 
-  const { run: runGetDashboard, loading: loadingGetDashboard } = useRequest(getDashboard, {
+  const { run: runGetDashboard, loading: loadingGetDashboard } = useRequest(getTeamDashboard, {
     manual: true,
     onSuccess: (data) => {
       setDashboard(data.detail)
     }
   })
 
-  const { run: fetchMyDashboard, loading: loadingFetchMyDashboard } = useRequest(listMyDashboard, {
+  const { run: fetchMyDashboard, loading: loadingFetchMyDashboard } = useRequest(listTeamDashboard, {
     manual: true,
     onSuccess: (data) => {
-      setMonitorDashboard(data.list || [])
+      setMonitorDashboard(data.items || [])
     }
   })
 

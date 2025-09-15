@@ -1,5 +1,5 @@
-import { TeamMetricDatasourceItem } from '@/api2/common.types'
-import request, { baseURL } from '@/api2/request'
+import { TeamMetricDatasourceItem } from '@/api/common.types'
+import request, { baseURL } from '@/api/request'
 import { MetricsChart } from '@/components/chart/metrics-charts'
 import PromQLInput from '@/components/data/child/prom-ql'
 import { DataFrom } from '@/components/data/form'
@@ -81,9 +81,9 @@ export const TimelyQuery: React.FC<TimelyQueryProps> = (props) => {
             renderItem={(item: DetailValue, index: React.Key) => {
               const metricExpr = item?.metric?.__name__
                 ? `${item?.metric?.__name__}{${Object.keys(item?.metric || {})
-                    .filter((key) => key !== '__name__' && key !== 'id')
-                    .map((key) => `${key}="${item?.metric[key]}"`)
-                    .join(', ')}}`
+                  .filter((key) => key !== '__name__' && key !== 'id')
+                  .map((key) => `${key}="${item?.metric[key]}"`)
+                  .join(', ')}}`
                 : expr || ''
               return (
                 <List.Item key={index} id={`list-${index}`}>

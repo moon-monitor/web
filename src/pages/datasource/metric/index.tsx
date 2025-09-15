@@ -1,9 +1,9 @@
-import { TeamMetricDatasourceItem } from '@/api2/common.types'
-import { listTeamMetricDatasource } from '@/api2/team/team-datasource'
+import { TeamMetricDatasourceItem } from '@/api/common.types'
+import { listTeamMetricDatasource } from '@/api/request/teamdatasource'
 import {
-  defaultSearchTeamMetricDatasourceParams,
+  ListMetricDatasourceMetadataRequest,
   type ListTeamMetricDatasourceRequest
-} from '@/api2/team/team-datasource.types'
+} from '@/api/request/types/index'
 import useStorage from '@/hooks/storage'
 import { useRequest } from 'ahooks'
 import { Button, Empty, Input, Menu, Tabs, type TabsProps, theme } from 'antd'
@@ -16,6 +16,13 @@ import { Metadata } from './metadata'
 import { TimelyQuery } from './timely-query'
 
 const { useToken } = theme
+
+export const defaultSearchTeamMetricDatasourceParams: ListMetricDatasourceMetadataRequest = {
+  pagination: {
+    page: 1,
+    pageSize: 100
+  }
+}
 
 const Metric: React.FC = () => {
   const { token } = useToken()

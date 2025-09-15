@@ -68,7 +68,7 @@ const ModalDetail: FC<ModalDetailProps> = ({ historyItem, open, ...reset }) => {
         label: '告警状态',
         children: (
           <>
-            {AlertStatusData[alertStatus]} {duration}
+            {AlertStatusData[alertStatus]?.label} {duration}
           </>
         ),
         span: 2
