@@ -1,11 +1,11 @@
-import { EmptyReply, UserItem } from '@/api/common.types'
 import {
-  type ResetUserPasswordBySelfRequest,
-  type UpdateUserAvatarRequest,
-  type UpdateUserBaseInfoRequest,
-  type UpdateUserRequest
+  type EmptyReply,
+  type UpdateSelfAvatarRequest,
+  type UpdateSelfInfoRequest,
+  type UpdateSelfPasswordRequest,
+  type UserItem
 } from '@/api/request/types'
-import { selfInfo, updateSelfInfo, updateSelfPassword } from '@/api/request/user'
+import { selfInfo, updateSelfEmail, updateSelfInfo, updateSelfPassword, updateSelfPhone } from '@/api/request/user'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
 import { GlobalContext } from '@/utils/context'
 import { hashMd5 } from '@/utils/hash'
@@ -17,14 +17,12 @@ import { useContext, useEffect, useState } from 'react'
 import { BaseInfo } from './base-info'
 import { MyTeam } from './my-team'
 import { avatarOptions, emailOptions, passwordOptions, phoneOptions } from './options'
-// import { updateUserEmail, updateUserPhone } from '@/api/request/user' // TODO: 实现这些 API 函数
-
-// 占位符函数，待实现
-const updateUserEmail = async (params: any): Promise<EmptyReply> => {
-  throw new Error('updateUserEmail API not implemented yet')
+// 使用专门的API函数更新手机号和邮箱
+const updateUserEmail = async (params: { email: string }): Promise<EmptyReply> => {
+  return updateSelfEmail({ email: params.email })
 }
-const updateUserPhone = async (params: any): Promise<EmptyReply> => {
-  throw new Error('updateUserPhone API not implemented yet')
+const updateUserPhone = async (params: { phone: string }): Promise<EmptyReply> => {
+  return updateSelfPhone({ phone: params.phone })
 }
 
 export interface SelfManageProps {
@@ -41,7 +39,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
   const [tab, setTab] = useState<TabType>('basic')
   const { token } = useToken()
   const [userDetail, setUserDetail] = useState<UserItem>({} as UserItem)
-  const [form] = Form.useForm<UpdateUserRequest | UpdateUserBaseInfoRequest | UpdateUserAvatarRequest>()
+  const [form] = Form.useForm<UpdateSelfInfoRequest | UpdateSelfAvatarRequest>()
 
   const showUpdateModal = (type: 'phone' | 'email' | 'avatar') => {
     let options: (DataFromItem | DataFromItem[])[]
@@ -128,17 +126,17 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
     if (!userInfo) {
       return
     }
-    selfInfo().then((res) => {
+    selfInfo({}).then((res) => {
       localStorage.setItem('user', JSON.stringify(res))
       setUserDetail(res)
-      setUserInfo?.(res)
+      setUserInfo?.(res as any)
     })
   }
 
-  const updatePassword = (val: ResetUserPasswordBySelfRequest) => {
-    const params: ResetUserPasswordBySelfRequest = {
-      oldPassword: hashMd5(val.oldPassword),
-      newPassword: hashMd5(val.newPassword)
+  const updatePassword = (val: UpdateSelfPasswordRequest) => {
+    const params: UpdateSelfPasswordRequest = {
+      oldPassword: hashMd5(val.oldPassword || ''),
+      newPassword: hashMd5(val.newPassword || '')
     }
     updateSelfPassword(params).then(() => {
       message.success('修改密码成功')
@@ -178,7 +176,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
           </Space>
         )
       default:
-        return <BaseInfo userInfo={userDetail} onOK={getUserInfo} />
+        return <BaseInfo userInfo={userDetail as any} onOK={getUserInfo} />
     }
   }
 

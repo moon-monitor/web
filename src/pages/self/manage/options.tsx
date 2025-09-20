@@ -1,3 +1,4 @@
+import { Gender } from '@/api/enum'
 import { GenderData } from '@/api/global'
 import type { DataFromItem } from '@/components/data/form'
 
@@ -16,10 +17,12 @@ export const baseInfoOptions: (DataFromItem | DataFromItem[])[] = [
       name: 'gender',
       type: 'radio-group',
       props: {
-        options: Object.entries(GenderData).map(([key, value]) => ({
-          label: value.label,
-          value: +key
-        }))
+        options: Object.entries(GenderData)
+          .filter(([key]) => +key !== Gender.GenderAll) // 过滤掉"全部"选项
+          .map(([key, value]) => ({
+            label: value.label,
+            value: +key
+          }))
       },
       formProps: {
         rules: [{ required: true, message: '必选' }]

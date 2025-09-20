@@ -2244,6 +2244,14 @@ export interface UpdateSelfInfoRequest {
    * User remark or description
    */
   remark?: string
+  /**
+   * User phone number
+   */
+  phone?: string
+  /**
+   * User email address
+   */
+  email?: string
 }
 
 /**
@@ -2258,6 +2266,26 @@ export interface UpdateSelfPasswordRequest {
    * Current password
    */
   oldPassword?: string
+}
+
+/**
+ * api.palace.UpdateSelfEmailRequest
+ */
+export interface UpdateSelfEmailRequest {
+  /**
+   * User email address
+   */
+  email: string
+}
+
+/**
+ * api.palace.UpdateSelfPhoneRequest
+ */
+export interface UpdateSelfPhoneRequest {
+  /**
+   * User phone number
+   */
+  phone: string
 }
 
 /**
