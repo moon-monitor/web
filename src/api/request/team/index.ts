@@ -72,7 +72,8 @@ export function getSMSConfig(params: EmptyRequest): Promise<SMSConfigItem> {
 /**
  * GetSMSConfigs Team
  * @param { GetSMSConfigsRequest } params
- * @returns {Promise<GetSMSConfigsReply>} */
+ * @returns {Promise<GetSMSConfigsReply>}
+ */
 export function getSMSConfigs(params: GetSMSConfigsRequest): Promise<GetSMSConfigsReply> {
   return request.POST<GetSMSConfigsReply>('/api/team/sms/configs', params)
 }
@@ -229,7 +230,6 @@ export function updateMemberStatus(params: UpdateMemberStatusRequest): Promise<E
 export function updateTeam(params: SaveTeamRequest): Promise<EmptyReply> {
   return request.PUT<EmptyReply>('/api/team/update', params)
 }
-
 /**
  * UpdateTeamRoleStatus Team
  * @param { UpdateTeamRoleStatusRequest } params
