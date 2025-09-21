@@ -1,5 +1,5 @@
 import { TeamDictItem } from '@/api/common.types'
-import { ActionKey } from '@/api/enum'
+import { ActionKey, GlobalStatus } from '@/api/enum'
 import { deleteTeamDict, listTeamDict, updateTeamDictStatus } from '@/api/request/teamdict'
 import { ListTeamDictRequest } from '@/api/request/types'
 import SearchBox from '@/components/data/search-box'
@@ -23,7 +23,7 @@ const defaultSearchParams: ListTeamDictRequest = {
     pageSize: 10
   },
   keyword: '',
-  status: 'GLOBAL_STATUS_UNKNOWN'
+  status: GlobalStatus.GLOBAL_STATUS_UNKNOWN
   // teamId: ''
 }
 
@@ -130,13 +130,13 @@ const Group: React.FC = () => {
       case ActionKey.ENABLE:
         batchUpdateDictStatus({
           dictIds: [item.dictId],
-          status: 'GLOBAL_STATUS_ENABLE'
+          status: GlobalStatus.GLOBAL_STATUS_ENABLE
         })
         break
       case ActionKey.DISABLE:
         batchUpdateDictStatus({
           dictIds: [item.dictId],
-          status: 'GLOBAL_STATUS_DISABLE'
+          status: GlobalStatus.GLOBAL_STATUS_DISABLE
         })
         break
       case ActionKey.OPERATION_LOG:
