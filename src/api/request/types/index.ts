@@ -2289,6 +2289,20 @@ export interface UpdateSelfPhoneRequest {
 }
 
 /**
+ * api.palace.UpdateTeamStatusRequest
+ */
+export interface UpdateTeamStatusRequest {
+  /**
+   * Team ID
+   */
+  teamId: number
+  /**
+   * Team status
+   */
+  status: number
+}
+
+/**
  * api.palace.UpdateTeamAuditStatusRequest
  */
 export interface UpdateTeamAuditStatusRequest {

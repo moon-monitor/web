@@ -29,7 +29,8 @@ import {
   UpdateMemberPositionRequest,
   UpdateMemberRolesRequest,
   UpdateMemberStatusRequest,
-  UpdateTeamRoleStatusRequest
+  UpdateTeamRoleStatusRequest,
+  UpdateTeamStatusRequest
 } from '../types/index.ts'
 
 /**
@@ -236,4 +237,13 @@ export function updateTeam(params: SaveTeamRequest): Promise<EmptyReply> {
  */
 export function updateTeamRoleStatus(params: UpdateTeamRoleStatusRequest): Promise<EmptyReply> {
   return request.PUT<EmptyReply>('/api/team/role/status', params)
+}
+
+/**
+ * UpdateTeamStatus Team
+ * @param { UpdateTeamStatusRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateTeamStatus(params: UpdateTeamStatusRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/team/status', params)
 }
