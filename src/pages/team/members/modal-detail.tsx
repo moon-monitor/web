@@ -37,7 +37,7 @@ export function DetailModal(props: HookDetailModalProps) {
     },
     {
       label: '角色类型',
-      children: RoleData[detail.role],
+      children: RoleData[detail.role]?.label || '-',
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },
     {

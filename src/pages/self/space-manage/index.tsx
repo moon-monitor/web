@@ -131,12 +131,12 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                 {
                   key: 'leader',
                   label: '负责人',
-                  children: (
+                  children: leader ? (
                     <Space direction='horizontal'>
                       <Avatar src={leader?.avatar} />
-                      {`${leader?.username}(${leader?.nickname})`}
+                      {`${leader?.username || ''}(${leader?.nickname || ''})`}
                     </Space>
-                  ),
+                  ) : '-',
                   span: 4
                 },
                 {
@@ -145,7 +145,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                   children: creator ? (
                     <Space direction='horizontal'>
                       <Avatar src={creator?.avatar} />
-                      {`${creator?.username}(${creator?.nickname})`}
+                      {`${creator?.username || ''}(${creator?.nickname || ''})`}
                     </Space>
                   ) : (
                     '-'
@@ -160,7 +160,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                       {admins?.length
                         ? admins?.map((admin) => (
                           <Avatar key={admin?.userId} src={admin?.avatar}>
-                            {admin?.nickname || admin?.username}
+                            {admin?.nickname || admin?.username || ''}
                           </Avatar>
                         ))
                         : '-'}
@@ -186,7 +186,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
               return (
                 <Col key={index + (name || '')} xs={24} sm={12} md={12} lg={12} xl={8} xxl={6}>
                   <Badge.Ribbon
-                    style={{ display: teamInfo?.teamId === teamId ? '' : 'none' }}
+                    style={{ display: teamInfo?.teamId === teamId ? 'block' : 'none' }}
                     text='current'
                     color='purple'
                   >

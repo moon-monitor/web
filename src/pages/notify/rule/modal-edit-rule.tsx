@@ -115,7 +115,7 @@ export function EditRuleModal(props: EditRuleModalProps) {
                 .filter(([key]) => +key !== TimeEngineRuleType.TimeEngineRuleTypeUnknown)
                 .map(([key, value]) => {
                   const { icon, label } = value
-                  return     
+                  return {
                     value: +key,
                     label: (
                       <Space direction='horizontal'>
