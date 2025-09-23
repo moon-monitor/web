@@ -1,6 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
-import { TeamMetricDatasourceItem } from '@/api/common.types'
+import { TeamMetricDatasourceItem } from '@/api/request/types'
 import { Button, Flex, Form, Input, Select, Space, Table } from 'antd'
 import { ColumnsType } from 'antd/es/table'
 import React from 'react'
@@ -11,7 +9,7 @@ export interface AlarmTemplateProps {
 
 export const AlarmTemplate: React.FC<AlarmTemplateProps> = () => {
   const [data] = React.useState<TeamMetricDatasourceItem[]>([])
-  const columns: ColumnsType<any> = [
+  const columns: ColumnsType<TeamMetricDatasourceItem> = [
     {
       title: '模板名称',
       dataIndex: 'name',

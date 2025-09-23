@@ -69,8 +69,7 @@ const StrategyMetric: React.FC = () => {
   })
 
   // 处理搜索事件
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const onPressEnter = (e: any) => {
+  const onPressEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     setSearchParams({
       ...searchParams,
       keyword: e.target.value

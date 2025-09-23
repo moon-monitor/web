@@ -425,7 +425,7 @@ const Dashboard: React.FC = () => {
             <List
               className='h-[400px] overflow-auto'
               dataSource={latestAlarmEvents?.events || []}
-              renderItem={(item: any) => (
+              renderItem={(item: { title?: string; summary?: string; timestamp?: string; eventTime?: string; severity?: string; level?: string }) => (
                 <List.Item className='flex justify-between'>
                   <div className='flex flex-col gap-1'>
                     <div className='text-sm font-bold text-ellipsis' style={{ color: token.colorText }}>

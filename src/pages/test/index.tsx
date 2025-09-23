@@ -1,4 +1,4 @@
-import { MenuTree } from '@/api/request/types/model-types'
+import { MenuTree } from '@/api/request/types'
 import { GlobalContext } from '@/utils/context'
 import { Tree, TreeDataNode } from 'antd'
 import type { DataNode, EventDataNode, TreeProps } from 'antd/es/tree'
@@ -12,8 +12,7 @@ const Test: React.FC = () => {
   }>({ checked: [], halfChecked: [] })
 
   const findSiblings = (treeData: DataNode[], node: EventDataNode<DataNode>) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const findParent = (data: any, targetKey: any): TreeDataNode | null => {
+    const findParent = (data: DataNode[], targetKey: React.Key): TreeDataNode | null => {
       for (const item of data) {
         if (item.children) {
           for (const child of item.children) {
@@ -39,8 +38,7 @@ const Test: React.FC = () => {
     if (!checkedKeysValue || typeof checkedKeysValue !== 'object') return
 
     const checkedKeysArray = Array.isArray(checkedKeysValue) ? checkedKeysValue : checkedKeysValue.checked
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const newCheckedKeys: any = { checked: [...checkedKeysArray] }
+    const newCheckedKeys: { checked: React.Key[]; halfChecked: React.Key[] } = { checked: [...checkedKeysArray], halfChecked: [] }
     const { node, checked } = info
 
     if (!(node.children && node.children.length > 0)) {
@@ -51,8 +49,7 @@ const Test: React.FC = () => {
           newCheckedKeys.checked = [...checkedKeysArray, firstSiblingKey]
         } else {
           if (node.key === firstSiblingKey) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const siblingKeys = siblings.map((sibling: { key: any }) => sibling.key)
+            const siblingKeys = siblings.map((sibling: DataNode) => sibling.key)
             newCheckedKeys.checked = checkedKeysArray.filter((key) => !siblingKeys.includes(key))
           } else {
             newCheckedKeys.checked = [...checkedKeysArray]

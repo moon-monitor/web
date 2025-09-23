@@ -146,8 +146,7 @@ export const TemplateEditModal: React.FC<TemplateEditModalProps> = (props) => {
     return validateAnnotationsTemplate({
       annotations: tmpValue,
       expr: expr,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      labels: labelsItems?.reduce((acc: any, { key, value }) => {
+      labels: labelsItems?.reduce((acc: Record<string, string>, { key, value }) => {
         acc[key] = value
         return acc
       }),

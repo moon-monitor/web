@@ -121,8 +121,7 @@ const LogAudit: React.FC = () => {
         )
       }
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ] as AutoTableColumnType<any>[]
+  ] as AutoTableColumnType<LogItem>[]
 
   const handleShowModal = (record: LogItem) => {
     setSelectedRecord(record)

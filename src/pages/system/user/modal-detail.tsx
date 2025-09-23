@@ -38,7 +38,7 @@ export function DetailModal(props: UserDetailModalProps) {
         <div className='flex items-center gap-2'>
           <Avatar src={detail?.avatar}>{detail?.nickname || detail?.username}</Avatar>
           {detail?.nickname || detail?.username}
-          <Badge color={(detail?.status != null ? UserStatusData[detail.status as UserStatus]?.color : undefined) || 'default'} />
+          <Badge color={detail?.status != null ? UserStatusData[detail.status as UserStatus]?.color ?? 'white' : 'white'} />
         </div>
       ),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
@@ -46,8 +46,8 @@ export function DetailModal(props: UserDetailModalProps) {
     {
       label: '角色',
       children: (() => {
-        const data = detail?.position != null ? UserPositionData[detail.position as UserPosition] : undefined
-        return <span style={{ color: data?.color || 'gray' }}>{(data as any)?.text ?? data?.label ?? '未知'}</span>
+        const data = UserPositionData[detail?.position as UserPosition]
+        return <span style={{ color: data?.color || 'gray' }}>{'text' in (data) ? data?.text : data?.label ?? '未知'}</span>
       })(),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },

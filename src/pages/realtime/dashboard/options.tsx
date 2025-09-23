@@ -1,7 +1,13 @@
 // import { InterventionEventItem } from '@/api/realtime/statistics' // TODO: 实现 realtime API
 
 // 占位符类型，待实现
-type InterventionEventItem = any
+interface InterventionEventItem {
+  handledAt?: string
+  handler?: UserItem
+  level?: string
+  summary?: string
+  eventTime?: string
+}
 import { UserItem } from '@/api/request/types/model-types'
 import { Avatar } from 'antd'
 import type { ColumnsType } from 'antd/es/table'

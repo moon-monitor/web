@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { MenuType, Status } from '@/api/enum'
 import { ActionKey, StatusData } from '@/api/global'
 import type { MenuItem, ResourceItem } from '@/api/request/types/model-types'
@@ -252,8 +251,7 @@ export const getMenuColumnList = (props: MenuColumnProps): ColumnsType<MenuItem>
       dataIndex: 'icon',
       key: 'icon',
       width: 160,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      render: (icon: any) => {
+      render: (icon: string) => {
         return renderIcon(icon)
       }
     },
@@ -303,7 +301,7 @@ export const getMenuColumnList = (props: MenuColumnProps): ColumnsType<MenuItem>
   ]
 }
 
-export const menuEditModalFormItems = (formData: any) => {
+export const menuEditModalFormItems = (formData: { menuType?: number }) => {
   return [
     {
       name: 'menuType',

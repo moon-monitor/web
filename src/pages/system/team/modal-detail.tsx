@@ -23,7 +23,7 @@ export const TeamDetailModal: React.FC<ModalDetailProps> = (props) => {
 
   const renderTeamStatus = (status?: number) => {
     const data = status != null ? TeamStatusData[status as keyof typeof TeamStatusData] : undefined
-    return data ? <Tag color={data.color}>{(data as any).text ?? data.label}</Tag> : '--'
+    return data ? <Tag color={data.color}>{data.text ?? data.label}</Tag> : '--'
   }
 
   const items: DescriptionsProps['items'] = [

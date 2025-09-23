@@ -23,7 +23,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
   const { run: getGroupDetail, loading: getGroupDetailLoading } = useRequest(getTeamDict, {
     manual: true,
     onSuccess: (data) => {
-      setGroupDetail(data as any)
+      setGroupDetail(data)
     }
   })
 

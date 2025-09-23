@@ -1,4 +1,4 @@
-import { SelectType, StatusData } from '@/api/global'
+import { StatusData } from '@/api/global'
 
 import SearchForm from '@/components/data/search-form'
 import { Badge, Button, Flex, Form, Space, Table, Tag, theme } from 'antd'
@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react'
 import { searchItems } from './options'
 
 import { Status } from '@/api/enum'
-import { StrategyTemplateItem, UserItem } from '@/api/request/types/model-types'
+import { StrategyTemplateItem, UserItem } from '@/api/request/types'
 import './index.scss'
 import { TemplateEditModal, TemplateEditModalData } from './template-edit-modal'
 
@@ -162,8 +162,7 @@ const StrategyTemplate: React.FC<StrategyTemplateProps> = () => {
     })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  function onValuesChange(_: any, allValues: any) {
+  function onValuesChange(_: unknown, allValues: Record<string, unknown>) {
     setSearchParams((prev) => {
       return {
         ...prev,

@@ -44,8 +44,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
   const showUpdateModal = (type: 'phone' | 'email' | 'avatar') => {
     let options: (DataFromItem | DataFromItem[])[]
     let title: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let update: (params: any) => Promise<EmptyReply | null>
+    let update: (params: UpdateSelfInfoRequest | UpdateSelfAvatarRequest | { email: string } | { phone: string }) => Promise<EmptyReply>
 
     switch (type) {
       case 'phone': {
@@ -129,7 +128,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
     selfInfo({}).then((res) => {
       localStorage.setItem('user', JSON.stringify(res))
       setUserDetail(res)
-      setUserInfo?.(res as any)
+      setUserInfo?.(res)
     })
   }
 
@@ -176,7 +175,7 @@ const SelfManage: React.FC<SelfManageProps> = (props) => {
           </Space>
         )
       default:
-        return <BaseInfo userInfo={userDetail as any} onOK={getUserInfo} />
+        return <BaseInfo userInfo={userDetail} onOK={getUserInfo} />
     }
   }
 
