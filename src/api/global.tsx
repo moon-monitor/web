@@ -219,7 +219,7 @@ export const TeamStatusData: Record<TeamStatus, EnumData> = {
   },
   [TeamStatus.TEAM_STATUS_DELETED]: {
     color: 'red',
-    label: '已删除'
+    label: '已禁用'
   },
   [TeamStatus.TEAM_STATUS_FORBIDDEN]: {
     color: 'red',

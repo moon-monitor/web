@@ -1,4 +1,5 @@
 import { TeamDictItem } from '@/api/common.types'
+import { GlobalStatus } from '@/api/enum'
 import { getTeamDict, saveTeamDict } from '@/api/request/teamdict'
 import { SaveTeamDictRequest } from '@/api/request/types'
 import { DataFrom } from '@/components/data/form'
@@ -50,7 +51,7 @@ export const GroupEditModal: React.FC<GroupEditModalProps> = (props) => {
       const data: SaveTeamDictRequest = {
         ...formValues,
         ...(formValues.color && typeof formValues.color !== 'string' && { color: formValues.color.toHexString() }),
-        status: 'GLOBAL_STATUS_ENABLE'
+        status: GlobalStatus.GLOBAL_STATUS_ENABLE
       }
       editDict({ ...data, ...(groupId && { dictId: groupId }) })
     })

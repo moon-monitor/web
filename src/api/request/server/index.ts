@@ -1,6 +1,6 @@
 // server 模块API函数
-import { request } from '../index.ts'
 import { EmptyRequest, GetServerListReply, ServerRegisterReply, ServerRegisterRequest } from '../types/index.ts'
+import { request } from '../index.ts'
 
 /**
  * GetServerList Server

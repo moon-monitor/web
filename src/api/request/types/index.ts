@@ -101,7 +101,7 @@ export interface MetricQueryResultValue {
 /**
  * api.common.ServerRegisterReply
  */
-export interface ServerRegisterReply { }
+export interface ServerRegisterReply {}
 
 /**
  * api.common.ServerRegisterRequest
@@ -138,7 +138,7 @@ export interface AlertDetailReply {
 /**
  * api.palace.CancelMessageReply
  */
-export interface CancelMessageReply { }
+export interface CancelMessageReply {}
 
 /**
  * api.palace.CancelMessageRequest
@@ -167,7 +167,7 @@ export interface CaptchaValidateRequest {
 /**
  * api.palace.ConfirmMessageReply
  */
-export interface ConfirmMessageReply { }
+export interface ConfirmMessageReply {}
 
 /**
  * api.palace.ConfirmMessageRequest
@@ -219,12 +219,12 @@ export interface DatasourceSelectRequest {
 /**
  * api.palace.DeleteInviteReply
  */
-export interface DeleteInviteReply { }
+export interface DeleteInviteReply {}
 
 /**
  * api.palace.DeleteMessagesReply
  */
-export interface DeleteMessagesReply { }
+export interface DeleteMessagesReply {}
 
 /**
  * api.palace.DeleteMessagesRequest
@@ -616,7 +616,7 @@ export interface InviteMemberRequest {
 /**
  * api.palace.InviteUserReply
  */
-export interface InviteUserReply { }
+export interface InviteUserReply {}
 
 /**
  * api.palace.InviteUserRequest
@@ -2127,7 +2127,7 @@ export interface TransferTeamRequest {
 /**
  * api.palace.UpdateInviteStatusReply
  */
-export interface UpdateInviteStatusReply { }
+export interface UpdateInviteStatusReply {}
 
 /**
  * api.palace.UpdateInviteStatusRequest
@@ -2229,6 +2229,16 @@ export interface UpdateSelfAvatarRequest {
 }
 
 /**
+ * api.palace.UpdateSelfEmailRequest
+ */
+export interface UpdateSelfEmailRequest {
+  /**
+   * New email address
+   */
+  email?: string
+}
+
+/**
  * api.palace.UpdateSelfInfoRequest
  */
 export interface UpdateSelfInfoRequest {
@@ -2258,6 +2268,16 @@ export interface UpdateSelfPasswordRequest {
    * Current password
    */
   oldPassword?: string
+}
+
+/**
+ * api.palace.UpdateSelfPhoneRequest
+ */
+export interface UpdateSelfPhoneRequest {
+  /**
+   * New phone number
+   */
+  phone?: string
 }
 
 /**
@@ -2353,6 +2373,20 @@ export interface UpdateTeamRoleStatusRequest {
    * New status for the role
    */
   status?: number
+}
+
+/**
+ * api.palace.UpdateTeamStatusRequest
+ */
+export interface UpdateTeamStatusRequest {
+  /**
+   * New status for the team
+   */
+  status?: number
+  /**
+   * Team Id
+   */
+  teamId?: number
 }
 
 /**
@@ -2526,12 +2560,12 @@ export interface EmailConfigItem {
 /**
  * api.palace.common.EmptyReply
  */
-export interface EmptyReply { }
+export interface EmptyReply {}
 
 /**
  * api.palace.common.EmptyRequest
  */
-export interface EmptyRequest { }
+export interface EmptyRequest {}
 
 /**
  * api.palace.common.KeyValueItem

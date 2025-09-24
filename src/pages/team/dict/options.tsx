@@ -5,7 +5,7 @@ import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
 import MoreMenu from '@/components/moreMenu'
-import { Badge, Button, Space } from 'antd'
+import { Badge, Button, Space, Tag } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 
 export const formList: SearchFormItem[] = [
@@ -31,7 +31,7 @@ export const formList: SearchFormItem[] = [
         mode: 'multiple',
         options: Object.entries(DictTypeData).map(([key, value]) => {
           return {
-            label: value,
+            label: value.label,
             value: +key
           }
         })
@@ -49,7 +49,7 @@ export const formList: SearchFormItem[] = [
         allowClear: true,
         options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: value.text,
+            label: value.label,
             value: +key
           }
         })
@@ -223,11 +223,11 @@ export const editModalFormItems = (): (DataFromItem | DataFromItem[])[] => [
       placeholder: '请选择字典类型',
       options: Object.entries(DictTypeData)
         .filter(([key]) => {
-          return +key !== DictType.DICT_TYPE_UNKNOWN
+          return +key !== DictType.DictTypeUnknown
         })
         .map(([key, value]) => {
           return {
-            label: value,
+            label: value.label,
             value: +key
           }
         })

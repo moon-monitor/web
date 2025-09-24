@@ -32,7 +32,6 @@ export const transformRoutersTree = (menuTree: MenuTreeItem[]): RouteObject[] =>
       loader: () => ({ title: item.name }),
       children: item.children?.length ? transformRoutersTree(item.children) : undefined
     }
-    console.log('routersItem', routersItem)
     return routersItem
   })
 }

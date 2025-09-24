@@ -231,8 +231,7 @@ export const TimelyQuery: React.FC<TimelyQueryProps> = (props) => {
         console.log('err', err)
         return {}
       })
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      .then((query: any) => {
+      .then((query: { data?: { resultType?: string; result?: DetailValue[] | RangeValue[] } }) => {
         if (query.data) {
           switch (query.data?.resultType) {
             case 'matrix':

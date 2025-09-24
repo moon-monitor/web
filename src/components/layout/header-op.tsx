@@ -80,7 +80,7 @@ export const HeaderOp: React.FC = () => {
           label: '退出登录',
           danger: true,
           onClick: () => {
-            logout().then(() => {
+            logout({ redirect: logoutURL }).then(() => {
               setLocalURL?.(logoutURL)
               removeUserInfo?.()
               removeToken()

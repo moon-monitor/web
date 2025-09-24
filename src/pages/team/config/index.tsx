@@ -1,8 +1,8 @@
 // import { getTeamConfig, updateTeamConfig } from '@/api/request/team' // TODO: 实现 team config API
 
 // 占位符函数，待实现
-const getTeamConfig = async (): Promise<any> => { throw new Error('getTeamConfig API not implemented yet') }
-const updateTeamConfig = async (params: any): Promise<any> => { throw new Error('updateTeamConfig API not implemented yet') }
+const getTeamConfig = async (): Promise<TeamConfigItem> => { throw new Error('getTeamConfig API not implemented yet') }
+const updateTeamConfig = async (params: TeamConfigFormData): Promise<TeamConfigItem> => { throw new Error('updateTeamConfig API not implemented yet') }
 import type {
   AsymmetricEncryptionConfigItem,
   EmailConfigItem,

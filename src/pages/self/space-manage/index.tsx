@@ -1,5 +1,6 @@
-import { TeamItem } from '@/api/common.types'
 import { TeamStatus } from '@/api/enum'
+import { updateTeamStatus } from '@/api/request/team'
+import { TeamItem } from '@/api/request/types'
 import { selfTeamList } from '@/api/request/user'
 import { useCreateTeamModal } from '@/hooks/create-team'
 import { GlobalContext } from '@/utils/context'
@@ -16,6 +17,7 @@ import {
   Dropdown,
   Empty,
   type MenuProps,
+  message,
   Row,
   Space,
   Spin,
@@ -67,7 +69,17 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
   }
 
   const handleChangeStatus = (teamId: number, checked: boolean) => {
-
+    const newStatus = checked ? TeamStatus.TEAM_STATUS_FORBIDDEN : TeamStatus.TEAM_STATUS_NORMAL
+    updateTeamStatus({
+      teamId,
+      status: newStatus
+    }).then(() => {
+      message.success('团队状态更新成功')
+      handleRefresh()
+    }).catch((error) => {
+      message.error('团队状态更新失败')
+      console.error('Update team status error:', error)
+    })
   }
 
   useEffect(() => {
@@ -119,12 +131,12 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                 {
                   key: 'leader',
                   label: '负责人',
-                  children: (
+                  children: leader ? (
                     <Space direction='horizontal'>
                       <Avatar src={leader?.avatar} />
-                      {`${leader?.username}(${leader?.nickname})`}
+                      {`${leader?.username || ''}(${leader?.nickname || ''})`}
                     </Space>
-                  ),
+                  ) : '-',
                   span: 4
                 },
                 {
@@ -133,7 +145,7 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                   children: creator ? (
                     <Space direction='horizontal'>
                       <Avatar src={creator?.avatar} />
-                      {`${creator?.username}(${creator?.nickname})`}
+                      {`${creator?.username || ''}(${creator?.nickname || ''})`}
                     </Space>
                   ) : (
                     '-'
@@ -146,9 +158,9 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                   children: (
                     <Avatar.Group size='small'>
                       {admins?.length
-                        ? admins?.map((item) => (
-                          <Avatar key={item?.userId} src={item?.avatar}>
-                            {item?.nickname || item?.username}
+                        ? admins?.map((admin) => (
+                          <Avatar key={admin?.userId} src={admin?.avatar}>
+                            {admin?.nickname || admin?.username || ''}
                           </Avatar>
                         ))
                         : '-'}
@@ -172,14 +184,14 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                 }
               ]
               return (
-                <Col key={index + name} xs={24} sm={12} md={12} lg={12} xl={8} xxl={6}>
+                <Col key={index + (name || '')} xs={24} sm={12} md={12} lg={12} xl={8} xxl={6}>
                   <Badge.Ribbon
-                    style={{ display: teamInfo?.teamId === teamId ? '' : 'none' }}
+                    style={{ display: teamInfo?.teamId === teamId ? 'block' : 'none' }}
                     text='current'
                     color='purple'
                   >
                     <Card
-                      key={index + name}
+                      key={index + (name || '')}
                       className='min-h-[306px] border-none'
                       hoverable
                       title={
@@ -187,12 +199,12 @@ const SpaceManage: React.FC<SpaceManageProps> = () => {
                           <Avatar shape='square' src={logo} className='w-11 h-11'>
                             {!logo && name?.at(0)?.toUpperCase()}
                           </Avatar>
-                          {name}
+                          {name || '-'}
                           <Switch
                             checkedChildren='正常'
                             unCheckedChildren='禁用'
-                            value={status === TeamStatus.TEAM_STATUS_REJECTED}
-                            onChange={(checked) => handleChangeStatus(teamId, checked)}
+                            value={status === TeamStatus.TEAM_STATUS_FORBIDDEN}
+                            onChange={(checked) => teamId && handleChangeStatus(teamId, checked)}
                           />
                         </Space>
                       }

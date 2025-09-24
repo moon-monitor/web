@@ -1,6 +1,6 @@
-import { TeamItem } from '@/api/common.types'
-import { TeamStatus } from '@/api/enum'
+import { TeamStatusData } from '@/api/global'
 import { getTeam } from '@/api/request/system'
+import { TeamItem } from '@/api/request/types'
 
 import { useRequest } from 'ahooks'
 import { Avatar, Descriptions, type DescriptionsProps, Modal, type ModalProps, Tag } from 'antd'
@@ -21,6 +21,11 @@ export const TeamDetailModal: React.FC<ModalDetailProps> = (props) => {
     }
   })
 
+  const renderTeamStatus = (status?: number) => {
+    const data = status != null ? TeamStatusData[status as keyof typeof TeamStatusData] : undefined
+    return data ? <Tag color={data.color}>{data.text ?? data.label}</Tag> : '--'
+  }
+
   const items: DescriptionsProps['items'] = [
     {
       label: '团队名称',
@@ -36,7 +41,7 @@ export const TeamDetailModal: React.FC<ModalDetailProps> = (props) => {
     },
     {
       label: '团队状态',
-      children: detail?.status ? <Tag>{TeamStatus[detail.status]}</Tag> : '--'
+      children: renderTeamStatus(detail?.status)
     },
     {
       label: '管理员',

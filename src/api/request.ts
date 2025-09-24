@@ -140,6 +140,7 @@ const errorHandle = (err: ErrorResponse) => {
     let msg = err.message
     switch (err.code) {
       case 400:
+        message.error(err?.message || '请求失败')
         break
       case 401:
         if (msg === 'JWT token is missing') {
