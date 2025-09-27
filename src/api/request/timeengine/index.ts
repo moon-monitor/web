@@ -1,7 +1,10 @@
 // timeengine 模块API函数
 import {
+  DeleteTimeEngineRequest,
+  DeleteTimeEngineRuleRequest,
   EmptyReply,
-  EmptyRequest,
+  GetTimeEngineRequest,
+  GetTimeEngineRuleRequest,
   ListTimeEngineReply,
   ListTimeEngineRequest,
   ListTimeEngineRuleReply,
@@ -21,37 +24,37 @@ import { request } from '../index.ts'
 
 /**
  * DeleteTimeEngine TimeEngine
- * @param { EmptyRequest } params
+ * @param { DeleteTimeEngineRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTimeEngine(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTimeEngine(params: DeleteTimeEngineRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/time/engine/delete', params)
 }
 
 /**
  * DeleteTimeEngineRule TimeEngine
- * @param { EmptyRequest } params
+ * @param { DeleteTimeEngineRuleRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTimeEngineRule(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTimeEngineRule(params: DeleteTimeEngineRuleRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/time/engine/rule/delete', params)
 }
 
 /**
  * GetTimeEngine TimeEngine
- * @param { EmptyRequest } params
+ * @param { GetTimeEngineRequest } params
  * @returns {Promise<TimeEngineItem>}
  */
-export function getTimeEngine(params: EmptyRequest): Promise<TimeEngineItem> {
+export function getTimeEngine(params: GetTimeEngineRequest): Promise<TimeEngineItem> {
   return request.GET<TimeEngineItem>('/api/time/engine/detail', params)
 }
 
 /**
  * GetTimeEngineRule TimeEngine
- * @param { EmptyRequest } params
+ * @param { GetTimeEngineRuleRequest } params
  * @returns {Promise<TimeEngineItemRule>}
  */
-export function getTimeEngineRule(params: EmptyRequest): Promise<TimeEngineItemRule> {
+export function getTimeEngineRule(params: GetTimeEngineRuleRequest): Promise<TimeEngineItemRule> {
   return request.GET<TimeEngineItemRule>('/api/time/engine/rule/detail', params)
 }
 

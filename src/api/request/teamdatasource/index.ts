@@ -2,8 +2,10 @@
 import {
   DatasourceSelectReply,
   DatasourceSelectRequest,
+  DeleteTeamMetricDatasourceRequest,
   EmptyReply,
-  EmptyRequest,
+  GetMetricDatasourceMetadataRequest,
+  GetTeamMetricDatasourceRequest,
   ListMetricDatasourceMetadataReply,
   ListMetricDatasourceMetadataRequest,
   ListTeamMetricDatasourceReply,
@@ -31,28 +33,30 @@ export function datasourceSelect(params: DatasourceSelectRequest): Promise<Datas
 
 /**
  * DeleteTeamMetricDatasource TeamDatasource
- * @param { EmptyRequest } params
+ * @param { DeleteTeamMetricDatasourceRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamMetricDatasource(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamMetricDatasource(params: DeleteTeamMetricDatasourceRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/metric/datasource', params)
 }
 
 /**
  * GetMetricDatasourceMetadata TeamDatasource
- * @param { EmptyRequest } params
+ * @param { GetMetricDatasourceMetadataRequest } params
  * @returns {Promise<TeamMetricDatasourceMetadataItem>}
  */
-export function getMetricDatasourceMetadata(params: EmptyRequest): Promise<TeamMetricDatasourceMetadataItem> {
+export function getMetricDatasourceMetadata(
+  params: GetMetricDatasourceMetadataRequest
+): Promise<TeamMetricDatasourceMetadataItem> {
   return request.GET<TeamMetricDatasourceMetadataItem>('/api/team/metric/datasource/metadata', params)
 }
 
 /**
  * GetTeamMetricDatasource TeamDatasource
- * @param { EmptyRequest } params
+ * @param { GetTeamMetricDatasourceRequest } params
  * @returns {Promise<TeamMetricDatasourceItem>}
  */
-export function getTeamMetricDatasource(params: EmptyRequest): Promise<TeamMetricDatasourceItem> {
+export function getTeamMetricDatasource(params: GetTeamMetricDatasourceRequest): Promise<TeamMetricDatasourceItem> {
   return request.GET<TeamMetricDatasourceItem>('/api/team/metric/datasource', params)
 }
 
@@ -89,10 +93,10 @@ export function metricDatasourceProxy(params: MetricDatasourceProxyRequest): Pro
 
 /**
  * MetricDatasourceProxy TeamDatasource
- * @param { EmptyRequest } params
+ * @param { MetricDatasourceProxyRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function metricDatasourceProxy2(params: EmptyRequest): Promise<EmptyReply> {
+export function metricDatasourceProxy2(params: MetricDatasourceProxyRequest): Promise<EmptyReply> {
   return request.GET<EmptyReply>('/api/team/datasource/metric/{datasourceId}/{target}', params)
 }
 
@@ -107,10 +111,10 @@ export function metricDatasourceProxy3(params: MetricDatasourceProxyRequest): Pr
 
 /**
  * MetricDatasourceProxy TeamDatasource
- * @param { EmptyRequest } params
+ * @param { MetricDatasourceProxyRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function metricDatasourceProxy4(params: EmptyRequest): Promise<EmptyReply> {
+export function metricDatasourceProxy4(params: MetricDatasourceProxyRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/datasource/metric/{datasourceId}/{target}', params)
 }
 

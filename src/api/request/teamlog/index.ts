@@ -1,7 +1,7 @@
 // teamlog 模块API函数
 import {
   EmptyReply,
-  EmptyRequest,
+  GetSendMessageLogRequest,
   GetTeamSendMessageLogsReply,
   GetTeamSendMessageLogsRequest,
   OperateOneTeamSendMessageRequest,
@@ -11,10 +11,10 @@ import { request } from '../index.ts'
 
 /**
  * GetSendMessageLog TeamLog
- * @param { EmptyRequest } params
+ * @param { GetSendMessageLogRequest } params
  * @returns {Promise<SendMessageLogItem>}
  */
-export function getSendMessageLog(params: EmptyRequest): Promise<SendMessageLogItem> {
+export function getSendMessageLog(params: GetSendMessageLogRequest): Promise<SendMessageLogItem> {
   return request.GET<SendMessageLogItem>('/api/team/log/send/message', params)
 }
 

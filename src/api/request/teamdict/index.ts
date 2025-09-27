@@ -1,7 +1,8 @@
 // teamdict 模块API函数
 import {
+  DeleteTeamDictRequest,
   EmptyReply,
-  EmptyRequest,
+  GetTeamDictRequest,
   ListTeamDictReply,
   ListTeamDictRequest,
   SaveTeamDictRequest,
@@ -14,19 +15,19 @@ import { request } from '../index.ts'
 
 /**
  * DeleteTeamDict TeamDict
- * @param { EmptyRequest } params
+ * @param { DeleteTeamDictRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamDict(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamDict(params: DeleteTeamDictRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/dict', params)
 }
 
 /**
  * GetTeamDict TeamDict
- * @param { EmptyRequest } params
+ * @param { GetTeamDictRequest } params
  * @returns {Promise<TeamDictItem>}
  */
-export function getTeamDict(params: EmptyRequest): Promise<TeamDictItem> {
+export function getTeamDict(params: GetTeamDictRequest): Promise<TeamDictItem> {
   return request.GET<TeamDictItem>('/api/team/dict', params)
 }
 

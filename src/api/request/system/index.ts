@@ -1,15 +1,17 @@
 // system 模块API函数
 import {
   EmptyReply,
-  EmptyRequest,
+  GetSystemRoleRequest,
   GetSystemRolesReply,
   GetSystemRolesRequest,
   GetTeamAuditListReply,
   GetTeamAuditListRequest,
   GetTeamListReply,
   GetTeamListRequest,
+  GetTeamRequest,
   GetUserListReply,
   GetUserListRequest,
+  GetUserRequest,
   OperateLogListReply,
   OperateLogListRequest,
   ResetUserPasswordRequest,
@@ -28,10 +30,10 @@ import { request } from '../index.ts'
 
 /**
  * GetSystemRole System
- * @param { EmptyRequest } params
+ * @param { GetSystemRoleRequest } params
  * @returns {Promise<SystemRoleItem>}
  */
-export function getSystemRole(params: EmptyRequest): Promise<SystemRoleItem> {
+export function getSystemRole(params: GetSystemRoleRequest): Promise<SystemRoleItem> {
   return request.GET<SystemRoleItem>('/api/system/role', params)
 }
 
@@ -46,10 +48,10 @@ export function getSystemRoles(params: GetSystemRolesRequest): Promise<GetSystem
 
 /**
  * GetTeam System
- * @param { EmptyRequest } params
+ * @param { GetTeamRequest } params
  * @returns {Promise<TeamItem>}
  */
-export function getTeam(params: EmptyRequest): Promise<TeamItem> {
+export function getTeam(params: GetTeamRequest): Promise<TeamItem> {
   return request.GET<TeamItem>('/api/system/team/detail', params)
 }
 
@@ -73,10 +75,10 @@ export function getTeamList(params: GetTeamListRequest): Promise<GetTeamListRepl
 
 /**
  * GetUser System
- * @param { EmptyRequest } params
+ * @param { GetUserRequest } params
  * @returns {Promise<UserItem>}
  */
-export function getUser(params: EmptyRequest): Promise<UserItem> {
+export function getUser(params: GetUserRequest): Promise<UserItem> {
   return request.GET<UserItem>('/api/system/user/detail', params)
 }
 
