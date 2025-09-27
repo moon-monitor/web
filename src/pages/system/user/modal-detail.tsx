@@ -47,7 +47,7 @@ export function DetailModal(props: UserDetailModalProps) {
       label: '角色',
       children: (() => {
         const data = UserPositionData[detail?.position as UserPosition]
-        return <span style={{ color: data?.color || 'gray' }}>{'text' in (data) ? data?.text : data?.label ?? '未知'}</span>
+        return <span style={{ color: data?.color || 'gray' }}>{data && 'text' in data ? data?.text : data?.label ?? '未知'}</span>
       })(),
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },

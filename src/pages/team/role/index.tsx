@@ -1,6 +1,6 @@
-import { TeamRoleItem } from '@/api/common.types'
 import { ActionKey, GlobalStatus } from '@/api/enum'
 import { deleteTeamRole, getTeamRoles, updateTeamRoleStatus } from '@/api/request/team'
+import type { TeamRoleItem } from '@/api/request/types'
 import { GetTeamRolesRequest } from '@/api/request/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
@@ -24,7 +24,7 @@ const defaultSearchParams: GetTeamRolesRequest = {
     pageSize: 10
   },
   keyword: '',
-  status: GlobalStatus.GLOBAL_STATUS_UNKNOWN
+  status: undefined
 }
 
 const Group: React.FC = () => {
@@ -73,7 +73,7 @@ const Group: React.FC = () => {
   const { run: fetchData, loading } = useRequest(getTeamRoles, {
     manual: true,
     onSuccess: (res) => {
-      setDatasource(res.items)
+      setDatasource(res.items || [])
       setTotal(res.pagination?.total || 0)
     }
   })
@@ -110,7 +110,7 @@ const Group: React.FC = () => {
       ...formData,
       pagination: {
         page: 1,
-        pageSize: searchParams.pagination.pageSize
+        pageSize: searchParams.pagination?.pageSize || 10
       }
     })
   }
@@ -134,18 +134,18 @@ const Group: React.FC = () => {
   const onHandleMenuOnClick = (item: TeamRoleItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
-        updateRoleStatus({ roleId: item.roleId, status: GlobalStatus.GLOBAL_STATUS_ENABLE })
+        updateRoleStatus({ roleId: item.teamRoleId, status: GlobalStatus.GLOBAL_STATUS_ENABLE })
         break
       case ActionKey.DISABLE:
-        updateRoleStatus({ roleId: item.roleId, status: GlobalStatus.GLOBAL_STATUS_DISABLE })
+        updateRoleStatus({ roleId: item.teamRoleId, status: GlobalStatus.GLOBAL_STATUS_DISABLE })
         break
       case ActionKey.OPERATION_LOG:
         break
       case ActionKey.DETAIL:
-        handleOpenDetailModal(item.teamRoleId)
+        handleOpenDetailModal(item.teamRoleId || 0)
         break
       case ActionKey.EDIT:
-        handleEditModal(item.roleId)
+        handleEditModal(item.teamRoleId || 0)
         break
       case ActionKey.DELETE:
         confirm({
@@ -153,7 +153,7 @@ const Group: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteDict({ roleId: item.roleId })
+            deleteDict({ roleId: item.teamRoleId || 0 })
           },
           onCancel() {
             message.info('取消操作')
@@ -165,8 +165,8 @@ const Group: React.FC = () => {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.page,
-    pageSize: searchParams.pagination.pageSize
+    current: searchParams.pagination?.page || 1,
+    pageSize: searchParams.pagination?.pageSize || 10
   })
 
   return (
@@ -220,8 +220,8 @@ const Group: React.FC = () => {
             loading={loading}
             columns={columns}
             handleTurnPage={handleTurnPage}
-            pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.page}
+            pageSize={searchParams.pagination?.pageSize || 10}
+            pageNum={searchParams.pagination?.page || 1}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

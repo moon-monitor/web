@@ -1,4 +1,5 @@
 // team 模块API函数
+import { request } from '../index.ts'
 import {
   DeleteTeamRoleRequest,
   EmailConfigItem,
@@ -35,7 +36,6 @@ import {
   UpdateTeamRoleStatusRequest,
   UpdateTeamStatusRequest
 } from '../types/index.ts'
-import { request } from '../index.ts'
 
 /**
  * DeleteTeamRole Team

@@ -28,10 +28,11 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
+        mode: 'multiple',
         options: Object.entries(GlobalStatusData).map(([key, value]) => {
           return {
-            label: <Badge {...value} />,
-            value: key
+            label: value.label,
+            value: Number(key)
           }
         })
       }
