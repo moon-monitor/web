@@ -1,7 +1,10 @@
 // teamnotice 模块API函数
 import {
+  DeleteTeamNoticeGroupRequest,
+  DeleteTeamNoticeHookRequest,
   EmptyReply,
-  EmptyRequest,
+  GetTeamNoticeGroupRequest,
+  GetTeamNoticeHookRequest,
   ListTeamNoticeGroupReply,
   ListTeamNoticeGroupRequest,
   ListTeamNoticeHookReply,
@@ -21,37 +24,37 @@ import { request } from '../index.ts'
 
 /**
  * DeleteTeamNoticeGroup TeamNotice
- * @param { EmptyRequest } params
+ * @param { DeleteTeamNoticeGroupRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamNoticeGroup(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamNoticeGroup(params: DeleteTeamNoticeGroupRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/notice/group', params)
 }
 
 /**
  * DeleteTeamNoticeHook TeamNotice
- * @param { EmptyRequest } params
+ * @param { DeleteTeamNoticeHookRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamNoticeHook(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamNoticeHook(params: DeleteTeamNoticeHookRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/notice/hook', params)
 }
 
 /**
  * GetTeamNoticeGroup TeamNotice
- * @param { EmptyRequest } params
+ * @param { GetTeamNoticeGroupRequest } params
  * @returns {Promise<NoticeGroupItem>}
  */
-export function getTeamNoticeGroup(params: EmptyRequest): Promise<NoticeGroupItem> {
+export function getTeamNoticeGroup(params: GetTeamNoticeGroupRequest): Promise<NoticeGroupItem> {
   return request.GET<NoticeGroupItem>('/api/team/notice/group', params)
 }
 
 /**
  * GetTeamNoticeHook TeamNotice
- * @param { EmptyRequest } params
+ * @param { GetTeamNoticeHookRequest } params
  * @returns {Promise<NoticeHookItem>}
  */
-export function getTeamNoticeHook(params: EmptyRequest): Promise<NoticeHookItem> {
+export function getTeamNoticeHook(params: GetTeamNoticeHookRequest): Promise<NoticeHookItem> {
   return request.GET<NoticeHookItem>('/api/team/notice/hook', params)
 }
 

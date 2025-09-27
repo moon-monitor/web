@@ -12,6 +12,7 @@ import { Button, Modal, Space, message, theme } from 'antd'
 import type React from 'react'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { GroupEditModal } from './group-edit-modal'
+import { RoleDetailModal } from './modal-detail'
 import { formList, getColumnList } from './options'
 
 const { confirm } = Modal
@@ -37,6 +38,8 @@ const Group: React.FC = () => {
   const [openGroupEditModal, setOpenGroupEditModal] = useState(false)
   const [editGroupId, setEditGroupId] = useState<number>()
   const [disabledEditGroupModal, setDisabledEditGroupModal] = useState(false)
+  const [openRoleDetailModal, setOpenRoleDetailModal] = useState(false)
+  const [detailRoleId, setDetailRoleId] = useState<number>()
 
   const searchRef = useRef<HTMLDivElement>(null)
   const ADivRef = useRef<HTMLDivElement>(null)
@@ -53,10 +56,14 @@ const Group: React.FC = () => {
     setOpenGroupEditModal(true)
   }
 
-  const handleOpenDetailModal = (groupId: number) => {
-    setEditGroupId(groupId)
-    setOpenGroupEditModal(true)
-    setDisabledEditGroupModal(true)
+  const handleOpenDetailModal = (roleId: number) => {
+    setDetailRoleId(roleId)
+    setOpenRoleDetailModal(true)
+  }
+
+  const handleCloseRoleDetailModal = () => {
+    setOpenRoleDetailModal(false)
+    setDetailRoleId(undefined)
   }
 
   const onRefresh = () => {
@@ -66,7 +73,7 @@ const Group: React.FC = () => {
   const { run: fetchData, loading } = useRequest(getTeamRoles, {
     manual: true,
     onSuccess: (res) => {
-      setDatasource(res.items || [])
+      setDatasource(res.items)
       setTotal(res.pagination?.total || 0)
     }
   })
@@ -135,7 +142,7 @@ const Group: React.FC = () => {
       case ActionKey.OPERATION_LOG:
         break
       case ActionKey.DETAIL:
-        handleOpenDetailModal(item.roleId)
+        handleOpenDetailModal(item.teamRoleId)
         break
       case ActionKey.EDIT:
         handleEditModal(item.roleId)
@@ -173,6 +180,11 @@ const Group: React.FC = () => {
         onOk={handleGroupEditModalSubmit}
         groupId={editGroupId}
         disabled={disabledEditGroupModal}
+      />
+      <RoleDetailModal
+        open={openRoleDetailModal}
+        onCancel={handleCloseRoleDetailModal}
+        roleId={detailRoleId}
       />
       <div
         style={{

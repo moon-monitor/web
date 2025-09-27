@@ -1,5 +1,4 @@
 // user 模块API函数
-import { request } from '../index.ts'
 import {
   CreateTeamRequest,
   EmptyReply,
@@ -16,6 +15,7 @@ import {
   UpdateSelfPhoneRequest,
   UserItem
 } from '../types/index.ts'
+import { request } from '../index.ts'
 
 /**
  * CreateTeam User
@@ -83,6 +83,15 @@ export function updateSelfAvatar(params: UpdateSelfAvatarRequest): Promise<Empty
 }
 
 /**
+ * UpdateSelfEmail User
+ * @param { UpdateSelfEmailRequest } params
+ * @returns {Promise<EmptyReply>}
+ */
+export function updateSelfEmail(params: UpdateSelfEmailRequest): Promise<EmptyReply> {
+  return request.PUT<EmptyReply>('/api/user/self/email', params)
+}
+
+/**
  * UpdateSelfInfo User
  * @param { UpdateSelfInfoRequest } params
  * @returns {Promise<EmptyReply>}
@@ -98,15 +107,6 @@ export function updateSelfInfo(params: UpdateSelfInfoRequest): Promise<EmptyRepl
  */
 export function updateSelfPassword(params: UpdateSelfPasswordRequest): Promise<EmptyReply> {
   return request.PUT<EmptyReply>('/api/user/self/password', params)
-}
-
-/**
- * UpdateSelfEmail User
- * @param { UpdateSelfEmailRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateSelfEmail(params: UpdateSelfEmailRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/user/self/email', params)
 }
 
 /**

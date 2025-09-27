@@ -1,7 +1,9 @@
 // teamstrategy 模块API函数
 import {
+  DeleteTeamStrategyGroupRequest,
+  DeleteTeamStrategyRequest,
   EmptyReply,
-  EmptyRequest,
+  GetTeamStrategyGroupRequest,
   ListTeamStrategyGroupReply,
   ListTeamStrategyGroupRequest,
   ListTeamStrategyReply,
@@ -21,28 +23,28 @@ import { request } from '../index.ts'
 
 /**
  * DeleteTeamStrategy TeamStrategy
- * @param { EmptyRequest } params
+ * @param { DeleteTeamStrategyRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamStrategy(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamStrategy(params: DeleteTeamStrategyRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/strategy', params)
 }
 
 /**
  * DeleteTeamStrategyGroup TeamStrategy
- * @param { EmptyRequest } params
+ * @param { DeleteTeamStrategyGroupRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamStrategyGroup(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamStrategyGroup(params: DeleteTeamStrategyGroupRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/strategy/group', params)
 }
 
 /**
  * GetTeamStrategyGroup TeamStrategy
- * @param { EmptyRequest } params
+ * @param { GetTeamStrategyGroupRequest } params
  * @returns {Promise<TeamStrategyGroupItem>}
  */
-export function getTeamStrategyGroup(params: EmptyRequest): Promise<TeamStrategyGroupItem> {
+export function getTeamStrategyGroup(params: GetTeamStrategyGroupRequest): Promise<TeamStrategyGroupItem> {
   return request.GET<TeamStrategyGroupItem>('/api/team/strategy/group', params)
 }
 

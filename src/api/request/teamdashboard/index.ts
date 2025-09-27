@@ -1,7 +1,10 @@
 // teamdashboard 模块API函数
 import {
+  DeleteTeamDashboardChartRequest,
+  DeleteTeamDashboardRequest,
   EmptyReply,
-  EmptyRequest,
+  GetTeamDashboardChartRequest,
+  GetTeamDashboardRequest,
   ListTeamDashboardChartReply,
   ListTeamDashboardChartRequest,
   ListTeamDashboardReply,
@@ -21,37 +24,37 @@ import { request } from '../index.ts'
 
 /**
  * DeleteTeamDashboard TeamDashboard
- * @param { EmptyRequest } params
+ * @param { DeleteTeamDashboardRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamDashboard(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamDashboard(params: DeleteTeamDashboardRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/dashboard', params)
 }
 
 /**
  * DeleteTeamDashboardChart TeamDashboard
- * @param { EmptyRequest } params
+ * @param { DeleteTeamDashboardChartRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamDashboardChart(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamDashboardChart(params: DeleteTeamDashboardChartRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/dashboard/chart', params)
 }
 
 /**
  * GetTeamDashboard TeamDashboard
- * @param { EmptyRequest } params
+ * @param { GetTeamDashboardRequest } params
  * @returns {Promise<TeamDashboardItem>}
  */
-export function getTeamDashboard(params: EmptyRequest): Promise<TeamDashboardItem> {
+export function getTeamDashboard(params: GetTeamDashboardRequest): Promise<TeamDashboardItem> {
   return request.GET<TeamDashboardItem>('/api/team/dashboard', params)
 }
 
 /**
  * GetTeamDashboardChart TeamDashboard
- * @param { EmptyRequest } params
+ * @param { GetTeamDashboardChartRequest } params
  * @returns {Promise<TeamDashboardChartItem>}
  */
-export function getTeamDashboardChart(params: EmptyRequest): Promise<TeamDashboardChartItem> {
+export function getTeamDashboardChart(params: GetTeamDashboardChartRequest): Promise<TeamDashboardChartItem> {
   return request.GET<TeamDashboardChartItem>('/api/team/dashboard/chart', params)
 }
 

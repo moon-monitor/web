@@ -4,13 +4,16 @@ import {
   AlertDetailReply,
   AlertItem,
   EmptyReply,
-  EmptyRequest,
   LatestAlarmEventReply,
+  LatestAlarmEventRequest,
   LatestInterventionEventReply,
+  LatestInterventionEventRequest,
   ListAlertParams,
   ListAlertReply,
   SummaryAlarmReply,
-  TopStrategyAlarmReply
+  SummaryAlarmRequest,
+  TopStrategyAlarmReply,
+  TopStrategyAlarmRequest
 } from '../types/index.ts'
 import { request } from '../index.ts'
 
@@ -25,19 +28,19 @@ export function alertDetail(params: AlertDetailParams): Promise<AlertDetailReply
 
 /**
  * LatestAlarmEvent Alert
- * @param { EmptyRequest } params
+ * @param { LatestAlarmEventRequest } params
  * @returns {Promise<LatestAlarmEventReply>}
  */
-export function latestAlarmEvent(params: EmptyRequest): Promise<LatestAlarmEventReply> {
+export function latestAlarmEvent(params: LatestAlarmEventRequest): Promise<LatestAlarmEventReply> {
   return request.GET<LatestAlarmEventReply>('/api/statistics/alarm/latest/event', params)
 }
 
 /**
  * LatestInterventionEvent Alert
- * @param { EmptyRequest } params
+ * @param { LatestInterventionEventRequest } params
  * @returns {Promise<LatestInterventionEventReply>}
  */
-export function latestInterventionEvent(params: EmptyRequest): Promise<LatestInterventionEventReply> {
+export function latestInterventionEvent(params: LatestInterventionEventRequest): Promise<LatestInterventionEventReply> {
   return request.GET<LatestInterventionEventReply>('/api/statistics/alarm/latest/intervention', params)
 }
 
@@ -61,18 +64,18 @@ export function pushAlert(params: AlertItem): Promise<EmptyReply> {
 
 /**
  * SummaryAlarm Alert
- * @param { EmptyRequest } params
+ * @param { SummaryAlarmRequest } params
  * @returns {Promise<SummaryAlarmReply>}
  */
-export function summaryAlarm(params: EmptyRequest): Promise<SummaryAlarmReply> {
+export function summaryAlarm(params: SummaryAlarmRequest): Promise<SummaryAlarmReply> {
   return request.GET<SummaryAlarmReply>('/api/statistics/alarm/summary', params)
 }
 
 /**
  * TopStrategyAlarm Alert
- * @param { EmptyRequest } params
+ * @param { TopStrategyAlarmRequest } params
  * @returns {Promise<TopStrategyAlarmReply>}
  */
-export function topStrategyAlarm(params: EmptyRequest): Promise<TopStrategyAlarmReply> {
+export function topStrategyAlarm(params: TopStrategyAlarmRequest): Promise<TopStrategyAlarmReply> {
   return request.GET<TopStrategyAlarmReply>('/api/statistics/alarm/top/strategy', params)
 }

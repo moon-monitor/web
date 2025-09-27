@@ -1,8 +1,11 @@
 // menu 模块API函数
 import {
+  DeleteMenuRequest,
   EmptyReply,
-  EmptyRequest,
+  GetMenuRequest,
   GetMenuTreeReply,
+  GetMenuTreeRequest,
+  GetTeamMenuTreeRequest,
   MenuTreeItem,
   SaveMenuRequest
 } from '../types/index.ts'
@@ -10,37 +13,37 @@ import { request } from '../index.ts'
 
 /**
  * DeleteMenu Menu
- * @param { EmptyRequest } params
+ * @param { DeleteMenuRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteMenu(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteMenu(params: DeleteMenuRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/menu/delete', params)
 }
 
 /**
  * GetMenu Menu
- * @param { EmptyRequest } params
+ * @param { GetMenuRequest } params
  * @returns {Promise<MenuTreeItem>}
  */
-export function getMenu(params: EmptyRequest): Promise<MenuTreeItem> {
+export function getMenu(params: GetMenuRequest): Promise<MenuTreeItem> {
   return request.GET<MenuTreeItem>('/api/menu/detail', params)
 }
 
 /**
  * GetMenuTree Menu
- * @param { EmptyRequest } params
+ * @param { GetMenuTreeRequest } params
  * @returns {Promise<GetMenuTreeReply>}
  */
-export function getMenuTree(params: EmptyRequest): Promise<GetMenuTreeReply> {
+export function getMenuTree(params: GetMenuTreeRequest): Promise<GetMenuTreeReply> {
   return request.GET<GetMenuTreeReply>('/api/menu/tree', params)
 }
 
 /**
  * GetTeamMenuTree Menu
- * @param { EmptyRequest } params
+ * @param { GetTeamMenuTreeRequest } params
  * @returns {Promise<GetMenuTreeReply>}
  */
-export function getTeamMenuTree(params: EmptyRequest): Promise<GetMenuTreeReply> {
+export function getTeamMenuTree(params: GetTeamMenuTreeRequest): Promise<GetMenuTreeReply> {
   return request.GET<GetMenuTreeReply>('/api/team/menu/tree', params)
 }
 
