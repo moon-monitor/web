@@ -1,4 +1,388 @@
 // types 模块接口定义
+/**
+ * DeleteInviteRequest
+ */
+export interface DeleteInviteRequest {
+  id?: number
+}
+
+/**
+ * DeleteMenuRequest
+ */
+export interface DeleteMenuRequest {
+    /**
+   * Id of the menu to delete
+   */
+  menuId?: number
+}
+
+/**
+ * DeleteTeamDashboardChartRequest
+ */
+export interface DeleteTeamDashboardChartRequest {
+  chartId?: number
+  dashboardId?: number
+}
+
+/**
+ * DeleteTeamDashboardRequest
+ */
+export interface DeleteTeamDashboardRequest {
+  dashboardId?: number
+}
+
+/**
+ * DeleteTeamDictRequest
+ */
+export interface DeleteTeamDictRequest {
+  dictId?: number
+}
+
+/**
+ * DeleteTeamMetricDatasourceRequest
+ */
+export interface DeleteTeamMetricDatasourceRequest {
+  datasourceId?: number
+}
+
+/**
+ * DeleteTeamMetricStrategyLevelRequest
+ */
+export interface DeleteTeamMetricStrategyLevelRequest {
+    /**
+   * Strategy metric level id
+   */
+  strategyMetricLevelIds?: any
+}
+
+/**
+ * DeleteTeamMetricStrategyRequest
+ */
+export interface DeleteTeamMetricStrategyRequest {
+    /**
+   * Strategy id
+   */
+  strategyId?: number
+}
+
+/**
+ * DeleteTeamNoticeGroupRequest
+ */
+export interface DeleteTeamNoticeGroupRequest {
+  groupId?: number
+}
+
+/**
+ * DeleteTeamNoticeHookRequest
+ */
+export interface DeleteTeamNoticeHookRequest {
+  hookId?: number
+}
+
+/**
+ * DeleteTeamRoleRequest
+ */
+export interface DeleteTeamRoleRequest {
+    /**
+   * Role Id
+   */
+  roleId?: number
+}
+
+/**
+ * DeleteTeamStrategyGroupRequest
+ */
+export interface DeleteTeamStrategyGroupRequest {
+    /**
+   * Strategy group Id
+   */
+  groupId?: number
+}
+
+/**
+ * DeleteTeamStrategyRequest
+ */
+export interface DeleteTeamStrategyRequest {
+    /**
+   * Strategy id
+   */
+  strategyId?: number
+}
+
+/**
+ * DeleteTimeEngineRequest
+ */
+export interface DeleteTimeEngineRequest {
+  timeEngineId?: number
+}
+
+/**
+ * DeleteTimeEngineRuleRequest
+ */
+export interface DeleteTimeEngineRuleRequest {
+  timeEngineRuleId?: number
+}
+
+/**
+ * GetEmailConfigRequest
+ */
+export interface GetEmailConfigRequest {
+    /**
+   * Email configuration Id
+   */
+  emailConfigId?: number
+}
+
+/**
+ * GetMenuRequest
+ */
+export interface GetMenuRequest {
+    /**
+   * Id of the menu to retrieve
+   */
+  menuId?: number
+}
+
+/**
+ * GetMenuTreeRequest
+ */
+export interface GetMenuTreeRequest {
+    /**
+   * menu category
+   */
+  menuCategory?: number
+    /**
+   * menu type
+   */
+  menuTypes?: any
+}
+
+/**
+ * GetMetricDatasourceMetadataRequest
+ */
+export interface GetMetricDatasourceMetadataRequest {
+  datasourceId?: number
+  metadataId?: number
+}
+
+/**
+ * GetSMSConfigRequest
+ */
+export interface GetSMSConfigRequest {
+    /**
+   * SMS configuration Id
+   */
+  smsConfigId?: number
+}
+
+/**
+ * GetSendMessageLogRequest
+ */
+export interface GetSendMessageLogRequest {
+  requestId?: string
+  sendTime?: string
+}
+
+/**
+ * GetServerListRequest
+ */
+export interface GetServerListRequest {
+  type?: string
+}
+
+/**
+ * GetSystemRoleRequest
+ */
+export interface GetSystemRoleRequest {
+    /**
+   * Role Id
+   */
+  roleId?: number
+}
+
+/**
+ * GetTeamDashboardChartRequest
+ */
+export interface GetTeamDashboardChartRequest {
+  chartId?: number
+  dashboardId?: number
+}
+
+/**
+ * GetTeamDashboardRequest
+ */
+export interface GetTeamDashboardRequest {
+  dashboardId?: number
+}
+
+/**
+ * GetTeamDictRequest
+ */
+export interface GetTeamDictRequest {
+  dictId?: number
+}
+
+/**
+ * GetTeamMenuTreeRequest
+ */
+export interface GetTeamMenuTreeRequest {
+    /**
+   * menu category
+   */
+  menuCategory?: number
+    /**
+   * menu type
+   */
+  menuTypes?: any
+}
+
+/**
+ * GetTeamMetricDatasourceRequest
+ */
+export interface GetTeamMetricDatasourceRequest {
+  datasourceId?: number
+}
+
+/**
+ * GetTeamNoticeGroupRequest
+ */
+export interface GetTeamNoticeGroupRequest {
+  groupId?: number
+}
+
+/**
+ * GetTeamNoticeHookRequest
+ */
+export interface GetTeamNoticeHookRequest {
+  hookId?: number
+}
+
+/**
+ * GetTeamRequest
+ */
+export interface GetTeamRequest {
+    /**
+   * Team Id
+   */
+  teamId?: number
+}
+
+/**
+ * GetTeamRoleRequest
+ */
+export interface GetTeamRoleRequest {
+    /**
+   * Role Id
+   */
+  roleId?: number
+}
+
+/**
+ * GetTeamStrategyGroupRequest
+ */
+export interface GetTeamStrategyGroupRequest {
+    /**
+   * Strategy group Id
+   */
+  groupId?: number
+}
+
+/**
+ * GetTimeEngineRequest
+ */
+export interface GetTimeEngineRequest {
+  timeEngineId?: number
+}
+
+/**
+ * GetTimeEngineRuleRequest
+ */
+export interface GetTimeEngineRuleRequest {
+  timeEngineRuleId?: number
+}
+
+/**
+ * GetUserRequest
+ */
+export interface GetUserRequest {
+    /**
+   * User Id
+   */
+  userId?: number
+}
+
+/**
+ * LatestAlarmEventRequest
+ */
+export interface LatestAlarmEventRequest {
+  timeRange_start?: string
+  timeRange_end?: string
+    /**
+   * 指定top数量，默认10
+   */
+  limit?: number
+}
+
+/**
+ * LatestInterventionEventRequest
+ */
+export interface LatestInterventionEventRequest {
+  timeRange_start?: string
+  timeRange_end?: string
+    /**
+   * 指定top数量，默认10
+   */
+  limit?: number
+}
+
+/**
+ * SummaryAlarmRequest
+ */
+export interface SummaryAlarmRequest {
+  timeRange_start?: string
+  timeRange_end?: string
+    /**
+   * 指定告警等级
+   */
+  level?: number
+    /**
+   * 环比周期，默认1天
+   */
+  inComparison?: number
+}
+
+/**
+ * TeamMetricStrategyDetailRequest
+ */
+export interface TeamMetricStrategyDetailRequest {
+    /**
+   * Strategy id
+   */
+  strategyId?: number
+}
+
+/**
+ * TeamMetricStrategyLevelDetailRequest
+ */
+export interface TeamMetricStrategyLevelDetailRequest {
+    /**
+   * Strategy metric level id
+   */
+  strategyMetricLevelId?: number
+}
+
+/**
+ * TopStrategyAlarmRequest
+ */
+export interface TopStrategyAlarmRequest {
+  timeRange_start?: string
+  timeRange_end?: string
+    /**
+   * 指定top数量，默认10
+   */
+  limit?: number
+}
+
 
 /**
  * api.common.AlertItem

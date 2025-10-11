@@ -1,7 +1,7 @@
 // invite 模块API函数
 import {
   DeleteInviteReply,
-  EmptyRequest,
+  DeleteInviteRequest,
   GetInviteReply,
   InviteUserReply,
   InviteUserRequest,
@@ -14,19 +14,19 @@ import { request } from '../index.ts'
 
 /**
  * DeleteInvite Invite
- * @param { EmptyRequest } params
+ * @param { DeleteInviteRequest } params
  * @returns {Promise<DeleteInviteReply>}
  */
-export function deleteInvite(params: EmptyRequest): Promise<DeleteInviteReply> {
+export function deleteInvite(params: DeleteInviteRequest): Promise<DeleteInviteReply> {
   return request.DELETE<DeleteInviteReply>('/v1/admin/invite/delete', params)
 }
 
 /**
  * GetInvite Invite
- * @param { EmptyRequest } params
+ * @param { GetInviteRequest } params
  * @returns {Promise<GetInviteReply>}
  */
-export function getInvite(params: EmptyRequest): Promise<GetInviteReply> {
+export function getInvite(params: GetInviteRequest): Promise<GetInviteReply> {
   return request.GET<GetInviteReply>('/v1/admin/invite/detail/{id}', params)
 }
 

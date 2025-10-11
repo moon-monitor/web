@@ -1,13 +1,13 @@
 // server 模块API函数
-import { EmptyRequest, GetServerListReply, ServerRegisterReply, ServerRegisterRequest } from '../types/index.ts'
+import { GetServerListReply, GetServerListRequest, ServerRegisterReply, ServerRegisterRequest } from '../types/index.ts'
 import { request } from '../index.ts'
 
 /**
  * GetServerList Server
- * @param { EmptyRequest } params
+ * @param { GetServerListRequest } params
  * @returns {Promise<GetServerListReply>}
  */
-export function getServerList(params: EmptyRequest): Promise<GetServerListReply> {
+export function getServerList(params: GetServerListRequest): Promise<GetServerListReply> {
   return request.GET<GetServerListReply>('/v1/server/list', params)
 }
 

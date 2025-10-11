@@ -1,9 +1,12 @@
 // teamstrategymetric 模块API函数
 import {
+  DeleteTeamMetricStrategyLevelRequest,
+  DeleteTeamMetricStrategyRequest,
   EmptyReply,
-  EmptyRequest,
   SaveTeamMetricStrategyLevelRequest,
   SaveTeamMetricStrategyRequest,
+  TeamMetricStrategyDetailRequest,
+  TeamMetricStrategyLevelDetailRequest,
   TeamMetricStrategyLevelListReply,
   TeamMetricStrategyLevelListRequest,
   TeamStrategyMetricItem,
@@ -14,19 +17,19 @@ import { request } from '../index.ts'
 
 /**
  * DeleteTeamMetricStrategy TeamStrategyMetric
- * @param { EmptyRequest } params
+ * @param { DeleteTeamMetricStrategyRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamMetricStrategy(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamMetricStrategy(params: DeleteTeamMetricStrategyRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/strategy/metric', params)
 }
 
 /**
  * DeleteTeamMetricStrategyLevel TeamStrategyMetric
- * @param { EmptyRequest } params
+ * @param { DeleteTeamMetricStrategyLevelRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamMetricStrategyLevel(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamMetricStrategyLevel(params: DeleteTeamMetricStrategyLevelRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/strategy/metric/level', params)
 }
 
@@ -50,19 +53,21 @@ export function saveTeamMetricStrategyLevel(params: SaveTeamMetricStrategyLevelR
 
 /**
  * TeamMetricStrategyDetail TeamStrategyMetric
- * @param { EmptyRequest } params
+ * @param { TeamMetricStrategyDetailRequest } params
  * @returns {Promise<TeamStrategyMetricItem>}
  */
-export function teamMetricStrategyDetail(params: EmptyRequest): Promise<TeamStrategyMetricItem> {
+export function teamMetricStrategyDetail(params: TeamMetricStrategyDetailRequest): Promise<TeamStrategyMetricItem> {
   return request.GET<TeamStrategyMetricItem>('/api/team/strategy/metric', params)
 }
 
 /**
  * TeamMetricStrategyLevelDetail TeamStrategyMetric
- * @param { EmptyRequest } params
+ * @param { TeamMetricStrategyLevelDetailRequest } params
  * @returns {Promise<TeamStrategyMetricLevelItem>}
  */
-export function teamMetricStrategyLevelDetail(params: EmptyRequest): Promise<TeamStrategyMetricLevelItem> {
+export function teamMetricStrategyLevelDetail(
+  params: TeamMetricStrategyLevelDetailRequest
+): Promise<TeamStrategyMetricLevelItem> {
   return request.GET<TeamStrategyMetricLevelItem>('/api/team/strategy/metric/level', params)
 }
 

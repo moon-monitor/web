@@ -1,6 +1,6 @@
-import { TeamRoleItem } from '@/api/common.types'
 import { ActionKey, GlobalStatus } from '@/api/enum'
 import { deleteTeamRole, getTeamRoles, updateTeamRoleStatus } from '@/api/request/team'
+import type { TeamRoleItem } from '@/api/request/types'
 import { GetTeamRolesRequest } from '@/api/request/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table/index'
@@ -12,6 +12,7 @@ import { Button, Modal, Space, message, theme } from 'antd'
 import type React from 'react'
 import { useContext, useEffect, useRef, useState } from 'react'
 import { GroupEditModal } from './group-edit-modal'
+import { RoleDetailModal } from './modal-detail'
 import { formList, getColumnList } from './options'
 
 const { confirm } = Modal
@@ -23,7 +24,7 @@ const defaultSearchParams: GetTeamRolesRequest = {
     pageSize: 10
   },
   keyword: '',
-  status: GlobalStatus.GLOBAL_STATUS_UNKNOWN
+  status: undefined
 }
 
 const Group: React.FC = () => {
@@ -37,6 +38,8 @@ const Group: React.FC = () => {
   const [openGroupEditModal, setOpenGroupEditModal] = useState(false)
   const [editGroupId, setEditGroupId] = useState<number>()
   const [disabledEditGroupModal, setDisabledEditGroupModal] = useState(false)
+  const [openRoleDetailModal, setOpenRoleDetailModal] = useState(false)
+  const [detailRoleId, setDetailRoleId] = useState<number>()
 
   const searchRef = useRef<HTMLDivElement>(null)
   const ADivRef = useRef<HTMLDivElement>(null)
@@ -53,10 +56,14 @@ const Group: React.FC = () => {
     setOpenGroupEditModal(true)
   }
 
-  const handleOpenDetailModal = (groupId: number) => {
-    setEditGroupId(groupId)
-    setOpenGroupEditModal(true)
-    setDisabledEditGroupModal(true)
+  const handleOpenDetailModal = (roleId: number) => {
+    setDetailRoleId(roleId)
+    setOpenRoleDetailModal(true)
+  }
+
+  const handleCloseRoleDetailModal = () => {
+    setOpenRoleDetailModal(false)
+    setDetailRoleId(undefined)
   }
 
   const onRefresh = () => {
@@ -103,7 +110,7 @@ const Group: React.FC = () => {
       ...formData,
       pagination: {
         page: 1,
-        pageSize: searchParams.pagination.pageSize
+        pageSize: searchParams.pagination?.pageSize || 10
       }
     })
   }
@@ -127,18 +134,18 @@ const Group: React.FC = () => {
   const onHandleMenuOnClick = (item: TeamRoleItem, key: ActionKey) => {
     switch (key) {
       case ActionKey.ENABLE:
-        updateRoleStatus({ roleId: item.roleId, status: GlobalStatus.GLOBAL_STATUS_ENABLE })
+        updateRoleStatus({ roleId: item.teamRoleId, status: GlobalStatus.GLOBAL_STATUS_ENABLE })
         break
       case ActionKey.DISABLE:
-        updateRoleStatus({ roleId: item.roleId, status: GlobalStatus.GLOBAL_STATUS_DISABLE })
+        updateRoleStatus({ roleId: item.teamRoleId, status: GlobalStatus.GLOBAL_STATUS_DISABLE })
         break
       case ActionKey.OPERATION_LOG:
         break
       case ActionKey.DETAIL:
-        handleOpenDetailModal(item.roleId)
+        handleOpenDetailModal(item.teamRoleId || 0)
         break
       case ActionKey.EDIT:
-        handleEditModal(item.roleId)
+        handleEditModal(item.teamRoleId || 0)
         break
       case ActionKey.DELETE:
         confirm({
@@ -146,7 +153,7 @@ const Group: React.FC = () => {
           icon: <ExclamationCircleFilled />,
           content: '此操作不可逆',
           onOk() {
-            deleteDict({ roleId: item.roleId })
+            deleteDict({ roleId: item.teamRoleId || 0 })
           },
           onCancel() {
             message.info('取消操作')
@@ -158,8 +165,8 @@ const Group: React.FC = () => {
 
   const columns = getColumnList({
     onHandleMenuOnClick,
-    current: searchParams.pagination.page,
-    pageSize: searchParams.pagination.pageSize
+    current: searchParams.pagination?.page || 1,
+    pageSize: searchParams.pagination?.pageSize || 10
   })
 
   return (
@@ -173,6 +180,11 @@ const Group: React.FC = () => {
         onOk={handleGroupEditModalSubmit}
         groupId={editGroupId}
         disabled={disabledEditGroupModal}
+      />
+      <RoleDetailModal
+        open={openRoleDetailModal}
+        onCancel={handleCloseRoleDetailModal}
+        roleId={detailRoleId}
       />
       <div
         style={{
@@ -208,8 +220,8 @@ const Group: React.FC = () => {
             loading={loading}
             columns={columns}
             handleTurnPage={handleTurnPage}
-            pageSize={searchParams.pagination.pageSize}
-            pageNum={searchParams.pagination.page}
+            pageSize={searchParams.pagination?.pageSize || 10}
+            pageNum={searchParams.pagination?.page || 1}
             showSizeChanger={true}
             style={{
               background: token.colorBgContainer,

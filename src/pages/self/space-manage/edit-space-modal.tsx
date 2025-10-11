@@ -1,7 +1,7 @@
 import { TeamItem } from '@/api/common.types'
 import { StatusData } from '@/api/global'
 import { ErrorResponse } from '@/api/request'
-import { getTeam, updateTeam } from '@/api/request/team'
+import { getTeam, saveTeam } from '@/api/request/team'
 import { type CreateTeamReply, type CreateTeamRequest } from '@/api/request/types'
 import { createTeam } from '@/api/request/user'
 import { DataFrom, type DataFromItem } from '@/components/data/form'
@@ -98,7 +98,7 @@ export const EditSpaceModal: React.FC<EditSpaceModalProps> = (props) => {
     manual: true
   })
 
-  const { runAsync: editTeam, loading: editTeamLoading } = useRequest(updateTeam, {
+  const { runAsync: editTeam, loading: editTeamLoading } = useRequest(saveTeam, {
     manual: true
   })
 

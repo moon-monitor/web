@@ -1,15 +1,19 @@
 // team 模块API函数
 import { request } from '../index.ts'
 import {
+  DeleteTeamRoleRequest,
   EmailConfigItem,
   EmptyReply,
   EmptyRequest,
+  GetEmailConfigRequest,
   GetEmailConfigsReply,
   GetEmailConfigsRequest,
+  GetSMSConfigRequest,
   GetSMSConfigsReply,
   GetSMSConfigsRequest,
   GetTeamMembersReply,
   GetTeamMembersRequest,
+  GetTeamRoleRequest,
   GetTeamRolesReply,
   GetTeamRolesRequest,
   InviteMemberRequest,
@@ -35,19 +39,19 @@ import {
 
 /**
  * DeleteTeamRole Team
- * @param { EmptyRequest } params
+ * @param { DeleteTeamRoleRequest } params
  * @returns {Promise<EmptyReply>}
  */
-export function deleteTeamRole(params: EmptyRequest): Promise<EmptyReply> {
+export function deleteTeamRole(params: DeleteTeamRoleRequest): Promise<EmptyReply> {
   return request.DELETE<EmptyReply>('/api/team/roles', params)
 }
 
 /**
  * GetEmailConfig Team
- * @param { EmptyRequest } params
+ * @param { GetEmailConfigRequest } params
  * @returns {Promise<EmailConfigItem>}
  */
-export function getEmailConfig(params: EmptyRequest): Promise<EmailConfigItem> {
+export function getEmailConfig(params: GetEmailConfigRequest): Promise<EmailConfigItem> {
   return request.GET<EmailConfigItem>('/api/team/email/config', params)
 }
 
@@ -62,10 +66,10 @@ export function getEmailConfigs(params: GetEmailConfigsRequest): Promise<GetEmai
 
 /**
  * GetSMSConfig Team
- * @param { EmptyRequest } params
+ * @param { GetSMSConfigRequest } params
  * @returns {Promise<SMSConfigItem>}
  */
-export function getSMSConfig(params: EmptyRequest): Promise<SMSConfigItem> {
+export function getSMSConfig(params: GetSMSConfigRequest): Promise<SMSConfigItem> {
   return request.GET<SMSConfigItem>('/api/team/sms/config', params)
 }
 
@@ -98,10 +102,10 @@ export function getTeamMembers(params: GetTeamMembersRequest): Promise<GetTeamMe
 
 /**
  * GetTeamRole Team
- * @param { EmptyRequest } params
+ * @param { GetTeamRoleRequest } params
  * @returns {Promise<TeamRoleItem>}
  */
-export function getTeamRole(params: EmptyRequest): Promise<TeamRoleItem> {
+export function getTeamRole(params: GetTeamRoleRequest): Promise<TeamRoleItem> {
   return request.GET<TeamRoleItem>('/api/team/role', params)
 }
 
@@ -222,14 +226,6 @@ export function updateMemberStatus(params: UpdateMemberStatusRequest): Promise<E
   return request.POST<EmptyReply>('/api/team/update/member/status', params)
 }
 
-/**
- * UpdateTeam Team
- * @param { SaveTeamRequest } params
- * @returns {Promise<EmptyReply>}
- */
-export function updateTeam(params: SaveTeamRequest): Promise<EmptyReply> {
-  return request.PUT<EmptyReply>('/api/team/update', params)
-}
 /**
  * UpdateTeamRoleStatus Team
  * @param { UpdateTeamRoleStatusRequest } params
