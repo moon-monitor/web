@@ -85,7 +85,8 @@ export default function EmailVerification() {
         return res.token
       })
       .then((token) => {
-        window.location.href = `${window.location.origin}?token=${token}`
+        // 直接跳转到应用主页面，避免根路径的token处理问题
+        window.location.href = `/#/home?token=${token}`
       })
       .catch((err: ErrorResponse) => {
         setError(err?.metadata?.['code'] || err?.message || '验证码不正确，请重新输入')

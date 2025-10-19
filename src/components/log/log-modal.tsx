@@ -12,7 +12,7 @@ interface LogModalProps {
 }
 const defaultSearchParams: ListResourceRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 10
   }
 }
@@ -62,7 +62,7 @@ const LogModal: React.FC<LogModalProps> = ({ open, onCancel }) => {
             ...prevParams,
             pagination: {
               ...prevParams.pagination,
-              pageNum: prevParams.pagination.pageNum + 1
+              page: prevParams.pagination.page + 1
             }
           }))
         }
