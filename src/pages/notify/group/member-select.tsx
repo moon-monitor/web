@@ -15,12 +15,12 @@ export interface MemberSelectProps {
 export interface UserAvatarProps extends UserItem { }
 
 export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
-  const { id, name, nickname, avatar } = props
+  const { id, username, nickname, avatar } = props
 
   return (
     <Space direction='horizontal' key={id}>
       <Avatar src={avatar} size='small' />
-      {`${name}(${nickname})`}
+      {`${username}(${nickname})`}
     </Space>
   )
 }
@@ -40,8 +40,8 @@ export const MemberSelect: React.FC<MemberSelectProps> = (props) => {
 
   useEffect(() => {
     initMemberList({
-      pagination: { pageNum: 1, pageSize: 999 },
-      status: Status.StatusEnable
+      pagination: { page: 1, pageSize: 999 },
+      status: [Status.StatusEnable]
     })
   }, [initMemberList])
 
@@ -106,12 +106,12 @@ export const MemberSelect: React.FC<MemberSelectProps> = (props) => {
         mode='multiple'
         options={memberList.map((item) => ({
           label: <UserAvatar {...item?.user} />,
-          value: item.id
+          value: item.userId
         }))}
         value={value?.map((item) => item?.member.id)}
         // size='large'
         onChange={(list) => {
-          const items = memberList.filter((item) => list.includes(item.id))
+          const items = memberList.filter((item) => list.includes(item.userId))
           if (items.length === 0) {
             setMembers({})
             onChange?.([])
