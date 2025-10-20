@@ -56,7 +56,7 @@ export default function Subscribe() {
       ...searchParams,
       ...formData,
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: searchParams?.pagination?.pageSize
       }
     })

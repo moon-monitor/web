@@ -24,12 +24,20 @@ export const handleFormError = <T extends Record<string, any>>(
 // 转换路由树
 export const transformRoutersTree = (menuTree: MenuTreeItem[]): RouteObject[] => {
   return menuTree.map((item) => {
+    // 规范化 menuPath，确保为字符串
+    const rawMenuPath = (item as unknown as { menuPath?: unknown })?.menuPath
+    const safeMenuPath = typeof rawMenuPath === 'string' && rawMenuPath.trim().length > 0 ? rawMenuPath : '/403'
+    const normalizedMenuPath = safeMenuPath.startsWith('/') ? safeMenuPath : `/${safeMenuPath}`
+    // 用于动态 import 的相对路径（不能以 / 开头）
+    const importMenuPath = normalizedMenuPath.replace(/^\/+/, '')
+    const safeName = typeof (item as unknown as { name?: unknown })?.name === 'string' ? (item as unknown as { name?: string }).name as string : '页面'
+
     const routersItem: RouteObject = {
-      path: routeJoin('/home', item.menuPath || '/403'),
+      path: routeJoin('/home', normalizedMenuPath || '/403'),
       ...(!item.children?.length && {
-        Component: lazy(() => import(/* @vite-ignore */ routeJoin('../pages', item.menuPath || '403')))
+        Component: lazy(() => import(/* @vite-ignore */ routeJoin('../pages', importMenuPath || '403')))
       }),
-      loader: () => ({ title: item.name }),
+      loader: () => ({ title: safeName }),
       children: item.children?.length ? transformRoutersTree(item.children) : undefined
     }
     return routersItem

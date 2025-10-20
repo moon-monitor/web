@@ -105,7 +105,35 @@ function App() {
     }
   }, [])
 
+  // 监听URL变化，处理OAuth2登录后的token
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const urlToken = new URLSearchParams(window.location.search).get('token')
+      if (urlToken && !getToken()) {
+        setAuthToken(urlToken)
+        setToken(urlToken)
+        storageMenus()
+      }
+    }
+
+    // 监听popstate事件（浏览器前进后退）
+    window.addEventListener('popstate', handleUrlChange)
+
+    // 检查当前URL是否有token
+    handleUrlChange()
+
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange)
+    }
+  }, [])
+
   const handleRouter = () => {
+    // 如果有token但菜单还没加载完成，给一个短暂的等待时间
+    if (isLogin() && !menuItems?.length) {
+      // 如果正在加载菜单，显示默认路由但允许访问
+      return createHashRouter(defaultRouters)
+    }
+
     if (!(menuItems?.length && isLogin())) {
       return createHashRouter(unAuthRouters)
     }
@@ -125,9 +153,12 @@ function App() {
                 <Navigate
                   to={routeJoin(
                     '/home',
-                    menuItems.length && menuItems[0].children?.length
-                      ? menuItems[0].children[0].menuPath || ''
-                      : menuItems[0].menuPath || ''
+                    (() => {
+                      const first = menuItems[0]
+                      const target = first?.children?.length ? first.children[0]?.menuPath : first?.menuPath
+                      const raw = typeof target === 'string' ? target : '/'
+                      return raw.startsWith('/') ? raw : `/${raw}`
+                    })()
                   )}
                   replace={true}
                 />

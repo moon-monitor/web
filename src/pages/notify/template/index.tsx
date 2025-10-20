@@ -24,7 +24,7 @@ const Template: React.FC = () => {
   const [total, setTotal] = useState(0)
   const [searchParams, setSearchParams] = useState<GetTemplateListRequest>({
     pagination: {
-      pageNum: 1,
+      page: 1,
       pageSize: 50
     }
   })
@@ -64,7 +64,7 @@ const Template: React.FC = () => {
   const onReset = () => {
     setSearchParams({
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: 50
       }
     })

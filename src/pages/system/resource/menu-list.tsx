@@ -20,7 +20,7 @@ const { useToken } = theme
 
 const defaultSearchParams: ListResourceRequest = {
   pagination: {
-    pageNum: 1,
+    page: 1,
     pageSize: 10
   },
   keyword: '',

@@ -15,7 +15,7 @@ import { formList, getColumnList } from './options'
 // 占位符类型和函数，待实现
 type GetTemplateListRequest = {
   pagination: {
-    pageNum: number
+    page: number
     pageSize: number
   }
 }
@@ -52,7 +52,7 @@ const Template: React.FC = () => {
   const [total, setTotal] = useState(0)
   const [searchParams, setSearchParams] = useState<GetTemplateListRequest>({
     pagination: {
-      pageNum: 1,
+      page: 1,
       pageSize: 50
     }
   })
@@ -93,7 +93,7 @@ const Template: React.FC = () => {
   const onReset = () => {
     setSearchParams({
       pagination: {
-        pageNum: 1,
+        page: 1,
         pageSize: 50
       }
     })

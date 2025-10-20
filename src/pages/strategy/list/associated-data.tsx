@@ -3,8 +3,7 @@ import { ActionKey } from '@/api/enum'
 import { DatasourceDriverMetricData, defaultPaginationReq, StrategyTypeData } from '@/api/global'
 import { baseURL } from '@/api/request'
 import {
-  deleteTeamMetricStrategyLevel,
-  getTeamMetricStrategy,
+  deleteTeamStrategy,
   listTeamMetricStrategyLevels
 } from '@/api/request/teamstrategy'
 import { GetTeamMetricStrategyReply } from '@/api/request/types'
@@ -53,7 +52,7 @@ export default function AssociatedData() {
     }
   })
 
-  const { run: deleteMetricLevel, loading: deleteMetricLevelLoading } = useRequest(deleteTeamMetricStrategyLevel, {
+  const { run: deleteMetricLevel, loading: deleteMetricLevelLoading } = useRequest(deleteTeamStrategy, {
     manual: true,
     onSuccess: () => {
       message.success('删除成功')
