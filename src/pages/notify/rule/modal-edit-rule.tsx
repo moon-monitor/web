@@ -1,12 +1,11 @@
-import { Status, TimeEngineRuleType } from '@/api/enum'
+import { TimeEngineRuleType } from '@/api/enum'
 import { TimeEngineRuleTypeData } from '@/api/global'
 import { ErrorResponse } from '@/api/request'
 import {
   getTimeEngineRule,
   saveTimeEngineRule,
 } from '@/api/request/timeengine'
-import { SaveTimeEngineRuleRequest } from '@/api/request/types'
-import { TimeEngineRuleItem } from '@/api/request/types/model-types'
+import { SaveTimeEngineRuleRequest, TimeEngineItemRule } from '@/api/request/types'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
 import { Avatar, Col, Form, Input, Modal, Row, Select, Space } from 'antd'
@@ -23,12 +22,17 @@ export interface EditRuleModalProps {
 export function EditRuleModal(props: EditRuleModalProps) {
   const { open, ruleId, onOk, onCancel } = props
 
-  const [form] = Form.useForm<SaveTimeEngineRuleRequest>()
+  const [form] = Form.useForm<{
+    name: string
+    remark: string
+    category: number
+    rules: number[]
+  }>()
 
   const category = Form.useWatch('category', form)
 
   const [loading, setLoading] = useState(false)
-  const [detail, setDetail] = useState<TimeEngineRuleItem>()
+  const [detail, setDetail] = useState<TimeEngineItemRule>()
 
   const init = () => {
     setDetail(undefined)
@@ -38,13 +42,35 @@ export function EditRuleModal(props: EditRuleModalProps) {
   const handleOnOk = () => {
     form.validateFields().then((values) => {
       setLoading(true)
-      if (ruleId) {
 
-      } else {
-        saveTimeEngineRule({ ...values, status: Status.StatusEnable })
+      const apiData = {
+        name: values.name,
+        remark: values.remark,
+        type: values.category,
+        ruleIds: values.rules
+      }
+
+      if (ruleId) {
+        saveTimeEngineRule({
+          ...apiData,
+          timeEngineRuleId: ruleId
+        })
           .then(() => {
             init()
-            onOk?.(values)
+            onOk?.(apiData)
+          })
+          .catch((err: ErrorResponse) => {
+            handleFormError(form, err)
+          })
+          .finally(() => {
+            setLoading(false)
+          })
+      } else {
+        // 新增模式：不添加 timeEngineRuleId
+        saveTimeEngineRule(apiData)
+          .then(() => {
+            init()
+            onOk?.(apiData)
           })
           .catch((err: ErrorResponse) => {
             handleFormError(form, err)
@@ -60,7 +86,7 @@ export function EditRuleModal(props: EditRuleModalProps) {
     onCancel?.()
   }
 
-  const { run: handleGetRuleDetail } = useRequest((id: number) => getTimeEngineRule(id), {
+  const { run: handleGetRuleDetail } = useRequest((id: number) => getTimeEngineRule({ timeEngineRuleId: id }), {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
       setDetail(res)
@@ -71,8 +97,8 @@ export function EditRuleModal(props: EditRuleModalProps) {
     if (detail) {
       form.setFieldsValue({
         name: detail.name,
-        category: detail.category,
-        rules: detail.rules,
+        category: detail.type,
+        rules: detail.rules?.map(Number) || [],
         remark: detail.remark
       })
     } else {

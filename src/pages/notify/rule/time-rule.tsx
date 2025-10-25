@@ -1,5 +1,5 @@
 import { ActionKey, GlobalStatus } from '@/api/enum'
-import { deleteTimeEngineRule, listTimeEngineRule } from '@/api/request/timeengine'
+import { deleteTimeEngineRule, listTimeEngineRule, updateTimeEngineRuleStatus } from '@/api/request/timeengine'
 import { ListTimeEngineRuleRequest, TimeEngineItemRule } from '@/api/request/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
@@ -85,9 +85,12 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
     onSuccess: onRefresh
   })
 
-  const onChangeStatus = (hookId: number, status: GlobalStatus) => {
-    console.log('onChangeStatus', hookId, status)
-    // updateTimeEngineRuleStatus({ ids: [hookId], status }).then(onRefresh)
+  const onChangeStatus = (ruleId: number, status: GlobalStatus) => {
+    console.log('onChangeStatus', ruleId, status)
+    updateTimeEngineRuleStatus({
+      timeEngineRuleIds: [ruleId],
+      status: status === GlobalStatus.GLOBAL_STATUS_ENABLE ? 1 : 2
+    }).then(onRefresh)
   }
 
   const onHandleMenuOnClick = (item: TimeEngineItemRule, key: ActionKey) => {
@@ -96,16 +99,16 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
         handleEditModal(item)
         break
       case ActionKey.DELETE:
-        handleDelete({ timeEngineRuleId: item.id as number })
+        handleDelete({ timeEngineRuleId: item.timeEngineRuleId as number })
         break
       case ActionKey.DETAIL:
         onOpenDetailModal(item)
         break
       case ActionKey.DISABLE:
-        onChangeStatus(item.id as number, 'GLOBAL_STATUS_DISABLE')
+        onChangeStatus(item.timeEngineRuleId as number, GlobalStatus.GLOBAL_STATUS_DISABLE)
         break
       case ActionKey.ENABLE:
-        onChangeStatus(item.id as number, 'GLOBAL_STATUS_ENABLE')
+        onChangeStatus(item.timeEngineRuleId as number, GlobalStatus.GLOBAL_STATUS_ENABLE)
         break
       default:
         break
@@ -145,12 +148,12 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
     <>
       <EditRuleModal
         open={showModal}
-        ruleId={ruleDetail?.id as number}
+        ruleId={ruleDetail?.timeEngineRuleId as number}
         onCancel={closeEditRuleModal}
         onOk={handleEditRuleModalOnOk}
       />
       <RuleDetailModal
-        ruleId={ruleDetail?.id || 0}
+        ruleId={ruleDetail?.timeEngineRuleId || 0}
         open={openDetailModal}
         onCancel={onCloseDetailModal}
         onOk={onCloseDetailModal}
@@ -204,7 +207,7 @@ const TimeRule: React.FC<TimeRuleProps> = ({ switchTimeEngine }) => {
           </div>
           <div className='mt-4' ref={ADivRef}>
             <AutoTable
-              rowKey={(record) => record.id}
+              rowKey={(record) => record.timeEngineRuleId || 0}
               dataSource={datasource}
               total={total}
               loading={loading}

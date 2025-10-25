@@ -1,7 +1,7 @@
 import { TimeEngineRuleType } from '@/api/enum'
 import { StatusData, TimeEngineRuleTypeData } from '@/api/global'
 import { getTimeEngineRule } from '@/api/request/timeengine'
-import { TimeEngineRuleItem } from '@/api/request/types/model-types'
+import { TimeEngineItemRule } from '@/api/request/types'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tag, Tooltip } from 'antd'
 import { useEffect, useState } from 'react'
@@ -61,11 +61,11 @@ export interface RuleDetailModalProps {
 export function RuleDetailModal(props: RuleDetailModalProps) {
   const { ruleId, open, onCancel, onOk } = props
 
-  const [detail, setDetail] = useState<TimeEngineRuleItem>()
-  const { run: getRuleDetail } = useRequest((id: number) => getTimeEngineRule(id), {
+  const [detail, setDetail] = useState<TimeEngineItemRule>()
+  const { run: getRuleDetail } = useRequest((id: number) => getTimeEngineRule({ timeEngineRuleId: id }), {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
-      setDetail(res.detail)
+      setDetail(res)
     }
   })
 
