@@ -1,5 +1,5 @@
 import { TimeEngineRuleType } from '@/api/enum'
-import { StatusData } from '@/api/global'
+import { StatusData, TimeEngineRuleTypeData } from '@/api/global'
 import { getTimeEngineRule } from '@/api/request/timeengine'
 import { TimeEngineRuleItem } from '@/api/request/types/model-types'
 import { useRequest } from 'ahooks'

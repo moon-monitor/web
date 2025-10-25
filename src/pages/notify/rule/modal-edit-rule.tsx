@@ -1,4 +1,5 @@
 import { Status, TimeEngineRuleType } from '@/api/enum'
+import { TimeEngineRuleTypeData } from '@/api/global'
 import { ErrorResponse } from '@/api/request'
 import {
   getTimeEngineRule,
