@@ -88,5 +88,5 @@ export const useTimeEngineRuleList = (params: ListTimeEngineRuleRequest) => {
   const { data, loading, error } = useRequest(listTimeEngineRule, {
     defaultParams: [params]
   })
-  return { timeEngineRuleList: data?.list || [], error, timeEngineRuleListLoading: loading }
+  return { timeEngineRuleList: data?.items || [], error, timeEngineRuleListLoading: loading }
 }

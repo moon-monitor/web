@@ -1,26 +1,33 @@
 import { NotifyType, Status } from '@/api/enum'
 import { getTeamMembers } from '@/api/request/team'
-import type { NoticeItem, TeamMemberItem, UserItem } from '@/api/request/types/model-types'
+import type { TeamMemberItem, UserItem } from '@/api/request/types'
+import { SaveTeamNoticeGroupRequest_Member } from '@/api/request/types'
 import { useRequest } from 'ahooks'
 import { Avatar, Checkbox, Select, Space, Table } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
 import type React from 'react'
 import { useEffect, useState } from 'react'
 
+// 定义本地使用的 NoticeItem 类型
+export interface NoticeItem {
+  member: TeamMemberItem
+  notifyType: number
+}
+
 export interface MemberSelectProps {
-  value?: NoticeItem[]
-  onChange?: (value: NoticeItem[]) => void
+  value?: SaveTeamNoticeGroupRequest_Member[]
+  onChange?: (value: SaveTeamNoticeGroupRequest_Member[]) => void
 }
 
 export interface UserAvatarProps extends UserItem { }
 
 export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
-  const { id, name, nickname, avatar } = props
+  const { userId, username, nickname, avatar } = props
 
   return (
-    <Space direction='horizontal' key={id}>
+    <Space direction='horizontal' key={userId}>
       <Avatar src={avatar} size='small' />
-      {`${name}(${nickname})`}
+      {`${username}(${nickname})`}
     </Space>
   )
 }
@@ -29,7 +36,7 @@ export const MemberSelect: React.FC<MemberSelectProps> = (props) => {
   const { value, onChange } = props
 
   const [memberList, setMemberList] = useState<TeamMemberItem[]>([])
-  const [members, setMembers] = useState<{ [key: number]: NoticeItem }>({})
+  const [selectedMembers, setSelectedMembers] = useState<NoticeItem[]>([])
 
   const { run: initMemberList, loading: initMemberListLoading } = useRequest(getTeamMembers, {
     manual: true,
@@ -40,10 +47,26 @@ export const MemberSelect: React.FC<MemberSelectProps> = (props) => {
 
   useEffect(() => {
     initMemberList({
-      pagination: { pageNum: 1, pageSize: 999 },
-      status: Status.StatusEnable
+      pagination: { page: 1, pageSize: 999 },
+      status: [Status.StatusEnable]
     })
   }, [initMemberList])
+
+  // 将外部传入的 SaveTeamNoticeGroupRequestMember[] 转换为内部使用的 NoticeItem[]
+  useEffect(() => {
+    if (value && memberList.length > 0) {
+      const noticeItems: NoticeItem[] = value.map(item => {
+        const member = memberList.find(m => m.teamMemberId === item.memberId)
+        return {
+          member: member!,
+          notifyType: item.noticeType || NotifyType.NOTIFY_UNKNOWN
+        }
+      }).filter(item => item.member)
+      setSelectedMembers(noticeItems)
+    } else {
+      setSelectedMembers([])
+    }
+  }, [value, memberList])
 
   const noticeMemberColumns: ColumnsType<NoticeItem> = [
     {
@@ -80,17 +103,22 @@ export const MemberSelect: React.FC<MemberSelectProps> = (props) => {
               { label: '邮件', value: NotifyType.NOTIFY_EMAIL },
               { label: '短信', value: NotifyType.NOTIFY_SMS, disabled: true }
             ]}
-            defaultValue={checkedList}
+            value={checkedList}
             onChange={(checkedList) => {
-              const v = {
-                ...members,
-                [record.member?.id]: {
-                  member: record.member,
-                  notifyType: checkedList.reduce((prev, curr) => prev | curr, 0)
-                }
-              }
-              setMembers(v)
-              onChange?.(Object.values(v))
+              const newNotifyType = checkedList.reduce((prev, curr) => prev | curr, 0)
+              const updatedMembers = selectedMembers.map(item =>
+                item.member.teamMemberId === record.member.teamMemberId
+                  ? { ...item, notifyType: newNotifyType }
+                  : item
+              )
+              setSelectedMembers(updatedMembers)
+
+              // 转换为 SaveTeamNoticeGroupRequestMember[] 格式
+              const saveFormat = updatedMembers.map(item => ({
+                memberId: item.member.teamMemberId,
+                noticeType: item.notifyType
+              }))
+              onChange?.(saveFormat)
             }}
           />
         )
@@ -106,32 +134,39 @@ export const MemberSelect: React.FC<MemberSelectProps> = (props) => {
         mode='multiple'
         options={memberList.map((item) => ({
           label: <UserAvatar {...item?.user} />,
-          value: item.id
+          value: item.teamMemberId
         }))}
-        value={value?.map((item) => item?.member.id)}
-        // size='large'
-        onChange={(list) => {
-          const items = memberList.filter((item) => list.includes(item.id))
+        value={selectedMembers.map((item) => item.member.teamMemberId)}
+        onChange={(memberIds) => {
+          const items = memberList.filter((item) => memberIds.includes(item.teamMemberId))
           if (items.length === 0) {
-            setMembers({})
+            setSelectedMembers([])
             onChange?.([])
             return
           }
-          for (const item of items) {
-            const v = {
-              ...members,
-              [item.id]: {
-                member: item,
-                notifyType: NotifyType.NOTIFY_UNKNOWN
-              }
-            }
-            setMembers(v)
-            onChange?.(Object.values(v))
-          }
+
+          // 创建新的 NoticeItem 数组
+          const newSelectedMembers: NoticeItem[] = items.map(item => ({
+            member: item,
+            notifyType: NotifyType.NOTIFY_UNKNOWN
+          }))
+          setSelectedMembers(newSelectedMembers)
+
+          // 转换为 SaveTeamNoticeGroupRequestMember[] 格式
+          const saveFormat = newSelectedMembers.map(item => ({
+            memberId: item.member.teamMemberId,
+            noticeType: item.notifyType
+          }))
+          onChange?.(saveFormat)
         }}
         allowClear
       />
-      <Table rowKey={(row) => row.member?.id} pagination={false} columns={noticeMemberColumns} dataSource={value} />
+      <Table
+        rowKey={(row) => row.member?.teamMemberId || 0}
+        pagination={false}
+        columns={noticeMemberColumns}
+        dataSource={selectedMembers}
+      />
     </div>
   )
 }

@@ -1,8 +1,6 @@
-import { Status } from '@/api/enum'
-import { defaultPaginationReq } from '@/api/global'
 import { ErrorResponse } from '@/api/request'
-import { getTimeEngine, saveTimeEngine, SaveTimeEngineRequest } from '@/api/request/timeengine'
-import { TimeEngineItem } from '@/api/request/types/model-types'
+import { getTimeEngine, saveTimeEngine } from '@/api/request/timeengine'
+import { SaveTimeEngineRequest, TimeEngineItem, TimeEngineItemRule } from '@/api/request/types'
 import { useTimeEngineRuleList } from '@/hooks/select'
 import { handleFormError } from '@/utils'
 import { useRequest } from 'ahooks'
@@ -24,7 +22,7 @@ export function EngineEditModal(props: EditModalProps) {
   const [loading, setLoading] = useState(false)
   const [detail, setDetail] = useState<TimeEngineItem>()
   const { timeEngineRuleList, timeEngineRuleListLoading } = useTimeEngineRuleList({
-    pagination: defaultPaginationReq
+    pagination: { page: 1, pageSize: 10000 }
   })
 
   const init = () => {
@@ -35,11 +33,20 @@ export function EngineEditModal(props: EditModalProps) {
   const handleOnOk = () => {
     form.validateFields().then((values) => {
       setLoading(true)
+
+      // 构建 API 数据
+      const apiData: SaveTimeEngineRequest = {
+        name: values.name,
+        remark: values.remark,
+        ruleIds: values.ruleIds // 从选择的规则列表中获取
+      }
+
       if (Id) {
-        saveTimeEngine({ ...values, id: Id })
+        // 更新模式：添加 timeEngineId
+        saveTimeEngine({ ...apiData, timeEngineId: Id })
           .then(() => {
             init()
-            onOk?.(values)
+            onOk?.(apiData)
           })
           .catch((err: ErrorResponse) => {
             handleFormError(form, err)
@@ -48,10 +55,11 @@ export function EngineEditModal(props: EditModalProps) {
             setLoading(false)
           })
       } else {
-        saveTimeEngine({ ...values, status: Status.StatusEnable })
+        // 添加模式：不包含 timeEngineId
+        saveTimeEngine(apiData)
           .then(() => {
             init()
-            onOk?.(values)
+            onOk?.(apiData)
           })
           .catch((err: ErrorResponse) => {
             handleFormError(form, err)
@@ -67,10 +75,10 @@ export function EngineEditModal(props: EditModalProps) {
     onCancel?.()
   }
 
-  const { run: handleGetDetail } = useRequest((id: number) => getTimeEngine(id), {
+  const { run: handleGetDetail } = useRequest((id: number) => getTimeEngine({ timeEngineId: id }), {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
-      setDetail(res.detail)
+      setDetail(res)
     }
   })
 
@@ -78,7 +86,7 @@ export function EngineEditModal(props: EditModalProps) {
     if (detail) {
       form.setFieldsValue({
         name: detail.name,
-        rules: detail.rules.map((rule) => rule.id),
+        ruleIds: detail.rules?.map((rule: TimeEngineItemRule) => rule.timeEngineRuleId).filter((id): id is number => id !== undefined) || [],
         remark: detail.remark
       })
     } else {
@@ -110,14 +118,14 @@ export function EngineEditModal(props: EditModalProps) {
           </Form.Item>
           <Form.Item
             label='规则'
-            name='rules'
+            name='ruleIds'
             tooltip='规则是时间引擎的执行单元，他们之间是且的关系，也就是说，只有当所有规则都满足时，才表示满足条件'
           >
             <Select
               loading={timeEngineRuleListLoading}
               placeholder='请选择规则'
               mode='multiple'
-              options={timeEngineRuleList.map((rule) => ({ label: rule.name, value: rule.id }))}
+              options={timeEngineRuleList.map((rule) => ({ label: rule.name, value: rule.timeEngineRuleId }))}
             />
           </Form.Item>
           <Form.Item label='备注' name='remark'>

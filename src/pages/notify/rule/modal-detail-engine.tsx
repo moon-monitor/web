@@ -2,7 +2,7 @@
 // import { GlobalStatus } from '@/api/enum'
 import { GlobalStatusData } from '@/api/global'
 import { getTimeEngine } from '@/api/request/timeengine'
-import { TimeEngineItem } from '@/api/request/types/model-types'
+import { TimeEngineItem } from '@/api/request/types'
 import { useRequest } from 'ahooks'
 import { Badge, Descriptions, DescriptionsProps, Modal, Space, Tag } from 'antd'
 import { useEffect, useState } from 'react'
@@ -18,7 +18,7 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
   const { Id, open, onCancel, onOk } = props
 
   const [detail, setDetail] = useState<TimeEngineItem>()
-  const { run: getEngineDetail } = useRequest(getTimeEngine, {
+  const { run: getEngineDetail } = useRequest((id: number) => getTimeEngine({ timeEngineId: id }), {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
       setDetail(res)
@@ -82,7 +82,7 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
 
   useEffect(() => {
     if (Id && open) {
-      getEngineDetail({ timeEngineId: Id })
+      getEngineDetail(Id)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Id, open])

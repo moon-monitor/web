@@ -143,7 +143,7 @@ const Template: React.FC = () => {
     setSearchParams({
       ...searchParams,
       pagination: {
-        pageNum,
+        page,
         pageSize
       }
     })
