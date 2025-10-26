@@ -1,7 +1,6 @@
 import { ActionKey, GlobalStatus, TimeEngineRuleType } from '@/api/enum'
-import { GlobalStatusData } from '@/api/global'
-import { PaginationRequest, TimeEngineItemRule } from '@/api/request/types'
-import { TimeEngineItem, } from '@/api/request/types/model-types'
+import { StatusData } from '@/api/global'
+import { PaginationRequest, TimeEngineItem, TimeEngineItemRule } from '@/api/request/types'
 
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
@@ -29,10 +28,10 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(GlobalStatus).map(([key, value]) => {
+        options: Object.entries(StatusData).map(([key, value]) => {
           return {
-            label: value,
-            value: key
+            label: <Badge {...value} />,
+            value: Number(key)
           }
         })
       }
@@ -89,10 +88,10 @@ export const engineFormList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(GlobalStatus).map(([key, value]) => {
+        options: Object.entries(StatusData).map(([key, value]) => {
           return {
-            label: value,
-            value: key
+            label: <Badge {...value} />,
+            value: Number(key)
           }
         })
       }
@@ -108,7 +107,7 @@ interface NotifyRuleColumnProps {
 export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEngineItemRule> => {
   const {
     onHandleMenuOnClick,
-    pagination: { page, pageSize }
+    pagination: { page = 1, pageSize = 10 }
   } = props
   const tableOperationItems = (record: TimeEngineItemRule): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
@@ -193,8 +192,8 @@ export const getColumnList = (props: NotifyRuleColumnProps): ColumnsType<TimeEng
       align: 'center',
       width: 160,
       render: (status: GlobalStatus) => {
-        const data = GlobalStatusData[status]
-        return <Badge color={data?.color} text={data?.label} />
+        const { text, color } = StatusData[status]
+        return <Badge color={color} text={text} />
       }
     },
     {
@@ -248,7 +247,7 @@ interface NotifyEngineColumnProps {
 export const getEngineColumnList = (props: NotifyEngineColumnProps): ColumnsType<TimeEngineItem> => {
   const {
     onHandleMenuOnClick,
-    pagination: { page, pageSize }
+    pagination: { page = 1, pageSize = 10 }
   } = props
   const tableOperationItems = (record: TimeEngineItem): MoreMenuProps['items'] => [
     record.status === GlobalStatus.GLOBAL_STATUS_DISABLE
@@ -317,8 +316,8 @@ export const getEngineColumnList = (props: NotifyEngineColumnProps): ColumnsType
       align: 'center',
       width: 160,
       render: (status: GlobalStatus) => {
-        const data = GlobalStatusData[status]
-        return <Badge color={data?.color} text={data?.label} />
+        const { text, color } = StatusData[status]
+        return <Badge color={color} text={text} />
       }
     },
     {

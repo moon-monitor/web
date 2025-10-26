@@ -1,7 +1,8 @@
-import { NoticeGroupItem, NoticeHookItem } from '@/api/common.types'
 import { ActionKey, GlobalStatus } from '@/api/enum'
-import { defaultPaginationReq, GlobalStatusData, HookAppData } from '@/api/global'
+import { defaultPaginationReq, HookAppData, StatusData } from '@/api/global'
+import { getEmailConfigs, getSMSConfigs } from '@/api/request/team'
 import { listTeamNoticeHook } from '@/api/request/teamnotice'
+import { NoticeGroupItem, NoticeHookItem } from '@/api/request/types'
 import type { DataFromItem } from '@/components/data/form'
 import type { SearchFormItem } from '@/components/data/search-box'
 import type { MoreMenuProps } from '@/components/moreMenu'
@@ -30,10 +31,10 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '告警组状态',
         allowClear: true,
-        options: Object.entries(GlobalStatusData).map(([key, value]) => {
+        options: Object.entries(StatusData).map(([key, value]) => {
           return {
             label: <Badge {...value} />,
-            value: key
+            value: Number(key)
           }
         })
       }
@@ -117,8 +118,8 @@ export const getColumnList = (props: GroupColumnProps): ColumnsType<NoticeGroupI
       align: 'center',
       width: 120,
       render: (status: GlobalStatus) => {
-        const data = GlobalStatusData[status]
-        return <Badge color={data?.color} text={data?.label} />
+        const { text, color } = StatusData[status]
+        return <Badge color={color} text={text} />
       }
     },
     {
@@ -170,7 +171,7 @@ export const HookAvatar: React.FC<HookAvatarProps> = (props) => {
 
   return (
     <Space direction='horizontal'>
-      <Avatar size='small' shape='square' icon={HookAppData[app].icon} />
+      {app !== undefined && <Avatar size='small' shape='square' icon={HookAppData[app as keyof typeof HookAppData]?.icon} />}
       {name}
     </Space>
   )
@@ -199,28 +200,50 @@ export const editModalFormItems: (DataFromItem | DataFromItem[])[] = [
       showCount: true
     }
   },
-  // {
-  //   name: 'timeEngines',
-  //   label: '时间引擎',
-  //   type: 'select-fetch',
-  //   props: {
-  //     handleFetch: (value: string) => {
-  //       return listTimeEngine({
-  //         keyword: value,
-  //         pagination: defaultPaginationReq
-  //       }).then((res) =>
-  //         res.list.map((item) => ({
-  //           label: item.name,
-  //           value: item.id
-  //         }))
-  //       )
-  //     },
-  //     selectProps: {
-  //       placeholder: '请选择时间引擎',
-  //       mode: 'multiple'
-  //     }
-  //   }
-  // },
+  {
+    name: 'emailConfigId',
+    label: '系统邮箱配置',
+    type: 'select-fetch',
+    props: {
+      handleFetch: (value: string) => {
+        return getEmailConfigs({
+          keyword: value,
+          pagination: defaultPaginationReq
+        }).then((res) =>
+          (res.items || []).map((item) => ({
+            label: item.name,
+            value: item.emailConfigId
+          }))
+        )
+      },
+      selectProps: {
+        placeholder: '请选择系统邮箱配置（可选）',
+        allowClear: true
+      }
+    }
+  },
+  {
+    name: 'smsConfigId',
+    label: '系统短信配置',
+    type: 'select-fetch',
+    props: {
+      handleFetch: (value: string) => {
+        return getSMSConfigs({
+          keyword: value,
+          pagination: defaultPaginationReq
+        }).then((res) =>
+          (res.items || []).map((item) => ({
+            label: item.name,
+            value: item.smsConfigId
+          }))
+        )
+      },
+      selectProps: {
+        placeholder: '请选择系统短信配置（可选）',
+        allowClear: true
+      }
+    }
+  },
   {
     name: 'hookIds',
     label: 'hook列表',
@@ -231,7 +254,7 @@ export const editModalFormItems: (DataFromItem | DataFromItem[])[] = [
           keyword: value,
           pagination: defaultPaginationReq
         }).then((res) =>
-          res.items.map((item) => ({
+          (res.items || []).map((item) => ({
             label: <HookAvatar {...item} />,
             value: item.noticeHookId,
             disabled: item.status !== GlobalStatus.GLOBAL_STATUS_ENABLE

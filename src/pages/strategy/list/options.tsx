@@ -57,7 +57,7 @@ export const formList: SearchFormItem[] = [
           .map(([key, value]) => {
             return {
               label: <Tag color={value.color}>{value.label}</Tag>,
-              value: key
+              value: +key
             }
           })
       }

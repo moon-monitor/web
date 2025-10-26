@@ -33,7 +33,7 @@ const processTypeOptions = Object.entries(MenuProcessTypeData)
   .map(([key, value]) => {
     return {
       label: value.label,
-      value: key
+      value: +key
     }
   })
 const Menu: React.FC = () => {

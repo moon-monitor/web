@@ -9,6 +9,7 @@ import { ExclamationCircleFilled } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 import { Button, Modal, Space, message, theme } from 'antd'
 import { useContext, useEffect, useRef, useState } from 'react'
+import { GroupDetailModal } from './modal-detail'
 import { GroupEditModal } from './modal-edit'
 import { formList, getColumnList } from './options'
 
@@ -33,17 +34,21 @@ export default function NotifyGroupPage() {
     })
     const [refresh, setRefresh] = useState<boolean>(true)
     const [showEditModal, setShowEditModal] = useState<boolean>(false)
+    const [showDetailModal, setShowDetailModal] = useState<boolean>(false)
     const [editingGroup, setEditingGroup] = useState<NoticeGroupItem | undefined>(undefined)
+    const [detailGroup, setDetailGroup] = useState<NoticeGroupItem | undefined>(undefined)
 
     const searchRef = useRef<HTMLDivElement>(null)
     const tableWrapRef = useRef<HTMLDivElement>(null)
     const autoTableHeight = useContainerHeightTop(tableWrapRef, dataSource, isFullscreen)
 
     const onSearch = (values: ListTeamNoticeGroupRequest) => {
-        setSearchParams({
+        const processedValues = {
             ...searchParams,
-            ...values
-        })
+            ...values,
+            status: typeof values.status === 'string' ? Number(values.status) : values.status
+        }
+        setSearchParams(processedValues)
     }
 
     const onReset = () => { }
@@ -96,6 +101,15 @@ export default function NotifyGroupPage() {
         setShowEditModal(false)
     }
 
+    const openDetailModal = (group: NoticeGroupItem) => {
+        setDetailGroup(group)
+        setShowDetailModal(true)
+    }
+
+    const closeDetailModal = () => {
+        setShowDetailModal(false)
+    }
+
     const onEditOk = () => {
         setShowEditModal(false)
         onRefresh()
@@ -111,6 +125,9 @@ export default function NotifyGroupPage() {
 
     const onHandleMenuOnClick = (item: NoticeGroupItem, key: ActionKey) => {
         switch (key) {
+            case ActionKey.DETAIL:
+                openDetailModal(item)
+                break
             case ActionKey.EDIT:
                 openEditModal(item)
                 break
@@ -150,6 +167,11 @@ export default function NotifyGroupPage() {
                 groupId={editingGroup?.noticeGroupId}
                 onCancel={closeEditModal}
                 onOk={onEditOk}
+            />
+            <GroupDetailModal
+                open={showDetailModal}
+                groupId={detailGroup?.noticeGroupId}
+                onCancel={closeDetailModal}
             />
             <div className='flex flex-col gap-3 p-3'>
                 <div

@@ -1,6 +1,6 @@
-import { NoticeHookItem } from '@/api/common.types'
-import { GlobalStatusData, HookAppData, HTTPMethodData } from '@/api/global'
+import { HookAppData, HTTPMethodData, StatusData } from '@/api/global'
 import { getTeamNoticeHook } from '@/api/request/teamnotice'
+import { NoticeHookItem } from '@/api/request/types'
 import { useRequest } from 'ahooks'
 import { Avatar, Badge, Descriptions, DescriptionsProps, Modal, Space, Tooltip, Typography } from 'antd'
 import { useEffect, useState } from 'react'
@@ -44,8 +44,8 @@ export function HookDetailModal(props: HookDetailModalProps) {
     {
       label: '状态',
       children: detail ? (() => {
-        const data = GlobalStatusData[detail.status]
-        return <Badge color={data?.color} text={data?.label} />
+        const { text, color } = StatusData[detail.status]
+        return <Badge color={color} text={text} />
       })() : '-',
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },
