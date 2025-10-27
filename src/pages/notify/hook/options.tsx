@@ -1,6 +1,6 @@
-import { NoticeHookItem } from '@/api/common.types'
 import { ActionKey, GlobalStatus, HookAPP, HTTPMethod } from '@/api/enum'
-import { GlobalStatusData, HookAppData, HTTPMethodData } from '@/api/global'
+import { HookAppData, HTTPMethodData, StatusData } from '@/api/global'
+import { NoticeHookItem } from '@/api/request/types'
 import { DataFromItem } from '@/components/data/form'
 import { SearchFormItem } from '@/components/data/search-box'
 import MoreMenu, { MoreMenuProps } from '@/components/moreMenu'
@@ -32,14 +32,12 @@ export const formList: SearchFormItem[] = [
       itemProps: {
         placeholder: '状态',
         allowClear: true,
-        options: Object.entries(GlobalStatusData)
-          .filter(([key]) => +key !== GlobalStatus.GLOBAL_STATUS_UNKNOWN)
-          .map(([key, value]) => {
-            return {
-              label: <Badge {...value} />,
-              value: +key
-            }
-          })
+        options: Object.entries(StatusData).map(([key, value]) => {
+          return {
+            label: <Badge {...value} />,
+            value: Number(key)
+          }
+        })
       }
     }
   },
@@ -145,15 +143,23 @@ export const getColumnList = (props: NotifyHookColumnProps): ColumnsType<NoticeH
       dataIndex: 'name',
       key: 'name',
       width: 220,
-      render: (text: string, record: NoticeHookItem) => {
+      render: (text: string) => {
         return (
-          <Space>
-            <Badge color={GlobalStatusData[record.status].color} />
-            <Text style={{ width: 180 }} ellipsis={true}>
-              {text}
-            </Text>
-          </Space>
+          <Text style={{ width: 200 }} ellipsis={true}>
+            {text}
+          </Text>
         )
+      }
+    },
+    {
+      title: '状态',
+      dataIndex: 'status',
+      key: 'status',
+      align: 'center',
+      width: 120,
+      render: (status: GlobalStatus) => {
+        const { text, color } = StatusData[status]
+        return <Badge color={color} text={text} />
       }
     },
     {
@@ -250,12 +256,12 @@ export const saveFormList: (DataFromItem | DataFromItem[])[] = [
       props: {
         placeholder: '请选择请求方法',
         options: Object.entries(HTTPMethodData)
-          .filter(([key]) => +key !== HTTPMethod.HTTP_METHOD_UNKNOWN)
+          .filter(([key]) => key !== HTTPMethod.HTTPMethodUnknown)
           .map(([key, value]) => ({ label: <Badge {...value} />, value: +key }))
       },
       formProps: {
         rules: [{ required: true, message: '请选择请求方法' }],
-        initialValue: HTTPMethod.HTTP_METHOD_POST
+        initialValue: HTTPMethod.HTTPMethodPOST
       }
     },
     {

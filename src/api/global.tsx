@@ -1,4 +1,5 @@
 import { IconFont } from '@/components/icon'
+import { AppstoreOutlined, CalendarOutlined, CalendarTwoTone, ClockCircleOutlined } from '@ant-design/icons'
 import { CSSProperties } from 'react'
 import {
   AlarmSendType,
@@ -23,6 +24,7 @@ import {
   TeamAuditAction,
   TeamAuditStatus,
   TeamStatus,
+  TimeEngineRuleType,
   UserPosition,
   UserStatus
 } from './enum'
@@ -762,6 +764,40 @@ export const AlertStatusData: Record<AlertStatus, EnumData> = {
   [AlertStatus.ALERT_STATUS_Silenced]: {
     color: 'orange',
     label: '已静音'
+  }
+}
+
+// 时间引擎规则类型数据
+export const TimeEngineRuleTypeData: Record<TimeEngineRuleType, EnumData> = {
+  [TimeEngineRuleType.TimeEngineRuleTypeUnknown]: {
+    color: 'gray',
+    label: '未知',
+    text: '未知',
+    icon: <IconFont type='icon-unknown' />
+  },
+  [TimeEngineRuleType.TimeEngineRuleTypeHourRange]: {
+    color: 'blue',
+    label: '小时范围',
+    text: '小时范围',
+    icon: <ClockCircleOutlined />
+  },
+  [TimeEngineRuleType.TimeEngineRuleTypeDaysOfWeek]: {
+    color: 'green',
+    label: '星期',
+    text: '星期',
+    icon: <CalendarOutlined />
+  },
+  [TimeEngineRuleType.TimeEngineRuleTypeDaysOfMonth]: {
+    color: 'orange',
+    label: '日期',
+    text: '日期',
+    icon: <CalendarTwoTone />
+  },
+  [TimeEngineRuleType.TimeEngineRuleTypeMonths]: {
+    color: 'purple',
+    label: '月份',
+    text: '月份',
+    icon: <AppstoreOutlined />
   }
 }
 

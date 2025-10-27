@@ -1,8 +1,8 @@
 
-// import { GlobalStatus } from '@/api/enum'
-import { GlobalStatusData } from '@/api/global'
+import { GlobalStatus } from '@/api/enum'
+import { StatusData } from '@/api/global'
 import { getTimeEngine } from '@/api/request/timeengine'
-import { TimeEngineItem } from '@/api/request/types/model-types'
+import { TimeEngineItem } from '@/api/request/types'
 import { useRequest } from 'ahooks'
 import { Badge, Descriptions, DescriptionsProps, Modal, Space, Tag } from 'antd'
 import { useEffect, useState } from 'react'
@@ -18,7 +18,7 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
   const { Id, open, onCancel, onOk } = props
 
   const [detail, setDetail] = useState<TimeEngineItem>()
-  const { run: getEngineDetail } = useRequest(getTimeEngine, {
+  const { run: getEngineDetail } = useRequest((id: number) => getTimeEngine({ timeEngineId: id }), {
     manual: true, // 手动触发请求
     onSuccess: (res) => {
       setDetail(res)
@@ -34,14 +34,14 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
     {
       label: '状态',
       children: detail ? (() => {
-        const data = GlobalStatusData[detail?.status]
-        return <Badge color={data?.color} text={data?.label} />
+        const { text, color } = StatusData[detail?.status || GlobalStatus.GLOBAL_STATUS_UNKNOWN]
+        return <Badge color={color} text={text} />
       })() : '-',
       span: { xs: 1, sm: 2, md: 3, lg: 3, xl: 2, xxl: 2 }
     },
     {
       label: '规则',
-      children: detail?.rules.slice(0, 3).map((item, index) => (
+      children: detail?.rules?.slice(0, 3).map((item, index) => (
         <Space key={index} size={8} wrap>
           <Tag color='blue' bordered={false}>
             {item.name}
@@ -82,7 +82,7 @@ export function EngineDetailModal(props: EngineDetailModalProps) {
 
   useEffect(() => {
     if (Id && open) {
-      getEngineDetail({ timeEngineId: Id })
+      getEngineDetail(Id)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Id, open])

@@ -2,9 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react'
 
 
 import { ActionKey, GlobalStatus } from '@/api/enum'
-import { deleteTimeEngine, listTimeEngine } from '@/api/request/timeengine'
-import { ListTimeEngineRequest } from '@/api/request/types'
-import { TimeEngineItem } from '@/api/request/types/model-types'
+import { deleteTimeEngine, listTimeEngine, updateTimeEngineStatus } from '@/api/request/timeengine'
+import { ListTimeEngineRequest, TimeEngineItem } from '@/api/request/types'
 import SearchBox from '@/components/data/search-box'
 import AutoTable from '@/components/table'
 import { useContainerHeightTop } from '@/hooks/useContainerHeightTop'
@@ -91,9 +90,18 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
     }
   })
 
-  const onChangeStatus = (hookId: number, status: GlobalStatus) => {
-    console.log('onChangeStatus', hookId, status)
-    // updateTimeEngineStatus({ ids: [hookId], status }).then(onRefresh)
+  const onChangeStatus = (timeEngineId: number, status: GlobalStatus) => {
+    // 将 GlobalStatus 枚举转换为数字
+    const statusValue = status === GlobalStatus.GLOBAL_STATUS_ENABLE ? 1 : 2
+
+    updateTimeEngineStatus({
+      timeEngineIds: [timeEngineId],
+      status: statusValue
+    }).then(() => {
+      onRefresh() // 刷新列表
+    }).catch((error) => {
+      console.error('更新状态失败:', error)
+    })
   }
 
   const onHandleMenuOnClick = (item: TimeEngineItem, key: ActionKey) => {
@@ -102,16 +110,20 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
         handleEditModal(item)
         break
       case ActionKey.DELETE:
-        handleDelete({ timeEngineId: item.id })
+        handleDelete({ timeEngineId: item.timeEngineId })
         break
       case ActionKey.DETAIL:
         onOpenDetailModal(item)
         break
       case ActionKey.DISABLE:
-        onChangeStatus(item.id, 'GLOBAL_STATUS_DISABLE')
+        if (item.timeEngineId) {
+          onChangeStatus(item.timeEngineId, GlobalStatus.GLOBAL_STATUS_DISABLE)
+        }
         break
       case ActionKey.ENABLE:
-        onChangeStatus(item.id, 'GLOBAL_STATUS_ENABLE')
+        if (item.timeEngineId) {
+          onChangeStatus(item.timeEngineId, GlobalStatus.GLOBAL_STATUS_ENABLE)
+        }
         break
       default:
         break
@@ -151,12 +163,12 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
     <>
       <EngineEditModal
         open={showModal}
-        engineId={Detail?.id}
+        engineId={Detail?.timeEngineId}
         onCancel={closeEditModal}
         onOk={handleEditModalOnOk}
       />
       <EngineDetailModal
-        Id={Detail?.id || 0}
+        Id={Detail?.timeEngineId || 0}
         open={openDetailModal}
         onCancel={onCloseDetailModal}
         onOk={onCloseDetailModal}
@@ -210,7 +222,7 @@ const TimeEngine: React.FC<TimeEngineProps> = ({ switchTimeEngine }) => {
           </div>
           <div className='mt-4' ref={ADivRef}>
             <AutoTable
-              rowKey={(record) => record.id}
+              rowKey={(record) => record.timeEngineId || 0}
               dataSource={datasource}
               total={total}
               loading={loading}
